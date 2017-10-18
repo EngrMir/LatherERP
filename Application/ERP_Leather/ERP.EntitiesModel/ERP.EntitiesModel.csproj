@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3F8FE4B4-0621-455A-BCE5-807C0A6C63B1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ERP.EntitiesModel</RootNamespace>
+    <AssemblyName>ERP.EntitiesModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppSetupModel\DropdownModel.cs" />
+    <Compile Include="AppSetupModel\LCMLCRetirement.cs" />
+    <Compile Include="AppSetupModel\LoginModel.cs" />
+    <Compile Include="AppSetupModel\MenuItems.cs" />
+    <Compile Include="AppSetupModel\PackUnit.cs" />
+    <Compile Include="AppSetupModel\SysArticle.cs" />
+    <Compile Include="AppSetupModel\SysArticleChallan.cs" />
+    <Compile Include="AppSetupModel\SysBank.cs" />
+    <Compile Include="AppSetupModel\SysBeneficiary.cs" />
+    <Compile Include="AppSetupModel\SysBranch.cs" />
+    <Compile Include="AppSetupModel\SysBuyer.cs" />
+    <Compile Include="AppSetupModel\SysBuyerAddress.cs" />
+    <Compile Include="AppSetupModel\SysBuyerAgent.cs" />
+    <Compile Include="AppSetupModel\SysChemicalItem.cs" />
+    <Compile Include="AppSetupModel\SysColor.cs" />
+    <Compile Include="AppSetupModel\SysComodity.cs" />
+    <Compile Include="AppSetupModel\SysCountry.cs" />
+    <Compile Include="AppSetupModel\SysCurrency.cs" />
+    <Compile Include="AppSetupModel\SysGrade.cs" />
+    <Compile Include="AppSetupModel\SysGradeRange.cs" />
+    <Compile Include="AppSetupModel\SysGradeRangeFormat.cs" />
+    <Compile Include="AppSetupModel\SysItemType.cs" />
+    <Compile Include="AppSetupModel\SysLeatherStatus.cs" />
+    <Compile Include="AppSetupModel\SysLeatherType.cs" />
+    <Compile Include="AppSetupModel\SysLocation.cs" />
+    <Compile Include="AppSetupModel\SysMachine.cs" />
+    <Compile Include="AppSetupModel\SysPaymentMethod.cs" />
+    <Compile Include="AppSetupModel\SysPaymentType.cs" />
+    <Compile Include="AppSetupModel\SysPort.cs" />
+    <Compile Include="AppSetupModel\SysPreDefineValue.cs" />
+    <Compile Include="AppSetupModel\SysPreDefineValueFor.cs" />
+    <Compile Include="AppSetupModel\SysProductionProces.cs" />
+    <Compile Include="AppSetupModel\SysSize.cs" />
+    <Compile Include="AppSetupModel\SysSource.cs" />
+    <Compile Include="AppSetupModel\SysStore.cs" />
+    <Compile Include="AppSetupModel\SysSupplier.cs" />
+    <Compile Include="AppSetupModel\SysSupplierAddress.cs" />
+    <Compile Include="AppSetupModel\SysSupplierAgent.cs" />
+    <Compile Include="AppSetupModel\SysTransHead.cs" />
+    <Compile Include="AppSetupModel\SysUnit.cs" />
+    <Compile Include="AppSetupModel\UserViewModel.cs" />
+    <Compile Include="BaseModel\CommonStatusForSetupData.cs" />
+    <Compile Include="BaseModel\DatabaseConfiguration.cs" />
+    <Compile Include="BaseModel\CommonApprovalInformation.cs" />
+    <Compile Include="BaseModel\CommonStatusInformation.cs" />
+    <Compile Include="BaseModel\Enums.cs" />
+    <Compile Include="BaseModel\ValidationMsg.cs" />
+    <Compile Include="OperationModel\ChemicalConsumptionForCrusting.cs" />
+    <Compile Include="OperationModel\ChemicalForeignPurchaseOrder.cs" />
+    <Compile Include="OperationModel\ChemicalPurchaseItemModel.cs" />
+    <Compile Include="OperationModel\ChemicalStockInfoModel.cs" />
+    <Compile Include="OperationModel\CnFBill.cs" />
+    <Compile Include="OperationModel\CommercialInvoiceVM.cs" />
+    <Compile Include="OperationModel\CrustedLeatherTransferTreatment.cs" />
+    <Compile Include="OperationModel\CrustReportModel.cs" />
+    <Compile Include="OperationModel\EXPAgentCommission.cs" />
+    <Compile Include="OperationModel\EXPAgentCommissionBuyer.cs" />
+    <Compile Include="OperationModel\EXPAgentCommissionBuyerCI.cs" />
+    <Compile Include="OperationModel\ExpAgentComReportModel.cs" />
+    <Compile Include="OperationModel\EXPBankDebitVoucher.cs" />
+    <Compile Include="OperationModel\EXPBankLoan.cs" />
+    <Compile Include="OperationModel\ExpBankVoucher.cs" />
+    <Compile Include="OperationModel\ExpBillOfLading.cs" />
+    <Compile Include="OperationModel\EXPCI.cs" />
+    <Compile Include="OperationModel\EXPCIPI.cs" />
+    <Compile Include="OperationModel\EXPCIPIItem.cs" />
+    <Compile Include="OperationModel\EXPCIPIItemColor.cs" />
+    <Compile Include="OperationModel\EXPCnfBill.cs" />
+    <Compile Include="OperationModel\ExpExportForm.cs" />
+    <Compile Include="OperationModel\ExpFreightBill.cs" />
+    <Compile Include="OperationModel\EXPLCOpening.cs" />
+    <Compile Include="OperationModel\EXPLCRetirement.cs" />
+    <Compile Include="OperationModel\EXPLeatherPI.cs" />
+    <Compile Include="OperationModel\EXPLeatherPIBadhon.cs" />
+    <Compile Include="OperationModel\EXPPackingList.cs" />
+    <Compile Include="OperationModel\EXPPIItem.cs" />
+    <Compile Include="OperationModel\EXPPIItemColor.cs" />
+    <Compile Include="OperationModel\ExpPiOrderReportModel.cs" />
+    <Compile Include="OperationModel\EXPPLPI.cs" />
+    <Compile Include="OperationModel\EXPPLPIItemColor.cs" />
+    <Compile Include="OperationModel\EXPPLPIItemColorBale.cs" />
+    <Compile Include="OperationModel\ExpTransportChallan.cs" />
+    <Compile Include="OperationModel\EXPDeliveryChallan.cs" />
+    <Compile Include="OperationModel\EXPDeliveryChallanCI.cs" />
+    <Compile Include="OperationModel\FinalGradeSelection.cs" />
+    <Compile Include="OperationModel\GradeRangeFromTo.cs" />
+    <Compile Include="OperationModel\GradeRangeTitle.cs" />
+    <Compile Include="OperationModel\GradeSelectionChallanItem.cs" />
+    <Compile Include="OperationModel\InvCrustLeatherIssue.cs" />
+    <Compile Include="OperationModel\InvFinishLeatherIssue.cs" />
+    <Compile Include="OperationModel\InvFinishLeatherReceive.cs" />
+    <Compile Include="OperationModel\InvFinishLeatherReceiveColor.cs" />
+    <Compile Include="OperationModel\InvFinishLeatherReceiveItem.cs" />
+    <Compile Include="OperationModel\InvFNTransferTo.cs" />
+    <Compile Include="OperationModel\InvLeatherIssue.cs" />
+    <Compile Include="OperationModel\InvLeatherIssueItem.cs" />
+    <Compile Include="OperationModel\InvLeatherStockAdjustItem.cs" />
+    <Compile Include="OperationModel\InvLeatherStockAdjustRequest.cs" />
+    <Compile Include="OperationModel\InvLeatherTransferReceiveItem.cs" />
+    <Compile Include="OperationModel\InvLeatherTransferRecieve.cs" />
+    <Compile Include="OperationModel\InvLoanReturnRequestData.cs" />
+    <Compile Include="OperationModel\InvStockDaily.cs" />
+    <Compile Include="OperationModel\InvStockItem.cs" />
+    <Compile Include="OperationModel\InvStockSupplier.cs" />
+    <Compile Include="OperationModel\InvStockSupplierAudit.cs" />
+    <Compile Include="OperationModel\InvLeatherStockAdjustModel.cs" />
+    <Compile Include="OperationModel\INVStoreTrans.cs" />
+    <Compile Include="OperationModel\INVStoreTransChallan.cs" />
+    <Compile Include="OperationModel\INVStoreTransItem.cs" />
+    <Compile Include="OperationModel\INVStoreTransRequest.cs" />
+    <Compile Include="OperationModel\InvWetBlueIssue.cs" />
+    <Compile Include="OperationModel\InvWetBlueIssueItem.cs" />
+    <Compile Include="OperationModel\InvWetBlueIssueRef.cs" />
+    <Compile Include="OperationModel\InvFNTransfer.cs" />
+    <Compile Include="OperationModel\InvFNTransferFrom.cs" />
+    <Compile Include="OperationModel\LcmBankDebitVoucher.cs" />
+    <Compile Include="OperationModel\LcmBillOfLading.cs" />
+    <Compile Include="OperationModel\LcmBillOfLadingVM.cs" />
+    <Compile Include="OperationModel\LcmLcFile.cs" />
+    <Compile Include="OperationModel\LcmLcOpening.cs" />
+    <Compile Include="OperationModel\LCMLCRetirement.cs" />
+    <Compile Include="OperationModel\LCMLimInfo.cs" />
+    <Compile Include="OperationModel\Lcm_Insurence.cs" />
+    <Compile Include="OperationModel\LcReportModel.cs" />
+    <Compile Include="OperationModel\LoanRequest.cs" />
+    <Compile Include="OperationModel\LoanReturnIssue.cs" />
+    <Compile Include="OperationModel\LoanReturnRequestInfo.cs" />
+    <Compile Include="OperationModel\PackinListVM.cs" />
+    <Compile Include="OperationModel\PRDChemProdReq.cs" />
+    <Compile Include="OperationModel\PRDChemProdReqItem.cs" />
+    <Compile Include="OperationModel\PRDCLProductionDrum.cs" />
+    <Compile Include="OperationModel\PrdCrustLeatherQC.cs" />
+    <Compile Include="OperationModel\PrdCrustLeatherQCItem.cs" />
+    <Compile Include="OperationModel\PrdCrustLeatherQCRef.cs" />
+    <Compile Include="OperationModel\PrdCrustLeatherQCSelection.cs" />
+    <Compile Include="OperationModel\PrdCrustYearMonth.cs" />
+    <Compile Include="OperationModel\PrdRecipe.cs" />
+    <Compile Include="OperationModel\PrdRecipeItem.cs" />
+    <Compile Include="OperationModel\PrdWBProduction.cs" />
+    <Compile Include="OperationModel\PrdYearMonth.cs" />
+    <Compile Include="OperationModel\PRDYearMonthCrustReqDate.cs" />
+    <Compile Include="OperationModel\PRDYearMonthCrustReqItem.cs" />
+    <Compile Include="OperationModel\PRDYearMonthCrustReqItemColor.cs" />
+    <Compile Include="OperationModel\PrdYearMonthCrustScheduleColor.cs" />
+    <Compile Include="OperationModel\PrdYearMonthCrustScheduleDrum.cs" />
+    <Compile Include="OperationModel\PrdYearMonthCrustScheduleItem.cs" />
+    <Compile Include="OperationModel\PrdYearMonthSchedule.cs" />
+    <Compile Include="OperationModel\PrdYearMonthScheduleDate.cs" />
+    <Compile Include="OperationModel\PrdYearMonthSchedulePurchase.cs" />
+    <Compile Include="OperationModel\PreGradeSelectionData.cs" />
+    <Compile Include="OperationModel\PrqBillPayment.cs" />
+    <Compile Include="OperationModel\PrqBillPaymentReference.cs" />
+    <Compile Include="OperationModel\PrqBillRealization.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcOrdr.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcOrdrItem.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcOrdrRqsn.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcRecv.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcRecvChallan.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcRecvItem.cs" />
+    <Compile Include="OperationModel\PRQChemFrgnPurcRecvPL.cs" />
+    <Compile Include="OperationModel\PRQChemicalPI.cs" />
+    <Compile Include="OperationModel\PRQChemicalPIItem.cs" />
+    <Compile Include="OperationModel\PrqChemLocalPurcBill.cs" />
+    <Compile Include="OperationModel\PrqChemLocalPurcBillPay.cs" />
+    <Compile Include="OperationModel\PrqChemPurcReq.cs" />
+    <Compile Include="OperationModel\PrqChemPurcReqItem.cs" />
+    <Compile Include="OperationModel\PrqPreGradeChallan.cs" />
+    <Compile Include="OperationModel\PrqPreGradeSelectedData.cs" />
+    <Compile Include="OperationModel\PrqPreGradeSelection.cs" />
+    <Compile Include="OperationModel\PrqPurchase.cs" />
+    <Compile Include="OperationModel\PrqPurchaseChallan.cs" />
+    <Compile Include="OperationModel\PrqPurchaseChallanItem.cs" />
+    <Compile Include="OperationModel\PrqPurchaseYearPeriod.cs" />
+    <Compile Include="OperationModel\PrqPurchaseYearPeriodItem.cs" />
+    <Compile Include="OperationModel\PrqPurchaseYearPeriodItemAudit.cs" />
+    <Compile Include="OperationModel\PrqPurchaseYearTarget.cs" />
+    <Compile Include="OperationModel\PrqSelectionReport.cs" />
+    <Compile Include="OperationModel\PrqSupplierBill.cs" />
+    <Compile Include="OperationModel\PrqSupplierBillChallan.cs" />
+    <Compile Include="OperationModel\PrqSupplierBillItem.cs" />
+    <Compile Include="OperationModel\PRQChemLocalPurcRecv.cs" />
+    <Compile Include="OperationModel\PRQChemLocalPurcRecvChallan.cs" />
+    <Compile Include="OperationModel\PRQChemLocalPurcRecvItem.cs" />
+    <Compile Include="OperationModel\PRQChemLocalPurcRecvPO.cs" />
+    <Compile Include="OperationModel\PurchaseReceive.cs" />
+    <Compile Include="OperationModel\PurchaseReportModel.cs" />
+    <Compile Include="OperationModel\ReportBillModel.cs" />
+    <Compile Include="OperationModel\ReportModel.cs" />
+    <Compile Include="OperationModel\SlsBuyerOrder.cs" />
+    <Compile Include="OperationModel\Sls_BuyerOrder_Badhon.cs" />
+    <Compile Include="OperationModel\SupplierBillVM.cs" />
+    <Compile Include="OperationModel\SupplierDetails.cs" />
+    <Compile Include="OperationModel\UspGetPurchaseIdBySupplierAndStoreId.cs" />
+    <Compile Include="OperationModel\WBIStoreSelectionVM.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

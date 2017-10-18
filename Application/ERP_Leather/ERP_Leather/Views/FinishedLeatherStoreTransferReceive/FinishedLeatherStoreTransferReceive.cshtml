@@ -1,0 +1,975 @@
+﻿@{
+    ViewBag.Title = "Finished Leather Store Transfer Receive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div>
+    @Html.Partial("~/Views/Common/_FormHeader.cshtml")
+</div>
+
+<div class="row">
+    <input type="hidden" id="FNReceiveID" name="FNReceiveID" readonly="readonly" />
+    <input type="hidden" id="FNReceiveItemID" name="FNReceiveItemID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="FNReceiveColorID" name="FNReceiveColorID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="FNReceiveColorID" name="FNReceiveColorID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="FinishLeatherIssueID" name="FinishLeatherIssueID" readonly="readonly" style="display: none" />
+
+    <input type="hidden" id="StoreID" name="StoreID" value="" placeholder="" readonly="readonly" style="display: none" />
+    <input type="hidden" id="BuyerID" name="BuyerID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="ArticleID" name="ArticleID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="ColorID" name="ColorID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="BuyerOrderID" name="BuyerOrderID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="ItemTypeID" name="ItemTypeID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="LeatherStatusID" name="LeatherStatusID" readonly="readonly" style="display: none" />
+    <input type="hidden" id="GradeID" name="GradeID" readonly="readonly" style="display: none" />
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Receive No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="FNReceiveNo" name="FNReceiveNo" class="txtBox" style="margin-right:2%" readonly="readonly" placeholder="Auto Generated" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>Receive Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="FNReceiveDate" name="FNReceiveDate" class="datePicker txtBox" style="margin-right:2%"  placeholder="" tabindex="1" />
+            </div>
+            <div class="col-lg-1">
+                <label>Receive At</label>
+            </div>
+            <div class="col-lg-3">
+                <div id="divReceiveAt">
+                    @Html.DropDownList("ReceiveAt", new SelectList(ViewBag.ReceiveAtList, "StoreID", "StoreName"), ".....Select.....", new { @class = "Dropdown RequiredTextBox", @style = "width: 274px; margin-left: 0px;" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Issue No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="FinishLeatherIssueNo" name="FinishLeatherIssueNo" class="txtBox" style="margin-right:2%" readonly="readonly" placeholder="Press F9" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>Issue Category</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="IssueCategory" name="IssueCategory" value="Store Transfer" class="txtBox" style="margin-right:2%; text-align:center;font-weight:bold" readonly="readonly" tabindex="1" />
+            </div>
+            <div class="col-lg-1">
+                <label>Issue From</label>
+            </div>
+            <div class="col-lg-3">
+                <div id="divIssueFrom">
+                    @Html.DropDownList("IssueFrom", new SelectList(ViewBag.IssueFromList, "StoreID", "StoreName"), ".....Select.....", new { @class = "Dropdown RequiredTextBox", @style = "width: 274px; margin-left: 0px;" })
+                </div>
+
+             </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-12" style="width:100%">
+                <div id="FinishItemsGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-12" style="width:100%">
+                <div id="FinishItemsColorGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Check Note</label>
+                </div>
+                <div class="col-lg-4">
+                    <textarea id="CheckNote" class="col-lg-12" name="CheckNote" rows="1" tabindex="12"></textarea><br />
+                    <button id="btnCheck" class="" name="btnCheck">Checked</button>
+
+                </div>
+                <div class="col-lg-2" style="">
+                    <label>Confirm Note</label>
+                </div>
+                <div class="col-lg-4">
+                    <textarea id="ReceiveNote" class="col-lg-12" name="ReceiveNote" rows="1" tabindex="13"></textarea><br />
+                    <button type="button" id="btnConfirm" name="ConfirmComments">Confirmed</button>
+                </div>
+            </div>
+        </div>
+</div>
+
+@*############################ All Popup Window for Grid #######################*@
+<div id="IssueWindow" style="display: none;">
+    <p>Issue No.:<input type="text" id="txtSearch" style="width: 250px;" />
+    <input type="button" id="btnIssueGridSearch" value="Search" /></p>
+
+<div id="IssuePopUpWindowGrid" class="PopUpGrid"></div>
+    <input type="button" id="btnIssueWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnIssueWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+@*<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>*@
+
+
+<script type="text/javascript">
+
+    //*************************** Start of DOCUMENT.READY Function ****************************//
+
+    $(document).ready(function () {
+      // var saveStatus = 1;
+    //$(window).ready(function(){
+
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            //max: new Date()
+        });
+
+
+        //*************************** POP Up for Issue No. ****************************//
+        var IssuePopUpDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "FinishLeatherIssueID",
+                    fields: {
+
+                        FinishLeatherIssueItemID: { editable: true },
+                        FinishLeatherIssueID: { editable: true },
+                        FinishLeatherIssueNo: { editable: false },
+
+                        BuyerID: { editable: false },
+                        BuyerName: { editable: false },
+
+                        BuyerOrderID: { editable: false },
+                        BuyerOrderNo: { editable: false },
+
+                        ArticleID: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleColorNo: { editable: false },
+
+                        ArticleChallanNo: { editable: false },
+
+                        StoreID: { editable: false },
+                        StoreName: { editable: false },
+                        IssueFrom: { editable: false },
+                        IssueFromName: { editable: false },
+                        IssueCategoryName: { editable: false },
+                        IssueCategory:{ editable: false },
+
+                        GradeRange: { editable: false },
+
+                        ItemTypeID: { editable: true },
+                        ItemTypeName: { editable: true },
+
+                        LeatherTypeID: { editable: true },
+
+                        RecordStatus: { editable: false, },
+
+                        LeatherStatusID: { editable: true },
+                        LeatherStatusName: { editable: false }
+                    }
+                }
+            },
+
+            @*transport: {
+                read: {
+                    url: '@Url.Action("GetPopUpDetail", "FinishedLeatherStoreTransferReceive")',
+                    data: { "IssueFrom": $("#IssueFrom").val() },
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },*@
+            pageSize: 20
+        });
+
+        var issuePopUp = $("#IssuePopUpWindowGrid").kendoGrid({
+            dataSource: IssuePopUpDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            height: 180,
+            columns: [
+                { field: "FinishLeatherIssueNo", title: "Issue No", editable: false, width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IssueCategory", title: "Issue Category", width: 80, editable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IssueFromName", title: "Issue From", width: 80, filterable: false, editable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "RecordStatus", title: "Record Status", filterable: false, width: 80, editable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+            ]
+        });
+
+        var IssueWindow = $('#IssueWindow').kendoWindow({
+            acttions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "1000px",
+            height: "auto",
+            tittle: "List of Issue",
+            position: { top: 100, left: 300 },
+            modal: true,
+            groupable: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        $(document.body).keypress(function (e) {
+            if ($("#FinishLeatherIssueNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    
+                    if (($("#IssueFrom").val() != "") && ($("#ReceiveAt").val() != "")) {
+
+                        $("#divLoading").show();
+                        $.ajax({
+                            url: '@Url.Action("GetPopUpDetail", "FinishedLeatherStoreTransferReceive")',
+                            type: 'GET',
+                            data: { "IssueFrom": $("#IssueFrom").val() },
+                            success: function (data) {
+                                 $("#IssuePopUpWindowGrid").data('kendoGrid').dataSource.data(data);
+                               // $("#FinishItemsGrid").data('kendoGrid').dataSource.data(data);
+                            },
+                            error: function (data) {
+                                alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                            },
+                            complete: function (data) {
+                                $("#divLoading").hide();
+                            }
+                        });
+                        SelectedItemOfListOfValue('IssuePopUpWindowGrid');
+                        
+                        IssueWindow.open();
+                        IssueWindow.center();
+                    }
+                    else {
+                        $('#MessageText').html("Select Issue From & Receive At Store");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            }
+        });
+
+
+        function CrustItemInfo() {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("GetItemGridStockDetail", "FinishedLeatherStoreTransferReceive")',
+                type: 'GET',
+                data: { "FinishLeatherIssueID": $("#FinishLeatherIssueID").val() },
+                success: function (data) {
+                   // $("#IssuePopUpWindowGrid").data('kendoGrid').dataSource.data(data);
+                    $("#FinishItemsGrid").data('kendoGrid').dataSource.data(data);
+                },
+                error: function (data) {
+                    alert("Failed: " + data.status + ": " + data.statusText);
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+
+
+        //Handling button click for WBSelectionNo window grid
+        $('#btnIssueWindowOK').click(function () {
+
+            ListOfValuIssueGridEvent('IssuePopUpWindowGrid');
+            CrustItemInfo();
+            IssueWindow.close();
+        });
+        $('#btnIssueWindowCancel').click(function () {
+            IssueWindow.close();
+        });
+        $("#IssueWindow").dblclick(function () {
+            ListOfValuIssueGridEvent('IssuePopUpWindowGrid');
+            CrustItemInfo();
+            IssueWindow.close();
+        });
+        $("#IssueWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValuIssueGridEvent('IssuePopUpWindowGrid');
+                IssueWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                IssueWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function ListOfValuIssueGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+
+        }
+        //*************************** End of POP Up for Issue No *********************//
+
+
+
+    });
+   
+    //*************************** End of DOCUMENT.READY Function ****************************//
+
+
+    //*************************** DropDown ****************************//
+    //*************************** End of DropDown *********************//
+
+
+
+    //*************************** Item Kendo Grid ****************************//
+    var itemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "FinishLeatherIssueID",
+                fields:
+                {
+                    
+                    FNReceiveID: { editable: true, hidden: true },
+                    FNReceiveItemID: { editable: true, hidden: true },
+                    FNReceiveColorID: { editable: true, hidden: true },
+                    FinishLeatherIssueID: { editable: false, hidden: true },
+                    FinishLeatherIssueNo: { editable: false },
+                    FinishLeatherIssueItemID: { editable: false },
+                    BuyerID: { editable: true },
+                    BuyerName: { editable: false },
+                    BuyerOrderID: { editable: true },
+                    BuyerOrderNo: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ArticleID: { editable: true },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ItemTypeID: { editable: true },
+                    ItemTypeName: { editable: false },
+                    LeatherTypeID: { editable: true },
+                    LeatherTypeName: { editable: false },
+                    LeatherStatusID: { editable: true }
+                }
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var itemGrid = $("#FinishItemsGrid").kendoGrid({
+        dataSource: itemGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        height: 180,
+        change: function (arg) {
+            var FinishLeatherIssueItemID = 0;
+            var entityGrid = $("#FinishItemsGrid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            FinishLeatherIssueItemID = selectedItem.FinishLeatherIssueItemID;
+            //ReturnMethod = selectedItem.ReturnMethod;
+            //RequestTo = selectedItem.RequestTo;
+            //ToSource = selectedItem.ToSource;
+            //$("#SelectedRequestID").val(RequestID);
+            //$("#FinishLeatherIssueID").val("");
+            //$("#FinishLeatherIssueNo").val("");
+            $.ajax({
+                url: '@Url.Action("GetColorGridStockDetail", "FinishedLeatherStoreTransferReceive")',
+                type: "GET",
+                data: { "FinishLeatherIssueItemID": FinishLeatherIssueItemID },
+                dataType: "JSON",
+                success: function (data) {
+                    //alert(FinishLeatherIssueItemID);
+                    //console.log(FinishLeatherIssueItemID);
+                    $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        },
+        columns:
+        [
+            { field: "FinishLeatherIssueItemID", title: "Sl No.", hidden: true, width: 60, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "FNReceiveID", title: "ReceiveID", hidden: true, width: 60, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "FNReceiveItemID", title: "ReceiveItemID", hidden: true, width: 60, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "BuyerName", title: "Party Name", width: 100, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "BuyerOrderNo", title: "Order", width: 100, filterable: false, attributes: { style: "background-color: silver" }, editable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ArticleChallanNo", title: "Challan", filterable: false, width: 100, attributes: { style: "background-color: silver" }, editable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ArticleNo", title: "Article", width: 100, filterable: false, attributes: { style: "background-color: silver" }, editable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ItemTypeName", title: "Item Type", width: 100, filterable: false, attributes: { style: "background-color: silver" }, editable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "LeatherStatusName", title: "Leather Status", filterable: false, width: 100, attributes: { style: "background-color: silver" }, editable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+
+
+    //*************************** End of Item Kendo Grid  *********************//
+
+    //*************************** Color Kendo Grid ****************************//
+    var colorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "FinishLeatherIssueID",
+                fields:
+                {
+
+                    FNReceiveID: { editable: true, hidden: true },
+                    FNReceiveItemID: { editable: true, hidden: true },
+                    FNReceiveColorID: { editable: true, hidden: true },
+                    FinishLeatherIssueColorID: { editable: true },
+                    FinishLeatherIssueItemID: { editable: true,hidden:true },
+                    FinishLeatherIssueID: { editable: true },
+                    ColorID: { editable: false },
+                    ColorName: { editable: false },
+                    GradeID: { editable: true },
+                    GradeName: { editable: false },
+                    ReceivePcs: { editable: true },
+                    ReceiveSide: { editable: true },
+                    ReceiveArea: { editable: true },
+                    IssuePcs: { editable: false },
+                    IssueSide: { editable: false },
+                    IssueArea: { editable: false },
+                    SideArea: { editable: false },
+                    ReceiveSideArea: { editable: true },
+                    AreaUnit: { editable: false },
+                    UnitName: { editable: false },
+                    FinishQCLabel: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var colorGrid = $("#FinishItemsColorGrid").kendoGrid({
+        dataSource: colorGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        height: 180,
+        columns: [ 
+            { field: "FinishLeatherIssueColorID", title: "Sl No.", hidden: true, width: 50, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "FNReceiveID", title: "ReceiveID", hidden: true, width: 60, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "FNReceiveItemID", title: "ReceiveItemID", hidden: true, width: 60, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "FNReceiveColorID", title: "ReceiveColorID", hidden: true, width: 60, editable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ColorName", title: "Color", width: 60, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "GradeName", title: "Grade", width: 60, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "IssuePcs", title: " Issue Pcs", width: 80, filterable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "IssueSide", title: "Issue Side", width: 80, filterable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            
+            { field: "IssueArea", title: "Issue Area", width: 80, filterable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SideArea", title: "Side Area", width: 80, filterable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReceivePcs", title: "Receive Pcs", width: 80, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReceiveSide", title: "Receive Side", width: 80, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReceiveArea", title: "Receive Area", width: 80, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReceiveSideArea", title: "Side Area", width: 80, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "UnitName", title: "Area Unit", width: 80, filterable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "FinishQCLabel", title: "QC Status", width: 80, filterable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    //*************************** End of Color Kendo Grid  *********************//
+
+
+    //********************* Common Function for Issue Pop Up ******************************//
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+    //********************************** RESET FUNCTION *********************************
+    function Reset() {
+        $("#FinishItemsGrid").data("kendoGrid").dataSource.data('');
+        $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data('');
+        $('.Dropdown').val('');
+        $('.FormBody input[type=text]').val('');
+        $("#ReceiveNote").val("");
+        $("#CheckNote").val("");
+
+        $('.FormBody input[type=text]').val(''); 
+        $('.txtBox').val('');
+        $('.textarea').val('');
+
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+
+        $('input:checkbox[name=checkbox]').removeAttr('checked');
+    }
+    //********************************** END OF RESET FUNCTION *********************************
+
+
+    ClearOperationalMessage();
+
+    ClearOperationMsgTextBoxRedColor();
+
+    ClearRequiredTextBoxRedColor();
+    
+
+    //################## Model Variable Declearation#####################//
+
+    var viewModelFinishLeatherReceive = {
+        "FNReceiveID": "", "FNReceiveNo": "", "FNReceiveDate": "", "ReceiveCategory": "", "ReceiveFor": "", "IssueFrom": "", "ReceiveAt": "", "RecordStatus": "",
+        "ReceiveNote": "", "InvFinishLeatherReceiveItemList": [], "InvFinishLeatherReceiveColorList": []
+    };
+    var viewModelFinishLeatherReceiveItem = {
+        "FNReceiveItemID": "", "FNReceiveID": "", "FinishLeatherIssueID": "", "FinishLeatherIssueItemID": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "",
+        "ArticleNo": "", "ArticleChallanID": "", "ArticleChallanNo": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "FinishQCLabel": ""
+    };
+    var viewModelFinishLeatherReceiveColor = {
+        "FNReceiveColorID": "", "FNReceiveItemID": "", "FNReceiveID": "", "FinishLeatherIssueItemID": "", "FinishLeatherIssueID": "", "FinishLeatherIssueColorID": "",
+        "ColorID": "", "GradeID": "", "FinishQCLabel": "", "IssuePcs": "", "IssueSide": "", "IssueArea": "", "SideArea": "", "AreaUnit": "", "ReceivePcs": "",
+        "ReceiveSide": "", "ReceiveArea": "", "ReceiveSideArea": "", "ArticleColorNo": "", "GradeRange": ""
+    };
+
+
+
+   
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+
+        //Check Empty or Maximum Length in TransactionFrom
+        CheckRequiredTextBoxMaxLength('IssueFrom', 10);
+        //Check Empty or Maximum Length in TransactionTo
+        CheckRequiredTextBoxMaxLength('ReceiveAt', 10);
+
+        if (saveStatus == 1) {
+            //--------------  Save Finish Receive Data ---------------------------------
+
+            viewModelFinishLeatherReceive.FNReceiveID = $("#FNReceiveID").val();
+            viewModelFinishLeatherReceive.FNReceiveNo = $("#FNReceiveNo").val();
+            viewModelFinishLeatherReceive.FNReceiveDate = $("#FNReceiveDate").val();
+            viewModelFinishLeatherReceive.ReceiveCategory = $("#ReceiveCategory").val();
+            viewModelFinishLeatherReceive.ReceiveFor = $("#ReceiveFor").val();
+            viewModelFinishLeatherReceive.IssueFrom = $("#IssueFrom").val();
+            viewModelFinishLeatherReceive.ReceiveAt = $("#ReceiveAt").val();
+            viewModelFinishLeatherReceive.ReceiveNote = $("#ReceiveNote").val();
+            viewModelFinishLeatherReceive.RecordStatus = $("#RecordStatus").val();
+
+
+
+                var itemGrid = $("#FinishItemsGrid").data("kendoGrid");
+                var itemGridRow = itemGrid.select();
+                var itemGridData = itemGrid.dataItem(itemGridRow);
+                if (itemGridData != null)
+                {
+
+                viewModelFinishLeatherReceiveItem.InvFinishLeatherReceiveItemList = [];
+                viewModelFinishLeatherReceiveItem.FNReceiveID = '';
+                viewModelFinishLeatherReceiveItem.FNReceiveItemID = itemGridData.FNReceiveItemID;
+                viewModelFinishLeatherReceiveItem.FinishLeatherIssueID = itemGridData.FinishLeatherIssueID;
+                viewModelFinishLeatherReceiveItem.FinishLeatherIssueItemID = itemGridData.FinishLeatherIssueItemID;
+                viewModelFinishLeatherReceiveItem.BuyerID = itemGridData.BuyerID;
+                viewModelFinishLeatherReceiveItem.BuyerOrderID = itemGridData.BuyerOrderID;
+                viewModelFinishLeatherReceiveItem.ArticleID = itemGridData.ArticleID;
+                viewModelFinishLeatherReceiveItem.ArticleNo = itemGridData.ArticleNo;
+                viewModelFinishLeatherReceiveItem.ArticleChallanID = itemGridData.ArticleChallanID;
+                viewModelFinishLeatherReceiveItem.ArticleChallanNo = itemGridData.ArticleChallanNo;
+                viewModelFinishLeatherReceiveItem.ItemTypeID = itemGridData.ItemTypeID;
+                viewModelFinishLeatherReceiveItem.LeatherTypeID = itemGridData.LeatherTypeID;
+                viewModelFinishLeatherReceiveItem.LeatherStatusID = itemGridData.LeatherStatusID;
+                viewModelFinishLeatherReceiveItem.FinishQCLabel = itemGridData.FinishQCLabel;
+                viewModelFinishLeatherReceive.InvFinishLeatherReceiveItemList.push(viewModelFinishLeatherReceiveItem);
+
+                viewModelFinishLeatherReceiveItem = {
+                    "FNReceiveItemID": "", "FNReceiveID": "", "FinishLeatherIssueID": "", "FinishLeatherIssueItemID": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "",
+                    "ArticleNo": "", "ArticleChallanID": "", "ArticleChallanNo": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "FinishQCLabel": ""
+                };
+
+                var colorGrid = $("#FinishItemsColorGrid").data("kendoGrid").dataSource;
+                var colorGridData = colorGrid.data();
+                viewModelFinishLeatherReceive.InvFinishLeatherReceiveColorList = [];
+                for (var i = 0; i < colorGridData.length; i++) {
+                    //if (colorGridData[i].dirty) {
+                        viewModelFinishLeatherReceiveColor.FNReceiveID = '';
+                        viewModelFinishLeatherReceiveColor.FNReceiveItemID = itemGridData.FNReceiveItemID;
+                        viewModelFinishLeatherReceiveColor.FNReceiveColorID = colorGridData[i].FNReceiveColorID;
+                        viewModelFinishLeatherReceiveColor.FinishLeatherIssueID = colorGridData[i].FinishLeatherIssueID;
+                        viewModelFinishLeatherReceiveColor.FinishLeatherIssueItemID = colorGridData[i].FinishLeatherIssueItemID;
+                        viewModelFinishLeatherReceiveColor.FinishLeatherIssueColorID = colorGridData[i].FinishLeatherIssueColorID;
+                        viewModelFinishLeatherReceiveColor.GradeID = colorGridData[i].GradeID;
+                        viewModelFinishLeatherReceiveColor.ColorID = colorGridData[i].ColorID;
+                        viewModelFinishLeatherReceiveColor.GradeRange = colorGridData[i].GradeRange;
+                        viewModelFinishLeatherReceiveColor.FinishQCLabel = colorGridData[i].FinishQCLabel;
+                        viewModelFinishLeatherReceiveColor.IssuePcs = colorGridData[i].IssuePcs;
+                        viewModelFinishLeatherReceiveColor.IssueSide = colorGridData[i].IssueSide;
+                        viewModelFinishLeatherReceiveColor.IssueArea = colorGridData[i].IssueArea;
+                        viewModelFinishLeatherReceiveColor.SideArea = colorGridData[i].SideArea;
+                        viewModelFinishLeatherReceiveColor.ReceivePcs = colorGridData[i].ReceivePcs;
+                        viewModelFinishLeatherReceiveColor.ReceiveSide = colorGridData[i].ReceiveSide;
+                        viewModelFinishLeatherReceiveColor.ReceiveArea = colorGridData[i].ReceiveArea;
+                        viewModelFinishLeatherReceiveColor.ReceiveSideArea = colorGridData[i].ReceiveSideArea;
+                        viewModelFinishLeatherReceiveColor.AreaUnit = colorGridData[i].AreaUnit;
+                        viewModelFinishLeatherReceiveColor.ArticleColorNo = colorGridData[i].ArticleColorNo;
+                        viewModelFinishLeatherReceive.InvFinishLeatherReceiveColorList.push(viewModelFinishLeatherReceiveColor);
+
+                        viewModelFinishLeatherReceiveColor =
+                            {
+                                "FNReceiveColorID": "", "FNReceiveItemID": "", "FNReceiveID": "", "FinishLeatherIssueItemID": "", "FinishLeatherIssueID": "", "FinishLeatherIssueColorID": "",
+                                "ColorID": "", "GradeID": "", "FinishQCLabel": "", "IssuePcs": "", "IssueSide": "", "IssueArea": "", "SideArea": "", "AreaUnit": "", "ReceivePcs": "",
+                                "ReceiveSide": "", "ReceiveArea": "", "ReceiveSideArea": "", "ArticleColorNo": "", "GradeRange": ""
+                            };
+                    //}
+                }
+                if (viewModelFinishLeatherReceive.FNReceiveID == "") {
+                    //$("#divLoading").show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Save", "FinishedLeatherStoreTransferReceive")',
+                        data: JSON.stringify(viewModelFinishLeatherReceive),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $("#FNReceiveID").val(data.FNReceiveID);
+                                $("#FNReceiveNo").val(data.FNReceiveNo);
+                                $("#FinishItemsGrid").data("kendoGrid").dataSource.data(data.InvFinishLeatherReceiveItemList);
+                                $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+                       
+
+                        
+                                //$("#divLoading").hide();
+                            } 
+                            else {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                }
+                    // No Changes Exiting Data
+                else {
+                    //$("#MessageText").html("No Changes to Save.");
+                    //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Update", "FinishedLeatherStoreTransferReceive")',
+                        data: JSON.stringify(viewModelFinishLeatherReceive),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#divLoading").hide();
+                            if (data.msg.Type == 2) {
+
+                                $("#FNReceiveID").val(data.FNReceiveID);
+                                $("#FNReceiveNo").val(data.FNReceiveNo);
+                                $("#FinishItemsGrid").data("kendoGrid").dataSource.data(data.InvFinishLeatherReceiveItemList);
+                                $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data([]);
+
+                                $('#MessageText').html(data.msg.Msg);
+                                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                            }
+
+                            else {
+                                $("#MessageText").html(data.msg.Msg);
+                                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            }
+                        },
+                        error: function (respnse) {
+                            // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                }
+            } else {//IF Shesh
+                $("#MessageText").html("There has no Finish Item List to Receive.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            viewModelFinishLeatherReceive =
+            {
+                "FNReceiveID": "", "FNReceiveNo": "", "FNReceiveDate": "", "ReceiveCategory": "", "ReceiveFor": "", "IssueFrom": "", "ReceiveAt": "", "RecordStatus": "",
+                "ReceiveNote": "", "InvFinishLeatherReceiveItemList": [], "InvFinishLeatherReceiveColorList": []
+            };
+        }
+    }
+
+
+
+
+
+    @*else {
+    // UPDATE DATA
+            $("#divLoading").show();
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("Update", "FinishedLeatherStoreTransferReceive")',
+        data: JSON.stringify(viewModelFinishLeatherReceive),
+        contentType: 'application/json;',
+        dataType: 'json',
+        success: function (data) {
+            $("#divLoading").hide();
+            if (data.msg.Type == 2) {
+                $('#MessageText').html(data.msg.Msg);
+                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+            }
+
+            else {
+                $("#MessageText").html(data.msg.Msg);
+                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+            }
+        },
+        error: function (respnse) {
+            // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+        },
+        complete: function (data) {
+            $("#divLoading").hide();
+        }
+    });
+    }//*@
+
+
+
+
+    //###################################################################  END OF SAVE #############################################################//
+
+
+    //###################################################################  SESRCH WETBLUE DATA ######################################################
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetFinishRecieveMasterDetail", "FinishedLeatherStoreTransferReceive", "FNReceiveID,FinishLeatherIssueID,ReceiveAt,IssueFrom,FNReceiveItemID,");
+    });
+
+
+    function SearchItemGridDetail() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetFinishRecieveItemDetail", "FinishedLeatherStoreTransferReceive")',
+            type: 'GET',
+            data: { "FNReceiveID": $('#FNReceiveID').val() },
+            success: function (data) {
+                $("#divLoading").show();
+                //console.log(data);
+                $("#FinishItemsGrid").data("kendoGrid").dataSource.data(data);
+            },
+            error: function (xhr, status, error) {
+                alert("Failed: " + data.status + ": " + data.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+
+
+
+    $("#btnSearchGridSearch").click(function () {
+
+        GetSearchResult("SearchFinishLeatherReceiveNo", "FinishedLeatherStoreTransferReceive");
+    });
+
+    AutoComplete("GetAutoCompleteData", "FinishedLeatherStoreTransferReceive");
+
+
+    function ListOfValueSearchGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+
+
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetFinishRecieveItemDetail", "FinishedLeatherStoreTransferReceive")',
+            type: 'GET',
+            data: { "FNReceiveID": $('#FNReceiveID').val() },
+            success: function (data) {
+                $("#divLoading").show();
+                console.log(data);
+                $("#FinishItemsGrid").data("kendoGrid").dataSource.data(data);
+
+                $.ajax({
+                    url: '@Url.Action("GetReceiveItemColorDetailInfoForSearch", "FinishedLeatherStoreTransferReceive")',
+                    type: 'GET',
+                    data: { "FNReceiveItemID": data[0].FNReceiveItemID },
+                    success: function (response) {
+                        // console.log(response);
+                        // $("#divLoading").hide();
+                        //$("#FinishItemsGrid").data("kendoGrid").dataSource.data(response);
+                        $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data(response);
+                        $("#RecordStatus").val(response.RecordStatus);
+
+                        if (selectedItem.RecordStatus == "Not Confirmed") {
+                            $("#btnConfirm").removeAttr('disabled');
+                            $("#btnCheck").removeAttr('disabled');
+                            $("#btnSubmit").removeAttr('disabled');
+                        }
+                        else if (selectedItem.RecordStatus == "Checked") {
+                            $("#btnCheck").attr('disabled', 'disabled');
+
+                        }
+
+                        else if (selectedItem.RecordStatus == "Confirmed") {
+                            $("#btnConfirm").attr('disabled', 'disabled');
+                            $("#btnCheck").attr('disabled', 'disabled');
+                            $("#btnSubmit").attr('disabled', 'disabled');
+                            $('#btnDelete').attr('disabled', true);
+
+                        }
+                        else {
+                            $("#btnConfirm").removeAttr('disabled');
+                            $("#btnCheck").removeAttr('disabled');
+                            $("#btnSubmit").removeAttr('disabled');
+                            $('#btnDelete').removeAttr('disabled');
+                        }
+
+                    },
+                    error: function (xhr, status, error) {
+                        alert(xhr.responseText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                alert("Failed: " + data.status + ": " + data.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+
+        $("#FinishItemsColorGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //################################################################### END OF SESRCH WETBLUE DATA ######################################################
+
+    //############################################################### DELETE WET BLUE ITEM #############################################################
+
+    @*$('#btnDelete').click(function () {
+        if ($("#FNReceiveID").val() != "") {
+            $.ajax({
+                url: '@Url.Action("DeleteAllReceiveData", "FinishedLeatherStoreTransferReceive")',
+                type: 'GET',
+                data: { id: $("#FNReceiveID").val() },
+                success: function (data) {
+                    $("#divLoading").show();
+                    //console.log(data);
+                    if (data.Type == 2) {
+                        $('.FormBody input[type=text]').val('');
+                        $('.Dropdown').val('');
+                        $('.FormBody input[type=hidden]').val('');
+                        $('.FormBody input[type=number]').val('');
+                        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                        $('#MessageText').html(data.Msg);
+                        
+                        $("#FinishItemsGrid").data("kendoGrid").dataSource.data("");
+                        $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data("");
+                    }
+                    else {
+                        $('#MessageText').html('Error Occured.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error occured !!!");
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+    });*@
+
+    $('#btnDelete').click(function () {
+        if ($("#FNReceiveID").val() != "") {
+            $.ajax({
+                url: '@Url.Action("DeleteAllReceiveData", "FinishedLeatherStoreTransferReceive")',
+                type: 'GET',
+                data: { id: $("#FNReceiveID").val() },
+                success: function (data) {
+                    $("#divLoading").show();
+                    //console.log(data);
+                    if (data.Type == 2) {
+                        $('.FormBody input[type=text]').val('');
+                        $('.Dropdown').val('');
+                        $('.FormBody input[type=hidden]').val('');
+                        $('.FormBody input[type=number]').val('');
+                        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                        $('#MessageText').html(data.Msg);
+                        $("#FinishItemsGrid").data("kendoGrid").dataSource.data("");
+                        $("#FinishItemsColorGrid").data("kendoGrid").dataSource.data("");
+                    }
+                    else {
+                        $('#MessageText').html('Error Occured.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error occured !!!");
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+    });
+    //############################################################### END OF DELETE WET BLUE ITEM #######################################################
+
+
+
+
+</script>
+

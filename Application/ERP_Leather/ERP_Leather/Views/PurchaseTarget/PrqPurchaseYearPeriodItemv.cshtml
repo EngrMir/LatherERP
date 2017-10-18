@@ -1,0 +1,1246 @@
+﻿@{
+    ViewBag.Title = "Raw Hide Leather Purchase Target";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<input id="YearID" type="hidden" class="txtBox" />
+<input id="PeriodID" type="hidden" class="txtBox" />
+<input id="RevisionNo" type="hidden" class="txtBox" />
+
+<div class="row">
+    <div class="FormBody">
+        <fieldset>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Purchase Year<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="PurchaseYear" class="txtBox RequiredTextBox SetFocus" name="" tabindex="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Year Start Date<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="YearStartDate" class="txtBox datePicker RequiredTextBox" name="" tabindex="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Year End Date<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="YearEndDate" class="txtBox datePicker RequiredTextBox" name="" tabindex="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div id="PageDetailGrid"></div>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody" id="abcas">
+        <div id="PeriodItemDetailGrid"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <fieldset>
+            <div class="row">
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-2">
+                    <input type="button" id="btnRevision" value="Revision" />
+                </div>
+                <div class="col-lg-2">
+                    <input type="button" id="btnConfirm" value="Confirmed" />
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var checkGridData = 1;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkitemgrid = 0;
+    var dataitem = {};
+    var minDate = 0;
+    var maxDate = 0;
+
+    $(document).ready(function () {
+        $(".SetFocus").focus();
+        OnlyNumericValue('PurchaseYear');
+        //$("#btnRevision").attr("disabled", "disabled");
+        $("#abcas").attr("disabled", "disabled");
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            change: function () {
+                var minstr = $("#YearStartDate").val().split('/');
+                var maxstr = $("#YearEndDate").val().split('/');
+                minDate = new Date(minstr[2], minstr[1] - 1, minstr[0]);
+                maxDate = new Date(maxstr[2], maxstr[1] - 1, maxstr[0]);
+            }
+        });
+
+        $("#YearStartDate").attr("readonly", true);
+        $("#YearEndDate").attr("readonly", true);
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        var periodDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PeriodID",
+                    fields: {
+                        PeriodID: { editable: false },
+                        StartDate: { editable: true },
+                        EndDate: { editable: true },
+                        RecordStatus: { editable: true }
+                    }
+                }
+            },
+            pageSize: 5
+        });
+        var periodGrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: periodDataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Period", className: "btnPeriodGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //height: 150,
+            columns: [
+                { field: "PeriodID", hidden: true },
+                { field: "StartDate", title: "Period Start Date<span style='color:red'>*</span>", editable: true, filterable: false, width: "100px", attributes: { "class": "periodStartDate" }, format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "EndDate", title: "Period End Date<span style='color:red'>*</span>", editable: true, filterable: false, width: "100px", attributes: { "class": "periodEndDate" }, format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "RecordStatus", hidden: true },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeletePeriod }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+                //,
+                //{ command: [{ name: "RevisionRow", text: "Revision", click: handleRevisionPeriod }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Revision", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ command: [{ name: "ConfirmedRow", text: "Confirmed", click: handleConfirmedPeriod }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmed", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        function handleDeletePeriod() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        var periodItemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemTypeID",
+                    fields: {
+                        PeriodItemID: { editable: false },
+                        LeatherStatusName: { editable: true },
+                        UnitName: { editable: true },
+                        ItemTypeName: { editable: true },
+                        SizeName: { editable: true },
+                        TargetQuantity: { editable: true, type: "number", defaultValue: '' },
+                        TargetValue: { editable: true, type: "number", defaultValue: '' },
+                        CurrencyName: { editable: true },
+                        RecordStatus: { editable: true }
+                    }
+                }
+            },
+            pageSize: 30
+
+        });
+        var periodItemGrid = $("#PeriodItemDetailGrid").kendoGrid({
+            dataSource: periodItemDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add Period Item", className: "btnPeriodItemGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //height: 200,
+            columns: [
+                { field: "PeriodItemID", hidden: true, width: "20px", filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LeatherStatusName", title: "Leather Status<span style='color:red'>*</span>", editable: true, filterable: false, width: "50px", editor: ddlLeatherStatus, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "UnitName", title: "Unit<span style='color:red'>*</span>", editable: true, filterable: false, width: "40px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ItemTypeName", title: "Item Type<span style='color:red'>*</span>", editable: true, filterable: false, width: "40px", editor: ddlItemType, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SizeName", title: "Size<span style='color:red'>*</span>", width: "50px", filterable: true, sortable: false, editor: ddlSize, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "TargetQuantity", title: "Target Pcs", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "TargetValue", title: "Target Value", width: "50px", filterable: true, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "CurrencyName", title: "Currency<span style='color:red'>*</span>", editable: true, filterable: false, width: "50px", editor: ddlICurrency, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "RecordStatus", hidden: true },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeletePeriodItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        function handleDeletePeriodItem() {
+            deleteStatus = 3;
+            //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            var grid1 = $("#PeriodItemDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Agent Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for master delete confirmation
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#YearID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedTargetYear", "PurchaseTarget")',
+                        type: 'POST',
+                        data: JSON.stringify({ "yearId": $("#YearID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                changeStatus = 0;
+                                checkitemgrid = 0;
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                        }
+                    });
+                    $(".RequiredTextBox").css("border-color", "");
+                    CloseConfirmationDialog();
+                } else {
+                    $("#MessageText").html("No Data Found.");
+                    $("#MessageText").css("color", "red");
+                }
+            } else if (deleteStatus == 2) {
+                if (dataitem.PeriodID != "") {
+                    //if (dataitem.RecordStatus == "CNF") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedPeriod", "PurchaseTarget")',
+                        type: 'POST',
+                        data: JSON.stringify({ "periodId": dataitem.PeriodID, "RecordStatus": dataitem.RecordStatus }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    $(".RequiredTextBox").css("border-color", "");
+                    CloseConfirmationDialog();
+                    //} else {
+                    //    $("#MessageText").html("This Record Already Confirmed.");
+                    //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    //}
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    CloseConfirmationDialog();
+                }
+            } else if (deleteStatus == 3) {
+                if (dataitem.PeriodItemID != "") {
+                    //if (dataitem.RecordStatus == "CNF") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedPeriodItem", "PurchaseTarget")',
+                        type: 'POST',
+                        data: JSON.stringify({ "periodItemId": dataitem.PeriodItemID, "RecordStatus": dataitem.RecordStatus }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                        }
+                    });
+                    CloseConfirmationDialog();
+                    //} else {
+                    //    $("#MessageText").html("This Record Already Confirmed.");
+                    //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    //}
+                } else {
+                    $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    CloseConfirmationDialog();
+                }
+                checkitemgrid = 0;
+            }
+
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                CheckRecordStatusForButton("NCF");
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                checkitemgrid = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                checkitemgrid = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#YearID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedTargetYear", "PurchaseTarget")',
+                            type: 'POST',
+                            data: JSON.stringify({ "yearId": $("#YearID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    changeStatus = 0;
+                                    CheckRecordStatusForButton("NCF");
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    checkitemgrid = 0;
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css("color", "red");
+                                }
+                            }
+                        });
+                        $(".RequiredTextBox").css("border-color", "");
+                        CloseSaveChangesDialog();
+                    } else {
+                        $("#MessageText").html("No Data Found.");
+                        $("#MessageText").css("color", "red");
+                    }
+                } else if (deleteStatus == 2) {
+                    if (dataitem.PeriodID != "") {
+                        //if (dataitem.RecordStatus == "CNF") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedPeriod", "PurchaseTarget")',
+                            type: 'POST',
+                            data: JSON.stringify({ "periodId": dataitem.PeriodID, "RecordStatus": dataitem.RecordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                        $(".RequiredTextBox").css("border-color", "");
+                        CloseSaveChangesDialog();
+                        //} else {
+                        //    $("#MessageText").html("This Record Already Confirmed.");
+                        //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        //}
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        CloseSaveChangesDialog();
+                    }
+                } else if (deleteStatus == 3) {
+                    if (dataitem.PeriodItemID != "") {
+                        //if (dataitem.RecordStatus == "CNF") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedPeriodItem", "PurchaseTarget")',
+                            type: 'POST',
+                            data: JSON.stringify({ "periodItemId": dataitem.PeriodItemID, "RecordStatus": dataitem.RecordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                }
+                                else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css("color", "red");
+                                }
+                            }
+                        });
+                        CloseSaveChangesDialog();
+                        //} else {
+                        //    $("#MessageText").html("This Record Already Confirmed.");
+                        //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        //}
+                    }
+                    else {
+                        $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        CloseSaveChangesDialog();
+                    }
+                    checkitemgrid = 0;
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                .appendTo(container)
+                .kendoDatePicker({
+                    format: "{0:dd/MM/yyyy}",
+                    //min: new Date(minDate), // sets max date to Jan 1st, 2013
+                    //max: new Date(maxDate), // sets min date to Jan 1st, 2011
+                    change: function () {
+                        //var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                        //var data = dataSource.data();
+                        //for (var i = 0; i < 1; i++) {
+                        //    var minstr = new Date(data[i].StartDate);
+                        //    minDate = minstr.getFullYear() + "/" + (minstr.getMonth() + 1) + "/" + (parseInt(minstr.getDate()) + parseInt('1'));
+                        //    if (data[i].EndDate != "") {
+                        //        var maxstr = new Date(data[i].EndDate);
+                        //        minDate = maxstr.getFullYear() + "/" + (maxstr.getMonth() + 1) + "/" + (parseInt(maxstr.getDate()) + parseInt('1'));
+                        //    }
+                        //}
+                        changeStatus = 1;
+                    }
+                });
+        }
+        //To add new row with enter key
+        $(".btnPeriodItemGrid").click(function () {
+            var supplieragentgrid = $("#PeriodItemDetailGrid").data("kendoGrid");
+            $("#PeriodItemDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+        });
+
+
+        $("#PeriodItemDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#PeriodItemDetailGrid").data("kendoGrid");
+                $("#PeriodItemDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+            }
+        });
+
+        //To Define Data Source for InfoFor Kendo Grid
+        var ddlLeatherStatusDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LeatherStatusID",
+                    fields: {
+                        LeatherStatusID: { editable: false },
+                        LeatherStatusName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllLeatherStatus", "PurchasePeriod")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlLeatherStatus(container, options) {
+            $('<input id="LeatherStatusName" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "LeatherStatusName",
+                    dataValueField: "LeatherStatusName",
+                    optionLabel: "--Slelct--",
+                    change: function () {
+                        changeStatus = 1;
+                        checkitemgrid = 1;
+                    },
+                    dataSource: ddlLeatherStatusDataSource
+                });
+        };
+
+        //To Define Data Source for InfoFor Kendo Grid
+        var ddlUnitDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveUnit", "PurchasePeriod")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnit(container, options) {
+            $('<input id="UnitName" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "UnitName",
+                    optionLabel: "--Slelct--",
+                    change: function () {
+                        changeStatus = 1;
+                        checkitemgrid = 1;
+                    },
+                    dataSource: ddlUnitDataSource
+                });
+        };
+
+        //To Define Data Source for InfoFor Kendo Grid
+        var ddlItemTypeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemTypeID",
+                    fields: {
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllItemType", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlItemType(container, options) {
+            $('<input id="ItemTypeName" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "ItemTypeName",
+                    dataValueField: "ItemTypeName",
+                    optionLabel: "--Slelct--",
+                    change: function () {
+                        changeStatus = 1;
+                        checkitemgrid = 1;
+                    },
+                    dataSource: ddlItemTypeDataSource
+                });
+        };
+
+        //To Define Data Source for InfoFor Kendo Grid
+        var ddlSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SizeID",
+                    fields: {
+                        SizeID: { editable: false },
+                        SizeName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllItemSize", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlSize(container, options) {
+            $('<input id="SizeName" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "SizeName",
+                    dataValueField: "SizeName",
+                    optionLabel: "--Slelct--",
+                    change: function () {
+                        changeStatus = 1;
+                        checkitemgrid = 1;
+                    },
+                    dataSource: ddlSizeDataSource
+                });
+        };
+
+        //To Define Data Source for InfoFor Kendo Grid
+        var ddlICurrencyDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CurrencyID",
+                    fields: {
+                        CurrencyID: { editable: false },
+                        CurrencyName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveCurrency", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlICurrency(container, options) {
+            $('<input id="CurrencyName" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "CurrencyName",
+                    dataValueField: "CurrencyName",
+                    optionLabel: "--Slelct--",
+                    change: function () {
+                        changeStatus = 1;
+                        checkitemgrid = 1;
+                    },
+                    dataSource: ddlICurrencyDataSource
+                });
+        };
+
+        $("#PeriodItemDetailGrid").on('input', function () {
+            checkitemgrid = 1;
+            changeStatus = 1;
+        });
+
+        $(".btnPeriodGrid").click(function () {
+            if (checkitemgrid == 0) {
+                var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+                $("#PeriodItemDetailGrid").data('kendoGrid').dataSource.data([]);
+            } else {
+                alert("Save First Current Transaction.");
+                //$('#MessageText').html("Save First Current Transaction.");
+                //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        });
+
+        //$(".btnPeriodGrid").click(function () {
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                if (checkitemgrid == 0) {
+                    var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+                    $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    supplieragentgrid.addRow();
+                    $("#PeriodItemDetailGrid").data('kendoGrid').dataSource.data([]);
+                } else {
+                    alert("Save First Current Transaction.");
+                    //$('#MessageText').html("Save First Current Transaction.");
+                    //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+            }
+        });
+
+        //To face child data into another grid for a grid row on click
+        $("#PageDetailGrid").on("click", "tr", function (e) {
+
+            if (checkitemgrid == 0) {
+                var parentGrid = $("#PageDetailGrid").data("kendoGrid");
+                var parentGridRow = parentGrid.select();
+                var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+                if (parentGridItem.PeriodID != "") {
+                    $.ajax({
+                        url: '@Url.Action("GetPeriodItemList", "PurchaseTarget")',
+                        type: 'GET',
+                        data: { "periodId": parentGridItem.PeriodID },
+                        success: function (response) {
+                            //if (response != null) {
+                            $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data(response);
+                            //}
+                        } //End of Success Call
+                    });
+                    $('#PeriodID').val(parentGridItem.PeriodID);
+                    CheckRecordStatusForButton(parentGridItem.RecordStatus);
+                    //if (parentGridItem.RecordStatus == "CNF") {
+                    //    $("#btnSave").attr("disabled", "disabled");
+                    //    $("#btnRevision").removeAttr("disabled");
+                    //    $("#btnConfirm").attr("disabled", "disabled");
+                    //} else {
+                    //    $("#btnSave").removeAttr("disabled");
+                    //    $("#btnRevision").attr("disabled", "disabled");
+                    //    $("#btnConfirm").removeAttr("disabled");
+                    //}
+                } else {
+                    $("#PeriodItemDetailGrid").data('kendoGrid').dataSource.data([]);
+                }
+            } else {
+                alert("Save First Current Transaction.");
+                //$('#MessageText').html("Save First Current Transaction.");
+                //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        // Reset Data
+        $("#btnReset").click(function () {
+            resetEditDeleteStatus = 1; //Reset Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                CheckRecordStatusForButton("NCF");
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                checkitemgrid = 0;
+            }
+        });
+    }); //End of Document.Ready()
+
+    // Declare Object
+    var prqPurchaseYearPeriodModel = { "YearID": "", "StartDate": "", "EndDate": "" };
+    var PurchaseYearPeriodItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+    var prqPurchaseYearTargetModel = { "PurchaseYear": "", "YearStartDate": "", "YearEndDate": "", "PurchaseYearPeriodList": [], "PurchaseYearPeriodItemList": [] };
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('PurchaseYear', 4);
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('YearStartDate', 10);
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('YearEndDate', 10);
+        //Check Two Dates
+        CheckDiffTwoDates('YearStartDate', 'YearEndDate');
+
+        if (saveStatus == 1) {
+            prqPurchaseYearTargetModel.YearID = $('#YearID').val();
+            prqPurchaseYearTargetModel.PeriodID = $('#PeriodID').val();
+            prqPurchaseYearTargetModel.PurchaseYear = $('#PurchaseYear').val();
+            prqPurchaseYearTargetModel.YearStartDate = $('#YearStartDate').val();
+            prqPurchaseYearTargetModel.YearEndDate = $('#YearEndDate').val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            prqPurchaseYearTargetModel.PurchaseYearPeriodList = [];
+            for (var i = data.length - 1; i >= 0; i--) {
+                if (data[i].dirty) {
+                    if ((data[i].StartDate == "") || (data[i].EndDate == "")) {
+                        checkGridData = 0;
+                        break;
+                    }
+                    prqPurchaseYearPeriodModel.StartDate = data[i].StartDate;
+                    prqPurchaseYearPeriodModel.EndDate = data[i].EndDate;
+                    prqPurchaseYearPeriodModel.PeriodID = data[i].PeriodID;
+                    prqPurchaseYearTargetModel.PurchaseYearPeriodList.push(prqPurchaseYearPeriodModel);
+                    prqPurchaseYearPeriodModel = { "YearID": "", "StartDate": "", "EndDate": "" };
+                }
+            }
+            var dataSourcePeriodItem = $("#PeriodItemDetailGrid").data("kendoGrid").dataSource;
+            var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+            prqPurchaseYearTargetModel.PurchaseYearPeriodItemList = [];
+            for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                if (dataPeriodItem[j].dirty) {
+                    if ((dataPeriodItem[j].ItemTypeName == "") || (dataPeriodItem[j].UnitName == "") || (dataPeriodItem[j].LeatherStatusName == "") || (dataPeriodItem[j].SizeName == "") || (dataPeriodItem[j].CurrencyName == "")) {
+                        checkGridData = 0;
+                        break;
+                    }
+                    PurchaseYearPeriodItemModel.PeriodItemID = dataPeriodItem[j].PeriodItemID;
+                    PurchaseYearPeriodItemModel.ItemTypeName = dataPeriodItem[j].ItemTypeName;
+                    PurchaseYearPeriodItemModel.UnitName = dataPeriodItem[j].UnitName;
+                    PurchaseYearPeriodItemModel.LeatherStatusName = dataPeriodItem[j].LeatherStatusName;
+                    PurchaseYearPeriodItemModel.SizeName = dataPeriodItem[j].SizeName;
+                    PurchaseYearPeriodItemModel.TargetQuantity = dataPeriodItem[j].TargetQuantity;
+                    PurchaseYearPeriodItemModel.TargetValue = dataPeriodItem[j].TargetValue;
+                    PurchaseYearPeriodItemModel.CurrencyName = dataPeriodItem[j].CurrencyName;
+
+                    prqPurchaseYearTargetModel.PurchaseYearPeriodItemList.push(PurchaseYearPeriodItemModel);
+                    PurchaseYearPeriodItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+                }
+            }
+            if (changeStatus == 1) {
+                if (checkGridData == 1) {
+                    var dataSourcePeriod = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                    var dataPeriod = dataSourcePeriod.data(); // Get Detail Grid Data
+                    prqPurchaseYearTargetModel.PeriodList = [];
+                    for (var k = dataPeriod.length - 1; k >= 0; k--) {
+                        prqPurchaseYearPeriodModel.StartDate = data[k].StartDate;
+                        prqPurchaseYearPeriodModel.EndDate = data[k].EndDate;
+                        prqPurchaseYearTargetModel.PeriodList.push(prqPurchaseYearPeriodModel);
+                        prqPurchaseYearPeriodModel = { "YearID": "", "StartDate": "", "EndDate": "" };
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("PrqPurchaseYearPeriodItemv", "PurchaseTarget")',
+                        data: JSON.stringify(prqPurchaseYearTargetModel),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#YearID").val(respnse.YearID);
+                                changeStatus = 0;
+                                checkitemgrid = 0;
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetPeriodList", "PurchaseTarget")',
+                                    data: { yearId: $("#YearID").val() },
+                                    dataType: 'json',
+                                    success: function (listofdata) {
+                                        $("#PageDetailGrid").data("kendoGrid").dataSource.data(listofdata.PurchaseYearPeriodList);
+                                        $("#PeriodID").val(listofdata.PeriodID);
+                                        $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    }
+                                });
+                            } else if (respnse.msg.Type == 3) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                changeStatus = 0;
+                                checkitemgrid = 0;
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetPeriodList", "PurchaseTarget")',
+                                    data: { yearId: $("#YearID").val() },
+                                    dataType: 'json',
+                                    success: function (listofdata) {
+                                        $("#PageDetailGrid").data("kendoGrid").dataSource.data(listofdata.PurchaseYearPeriodList);
+                                        $("#PeriodID").val(listofdata.PeriodID);
+                                        $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    }
+                                });
+                            }
+                            else {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                }
+                    // Wrong Grid Data
+                else {
+                    $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    checkGridData = 1;//gfhvgnbvgnvbnbvnvbnb//////////
+                }
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    }
+
+    ////////////////////Confirmed////////////////////////////
+
+    $("#btnConfirm").click(function () {
+        var grid1 = $("#PageDetailGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+        if (changeStatus == 0) {
+            //if (checkitemgrid == 0) {
+            if (dataitem.RecordStatus == "NCF") {
+
+                prqPurchaseYearTargetModel.YearID = $('#YearID').val();
+                prqPurchaseYearTargetModel.PeriodID = $('#PeriodID').val();
+
+                var dataSourcePeriodItem = $("#PeriodItemDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data();
+                prqPurchaseYearTargetModel.PurchaseYearPeriodItemList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    PurchaseYearPeriodItemModel.PeriodItemID = dataPeriodItem[j].PeriodItemID;
+                    PurchaseYearPeriodItemModel.ItemTypeName = dataPeriodItem[j].ItemTypeName;
+                    PurchaseYearPeriodItemModel.UnitName = dataPeriodItem[j].UnitName;
+                    PurchaseYearPeriodItemModel.LeatherStatusName = dataPeriodItem[j].LeatherStatusName;
+                    PurchaseYearPeriodItemModel.SizeName = dataPeriodItem[j].SizeName;
+                    PurchaseYearPeriodItemModel.TargetQuantity = dataPeriodItem[j].TargetQuantity;
+                    PurchaseYearPeriodItemModel.TargetValue = dataPeriodItem[j].TargetValue;
+                    PurchaseYearPeriodItemModel.CurrencyName = dataPeriodItem[j].CurrencyName;
+                    //PurchaseYearPeriodItemModel.RecordStatus = dataPeriodItem[j].RecordStatus;
+
+                    prqPurchaseYearTargetModel.PurchaseYearPeriodItemList.push(PurchaseYearPeriodItemModel);
+                    PurchaseYearPeriodItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+                }
+                if (dataPeriodItem.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("YearlyTargetConfirmed", "PurchaseTarget")',
+                        data: JSON.stringify(prqPurchaseYearTargetModel),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("CNF");
+
+                                //CheckRecordStatusForButton("NCF");
+                                //ClearOperationalMessage();
+                                //ResetOnlyMasterPageData();
+                                checkitemgrid = 0;
+                                //$(".RequiredTextBox").css("border-color", "");
+                                //$("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                //$("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                } else {
+                    alert("Child Record not Found.");
+                    //$('#MessageText').html("Child Record not Found.");
+                    //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+            } else {
+                alert("Already Confirmed.");
+                //$('#MessageText').html("Already Confirmed.");
+                //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+        else {
+            alert("Save First Current Transaction.");
+            //$('#MessageText').html("Save First Current Transaction.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+    });
+
+    ////////////////////Revision///////////////////////////
+
+    $("#btnRevision").click(function () {
+        var grid1 = $("#PageDetailGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+        if (changeStatus == 0) {
+            //if (checkitemgrid == 0) {
+            if (dataitem.RecordStatus == "CNF") {
+                prqPurchaseYearTargetModel.PeriodID = $('#PeriodID').val();
+
+                var dataSourcePeriodItem = $("#PeriodItemDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data();
+                prqPurchaseYearTargetModel.PurchaseYearPeriodItemList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    PurchaseYearPeriodItemModel.PeriodItemID = dataPeriodItem[j].PeriodItemID;
+                    PurchaseYearPeriodItemModel.ItemTypeName = dataPeriodItem[j].ItemTypeName;
+                    PurchaseYearPeriodItemModel.UnitName = dataPeriodItem[j].UnitName;
+                    PurchaseYearPeriodItemModel.LeatherStatusName = dataPeriodItem[j].LeatherStatusName;
+                    PurchaseYearPeriodItemModel.SizeName = dataPeriodItem[j].SizeName;
+                    PurchaseYearPeriodItemModel.TargetQuantity = dataPeriodItem[j].TargetQuantity;
+                    PurchaseYearPeriodItemModel.TargetValue = dataPeriodItem[j].TargetValue;
+                    PurchaseYearPeriodItemModel.CurrencyName = dataPeriodItem[j].CurrencyName;
+
+                    prqPurchaseYearTargetModel.PurchaseYearPeriodItemList.push(PurchaseYearPeriodItemModel);
+                    PurchaseYearPeriodItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("YearlyTargetRevisioned", "PurchaseTarget")',
+                    data: JSON.stringify(prqPurchaseYearTargetModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            dataitem.RecordStatus = "NCF";
+
+                            $("#btnSave").removeAttr("disabled");
+                            $("#btnRevision").attr("disabled", "disabled");
+                            $("#btnConfirm").removeAttr("disabled");
+
+                            @*$.ajax({
+                                type: "GET",
+                                url: '@Url.Action("GetPeriodList", "PurchaseTarget")',
+                                data: { yearId: $("#YearID").val() },
+                                dataType: 'json',
+                                success: function (listofdata) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(listofdata.PurchaseYearPeriodList);
+                                    $("#PeriodID").val(listofdata.PeriodID);
+                                    $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+                                }
+                            });*@
+                        }
+                    }
+                });
+            } else {
+                alert("At First Confirmed then Revision.");
+                //$('#MessageText').html("At Confirmed Saved then Revision.");
+                //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+        //else {
+        //    alert("Save First Current Transaction.");
+        //    //$('#MessageText').html("Save First Current Transaction.");
+        //    //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        //}
+
+    });
+
+    //////////////////////////////////////////////////
+
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "YearID",
+                fields: {
+                    YearID: { editable: false },
+                    PurchaseYear: { editable: false },
+                    YearStartDate: { editable: false },
+                    RecordStatus: { editable: false },
+                    YearEndDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "YearID", hidden: true },
+            { field: "RecordStatus", hidden: true },
+            { field: "PurchaseYear", title: "Purchase Year", width: "60px" },
+            { field: "YearStartDate", title: "YearStart Date", width: "60px" },
+            { field: "YearEndDate", title: "YearEnd Date", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Target Year Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetYearList", "PurchaseTarget")',
+            dataType: 'json',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#YearID").val(selectedItem.YearID);
+        $("#PurchaseYear").val(selectedItem.PurchaseYear);
+        $("#YearStartDate").val(selectedItem.YearStartDate);
+        $("#YearEndDate").val(selectedItem.YearEndDate);
+        $.ajax({
+            url: '@Url.Action("GetPeriodList", "PurchaseTarget")',
+            type: 'GET',
+            data: { yearId: selectedItem.YearID },
+            success: function (data33) {
+                var minstr = data33.YearStartDate.split('/');
+                var maxstr = data33.YearEndDate.split('/');
+                minDate = new Date(minstr[2], minstr[1] - 1, minstr[0]);
+                //minDate = new Date(minstr[2], minstr[1] - 1, (parseInt(minstr[0]) + parseInt('1')));
+                maxDate = new Date(maxstr[2], maxstr[1] - 1, maxstr[0]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33.PurchaseYearPeriodList);
+                $("#PeriodID").val(data33.PeriodID);
+                $("#PeriodItemDetailGrid").data("kendoGrid").dataSource.data([]);
+            }
+        });
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+        $("#IssueTo").val(23);
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+        $("#IssueTo").val(23);
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+</script>

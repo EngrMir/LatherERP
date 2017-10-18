@@ -1,0 +1,1457 @@
+﻿@{
+    ViewBag.Title = "Finish Chemical Consumption";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Transaction Of</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="" readonly="readonly" value="Stock Adjustment Consumption" class="ReadOnlyTextbox" name="" tabindex="" style="width:250px;" />
+            </div>
+
+
+
+            <div class="col-lg-2">
+                <label>Transaction No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="TransactionNo" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" style="width: 250px;" />
+                <input type="hidden" id="TransactionID" class="txtBox" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Transaction Store</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("IssueFrom", new SelectList(ViewBag.RequisitionTo, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 250px; margin-left: 0px;" })
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>Transaction Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="TransactionDate" class="datePicker" name="" tabindex="" style="width: 250px; margin-left: 2px;" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Transaction From</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ReqFromDate" class="datePicker" name="" tabindex="" style="width: 120px; margin-left: 2px;" /> To
+                <input type="text" id="ReqToDate" class="datePicker" name="" tabindex="" style="width: 120px; margin-left: 2px;" />
+            </div>
+
+
+
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="Remark" class="txtBox" name="" tabindex="" style="width: 250px; margin-left: 2px;" />
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div id="IssueToProductionGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Check Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="CheckComment" class="txtBox" name="" tabindex=""></textarea>
+                @*<input type="button" id="btnCheck" value="Check" />*@
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="ChemicalItemWindow" style="display: none;">
+    <div id="ChemicalItemWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalItemWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalItemWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="GradeWindow" style="display: none;">
+    <div id="GradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RequisitionWindow" style="display: none;">
+    <div id="RequisitionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRequisitionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRequisitionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="StockPackSizeWindow" style="display: none;">
+    <div id="StockPackSizeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnStockPackSizeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnStockPackSizeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    //var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+    var RequisitionWindowOpen = "YES";
+
+    $(document).ready(function () {
+
+        function MakeIssueFromDisabled() {
+            $("#IssueFrom").attr("disabled", "disabled");
+
+        };
+
+        function MakeIssueFromEnabled() {
+            $("#IssueFrom").removeAttr("disabled");
+
+        };
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+        var ddlSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SizeID",
+                    fields: {
+                        SizeID: { editable: false },
+                        SizeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllPackSizeForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlSize(container, options) {
+            $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "SizeName",
+                        dataValueField: "SizeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlSizeDataSource
+                    });
+        };
+
+        var ddlUnitForChemicalPackSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemicalPackSize", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemicalPackSize(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalPackSizeDataSource
+                    });
+        };
+
+
+        var ddlUnitForChemicalDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemical(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalDataSource
+                    });
+        };
+        //--------------------------------------End of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var IssueToProductionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "TransItemID",
+                    fields: {
+                        TransItemID: { editable: true },
+                        ItemID: { editable: true },
+                        ItemName: { editable: true, defaultValue: 'Press F9' },
+
+                        SupplierID: { editable: true },
+                        SupplierName: { editable: true },
+
+                        PackSize: { editable: false },
+                        PackSizeName: { editable: false },
+                        SizeUnit: { editable: false },
+                        SizeUnitName: { editable: false },
+                        PackQty: { editable: false, type: "number", validation: { min: 0, max: 999999999999 } },
+                        StockQty: { editable: true, type: "number", validation: {  min: 0, max: 999999999999 } },
+                        StockUnit: { editable: true },
+                        StockUnitName: { editable: true },
+                        
+                        
+                        //IssuePackSize: { editable: true },
+                        //IssuePackSizeName: { editable: true, defaultValue: 'Press F9' },
+                        //IssueSizeUnit: { editable: true },
+                        //IssueSizeUnitName: { editable: true },
+                        //IssuePackQty: { editable: true, type: "number", validation: {  min: 0, max: 999999999999 } },
+                        IssueQty: { editable: true, type: "number", validation: {  min: 0, max: 999999999999 } },
+                        IssueUnit: { editable: true },
+                        IssueUnitName: { editable: true, defaultValue: 'KG' },
+                        
+                        ItemSource: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var IssueToProductionGrid = $("#IssueToProductionGrid").kendoGrid({
+            dataSource: IssueToProductionGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+
+                $("[name='IssuePackQty']", e.container).blur(function () {
+                    var grid = $("#IssueToProductionGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("IssueQty", (grid.dataItem(row).IssuePackSizeName * grid.dataItem(row).IssuePackQty).toFixed(4));
+                });
+
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            toolbar: [{
+                text: "Add New Requisition",
+                className: "btnIssueToProductionGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                    { field: "ItemName", title: "Chemical<span style='color:red'>*</span>", width: "100px", attributes: { "class": "ChemicalItemName" } },
+                    //{ field: "PackSizeName", title: "Rqsn Pack Size", filterable: false, width: "70px", editor: ddlSize, attributes: { style: "background-color: silver" } },
+                    //{ field: "SizeUnitName", title: "Rqsn Size Unit", filterable: false, width: "80px", editor: ddlUnitForChemicalPackSize, attributes: { style: "background-color: silver" } },
+                    //{ field: "PackQty", format: "{0:n2}", title: "Rqsn Pack Qty", width: "70px", filterable: false, attributes: { style: "background-color: silver" } },
+                    { field: "StockQty", format: "{0:n2}", title: "Stock Qty", filterable: false, width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "StockUnitName", title: "Unit", width: "75px", attributes: { style: "background-color: silver" } },
+                    { field: "SupplierName", title: "Supplier", width: "80px" },
+                    //{ field: "IssuePackSizeName", filterable: false, title: "Issue Pack Size<span style='color:red'>*</span>", width: "80px", attributes: { "class": "StockPackSize" } },
+                    //{ field: "IssueSizeUnitName", filterable: false, title: "Issue Size Unit<span style='color:red'>*</span>", width: "80px" },
+                    //{ field: "IssuePackQty", format: "{0:n2}", filterable: false, title: "Issue Pack Qty<span style='color:red'>*</span>", width: "80px" },
+                    { field: "IssueQty", format: "{0:n2}", filterable: false, title: "Issue Qty<span style='color:red'>*</span>", width: "60px" },
+                    { field: "IssueUnitName", filterable: false, title: "Unit<span style='color:red'>*</span>", width: "60px", editor: ddlUnitForChemical },
+                    
+
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 70 }
+            ]
+        }).data('kendoGrid');
+
+        var RequisitionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RequisitionID",
+                    fields: {
+                        RequisitionID: { editable: false },
+                        RequisitionNo: { editable: false },
+                        RequisitionCategory: { editable: false },
+                        RequisitionType: { editable: false },
+                        RequiredByTime: { editable: false },
+
+                        RequisitionFromName: { editable: false },
+                        ReqRaisedOn: { editable: false },
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var RequisitionGrid = $("#RequisitionWindowGrid").kendoGrid({
+            dataSource: RequisitionGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            //autoBind: false,
+            columns: [
+                  { field: "RequisitionNo", title: "Requisition No", width: "60px" },
+                  { field: "RequisitionFromName", title: "Requisition From", width: "60px" },
+                  { field: "ReqRaisedOn", title: "Req Raised On", width: "60px" },
+                  { field: "RequisitionCategory", title: "Requisition Category", width: "60px" },
+                  { field: "RequisitionType", title: "Requisition Type", width: "80px" },
+                  { field: "RequiredByTime", title: "Required By Time", width: "60px" }
+            ]
+        });
+
+
+       
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                data: "data", // records are returned in the "data" field of the response
+                total: "total", // total number of records is in the "total" field of the response
+                model: {
+                    id: "TransactionID",
+                    fields: {
+                        TransactionID: { editable: false },
+                        TransactionNo: { editable: false },
+                        TransactionDate: { editable: false },
+                        TransactionFrom: { editable: false },
+                        ReqFromDate: { editable: false },
+                        ReqToDate: { editable: false },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            serverPaging: true, // enable server paging
+            serverFiltering: true,
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetTransactionInfoForSearch", "IssueToProduction")',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: { "_TransactionType": "ADI" }
+                }
+            }
+        });
+
+        var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            columns: [
+                  { field: "TransactionNo", title: "Transaction No", width: "60px" },
+                  { field: "TransactionDate", title: "Transaction Date", width: "60px" },
+                  { field: "TransactionFrom", title: "Transaction Store", width: "80px" },
+                  { field: "ReqFromDate", title: "Consumed From", width: "60px" },
+                  { field: "ReqToDate", title: "Consumed To", width: "80px" },
+                  //{ field: "TransactionTo", title: "Transaction To", width: "60px" },
+                  { field: "RecordStatus", title: "Record Status", width: "60px" }
+            ]
+        });
+
+
+        var ChemicalItemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemID",
+                    fields: {
+                        ItemID: { editable: false },
+                        ItemName: { editable: false },
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false },
+                        StockQty: { editable: false },
+                        StockUnit: { editable: false },
+                        StockUnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ChemicalItemGrid = $("#ChemicalItemWindowGrid").kendoGrid({
+            dataSource: ChemicalItemDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                  //{ field: "ItemID", title: "Item ID", width: "60px", filterable: false, sortable: false },
+                  { field: "ItemName", title: "Item Name", width: "60px" },
+                  //{ field: "SupplierID", title: "Supplier", width: "60px", filterable: false, sortable: false },
+                  { field: "SupplierName", title: "Supplier", width: "60px", filterable: false, sortable: false },
+                  { field: "StockQty", title: "Consumable Stock Qty", width: "60px" },
+                  { field: "StockUnitName", title: "Unit", width: "60px", filterable: false, sortable: false }
+            ]
+
+        });
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+        function GetAvailableChemicalInStock() {
+            $.ajax({
+                url: '@Url.Action("GetChemicalItemListInProductionFloor", "ChemicalConsumption")',
+                type: 'GET',
+                data: { "_ProductionFloor": $("#IssueFrom").val() },
+                success: function (response) {
+                    $("#ChemicalItemWindowGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+        $(document).on('keyup', '.ChemicalItemName', function (e) {
+            if (e.which == 120) {
+                GetAvailableChemicalInStock();
+                SelectedItemOfListOfValue('ChemicalItemWindowGrid');
+                ChemicalItemWindow.open(); //Open Popup
+                ChemicalItemWindow.center();
+            }
+
+        });
+
+        function GetStockInformationForItem() {
+            var grid = $("#IssueToProductionGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+
+            $.ajax({
+                url: '@Url.Action("GetStockPackSizeInfo", "IssueToProduction")',
+                type: 'GET',
+                data: { "_StoreID": $("#IssueFrom").val(), "_ItemID": selectedItem.ItemID },
+                success: function (response) {
+                    $("#StockPackSizeWindowGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+
+        $(document).on('keyup', '.StockPackSize', function (e) {
+            if (e.which == 120) {
+                GetStockInformationForItem();
+                SelectedItemOfListOfValue('StockPackSizeWindowGrid');
+                StockPackSizeWindow.open(); //Open Popup
+                StockPackSizeWindow.center();
+                MakeIssueToProductionGridEditable();
+            }
+
+        });
+
+        function GetRequisitionFromFixedStore() {
+            $.ajax({
+                url: '@Url.Action("GetRequisitionFromFixedStore", "IssueToProduction")',
+                type: 'GET',
+                data: { "_RequisitionFrom": $("#IssueFrom").val() },
+                success: function (response) {
+                    $("#RequisitionWindowGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+
+        $(document.body).keyup(function (e) {
+
+            if ($("#RequisitionNo").is(":focus")) {
+                if (e.which == 120) {
+                    if (RequisitionWindowOpen == "YES") {
+                        if ($("#IssueFrom").val() != "") {
+                            GetRequisitionFromFixedStore();
+                            SelectedItemOfListOfValue('RequisitionWindowGrid');
+                            RequisitionWindow.open();
+                            RequisitionWindow.center();
+                        }
+                        else {
+                            $('#MessageText').html("Please Select Transaction At");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                    else if (RequisitionWindowOpen == "NO") {
+                        $('#MessageText').html("Requisition Can't be Changed");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            }
+        });
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var SearchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Issue To Production",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        var ChemicalItemWindow = $('#ChemicalItemWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Chemicals",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var RequisitionWindow = $('#RequisitionWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Requisition List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var StockPackSizeWindow = $('#StockPackSizeWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Stock Information",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date()
+                        //change: function () {
+                        //    alert("test");
+                        //}
+                    });
+        }
+
+        $("#IssueToProductionGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $.ajax({
+                url: '@Url.Action("GetTransactionDetailsAfterSearch", "IssueToProduction")',
+                data: ({ "_TransactionID": selectedItem.TransactionID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#divLoading").show();
+                },
+                complete: function () {
+                    $("#divLoading").hide();
+                },
+                success: function (response) {
+                    //ResetData();
+                    if (response.TransactionInfo != null) {
+                        $.each(response.TransactionInfo, function (key, value) {
+                            //if (value != null && value != 0)
+                            $('#' + key).val(value);
+                        });
+                    }
+                    //SelectedItemOfListOfValue('ChallanGrid');
+                    $("#IssueToProductionGrid").data("kendoGrid").dataSource.data(response.TransactionItemList);
+
+                    PageStatus = response.TransactionInfo.RecordStatus;
+                    CheckRecordStatusForButton(PageStatus);
+                    MakeIssueFromDisabled();
+                    RequisitionWindowOpen = "NO";
+                }
+            });
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            SearchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                SearchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                SearchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //Handling button click for Location window grid
+        function RequisitionWindowEvent() {
+            var WindowGrid = $("#RequisitionWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            //$("#RecipeID").val(WindowGridItem.RecipeID);
+            //$("#ArticleNo").val(WindowGridItem.ArticleNo);
+
+
+
+            $.ajax({
+                url: '@Url.Action("GetRequisitionDetailsFromFixedStore", "IssueToProduction")',
+                data: ({ "_RequisitionID": WindowGridItem.RequisitionID, "_RequisitionAt": $("#IssueFrom").val() }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.RequisitionInfo != null) {
+                        $.each(response.RequisitionInfo, function (key, value) {
+                            //if (value != null && value != 0)
+                            $('#' + key).val(value);
+                        });
+                    }
+                    $("#IssueToProductionGrid").data("kendoGrid").dataSource.data(response.RequisitionItemList);
+                }
+            });
+
+            changeStatus = 1;
+            MakeIssueFromDisabled();
+
+            //PageGrid.editCell($("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ") td:eq(1)"));
+
+            //$("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#RequisitionGrid tr:eq(1)").removeClass('k-state-selected');
+        };
+
+        $('#btnRequisitionWindowOK').click(function () {
+            RequisitionWindowEvent();
+            RequisitionWindow.close();
+        });
+        $('#btnRequisitionWindowCancel').click(function () {
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").dblclick(function () {
+            RequisitionWindowEvent();
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                RequisitionWindowEvent();
+                RequisitionWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                RequisitionWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //function ChemicalItemWindowEvent() {
+        //    var WindowGrid = $("#ChemicalItemWindowGrid").data("kendoGrid");
+        //    var WindowGridRow = WindowGrid.select();
+        //    var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //    var PageGrid = $("#IssueToProductionGrid").data("kendoGrid");
+        //    var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        //    PageGridItem.set("ItemID", WindowGridItem.ItemID);
+        //    PageGridItem.set("ItemName", WindowGridItem.ItemName);
+        //    PageGridItem.set("StockQty", WindowGridItem.StockQty);
+        //    changeStatus = 1;
+        //    checkUnsavedData = 1;
+        //};
+
+        function ChemicalItemWindowEvent() {
+            var testSameChemical = 1;
+
+            var WindowGrid = $("#ChemicalItemWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var ChemicalGridDataSource = $("#IssueToProductionGrid").data("kendoGrid").dataSource;
+            var ChemicalGridData = ChemicalGridDataSource.data();
+
+            for (i = ChemicalGridData.length - 1; i >= 0; i--) {
+                if (ChemicalGridData[i].ItemID == WindowGridItem.ItemID && ChemicalGridData[i].SupplierID == WindowGridItem.SupplierID && ChemicalGridData[i].UnitID == WindowGridItem.UnitID)
+                    testSameChemical = 0;
+            }
+            if (testSameChemical == 1) {
+                var PageGrid = $("#IssueToProductionGrid").data("kendoGrid");
+                var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+                PageGridItem.set("ItemID", WindowGridItem.ItemID);
+                PageGridItem.set("ItemName", WindowGridItem.ItemName);
+                PageGridItem.set("SupplierID", WindowGridItem.SupplierID);
+                PageGridItem.set("SupplierName", WindowGridItem.SupplierName);
+                PageGridItem.set("StockQty", WindowGridItem.StockQty);
+                PageGridItem.set("StockUnit", WindowGridItem.StockUnit);
+                PageGridItem.set("StockUnitName", WindowGridItem.StockUnitName);
+            }
+            else {
+                $('#MessageText').html("Same Item Can't be Added Twice");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+
+            changeStatus = 1;
+            checkUnsavedData = 1;
+            ItemGridchangeStatus = 1;
+
+        };
+
+
+        $('#btnChemicalItemWindowOK').click(function () {
+            ChemicalItemWindowEvent();
+            ChemicalItemWindow.close();
+        });
+        $('#btnChemicalItemWindowCancel').click(function () {
+            ChemicalItemWindow.close();
+        });
+        $("#ChemicalItemWindow").dblclick(function () {
+            ChemicalItemWindowEvent();
+            ChemicalItemWindow.close();
+        });
+        $("#ChemicalItemWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ChemicalItemWindowEvent();
+                ChemicalItemWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ChemicalItemWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+
+        function StockPackSizeWindowEvent() {
+            var WindowGrid = $("#StockPackSizeWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#IssueToProductionGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            var IssuePackQty = Math.ceil(PageGridItem.RequsitionQty / WindowGridItem.PackSizeName);
+            var IssueQty = WindowGridItem.PackSizeName * IssuePackQty;
+
+
+            PageGridItem.set("IssuePackSize", WindowGridItem.PackSize);
+            PageGridItem.set("IssuePackSizeName", WindowGridItem.PackSizeName);
+            PageGridItem.set("IssueSizeUnit", WindowGridItem.SizeUnit);
+            PageGridItem.set("IssueSizeUnitName", WindowGridItem.SizeUnitName);
+            PageGridItem.set("IssuePackQty", IssuePackQty);
+            PageGridItem.set("IssueQty", IssueQty);
+            PageGridItem.set("SupplierID", WindowGridItem.SupplierID);
+            PageGridItem.set("SupplierName", WindowGridItem.SupplierName);
+
+            PageGridItem.set("IssueUnitName", WindowGridItem.IssueUnitName);
+
+            MakeIssueToProductionGridNonEditable();
+            //PageGrid.editCell($("#RecipeItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            //$("#RecipeItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#RecipeItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnStockPackSizeWindowOK').click(function () {
+            StockPackSizeWindowEvent();
+            StockPackSizeWindow.close();
+        });
+        $('#btnStockPackSizeWindowCancel').click(function () {
+            StockPackSizeWindow.close();
+        });
+        $("#StockPackSizeWindow").dblclick(function () {
+            StockPackSizeWindowEvent();
+            StockPackSizeWindow.close();
+        });
+        $("#StockPackSizeWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                StockPackSizeWindowEvent();
+                StockPackSizeWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                StockPackSizeWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                $("#IssueToProductionGrid").data('kendoGrid').dataSource.data([]);
+                MakeIssueFromEnabled();
+                RequisitionWindowOpen = "YES";
+            }
+            else {
+                OpenSaveChangesDialog(); // Probelm opening window!
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                ResetOnlyMasterPageData();
+                $("#IssueToProductionGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+                MakeIssueFromEnabled();
+                RequisitionWindowOpen = "YES";
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 3) // For Requisition Item Delete from Grid
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Requisition Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnCheck").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("CheckIssueToProductionTransaction", "IssueToProduction")',
+                type: 'GET',
+                data: { "_TransactionID": $("#TransactionID").val(), "_CheckComment": $("#CheckComment").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Checked Successfully");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+                        changeStatus = 0;
+                        PageStatus = "CHK";
+                        CheckRecordStatusForButton(PageStatus);
+
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+
+
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmChemicalStockAdjustTransaction", "ChemicalStockAdjustment")',
+                type: 'GET',
+                data: { "_TransactionID": $("#TransactionID").val(), "_CheckComment": $("#CheckComment").val() },
+                beforeSend: function () {
+                    $("#divLoading").show();
+                },
+                complete: function () {
+                    $("#divLoading").hide();
+                },
+                success: function (response) {
+
+                    if (response.ReturnId == 1) {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+                        changeStatus = 0;
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+                    } else if (response.ReturnId == 0) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        function MakeIssueToProductionGridEditable() {
+            var grid = $("#IssueToProductionGrid").data("kendoGrid");
+
+            //grid.dataSource.at(0).fields["ItemID"].editable = true;
+            //grid.dataSource.at(0).fields["ItemName"].editable = true;
+
+            grid.dataSource.at(0).fields["SupplierID"].editable = true;
+            grid.dataSource.at(0).fields["SupplierName"].editable = true;
+
+            grid.dataSource.at(0).fields["IssuePackSize"].editable = true;
+            grid.dataSource.at(0).fields["IssuePackSizeName"].editable = true;
+
+            grid.dataSource.at(0).fields["IssueSizeUnit"].editable = true;
+            grid.dataSource.at(0).fields["IssueSizeUnitName"].editable = true;
+
+            grid.dataSource.at(0).fields["IssuePackQty"].editable = true;
+        };
+
+        function MakeIssueToProductionGridNonEditable() {
+            var grid = $("#IssueToProductionGrid").data("kendoGrid");
+
+            //grid.dataSource.at(0).fields["ItemID"].editable = false;
+            //grid.dataSource.at(0).fields["ItemName"].editable = false;
+
+            grid.dataSource.at(0).fields["SupplierID"].editable = false;
+            grid.dataSource.at(0).fields["SupplierName"].editable = false;
+
+            //grid.dataSource.at(0).fields["IssuePackSize"].editable = false;
+            //grid.dataSource.at(0).fields["IssuePackSizeName"].editable = false;
+
+            grid.dataSource.at(0).fields["IssueSizeUnit"].editable = false;
+            grid.dataSource.at(0).fields["IssueSizeUnitName"].editable = false;
+
+        };
+
+
+
+
+        $("#IssueToProductionGrid").keyup(function (e) {
+
+            if (e.keyCode == 13) {
+                var grid = $("#IssueToProductionGrid").data("kendoGrid");
+                $("#IssueToProductionGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                MakeIssueToProductionGridEditable();
+            }
+        });
+
+        $(".btnIssueToProductionGrid").click(function (e) {
+
+            var grid = $("#IssueToProductionGrid").data("kendoGrid");
+            $("#IssueToProductionGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            MakeIssueToProductionGridEditable();
+            e.preventDefault();
+
+        });
+
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+
+        var DeleteFrom = 0;
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                dataitem = IssueToProductionGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = IssueToProductionGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // PIItem Delete
+            {
+                if (dataitem.TransItemID == 0) {
+                    $("#IssueToProductionGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteTransactionItem", "IssueToProduction")',
+                        type: 'GET',
+                        data: { "_TransItemID": dataitem.TransItemID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#IssueToProductionGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+            else if (DeleteFrom == 3) //PI Delete
+            {
+                var GridDataSource = $("#IssueToProductionGrid").data("kendoGrid").dataSource;
+                var GridData = GridDataSource.data();
+                if (GridData.length > 0) {
+                    $('#MessageText').html("Issue Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteTransaction", "IssueToProduction")',
+                        type: 'GET',
+                        data: { "_TransactionID": $("#TransactionID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+
+    var InvStoreTransItemList = {
+        "TransItemID": "", "TransactionID": "", "ItemID": "", "SupplierID": "", "ManufacturerID": "", "TransactionQty": "", "TransactionUnitName": "",
+        "PackSizeName": "", "SizeUnitName": "", "PackQty": "", "ItemSource": ""
+    };
+
+    var FinalObject = {
+        "TransactionID": "", "TransactionNo": "", "PageName": "", "ReqFromDate": "", "ReqToDate": "", "TransactionDate": "", "TransactionFrom": "", "TransactionTo": "", "RefTransactionID": "", "RefTransactionNo": "", "Remark": "",
+        "InvStoreTransItemList": []
+    };
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('IssueFrom', 50);
+        
+
+
+        var IssueToProductionGridDataSource = $("#IssueToProductionGrid").data("kendoGrid").dataSource;
+        var IssueToProductionGridData = IssueToProductionGridDataSource.data();
+        
+        if (saveStatus == 1) {
+            FinalObject.TransactionID = $("#TransactionID").val();
+            FinalObject.TransactionNo = $("#TransactionNo").val();
+            FinalObject.TransactionDate = $("#TransactionDate").val();
+            FinalObject.TransactionFrom = $("#IssueFrom").val();
+            FinalObject.PageName = "Adjustment";
+            FinalObject.ReqFromDate = $("#ReqFromDate").val();
+            FinalObject.ReqToDate = $("#ReqToDate").val();
+            FinalObject.Remark = $("#Remark").val();
+
+
+            FinalObject.RefTransactionID = $("#RequisitionID").val();
+            FinalObject.RefTransactionNo = $("#RequisitionNo").val();
+
+            for (var i = IssueToProductionGridData.length - 1; i >= 0; i--) {
+                //if (PIGridData[i].dirty) {
+                InvStoreTransItemList.TransItemID = IssueToProductionGridData[i].TransItemID;
+                //InvStoreTransItemList.TransactionID = IssueToProductionGridData[i].TransactionID;
+                InvStoreTransItemList.ItemID = IssueToProductionGridData[i].ItemID;
+                InvStoreTransItemList.SupplierID = IssueToProductionGridData[i].SupplierID;
+
+                InvStoreTransItemList.PackSizeName = IssueToProductionGridData[i].IssuePackSizeName;
+                InvStoreTransItemList.SizeUnitName = IssueToProductionGridData[i].IssueSizeUnitName;
+                InvStoreTransItemList.PackQty = IssueToProductionGridData[i].IssuePackQty;
+
+                InvStoreTransItemList.TransactionQty = IssueToProductionGridData[i].IssueQty;
+                InvStoreTransItemList.TransactionUnitName = IssueToProductionGridData[i].IssueUnitName;
+                InvStoreTransItemList.ItemSource = IssueToProductionGridData[i].ItemSource;
+
+
+                FinalObject.InvStoreTransItemList.push(InvStoreTransItemList);
+                InvStoreTransItemList = {
+                    "TransItemID": "", "TransactionID": "", "ItemID": "", "SupplierID": "", "ManufacturerID": "", "TransactionQty": "", "TransactionUnitName": "",
+                    "PackSizeName": "", "SizeUnitName": "", "PackQty": "", "ItemSource": ""
+                };
+                //}
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("IssueToProduction", "IssueToProduction")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        //ItemGridchangeStatus = 0;
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#TransactionID").val(response.TransactionID);
+                            $("#TransactionNo").val(response.TransactionNo);
+
+                            $("#IssueToProductionGrid").data('kendoGrid').dataSource.data(response.TransactionItemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                            RequisitionWindowOpen = "NO";
+
+                        }
+                        else if (response.Msg.Type == 3) {
+                            //ItemGridchangeStatus = 0;
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#IssueToProductionGrid").data('kendoGrid').dataSource.data(response.TransactionItemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "TransactionID": "", "TransactionNo": "", "PageName": "", "ReqFromDate": "", "ReqToDate": "", "TransactionDate": "", "TransactionFrom": "", "TransactionTo": "", "RefTransactionID": "", "RefTransactionNo": "", "Remark": "",
+            "InvStoreTransItemList": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>
+

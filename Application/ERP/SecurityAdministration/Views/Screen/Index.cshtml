@@ -1,0 +1,316 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model ScreenVM
+
+@{
+    ViewBag.Title = "Screen Management";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-custom">
+                <div class="panel-heading">
+                    Screen Setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Module ID </label>
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.Screen.ScreenCode)
+                                    @Html.DropDownListFor(model => model.Screen.ModuleID, Model.ModuleList, "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Title </label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Screen.Title, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Type </label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Screen.Type, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">URL </label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Screen.URL, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label"> Description </label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Screen.Description, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label"> Is Active</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.Screen.IsActive)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-6 col-lg-offset-10">
+                            <div class="form-group">
+                                <input type="button" id="btnSave" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearScreenData()" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Screens
+            </div>
+            <div class="panel-body">
+                @(Html.Telerik().Grid<ScreenView>()
+                    .BindTo(ViewBag.ScreenList as List<ScreenView>)
+                    .Name("gvScreenList")
+                    .DataKeys(keys => keys.Add(k => k.ScreenCode))
+                    .Filterable()
+                    .Columns(column =>
+                    {
+                        column.Bound(s => s.ScreenCode).Hidden().Template(@<input type="hidden" id="@item.ScreenCode" value="@item.ScreenCode" />);
+                        column.Bound(s => s.ScreenCode);
+                        column.Bound(s => s.Title).Title("Screen");
+                        column.Bound(s => s.Type).Width(35);
+                        column.Bound(s => s.URL);
+                        column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>);
+                        column.Bound(s => s.Description).Width(170);
+                        column.Bound(s => s.SetOn);
+                        column.Bound(s => s.SetBy);
+                        column.Bound(s => s.ModuleTitle);
+                        column.Bound(s => s.ScreenCode).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                    })
+                                        .Selectable()
+                                        .Pageable(pages => pages.PageSize(10))
+                                        .Scrollable(scroll => scroll.Height(200))
+                                        .Sortable()
+                                        .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    @Html.Partial("_ConfirmationView")
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+    });
+
+    function validateScreenData() {
+        if ($('#Screen_ModuleID').val() == "") {
+            showMessage('Module Name is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#Screen_Title').val() == "") {
+            showMessage('Screen Title is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#Screen_Type').val() == "") {
+            showMessage('Screen Type is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#Screen_URL').val() == "") {
+            showMessage('Screen URL is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#Screen_Description').val() == "") {
+            showMessage('Screen Description is required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+
+    $('#btnSave').click(function () {
+
+        if (validateScreenData()) {
+            var jsonObject = {
+                "ScreenCode": $('#Screen_ScreenCode').val(),
+                "ModuleID": $('#Screen_ModuleID').val(),
+                "Title": $('#Screen_Title').val(),
+                "IsActive": $('#Screen_IsActive').is(":checked"),
+                "Type": $("#Screen_Type").val(),
+                "URL": $('#Screen_URL').val(),
+                "Description": $('#Screen_Description').val()
+            };
+
+            var trNew = "";
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "Screen")',
+                data: JSON.stringify({ screen: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (data == 1) {
+                        showMessage('Screen ID already exists.', 'warning', 'Warning!');
+                    }
+                    else {
+                        trNew = "<tr>";
+                        trNew = trNew + "<td  style='display:none;'><input id='" + data.ScreenCode + "' type='hidden' value='" + data.ScreenCode + "'></td>";
+                        trNew = trNew + "<td>" + data.ScreenCode + "</td>";
+                        trNew = trNew + "<td>" + data.Title + "</td>";
+                        trNew = trNew + "<td>" + data.Type + "</td>";
+                        trNew = trNew + "<td>" + data.URL + "</td>";
+                        trNew = trNew + "<td>" + "<label for=\"\">";
+                        if (data.IsActive == true) {
+                            trNew = trNew + "Active";
+                        } else {
+                            trNew = trNew + "In-Active";
+                        }
+                        trNew = trNew + "</label> </td>";
+                        trNew = trNew + "<td>" + data.Description + "</td>";
+                        trNew = trNew + "<td>" + data.SetOn + "</td>";
+                        trNew = trNew + "<td>" + data.SetBy + "</td>";
+                        trNew = trNew + "<td>" + data.ModuleTitle + "</td>";
+                        trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                        trNew = trNew + " </tr>";
+
+                        if ($("#hdnIsInsert").val() == "true") {
+                            $('#gvScreenList .t-grid-content tbody').prepend(trNew);
+                            $('#gvScreenList .t-grid-content tbody .t-no-data').remove();
+                        } else {
+                            var tr = $('#' + data.ScreenCode).parent().parent();
+                            tr.replaceWith(trNew);
+                        }
+
+                        showMessage('Saved successfully.', 'success', 'Success!');
+                    }
+                    clearScreenData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+
+            });
+        }
+    });
+
+
+    $("#gvScreenList").delegate("a.btn-link", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        editScreenData(id.trim());
+    });
+
+
+    $("#gvScreenList").delegate("a.btn-link-delete", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        $('#commonIdForDelete').val(id);
+        $('#myModal').modal('show');
+    });
+
+
+    function editScreenData(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetScreen", "Screen")',
+            data: { id: id },
+            cache: false,
+            success: function (data) {
+                $('#Screen_ScreenCode').val(data.ScreenCode);
+                $('#Screen_ModuleID').val(data.ModuleID);
+                $('#Screen_Title').val(data.Title);
+                $('#Screen_IsActive').prop('checked', data.IsActive);
+                $('#Screen_URL').val(data.URL);
+                $('#Screen_Description').val(data.Description);
+                $("#hdnIsInsert").val(false);
+                $("#Screen_Type").val(data.Type);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function deleteItem(id) {
+        id = id.trim();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "Screen")',
+            data: { id: id },
+            cache: false,
+            success: function () {
+                var tr = $('#' + id).parent().parent();
+                tr.remove();
+                $("#myModal").modal('hide');
+                showMessage('Deleted successfully.', 'success', 'Success!');
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function clearScreenData() {
+        $("#hdnIsInsert").val(true);
+        $('#Screen_ScreenCode').val("");
+        $('#Screen_ModuleID').val("");
+        $('#Screen_Title').val("");
+        $('#Screen_IsActive').prop("checked", false);
+        $('#Screen_URL').val("");
+        $('#Screen_Description').val("");
+        $("#Screen_Type").val("");
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+          {
+              'message': message,
+              'priority': priority,
+              'title': title
+          }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

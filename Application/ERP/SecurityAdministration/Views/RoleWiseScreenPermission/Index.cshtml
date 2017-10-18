@@ -1,0 +1,432 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model RoleWiseScreenPermissionVM
+
+@{
+    ViewBag.Title = "Role wise Screen Permission";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-custom">
+                <div class="panel-heading">
+                    Role wise screen permission setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Role</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.RoleList, Model.RoleList, "--Select--", new { @id = "ddlfRoleList", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Module</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.ModuleList, Model.ModuleList, "--Select--", new { @id = "ddlfModuleList", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Screen</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownList("ScreenList", Enumerable.Empty<SelectListItem>(), "--Select--", new { @id = "ddlfScreenList", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="form-group">
+                                <label class="col-xs-3 control-label">Access Permission</label>
+                                <div class="col-xs-9" style="padding-left: 35px;">
+                                    <input type="checkbox" id="chkCanRead" />&nbsp;<label>Can Read</label>&nbsp;&nbsp;
+                                    <input type="checkbox" id="chkCanCreate" />&nbsp;<label>Can Add</label>&nbsp;&nbsp;
+                                    <input type="checkbox" id="chkCanUpdate" />&nbsp;<label>Can Modify</label>&nbsp;&nbsp;
+                                    <input type="checkbox" id="chkCanDelete" />&nbsp;<label>Can Delete</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-lg-offset-2" style="padding-left: 100px;">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearScreenPermissionData();" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-custom">
+            <div class="panel-heading">
+                List of Screen Permissions
+            </div>
+            <div class="panel panel-custom" style="margin: 10px;">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Role</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.RoleList, Model.RoleList, "--Select--", new { @id = "ddlfRoleListFilter", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Module</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.ModuleList, Model.ModuleList, "--Select--", new { @id = "ddlfModuleListFilter", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Screen</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownList("ScreenList", Enumerable.Empty<SelectListItem>(), "--Select--", new { @id = "ddlfScreenListFilter", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            List of Users
+                        </div>
+
+                        <div class="panel-body">
+                            @(Html.Telerik().Grid<ScreenPermissionView>()
+                            .BindTo(ViewBag.RoleWiseScreenPermissionList as List<ScreenPermissionView>)
+                            .Name("gvRoleWiseScreenPermissionList")
+                            .DataKeys(keys => keys.Add(k => k.RoleID))
+                            .Filterable()
+                            .Columns(column =>
+                            {
+                                column.Bound(s => s.RoleID).Hidden().Template(@<input type="hidden" id="@item.RoleID@item.ScreenCode" value="@item.RoleID@item.ScreenCode" />);
+                                column.Bound(s => s.RoleID).Width(60);
+                                column.Bound(s => s.RoleName);
+                                column.Bound(s => s.ModuleID);
+                                column.Bound(s => s.ModuleTitle);
+                                column.Bound(s => s.ScreenCode);
+                                column.Bound(s => s.ScreenTitle).Width(90);
+                                column.Bound(s => s.CanRead);
+                                column.Bound(s => s.CanCreate);
+                                column.Bound(s => s.CanUpdate);
+                                column.Bound(s => s.CanDelete);
+                                column.Bound(s => s.SetOn);
+                                column.Bound(s => s.SetBy);
+                                column.Bound(s => s.RoleID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                            })
+                            .Selectable()
+                            .Pageable(pages => pages.PageSize(100))
+                            .Scrollable(scroll => scroll.Height(300))   
+                            .Sortable()
+                            .Footer(true)
+                            )
+                            <div style="clear: both; margin-bottom: 15px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        setStatus(false);
+        $("#hdnIsInsert").val(true);
+
+        $('#ddlfModuleList').change(function () {
+            loadScreenDropdownList($(this).val(), 'ddlfScreenList');
+        });
+
+        $('#ddlfModuleListFilter').change(function () {
+            loadScreenDropdownList($(this).val(), 'ddlfScreenListFilter');
+        });
+    });
+
+    function loadScreenDropdownList(moduleID, dropdownScreenList) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetScreenList", "RoleWiseScreenPermission")',
+            data: { moduleID: moduleID },
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
+                $('#' + dropdownScreenList).get(0).options.length = 0;
+                $('#' + dropdownScreenList).get(0).options[0] = new Option("--Select--", "");
+                $.map(data, function (item) {
+                    $('#' + dropdownScreenList).get(0).options[$('#' + dropdownScreenList).get(0).options.length] = new Option(item.Text, item.Value);
+                });
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
+
+    $('#ddlfRoleListFilter').change(function () {
+        var roleID = $(this).val();
+        var moduleID = $('#ddlfModuleListFilter').val();
+        var screenCode = $('#ddlfScreenListFilter').val();
+        loadScreenPermissionListInTable(roleID, moduleID, screenCode);
+    });
+
+    $('#ddlfModuleListFilter').change(function () {
+        var roleID = $('#ddlfRoleListFilter').val();
+        var moduleID = $(this).val();
+        var screenCode = $('#ddlfScreenListFilter').val();
+        loadScreenPermissionListInTable(roleID, moduleID, screenCode);
+    });
+
+    $('#ddlfScreenListFilter').change(function () {
+        var roleID = $('#ddlfRoleListFilter').val();
+        var moduleID = $('#ddlfModuleListFilter').val();
+        var screenCode = $(this).val();
+        loadScreenPermissionListInTable(roleID, moduleID, screenCode);
+    });
+
+    function loadScreenPermissionListInTable(roleID, moduleID, screenCode) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetScreenPermissionList", "RoleWiseScreenPermission")',
+            data: { roleID: roleID, moduleID: moduleID, screenCode: screenCode },
+            cache: false,
+            success: function (data) {
+                $("#gvRoleWiseScreenPermissionList .t-grid-content tbody tr td").remove();
+                $.each(data, function (i, item) {
+                    var row = $("<tr><td  style='display:none;'><input id='" + roleID + "" + screenCode + "' type='hidden' value='" + roleID + "" + screenCode + "'></td></tr>");
+                    for (i in item) row.append($('<td>').text(item[i]));
+                    row.append($('<td><a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>'));
+                    $("#gvRoleWiseScreenPermissionList .t-grid-content tbody").append(row);
+                });
+
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function validatedRoleWiseScreenPermission() {
+
+        if ($('#ddlfRoleList').val() == "") {
+            showMessage('Role selection is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#ddlfModuleList').val() == "") {
+            showMessage('Module selection is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#ddlfScreenList').val() == "") {
+            showMessage('Screen selection is required.', 'warning', 'Warning!');
+            return false;
+        }
+
+        return true;
+    }
+
+    $("#btnSave").click(function () {
+        if (validatedRoleWiseScreenPermission()) {
+
+            var trSaved = "";
+
+            var accessRight = $('#chkCanRead').is(":checked") ? '1' : '0';
+            accessRight += $('#chkCanCreate').is(":checked") ? '1' : '0';
+            accessRight += $('#chkCanUpdate').is(":checked") ? '1' : '0';
+            accessRight += $('#chkCanDelete').is(":checked") ? '1' : '0';
+
+            var jsonObject = {
+                "RoleID": $('#ddlfRoleList').val(),
+                "ScreenCode": $('#ddlfScreenList').val(),
+                "AccessRight": accessRight,
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "RoleWiseScreenPermission")',
+                data: JSON.stringify({ rolewisescreenpermission: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (data.JsonData != null) {
+                        console.log(data.JsonData);
+                        trSaved = "<tr>";
+                        trSaved += "<td style='display:none;'> <input type='hidden' value='" + data.JsonData.RoleID + "" + data.JsonData.ScreenCode + "' id='" + data.JsonData.RoleID + "" + data.JsonData.ScreenCode + "' />" + data.JsonData.RoleID + "</td>";
+                        trSaved += "<td>" + data.JsonData.RoleID + "</td>";
+                        trSaved += "<td>" + data.JsonData.RoleName + "</td>";
+                        trSaved += "<td>" + data.JsonData.ModuleID + "</td>";
+                        trSaved += "<td>" + data.JsonData.ModuleTitle + "</td>";
+                        trSaved += "<td>" + data.JsonData.ScreenCode + "</td>";
+                        trSaved += "<td>" + data.JsonData.ScreenTitle + "</td>";
+                        trSaved = trSaved + "<td>" + "<label for=\"\">";
+                        if ($('#chkCanRead').is(":checked") == true) {
+                            trSaved = trSaved + "Yes";
+                        } else {
+                            trSaved = trSaved + "No";
+                        }
+                        trSaved = trSaved + "</label> </td>";
+                        trSaved = trSaved + "<td>" + "<label for=\"\">";
+                        if ($('#chkCanCreate').is(":checked") == true) {
+                            trSaved = trSaved + "Yes";
+                        } else {
+                            trSaved = trSaved + "No";
+                        }
+                        trSaved = trSaved + "</label> </td>";
+                        trSaved = trSaved + "<td>" + "<label for=\"\">";
+                        if ($('#chkCanUpdate').is(":checked") == true) {
+                            trSaved = trSaved + "Yes";
+                        } else {
+                            trSaved = trSaved + "No";
+                        }
+                        trSaved = trSaved + "</label> </td>";
+                        trSaved = trSaved + "<td>" + "<label for=\"\">";
+                        if ($('#chkCanDelete').is(":checked") == true) {
+                            trSaved = trSaved + "Yes";
+                        } else {
+                            trSaved = trSaved + "No";
+                        }
+                        trSaved = trSaved + "</label> </td>";
+                        trSaved += "<td>" + data.JsonData.SetOn + "</td>";
+                        trSaved += "<td>" + data.JsonData.SetBy + "</td>";
+                        trSaved += "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                        trSaved += "</tr>";
+
+                        if ($("#hdnIsInsert").val() == "true") {
+                            $("#gvRoleWiseScreenPermissionList .t-grid-content tbody").prepend(trSaved);
+                        } else {
+                            var trModified = $('#' + data.JsonData.RoleID + '' + data.JsonData.ScreenCode).parent().parent();
+                            trModified.replaceWith(trSaved);
+                        }
+                        showMessage('Saved successfully.', 'success', 'Success!');
+                        clearScreenPermissionData();
+                    } else {
+                        showMessage(data.Message, 'warning', 'Warning!');
+                    }
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+    function clearScreenPermissionData() {
+        $('#ddlfRoleList').val("");
+        $('#ddlfModuleList').val("");
+        $('#ddlfScreenList').val("");
+        $('#chkCanRead').prop('checked', false);
+        $('#chkCanCreate').prop('checked', false);
+        $('#chkCanUpdate').prop('checked', false);
+        $('#chkCanDelete').prop('checked', false);
+        setStatus(false);
+    }
+
+    $("#gvRoleWiseScreenPermissionList").delegate("a.btn-link", "click", function () {
+        var roleID = $(this).parent().parent().find("td:eq(1)").text();
+        var screenCode = $(this).parent().parent().find("td:eq(5)").text();
+        editData(roleID.trim(), screenCode.trim());
+    });
+
+
+    $("#gvRoleWiseScreenPermissionList").delegate("a.btn-link-delete", "click", function () {
+        var roleID = $(this).parent().parent().find("td:eq(1)").text();
+        var screenCode = $(this).parent().parent().find("td:eq(5)").text();
+        deleteData(roleID.trim(), screenCode.trim());
+    });
+
+
+    function editData(roleID, screenCode) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRoleWiseScreenPermission", "RoleWiseScreenPermission")',
+            data: { roleID: roleID, screenCode: screenCode },
+            cache: false,
+            success: function (data) {
+                // loadScreenDropdownList(data.JsonData.ModuleID, 'ddlfScreenList');
+                $('#ddlfRoleList').val(data.JsonData.RoleID);
+                $('#ddlfModuleList').val(data.JsonData.ModuleID);
+                $('#chkCanRead').prop('checked', data.JsonData.CanRead == 'Yes' ? true : false);
+                $('#chkCanCreate').prop('checked', data.JsonData.CanCreate == 'Yes' ? true : false);
+                $('#chkCanUpdate').prop('checked', data.JsonData.CanUpdate == 'Yes' ? true : false);
+                $('#chkCanDelete').prop('checked', data.JsonData.CanDelete == 'Yes' ? true : false);
+                setStatus(true);
+                //$('#ddlfScreenList').val(data.JsonData.ScreenCode).attr("selected", "selected");
+                $('#ddlfScreenList').get(0).options[0] = new Option(data.JsonData.ScreenTitle, data.JsonData.ScreenCode);
+            },
+            error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message);
+            }
+        });
+    }
+
+    function deleteData(roleID, screenCode) {
+        if (confirm("Are you sure you want to delete this Role?")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "RoleWiseScreenPermission")',
+                data: { roleID: roleID, screenCode: screenCode },
+                cache: false,
+                success: function () {
+                    $('#' + roleID.trim() + '' + screenCode.trim()).parent().parent().remove();
+                    showMessage('Deleted successfully.', 'success', 'Success!');
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    }
+
+    function setStatus(isDisabled) {
+        $("#ddlfRoleList").prop("disabled", isDisabled);
+        $("#ddlfModuleList").prop("disabled", isDisabled);
+        $("#ddlfScreenList").prop("disabled", isDisabled);
+        $("#hdnIsInsert").val(!isDisabled);
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+            {
+                'message': message,
+                'priority': priority,
+                'title': title
+            }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

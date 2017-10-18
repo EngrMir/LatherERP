@@ -1,0 +1,1653 @@
+@{
+    ViewBag.Title = "Commercial Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Commercial Invoice</div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+            </div>
+            <div id="" class="col-lg-3">
+                <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+                <input type="text" id="supplierBillId" class="" style="display:none;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody" style="height: 130px;">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Commercial Invoice no.</label>
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" id="commercialInvoiceId" class="field" style="width: 150px; display: none;" />
+                    <input type="text" id="commercialInvoiceNo" class="field" style="width: 150px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Commercial Invoice Date</label>
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" id="commercialInvoiceDate" class="datePicker field" style="width: 150px; margin-left: 1px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4" style=" padding-right: 0;">
+                    <label>Invoice Status</label>
+                </div>
+                <div class="col-lg-8">
+                    <select id="invoiceStatus" class="dDown" style="width: 150px;">
+                        <option value="">-- Select --</option>
+                        <option value="full">Full</option>
+                        <option value="part">Partial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Currency</label>
+                </div>
+                <div class="col-lg-8">
+                    @Html.DropDownList("currency1", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "text-box dDown", @style = "width: 150px;" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label>L/C no.</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" id="lcId" class="" style="width: 150px; display: none;" />
+                    <input type="text" id="search" class="field" placeholder="Press (F9)" style="width: 150px;" readonly />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <label>PI / Indent no.</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" id="piId" class="" style="width: 150px; display: none;" />
+                    <input type="text" id="piNo" class="field" style="width: 150px;" readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <label>PO no.</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" id="poNo" class="field" style="width: 150px;" readonly />
+                    <input type="text" id="supplierId" class="" style="display: none;" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="height: 222px;">
+        <div class="row" style="margin-top: -10px; padding: 0 0 0 0;">
+            <div id="commercialInvoiceItemGrid" class="col-lg-12" style="padding: 0 0 0 0; width: 1221px; margin-left: 5px;"></div>
+        </div>
+    </div>
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <label style="margin-left: 6px;">Exchange Currency</label>
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.DropDownList("currency2", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "text-box dDown", @style = "width: 150px;" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <label style="float: right;">Exchange Rate</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="exchangeRate" class="field" style="width: 150px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <label style="float: right;">Exchange Amt</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="exchangeAmt" class="field" style="width: 150px;" readonly />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-lg-12" style="margin-left: 5px;">Check Note</label>
+        </div>
+        <div class="row">
+            <textarea id="checkNote" class="col-lg-3 " style="margin-left: 20px; height: 22px;"></textarea>
+        </div>
+        <div class="row">
+            <input type="button" id="btnCheck" value="Check" style="margin-left: 20px;" />
+            <input type="button" id="btnConfirm" value="Confirm" style="margin-left: 5px;" />
+        </div>
+    </div>
+</div>
+<div id="ItemSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Item</label>
+        <input type="text" id="txtItemName" style="width: 250px;" /><input type="button" id="btnItemGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 596px;">
+        <div id="ItemSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnItemWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnItemWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="SupplierSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Item</label>
+        <input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnSupplierGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 596px;">
+        <div id="SupplierSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="LCOpeningSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">LC No.</label>
+        <input type="text" id="txtLCOpening" style="width: 250px;" /><input type="button" id="btnLCOpeningGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 596px;">
+        <div id="LCOpeningSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnLCOpeningWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnLCOpeningWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="CommercialInvoiceSearchWindow" style="display: none;">
+    <div class="row" style="width: 99%;">
+        <label style="margin-left: 20px;">LC No.</label>
+        <input type="text" id="txtCommercialInvoice" style="width: 200px;" /><input type="button" id="btnCommercialInvoiceGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 99%;">
+        <div id="CommercialInvoiceSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnCommercialInvoiceWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnCommercialInvoiceWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="DeleteCommercialInvoiceItemConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteCommercialInvoiceItemOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteCommercialInvoiceItemCancel" value="Cancel" />
+</div>
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 45%; left: 45%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date()
+        });
+
+        $('#commercialInvoiceNo').focusout(function () {
+            $('#commercialInvoiceNo').css({ 'box-shadow': 'none' });
+        });
+
+        $("#commercialInvoiceDate").attr("readonly", true);
+        // Create new row in commercialInvoiceItemGrid
+        $(".btnAddCommercialInvoiceItem").click(function () {
+            if (recordStatus != "CNF") {
+                del = 0;
+                var grid = $("#commercialInvoiceItemGrid").data("kendoGrid");
+                $("#commercialInvoiceItemGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                setTimeout(function () {
+                    $("#commercialInvoiceItemGrid tbody tr:first td:eq(0)").focus();
+                }, 1);
+            }
+        });
+        $("#commercialInvoiceItemGrid").keyup(function (e) {
+            if (recordStatus != "CNF") {
+                if (e.keyCode == "13") {
+                    var grid = $("#commercialInvoiceItemGrid").data("kendoGrid");
+                    $("#commercialInvoiceItemGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    grid.addRow();
+                    setTimeout(function () {
+                        $("#commercialInvoiceItemGrid tbody tr:first td:eq(0)").focus();
+                    }, 1);
+                }
+            }
+        }); // Create new row in commercialInvoiceItemGrid end
+    });
+    //LCOpening search window definition
+    function getLcBasicData() {
+        $.ajax({
+            url: '@Url.Action("GetLcBasicInfo", "CommercialInvoice")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#LCOpeningSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    var LCOpeningWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LCID",
+                fields: {
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+                    LCDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#LCOpeningSearchWindowGrid").kendoGrid({
+        dataSource: LCOpeningWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            //{ field: "LCID", title: "LC Id" },
+            { field: "LCNo", title: "LC No." },
+            { field: "LCDate", title: "Date" },
+            { field: "RecordStatus", title: "Status" }
+        ]
+    });
+    var LcWindow = $('#LCOpeningSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "LC Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow'); //LCOpening search window definition end
+    // Activation of LCOpeningSearchWindow
+    $("#search").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtLCOpening").val("");
+            getLcBasicData();
+
+            LcWindow.open();
+            LcWindow.center();
+        }
+    });// Activation of LCOpeningSearchWindow end
+    // CommercialInvoice search window grid decleration
+    function getBasicCI() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetAllInvoiceMin", "CommercialInvoice")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#divLoading").hide();
+                $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            },error: function() {
+                $("#divLoading").hide();
+            }
+        });
+    }
+    var CommercialInvoiceWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    LCNo: { editable: false },
+                    SupplierName: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#CommercialInvoiceSearchWindowGrid").kendoGrid({
+        dataSource: CommercialInvoiceWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "LCNo", title: "LC No." },
+            { field: "LCDate", title: "LC Date" },
+            { field: "SupplierName", title: "Supplier" },
+            { field: "CINo", title: "CI No." },
+            { field: "CIDate", title: "CI Date" },
+            { field: "RecordStatus", title: "Status" }
+
+        ]
+    });
+    var CommercialInvoiceWindow = $('#CommercialInvoiceSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "90%",
+        height: "auto",
+        title: "Commercial Invoice Search",
+        position: { top: 80, left: 70 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');// CommercialInvoice search window grid decleration end
+    // Activation of CommercialInvoiceSearchWindow
+
+    $("#btnSearch").click(function (e) {
+        $("#txtCommercialInvoice").val("");
+        if (changeStatus == 1 && saveStatus != 1) {
+            formChangeReset = "search";
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            getBasicCI();
+            $("#txtCommercialInvoice").val("");
+            CommercialInvoiceWindow.open();
+            //CommercialInvoiceWindow.center();
+        }
+
+    });// Activation of CommercialInvoiceSearchWindow end
+
+    function CheckRecStat(recStatus) {
+        if (recStatus == "CHK") {
+            recordStatus = "CHK";
+            $("#btnCheck").attr("disabled", true);
+        }
+        if (recStatus == "CNF") {
+            recordStatus = "CNF";
+            $('#commercialInvoiceDate').data('kendoDatePicker').enable(false);
+            $("#invoiceStatus").attr("disabled", true);
+            $("#currency1").attr("disabled", true);
+            $("#currency2").attr("disabled", true);
+            $("#exchangeRate").attr("disabled", true);
+            $("#checkNote").attr("disabled", true);
+            $("#btnSave").attr("disabled", true);
+            $("#btnDelete").attr("disabled", true);
+            $("#btnCheck").attr("disabled", true);
+            $("#btnConfirm").attr("disabled", true);
+            $("#search").attr("disabled", true);
+
+        }
+    }
+
+    // CommercialInvoiceSearchWindow events
+    function setAllCInvoiceData(CIID) {
+        $.ajax({
+            url: '@Url.Action("GetAllInvoice", "CommercialInvoice")',
+            type: 'GET',
+            data: { CIID: CIID },
+            success: function (data) {
+                $("#commercialInvoiceId").val(data.CIID);
+                $("#commercialInvoiceNo").val(data.CINo);
+                $("#commercialInvoiceDate").val(data.CIDate);
+                $("#currency1").val(data.CICurrency);
+                $("#invoiceStatus").val(data.CIStatus);
+                $("#lcId").val(data.LCID);
+                $("#search").val(data.LCNo);
+                $("#piId").val(data.PIID);
+                $("#piNo").val(data.PINo);
+                $("#poNo").val(data.OrderNo);
+                $("#currency2").val(data.ExchangeCurrency);
+                $("#exchangeRate").val(data.ExchangeRate);
+                $("#exchangeAmt").val(data.ExchangeValue);
+                $("#checkNote").val(data.CINote);
+                if (data.RecordStatus == "CNF") {
+                    $("#checkNote").val(data.ApprovalAdvice);
+                }
+                CheckRecStat(data.RecordStatus);
+                $("#commercialInvoiceItemGrid").data("kendoGrid").dataSource.data(data.Items);
+                changeStatus = 0;
+            }
+        });
+    }
+    function CISearchEvents() {
+        var gridCommercialInvoiceSearch = $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid");
+        var selectedCommercialInvoice = (gridCommercialInvoiceSearch.dataItem(gridCommercialInvoiceSearch.select())); //Selected Row
+        setAllCInvoiceData(selectedCommercialInvoice.CIID);
+    }
+    $("#btnCommercialInvoiceWindowOK").click(function () {
+        CISearchEvents();
+        CommercialInvoiceWindow.close();
+    });
+    $("#btnCommercialInvoiceWindowCancel").click(function () {
+        CommercialInvoiceWindow.close();
+    });
+    $("#CommercialInvoiceSearchWindowGrid").dblclick(function () {
+        CISearchEvents();
+        CommercialInvoiceWindow.close();
+    });
+    $("#CommercialInvoiceSearchWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            CISearchEvents();
+            CommercialInvoiceWindow.close();
+        }
+        if (e.keyCode == 27) {
+            CommercialInvoiceWindow.close();
+        }
+    });// CommercialInvoiceSearchWindow events end
+    // Commercial Invoice Item Grid declaration
+    var commercialInvoiceItemGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "CIItemID",
+                fields: {
+                    CIItemID: { editable: true },
+                    CIID: { editable: true },
+                    ItemID: { editable: true },
+                    ItemName: { editable: true, defaultValue: "Press F9" },
+                    PackSize: { editable: true },
+                    PackSizeName: { editable: true },
+                    SizeUnit: { editable: true },
+                    SizeUnitName: { editable: true },
+                    PackQty: { eidtable: true },
+                    CIQty: { editable: true },
+                    CIUnit: { editable: true },
+                    CIUnitName: { editable: true },
+                    CIUnitPrice: { editable: true },
+                    CITotalPrice: { editable: true },
+                    SupplierID: { editable: true },
+                    ManufacturerID: { editable: true },
+                    ManufacturerName: { editable: true, defaultValue: "Press F9" }
+                }
+            }
+        },
+        pageSize: 30
+    });
+    var ItemGrid = $("#commercialInvoiceItemGrid").kendoGrid({
+        dataSource: commercialInvoiceItemGridDataSource,
+        pageable: true,
+        edit: function (e) {
+            if (recordStatus == "CNF") {
+                $('input[name = "ItemName"]').attr("disabled", true);
+                $('input[name = "PackQty"]').attr("disabled", true);
+                $('input[name = "CIUnitPrice"]').attr("disabled", true);
+                $('input[name = "ManufacturerName"]').attr("disabled", true);
+            }
+            $('input[name = "CIQty"]').attr("readonly", true);
+            $('input[name = "CITotalPrice"]').attr("readonly", true);
+            $("[name='PackQty']", e.container).blur(function () {
+                var totalWeight = 0;
+                var grid = $("#commercialInvoiceItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                if (grid.dataItem(row).PackQty != 0 && grid.dataItem(row).PackSize != 0) {
+                    //$("#commercialInvoiceItemGrid").data("kendoGrid").editCell(grid.dataItem(row).CIQty);
+                    totalWeight = parseFloat(grid.dataItem(row).PackQty) * parseFloat(grid.dataItem(row).PackSizeName);
+                    grid.dataItem(row).CIQty = totalWeight;
+
+                }
+            });
+            $("[name='CIUnitPrice']", e.container).blur(function () {
+                var price = 0;
+                var grid = $("#commercialInvoiceItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                if (grid.dataItem(row).CIUnitPrice != 0 && grid.dataItem(row).CIQty != 0) {
+                    price = grid.dataItem(row).CIUnitPrice * grid.dataItem(row).CIQty;
+                    grid.dataItem(row).CITotalPrice = price.toFixed(2);
+
+                }
+            });
+            $("[name='ItemName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    $(this).val("");
+                    //SelectedItemOfListOfValue('ItemSearchWindow');
+                    $("#txtItemName").val("");
+                    ItemWindow.open();
+                    ItemWindow.center();
+                }
+            });
+            $("[name='ManufacturerName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    $(this).val("");
+                    SupplierWindow.open();
+                    SupplierWindow.center();
+                }
+            });
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+        },
+        save: function (e) {
+            setTimeout(function () {
+                $("#totalPackQty").text(sumPackQty());
+            });
+            setTimeout(function () {
+                $("#totalCIkQty").text(sumCIQty());
+            });
+            setTimeout(function () {
+                $("#totalCITotalPrice").text(sumCITotalPrice());
+                if ($("#exchangeRate").val() != "") {
+                    var exchangeRate = parseFloat($("#exchangeRate").val());
+                    var total = parseFloat($("#totalCITotalPrice").text());
+                    total = exchangeRate * total;
+                    $("#exchangeAmt").val(total.toFixed(2));
+                }
+            });
+            //setTimeout(function() {
+
+            //});
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 220,
+        toolbar: [{
+            text: "Add Item",
+            className: "btnAddCommercialInvoiceItem",
+            imageClass: "k-icon k-add"
+        }],
+        columns: [
+            { field: "ItemName", title: "Item Name", width: "30px", attributes: { "class": "itemName" } },
+            { field: "PackSizeName", title: "Pack Size", editor: CISizeDropDownEditor, footerTemplate: "Total:", width: "30px" },
+            { field: "SizeUnitName", title: "Unit", editor: SizeUnitDropDownEditor, width: "30px" },
+            { field: "PackQty", title: "Pack Qty", footerTemplate: "<span id='totalPackQty'>#=sumPackQty()#</span>", width: "30px" },
+            { field: "CIQty", title: "Total Weight", footerTemplate: "<span id='totalCIkQty'>#=sumCIQty()#</span>", width: "30px" },
+            { field: "CIUnitName", title: "Unit", editor: CIUnitDropDownEditor, width: "30px" },
+            { field: "CIUnitPrice", title: "Rate", width: "30px" },
+            { field: "CITotalPrice", title: "Price", footerTemplate: "<span id='totalCITotalPrice'>#=sumCITotalPrice()#</span>", width: "30px" },
+            { field: "ManufacturerName", title: "Manufacturer", width: "30px" },
+            { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteCommercialInvoiceItem }], title: "Delete", width: "30px" }
+        ]
+    });// Commercial Invoice Item Grid declaration End
+
+    var confirmCommercialInvoiceItemDeleteWindow = $('#DeleteCommercialInvoiceItemConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+    function handleDeleteCommercialInvoiceItem() {
+        if (recordStatus != "CNF") {
+            del = "grid";
+            confirmCommercialInvoiceItemDeleteWindow.open();
+            confirmCommercialInvoiceItemDeleteWindow.center();
+            var grid = $("#commercialInvoiceItemGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select())); //Selected Row
+        }
+    };
+    //Recalculate excahnge amount
+    function reCalcExchangeAmountOnDelete() {
+        if ($("#exchangeRate").val() != "") {
+            var exchangeRate = parseFloat($("#exchangeRate").val());
+            var amount = parseFloat($("#totalCITotalPrice").text());
+            amount = exchangeRate * amount;
+            $("#exchangeAmt").val(amount.toFixed(2));
+        }
+    }
+
+    $("#btnDelete").click(function () {
+        del = "all";
+        confirmCommercialInvoiceItemDeleteWindow.open();
+        confirmCommercialInvoiceItemDeleteWindow.center();
+    });
+
+    $('#btnDeleteCommercialInvoiceItemOK').click(function () {
+        if (del == "grid") {
+            if ($('#commercialInvoiceId').val() != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteCommercialInvoiceItem", "CommercialInvoice")',
+                    type: 'GET',
+                    data: ({ "CIItemID": dataItem.CIItemID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            changeStatus = 1;
+                        }
+                        else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                });
+                $("#commercialInvoiceItemGrid").data("kendoGrid").dataSource.remove(dataItem);
+            }
+            else {
+                $("#commercialInvoiceItemGrid").data("kendoGrid").dataSource.remove(dataItem);
+                $('#MessageText').html("Item has been successfully removed");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+            }
+            reCalcExchangeAmountOnDelete();
+        }
+        if (del == "all") {
+            var ciid = $('#commercialInvoiceId').val();
+            if ($('#commercialInvoiceId').val() != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteCommercialInvoice", "CommercialInvoice")',
+                    type: 'GET',
+                    data: ({ "ciid": ciid }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            reset();
+                        }
+                        else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                });
+            }
+        }
+        confirmCommercialInvoiceItemDeleteWindow.close();
+    });
+    // Delete row of Commercial Invoice Item grid end
+    // Create drop down list editor for chemical unit
+    var ddlChemicalUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllUnitForChemical", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 8
+    });
+    function SizeUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlChemicalUnitDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("SizeUnitName", dataItem.UnitName);
+                    options.model.set("SizeUnit", dataItem.UnitID);
+                    var cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(2)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').closeCell(cell);
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(3)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+    function CIUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlChemicalUnitDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("CIUnitName", dataItem.UnitName);
+                    options.model.set("CIUnit", dataItem.UnitID);
+                    var cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(5)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').closeCell(cell);
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(6)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }// Create drop down list editor for chemical unit end
+    //Create drop down list editor for chemical size
+    var ddlChemicalSizeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SizeID",
+                fields: {
+                    SizeID: { editable: false },
+                    SizeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllPackSizeForChemical", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 100
+    });
+    function CISizeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "SizeName",
+                dataValueField: "SizeID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlChemicalSizeDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("PackSizeName", dataItem.SizeName);
+                    options.model.set("PackSize", dataItem.SizeID);
+                    var cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(1)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').closeCell(cell);
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(2)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }//Create drop down list editor for chemical size end
+    // Get sum of column PackQty
+    function sumPackQty() {
+        var field = "PackQty";
+        var dataSource = commercialInvoiceItemGridDataSource;
+        var newValue = 0;
+        $.each(dataSource.data(), function (index, model) {
+            newValue += parseFloat(model.get(field));
+        });
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        return newValue;
+    }// Get sum of column end
+    // Get sum of column CIQty
+    function sumCIQty() {
+        var field = "CIQty";
+        var dataSource = commercialInvoiceItemGridDataSource;
+        var newValue = 0;
+        $.each(dataSource.data(), function (index, model) {
+            newValue += parseFloat(model.get(field));
+        });
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        return newValue;
+    }// Get sum of column CIQty end
+    function sumCITotalPrice() {
+        var field = "CITotalPrice";
+        var dataSource = commercialInvoiceItemGridDataSource;
+        var newValue = 0;
+        $.each(dataSource.data(), function (index, model) {
+            newValue += parseFloat(model.get(field));
+        });
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        totalPrice = newValue;
+        return newValue.toFixed(2);
+    }// Get sum of column CIQty end
+    // Defination of ItemSearchWindow
+    var ItemSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: false },
+                    HSCode: { editable: false },
+                    ItemName: { editable: false },
+                    ItemCategory: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: '@Url.Action("GetAllChemicalItemType","CommonChemical")',
+            type: 'GET',
+            data: 'JSON'
+        },
+        pageSize: 10
+    });
+    var ItemSearchGrid = $("#ItemSearchWindowGrid").kendoGrid({
+        dataSource: ItemSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //height: 150,
+        columns: [
+           { field: "ItemName", title: "Name", width: "30px" },
+           { field: "HSCode", title: "HSCode", width: "30px" },
+           { field: "ItemCategory", title: "Category", width: "30px" }
+        ]
+    });
+    var ItemWindow = $('#ItemSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "Chemical Item Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    } // Defination of ItemSearchWindow end
+    // Item search window events
+    function ItemSearchEvents() {
+        var gridItemSearch = $("#ItemSearchWindowGrid").data("kendoGrid");
+        var selectedIsgItem = (gridItemSearch.dataItem(gridItemSearch.select())); //Selected Row
+        var gridCiItem = $("#commercialInvoiceItemGrid").data("kendoGrid");
+        var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+        selectedCiigItem.set("ItemID", selectedIsgItem.ItemID);
+        selectedCiigItem.set("ItemName", selectedIsgItem.ItemName);
+        var cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(0)'); // or different cell
+        $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+    }
+
+    $("#btnItemWindowOK").click(function () {
+        ItemSearchEvents();
+        ItemWindow.close();
+    });
+    $("#ItemSearchWindowGrid").dblclick(function () {
+        ItemSearchEvents();
+        ItemWindow.close();
+    });
+    $("#ItemSearchWindowGrid").keyup(function (e) {
+        var gridItemSearch = $("#ItemSearchWindowGrid").data("kendoGrid");
+        var selectedIsgItem = (gridItemSearch.dataItem(gridItemSearch.select())); //Selected Row
+        if (selectedIsgItem != null) {
+            if (e.keyCode == 13) {
+                ItemSearchEvents();
+                ItemWindow.close();
+            }
+        }
+    });
+    $("#btnItemWindowCancel").click(function () {
+        ItemWindow.close();
+    });
+    $("#ItemSearchWindow").keyup(function (e) {
+        if (e.keyCode == 27) {
+            ItemWindow.close();
+        }
+    });// Item search window events End
+    //Manufacturer search window definition
+    var SupplierSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierType: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: '@Url.Action("GetAllManufacturer", "CommonChemical")', //Need to change to Manufacturer
+            type: 'GET',
+            data: 'JSON'
+        },
+        pageSize: 10
+    });
+    var SupplierSearchGrid = $("#SupplierSearchWindowGrid").kendoGrid({
+        dataSource: SupplierSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //height: 150,
+        columns: [
+            { field: "SupplierCode", title: "Code", width: "30px" },
+            { field: "SupplierName", title: "Name", width: "30px" },
+            { field: "SupplierType", title: "Type", width: "30px" }
+        ]
+    });
+    var SupplierWindow = $('#SupplierSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "Manufacturer Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: false
+    }).data('kendoWindow'); //Manufacturer search window definition end
+    // Manufacturer search window events
+    function SupplierSearchEvents() {
+        var gridSupplierSearch = $("#SupplierSearchWindowGrid").data("kendoGrid");
+        var selectedSupplier = (gridSupplierSearch.dataItem(gridSupplierSearch.select())); //Selected Row
+        var gridCiItem = $("#commercialInvoiceItemGrid").data("kendoGrid");
+        var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+        selectedCiigItem.set("SupplierID", selectedSupplier.SupplierID);
+        selectedCiigItem.set("ManufacturerID", selectedSupplier.SupplierID);
+        selectedCiigItem.set("ManufacturerName", selectedSupplier.SupplierName);
+        var cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(0) td:eq(8)'); // or different cell
+        $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+    }
+    $("#btnSupplierWindowOK").click(function () {
+        SupplierSearchEvents();
+        SupplierWindow.close();
+    });
+    $("#SupplierSearchWindowGrid").dblclick(function () {
+        SupplierSearchEvents();
+        SupplierWindow.close();
+    });
+    $("#SupplierSearchWindowGrid").keyup(function (e) {
+        var gridSupplierSearch = $("#SupplierSearchWindowGrid").data("kendoGrid");
+        var selectedSupplier = (gridSupplierSearch.dataItem(gridSupplierSearch.select())); //Selected Row
+        if (selectedSupplier != null) {
+            if (e.keyCode == 13) {
+                SupplierSearchEvents();
+                SupplierWindow.close();
+            }
+        }
+    });
+    $("#btnSupplierWindowCancel").click(function () {
+        SupplierWindow.close();
+    });
+    $("#SupplierSearchWindow").keyup(function (e) {
+        if (e.keyCode == 27) {
+            SupplierWindow.close();
+        }
+    }); // Manufacturer search window events End
+    //SaveChange window decleration
+    SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Confirmation!",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');//SaveChange window decleration end
+    //SaveChange window events
+    $("#btnSaveChangeWindowOk").click(function () {
+        if (formChangeReset == "reset") {
+            reset();
+            SaveChangeWindow.close();
+        }
+        if (formChangeReset == "search") {
+            reset();
+            getBasicCI();
+            CommercialInvoiceWindow.open();
+            //CommercialInvoiceWindow.center();
+            SaveChangeWindow.close();
+        }
+    });
+    $("#btnSaveChangeWindowCancel").click(function () {
+        SaveChangeWindow.close();
+    });//SaveChange window events end
+    //Load all lc data and set to the appropriate fields
+    function getAllLcRelatedData(lcId) {
+        $.ajax({
+            url: '@Url.Action("GetAllLCforCommercialInvoice", "CommercialInvoice")',
+            type: 'GET',
+            data: { lcId: lcId },
+            success: function (data) {
+                $("#lcId").val(data.LCID);
+                $("#search").val(data.LCNo);
+                $("#piId").val(data.PIID);
+                $("#piNo").val(data.PINo);
+                $("#poNo").val(data.OrderNo);
+                $("#currency2").val(data.ExchangeCurrency);
+                $("#exchangeRate").val(data.ExchangeRate);
+                $("#exchangeAmt").val(data.ExchangeValue);
+                $("#commercialInvoiceItemGrid").data("kendoGrid").dataSource.data(data.Items);
+                changeStatus = 1;
+            }
+        });
+    }
+
+    function LCSearchEvents() {
+        var gridLcOpeningSearch = $("#LCOpeningSearchWindowGrid").data("kendoGrid");
+        var selectedLcOpening = (gridLcOpeningSearch.dataItem(gridLcOpeningSearch.select())); //Selected Row
+        getAllLcRelatedData(selectedLcOpening.LCID);
+        setTimeout(function () {
+            $("#poNo").focus();
+        }, 1);
+    }
+
+    $("#LCOpeningSearchWindowGrid").dblclick(function () {
+        LCSearchEvents();
+        LcWindow.close();
+    });
+    $("#LCOpeningSearchWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            LCSearchEvents();
+            LcWindow.close();
+        }
+        if (e.keyCode == 27) {
+            LcWindow.close();
+        }
+    });
+    $("#btnLCOpeningWindowOK").click(function () {
+        LCSearchEvents();
+        LcWindow.close();
+    });
+    $("#btnLCOpeningWindowCancel").click(function () {
+        LcWindow.close();
+    }); //Load all lc data and set to the appropriate fields end
+    // Calculate Exchange Amt
+    $('#exchangeRate').blur(function () {
+        var stri = $('#exchangeRate').val(); //the input element
+        var numbers = "0123456789.";
+        var flag = false;
+        for (var x = 0; x < stri.length; x++) {
+            var ch = stri.charAt(x);
+            var n = numbers.indexOf(ch);
+            if (n === -1) { //why does it always resolve to true
+                flag = true;
+                break;
+            } else {
+
+            }
+        }
+        if (flag) {
+            $('#MessageText').html("Exchange rate should be a positive number.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            $('#exchangeRate').val("");
+            $("#exchangeRate").css({ 'box-shadow': '1px 1px 1px red' });
+            setTimeout(function () {
+                $("#exchangeRate").focus();
+            }, 1);
+        } else {
+            $("#exchangeRate").css({ 'box-shadow': '0 0 0 white' });
+            $('#MessageText').html("");
+            var exchangeRate = parseFloat($("#exchangeRate").val());
+            var totalPrice = parseFloat($("#totalCITotalPrice").text());
+            var exchangeAmt = exchangeRate * totalPrice;
+            if (!isNaN(exchangeAmt)) {
+                $("#exchangeAmt").val(exchangeAmt.toFixed(2));
+            }
+        }
+    }); // Calculate Exchange Amt end
+    // Check data for saving
+    function checkDataValidity() {
+        if ($("#search").val() == "") {
+            $('#MessageText').html("Please input LC no to continue.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            setTimeout(function () {
+                $("#search").focus();
+            }, 1);
+            return 1;
+        }
+        var commercialInvoiceItemGridDataSource = $("#commercialInvoiceItemGrid").data("kendoGrid").dataSource;
+        var ciigd = commercialInvoiceItemGridDataSource.data();
+        if (ciigd.length > 0) {
+            var cell;
+            for (var i = 0; i < ciigd.length; i++) {
+                if (ciigd[i].ItemID == "") {
+                    $('#MessageText').html("Please input Item at row " + (i + 1) + " in the item grid to continue.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(' + i + ') td:eq(0)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                    return 1;
+                }
+                if (ciigd[i].CIQty == "") {
+                    $('#MessageText').html("Please input Pack Qty at row " + (i + 1) + " in the item grid to continue.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(' + i + ') td:eq(3)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                    return 1;
+                }
+                if (ciigd[i].CIUnit == "") {
+                    $('#MessageText').html("Please input Unit at row " + (i + 1) + " in the item grid to continue.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(' + i + ') td:eq(5)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                    return 1;
+                }
+                if (ciigd[i].CIUnitPrice == "") {
+                    $('#MessageText').html("Please input Rate at row " + (i + 1) + " in the item grid to continue.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    cell = $('#commercialInvoiceItemGrid').find('tbody tr:eq(' + i + ') td:eq(6)'); // or different cell
+                    $('#commercialInvoiceItemGrid').data('kendoGrid').editCell(cell);
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    //Save and update
+
+    function CheckCiNo(val) {
+        var chk;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckCiNo", "CommercialInvoice")',
+            dataType: 'JSON',
+            data: JSON.stringify({ cino: val }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null) {
+                    chk = true;
+                } else {
+                    chk = false;
+                }
+            }
+        });
+        return chk;
+    }
+
+    function save() {
+        ClearItems();
+        ClearCommercialInvoice();
+        var validity = checkDataValidity();
+        if (validity == 1) {
+            return false;
+        }
+
+        commercialInvoice = {
+            "CIID": "", "CINo": "", "CIDate": "", "CICurrency": "", "CIStatus": "", "LCID": "", "LCNo": "", "LCDate": "", "PIID": "",
+            "PINo": "", "OrderNo": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "CINote": "", "Items": []
+        };
+        commercialInvoice.CIID = $("#commercialInvoiceId").val();
+        commercialInvoice.CINo = $("#commercialInvoiceNo").val();
+        commercialInvoice.CIDate = $("#commercialInvoiceDate").val();
+        commercialInvoice.CICurrency = $("#currency1 option:selected").val();
+        commercialInvoice.CIStatus = $("#invoiceStatus option:selected").val();
+        commercialInvoice.LCID = $("#lcId").val();
+        commercialInvoice.LCNo = $("#search").val();
+        commercialInvoice.ExchangeCurrency = $("#currency2 option:selected").val();
+        commercialInvoice.ExchangeRate = $("#exchangeRate").val();
+        commercialInvoice.ExchangeValue = $("#exchangeAmt").val();
+        var commercialInvoiceItemGridDataSource = $("#commercialInvoiceItemGrid").data("kendoGrid").dataSource;
+        var ciigd = commercialInvoiceItemGridDataSource.data();
+        if (ciigd.length > 0) {
+            for (var i = 0; i < ciigd.length; i++) {
+                Items.CIItemID = ciigd[i].CIItemID;
+                Items.CIID = ciigd[i].CIID;
+                Items.ItemID = ciigd[i].ItemID;
+                Items.PackSize = ciigd[i].PackSize;
+                Items.SizeUnit = ciigd[i].SizeUnit;
+                Items.PackQty = ciigd[i].PackQty;
+                Items.CIQty = ciigd[i].CIQty;
+                Items.CIUnit = ciigd[i].CIUnit;
+                Items.CIUnitPrice = ciigd[i].CIUnitPrice;
+                Items.CITotalPrice = ciigd[i].CITotalPrice;
+                Items.SupplierID = ciigd[i].SupplierID;
+                Items.ManufacturerID = ciigd[i].ManufacturerID;
+                commercialInvoice.Items.push(Items);
+
+                ClearItems();
+            }
+        }
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "CommercialInvoice")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: commercialInvoice }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Type == 2) {
+                    $("#commercialInvoiceId").val(response.ReturnId);
+                    $("#commercialInvoiceNo").val(response.ReturnCode);
+                    setAllCInvoiceData(response.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else if (response.Type == 3) {
+                    setAllCInvoiceData(response.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+            }
+        });
+        return true;
+    }
+    $("#btnSave").click(function () {
+
+        var gridCheck = doesDataSourceHaveChanges(commercialInvoiceItemGridDataSource);
+        if (gridCheck == true) {
+            changeStatus = 1;
+        }
+        //var chk = CheckCiNo($("#commercialInvoiceNo").val());
+        //if (chk) {
+        //    $('#MessageText').html("Commercial Invoice no. already exist please change to proceed.");
+        //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        //    return false;
+        //}
+        if (changeStatus == 1) {
+            if ($('#commercialInvoiceNo').val() == "") {
+                $('#MessageText').html("Please enter a commmercial invoice number.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                $('#commercialInvoiceNo').css({ 'box-shadow': '1px 1px 1px red' });
+            } else {
+                save();
+            }
+
+        } else {
+            $('#MessageText').html("No changes to save.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }); //Save and update end
+    //Check and confrim form
+    function checkNconfirm(state) {
+        var ciid = $("#commercialInvoiceId").val();
+        if (state == "chk") {
+            var chkNote = $("#checkNote").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Check", "CommercialInvoice")',
+                dataType: 'JSON',
+                data: JSON.stringify({ ciid: ciid, chkNote: chkNote }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.Type == 2) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        recordStatus = "CHK";
+                        CheckRecStat(recordStatus);
+                        $("#btnCheck").attr("disabled", true);
+                    }
+                    else {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        if (state == "cnf") {
+            var apvNote = $("#checkNote").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Confirm", "CommercialInvoice")',
+                dataType: 'JSON',
+                data: JSON.stringify({ ciid: ciid, apvNote: apvNote }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.Type == 2) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        recordStatus = "CNF";
+                        CheckRecStat(recordStatus);
+                        $('#commercialInvoiceDate').data('kendoDatePicker').enable(false);
+                        $("#invoiceStatus").attr("disabled", true);
+                        $("#currency1").attr("disabled", true);
+                        $("#currency2").attr("disabled", true);
+                        $("#exchangeRate").attr("disabled", true);
+                        $("#checkNote").attr("disabled", true);
+                        $("#btnSave").attr("disabled", true);
+                        $("#btnDelete").attr("disabled", true);
+                        $("#btnCheck").attr("disabled", true);
+                        $("#btnConfirm").attr("disabled", true);
+                        $("#search").attr("disabled", true);
+                    }
+                    else {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    }//Check and confrim form end
+    //Check and confrim form acivation
+    $("#btnCheck").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#commercialInvoiceId").val() != "") {
+                state = "chk";
+                checkNconfirm(state);
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+    });
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#commercialInvoiceId").val() != "") {
+                state = "cnf";
+                checkNconfirm(state);
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+            return true;
+        }
+    });//Check and confrim form acivation end
+    // Delete Commercial Invoice
+    //$("#")
+    // Variables
+    var del = 0;
+    var recordStatus = "";
+    var formChangeReset = "";
+    var state = "";
+    var totalPrice = 0;
+    var saveStatus = 0;
+    var resetStatus = 0;
+    var changeStatus = 0;
+    var dataItem;
+    var Items = {
+        "CIItemID": "", "CIID": "", "ItemID": "", "ItemName": "", "PackSize": "", "PackSizeName": "", "SizeUnit": "", "SizeUnitName": "",
+        "PackQty": "", "CIQty": "", "CIUnit": "", "CIUnitName": "", "CIUnitPrice": "", "CITotalPrice": "", "SupplierID": "", "SupplierName": "",
+        "ManufacturerID": "", "ManufacturerName": ""
+    };
+    var commercialInvoice = {
+        "CIID": "", "CINo": "", "CIDate": "", "CICurrency": "", "CIStatus": "", "LCID": "", "LCNo": "", "LCDate": "", "PIID": "",
+        "PINo": "", "OrderNo": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "CINote": "", "Items": []
+    };
+    function ClearItems() {
+        Items = {
+            "CIItemID": "", "CIID": "", "ItemID": "", "ItemName": "", "PackSize": "", "PackSizeName": "", "SizeUnit": "", "SizeUnitName": "",
+            "PackQty": "", "CIQty": "", "CIUnit": "", "CIUnitName": "", "CIUnitPrice": "", "CITotalPrice": "", "SupplierID": "", "SupplierName": "",
+            "ManufacturerID": "", "ManufacturerName": ""
+        };
+    }
+    function ClearCommercialInvoice() {
+        commercialInvoice = {
+            "CIID": "", "CINo": "", "CIDate": "", "CICurrency": "", "CIStatus": "", "LCID": "", "LCNo": "", "LCDate": "", "PIID": "",
+            "PINo": "", "OrderNo": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "CINote": "", "Items": []
+        };
+    }
+    // Detect changes
+    $(".field").change(function () {
+        changeStatus = 1;
+    });
+    $(".dDown").change(function () {
+        changeStatus = 1;
+    });
+    $(".grdKendo").on('input', function () {
+        changeStatus = 1;
+    });// Detect changes end
+    function doesDataSourceHaveChanges(ds) {
+        //var ds = commercialInvoiceItemGridDataSource;
+        var dirty = false;
+
+        $.each(ds._data, function () {
+            if (this.dirty == true) {
+                dirty = true;
+            }
+        });
+        if (ds._destroyed.length > 0) dirty = true;
+        return dirty;
+    }
+    //Reset the page
+    $("#btnReset").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            formChangeReset = "reset";
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            reset();
+        }
+    });
+    function reset() {
+        $(".field").val("");
+        $(".dDown").val("");
+        $("#commercialInvoiceItemGrid").data('kendoGrid').dataSource.data([]);
+        resetStatus = 1;
+        changeStatus = 0;
+        saveStatus = 0;
+        totalPrice = 0;
+        state = "";
+        totalPrice = 0;
+        recordStatus = "";
+        del = "";
+        $("#checkNote").val("");
+        $("#invoiceStatus").attr("disabled", false);
+        $("#currency1").attr("disabled", false);
+        $("#currency2").attr("disabled", false);
+        $("#exchangeRate").attr("disabled", false);
+        $("#checkNote").attr("disabled", false);
+        $("#btnSave").attr("disabled", false);
+        $("#btnDelete").attr("disabled", false);
+        $("#btnCheck").attr("disabled", false);
+        $("#btnConfirm").attr("disabled", false);
+        $("#search").attr("disabled", false);
+        $("#MessageText").html("");
+        $('#commercialInvoiceDate').data('kendoDatePicker').enable(true);
+        $("#commercialInvoiceDate").attr("readonly", true);
+    }; //Reset the page end
+    // Common function calls
+    ClearOperationalMessage();
+
+    // AutoComplete start
+    // Search by CiNo in CommercialInvoiceWindow
+    var dataSourceCI = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetInvoiceMinForSearch", "CommercialInvoice")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtCommercialInvoice").kendoAutoComplete({
+        dataSource: dataSourceCI,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Invoice..."
+    });
+    $("#btnCommercialInvoiceGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetInvoiceByCiNo", "CommercialInvoice")',
+            type: 'GET',
+            data: { ciNo: $("#txtCommercialInvoice").val() },
+            success: function (data) {
+                $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    setAllCInvoiceData(data[0].CIID);
+                    CommercialInvoiceWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtCommercialInvoice").keyup(function (event) {
+        if ($("#txtCommercialInvoice").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetInvoiceByCiNo", "CommercialInvoice")',
+                    type: 'GET',
+                    data: { ciNo: $("#txtCommercialInvoice").val() },
+                    success: function (data) {
+                        $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            setAllCInvoiceData(data[0].CIID);
+                            CommercialInvoiceWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });// Search by CiNo in CommercialInvoiceWindow end
+    // Search by LC No in LcWindow
+    var dataSourceLC = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLcInfoForSearch", "CommercialInvoice")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtLCOpening").kendoAutoComplete({
+        dataSource: dataSourceLC,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search LC No..."
+    });
+    $("#btnLCOpeningWindowOK").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetLcInfoByLcNo", "CommercialInvoice")',
+            type: 'GET',
+            data: { lcNo: $("#txtLCOpening").val() },
+            success: function (data) {
+                $("#LCOpeningSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    getAllLcRelatedData(data[0].LCID);
+                    LcWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtLCOpening").keyup(function (event) {
+        if ($("#txtLCOpening").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetLcInfoByLcNo", "CommercialInvoice")',
+                    type: 'GET',
+                    data: { lcNo: $("#txtLCOpening").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#LCOpeningSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            getAllLcRelatedData(data[0].LCID);
+                            LcWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });// Search by LC No in LcWindow End
+    // Search by Item Name in Item search Window
+    var dataSourceChemItem = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllChemicalItemForSearch", "CommercialInvoice")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtItemName").kendoAutoComplete({
+        dataSource: dataSourceChemItem,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Items..."
+    });
+    $("#btnItemWindowOK").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetAllChemicalItemByName", "CommercialInvoice")',
+            type: 'GET',
+            data: { name: $("#txtItemName").val() },
+            success: function (data) {
+                $("#ItemSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    var gridCiItem = $("#commercialInvoiceItemGrid").data("kendoGrid");
+                    var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+                    selectedCiigItem.set("ItemID", data[0].ItemID);
+                    selectedCiigItem.set("ItemName", data[0].ItemName);
+                    ItemWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtItemName").keyup(function (event) {
+        if ($("#txtItemName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetAllChemicalItemByName", "CommercialInvoice")',
+                    type: 'GET',
+                    data: { name: $("#txtItemName").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#ItemSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            var gridCiItem = $("#commercialInvoiceItemGrid").data("kendoGrid");
+                            var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+                            selectedCiigItem.set("ItemID", data[0].ItemID);
+                            selectedCiigItem.set("ItemName", data[0].ItemName);
+                            ItemWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });// Search by Item Name in Item search Window end
+    // AutoComplete start end
+</script>

@@ -1,0 +1,1249 @@
+﻿@{
+    ViewBag.Title = "C&F Bill Documents";
+    ViewBag.SearchTitle = "LC NO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+<div class="row">
+    <div class="FormBody">
+
+        <input type="hidden"    id="CnfBillID"         name="CnfBillID"  />
+        <input type="hidden"    id="BuyerID"           name="BuyerID"  />
+        <input type="hidden"    id="LCID"              name="LCID"  />
+        <input type="hidden"    id="BuyerAddressID"    name="BuyerAddressID"  />
+        <input type="hidden"    id="PIID"              name="PIID" />
+        <input type="hidden"    id="CIID"              name="CIID"  />
+        
+
+        <div class="row">
+            <div class="col-lg-1">
+                <label>C&F Agent</label><label style="color:red">*</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="BuyerCode" name="BuyerCode" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" style="width: 80px;" />
+                <input type="text" id="BuyerName" name="BuyerName" class="txtBox RequiredTextBox" readonly="readonly" value="" style="width: 160px;" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>Address</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="Address" readonly="readonly" tabindex="2" name="Address" class="txtBox RequiredTextBox" value="" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>Contact Person</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="ContactPerson" readonly="readonly" tabindex="2" name="ContactPerson" class="txtBox RequiredTextBox" value="" />
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Contact No.</label>
+            </div>
+            <div class="col-lg-3">
+
+                <input type="text" id="ContactNumber" name="ContactNumber" class="txtBox RequiredTextBox" readonly="readonly" value="" style="width:246px;" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>Email</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="EmailAddress" readonly="readonly" tabindex="2" name="EmailAddress" class="txtBox RequiredTextBox" value="" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>Phone No.</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="PhoneNo" readonly="readonly" tabindex="2" name="PhoneNo" class="txtBox RequiredTextBox" value="" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div class="row ">
+
+            <div class="col-lg-1">
+                <label>L/C No</label><label style="color:red">*</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="LCNo" name="LCNo" readonly="readonly" tabindex="5" class="txtBox RequiredTextBox" placeholder="Press F9" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>CI No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="CINo" name="CINo" readonly="readonly" tabindex="5" class="txtBox RequiredTextBox" placeholder="" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>PI No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="PINo" name="PINo" readonly="readonly" tabindex="6" class="txtBox RequiredTextBox" placeholder="" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+
+            <div class="col-lg-1">
+                <label>Ref CnfBill No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="RefCnfBillNo" name="RefCnfBillNo" tabindex="3" class="txtBox RequiredTextBox" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>Cnf Bill No</label><label style="color:red">*</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="CnfBillNo" name="CnfBillNo" tabindex="3" readonly="readonly" class="txtBox" />
+            </div>
+
+            <div class="col-lg-1">
+                <label>Cnf Bill Date</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="CnfBillDate" name="CnfBillDate"  tabindex="4"  class="txtBox datePicker" placeholder="" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row ">
+            <div class="col-lg-2">
+                <label>Bill of Entry No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BillOfEntryNo" name="BillOfEntryNo" tabindex="7" class="txtBox RequiredTextBox" placeholder="" style="width:352px;" />
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>Assessment Value</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="AssesmentValue" name="AssesmentValue" class="txtBox RequiredTextBox" tabindex="9" placeholder="" style="width:352px;" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bill of Entry Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BillOfEntryDate" name="BillOfEntryDate"  tabindex="8" class="txtBox datePicker" placeholder="" style="width:352px;" />
+               
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="CnfBillNote" name="CnfBillNote" class="txtBox " tabindex="10" placeholder="" style="width:352px" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+
+        <div class="row ">
+
+            <div class="col-lg-2">
+                <label>Currecncy</label>
+            </div>
+            <div class="col-lg-4">
+                <div id="CnfBillCurrency" tabindex="23">
+                    @Html.DropDownList("Currency", (SelectList)ViewBag.Currency, new { style = "width: 351px;text-align:center" })
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Shipping Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ShippingCharge" name="ShippingCharge" class="txtBox " tabindex="13" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+
+
+
+
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Duty A/C Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="DutyAccountCharge" name="DutyAccountCharge" placeholder="0.00" onblur="TotalAmountCalcultaion()" class="txtBox RequiredTextBox" tabindex="11" style="width:352px;text-align:right" />
+            </div>
+
+
+
+            <div class="col-lg-2">
+                <label>Special Delivary Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="SpecialDeliveryCharge" name="SpecialDeliveryCharge" class="txtBox " tabindex="18" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Port Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="PortCharge" name="PortCharge" class="txtBox" tabindex="12" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Amendment Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="AmendmentCharge" name="AmendmentCharge" class="txtBox " tabindex="19" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Berth Operator/Labour Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BerthOperatorCharge" name="BerthOperatorCharge" class="txtBox " tabindex="14" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>Chemical Test Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ChemicalTestCharge" name="ChemicalTestCharge" class="txtBox " tabindex="20" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>NOC Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="NOCCharge" name="NOCCharge" class="txtBox" tabindex="15" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>Agency Commission</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="AgencyCommission" name="AgencyCommission" class="txtBox " tabindex="21" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Stamp Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="StampCharge" name="StampCharge" class="txtBox " tabindex="16" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px; text-align:right" />
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>B/L Verify Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BLVerifyCharge" name="BLVerifyCharge" class="txtBox "  tabindex="22" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Examine Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ExamineCharge" name="ExamineCharge" placeholder="0.00" onblur="TotalAmountCalcultaion()" class="txtBox " tabindex="17" style="width:352px;text-align:right" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Total Amount</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="TotalAmount" name="TotalAmount" class="txtBox " readonly="readonly" tabindex="22" placeholder="0.00" onblur="TotalAmountCalcultaion()" style="width:352px;text-align:right" />
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Others Charge</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="OtherCharge" name="OtherCharge" placeholder="0.00" onblur="TotalAmountCalcultaion()" class="txtBox " tabindex="17" style="width:352px;text-align:right" />
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    @*Currency Exchange Rate and Exchange Amount portion*@
+
+    <div class="FormBody">
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Exchange Currecncy</label>
+            </div>
+            <div class="col-lg-2">
+                <div id="ExchangeCurrency">
+                    @Html.DropDownList("Currency", (SelectList)ViewBag.Currency, new { style = "width: 200px;" })
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-1">
+                <label>Exchange Rate</label>
+            </div>
+            <div class="col-lg-3">
+                <div id="ExchangeCurrency">
+                    <input type="text" id="ExchangeRate" name="ExchangeRate" style="width: 200px; text-align: right" value="" placeholder="0.00" onblur="ExchangeAmountCalcultaion(); return IsNumber('ExchangeRate');" />
+                    
+                </div>
+            </div>
+
+
+            <div class="col-lg-1">
+                <label>Exchange Amount</label>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <input type="text" id="ExchangeValue" name="ExchangeValue" style="width: 200px; text-align: right" value="" readonly="readonly" placeholder="0.00" onblur="return IsNumber('ExchangeValue');" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Check Note Confir Note and Conceal Portion*@
+
+
+    @*Check Note Confir Note and Conceal Portion*@
+
+    <div class="FormBody">
+        <div class="row" style="">
+            <div class="col-lg-2" style="">
+                <label>ConfirmNote</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea type="text" id="Remarks" class="col-lg-12" name="Remarks" rows="1"></textarea><br />
+                <button type="button" id="btnConfirm" name="ConfirmComments">Confirmed</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="BuyerIDWindow" style="display: none;">
+    @*<p>Buyer:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>*@
+
+    <div id="BuyerIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="LCIDWindow" style="display: none;">
+    <p>LC No.:<input type="text" id="LCNo" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>
+
+
+    <div id="LCIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+@*<div id="DeleteConfirmWindow" style="display: none;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteConfirmWindowOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteConfirmWindowCancel" value="Cancel" />
+    </div>*@
+
+<div id="DeleteCnFBillListConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteCnFBillListOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteCnFBillListCancel" value="Cancel" />
+</div>
+
+@*<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+        top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+        opacity: .8; filter: alpha(opacity=70);display:none">
+        <p style="position: absolute; top: 50%; left: 42%; color: White;">
+            Loading, please wait...<img src="../../images/ajax-loading.gif">
+        </p>
+    </div>*@
+
+
+<script type="text/javascript">
+
+
+    NumericAndDecimalValue('AssesmentValue');
+    NumericAndDecimalValue('DutyAccountCharge');
+    NumericAndDecimalValue('PortCharge');
+    NumericAndDecimalValue('ShippingCharge');
+    NumericAndDecimalValue('BerthOperatorCharge');
+    NumericAndDecimalValue('NOCCharge');
+    NumericAndDecimalValue('ExamineCharge');
+    NumericAndDecimalValue('SpecialDeliveryCharge');
+    NumericAndDecimalValue('AmendmentCharge');
+    NumericAndDecimalValue('ChemicalTestCharge');
+    NumericAndDecimalValue('AgencyCommission');
+    NumericAndDecimalValue('ExchangeRate');
+    NumericAndDecimalValue('ExchangeValue');
+    NumericAndDecimalValue('TotalAmount'); 
+    NumericAndDecimalValue('StampCharge');
+    NumericAndDecimalValue('BLVerifyCharge');
+
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+    $("select").addClass("select");
+    //$(".datePicker").kendoDatePicker({
+    //    format: "dd/MM/yyyy",
+    //    value: new Date(),
+    //    animation: {
+    //        close: {
+    //            effects: "fadeOut zoom:out",
+    //            duration: 300
+    //        },
+    //        open: {
+    //            effects: "fadeIn zoom:in",
+    //            duration: 300
+    //        }
+    //    }
+    //});
+
+
+    
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable:false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+
+ 
+    
+
+
+
+    //Reset();
+    $('.FormBody .datePicker').val(getISODateTime(new Date()));
+    $("#LCID").val('');
+    var saveStatus = 1;
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+
+
+    //#################### Exchange Rate #####################
+    $('#ExchangeRate').click(function () {
+        $('#ExchangeValue').blur();
+        ExchangeAmountCalcultaion();
+    });
+
+    //##################### TotalAmountCalculation ##########################
+
+    function TotalAmountCalcultaion() {
+
+
+            ($("#TotalAmount").val((              (($("#DutyAccountCharge").val()) - 0)
+                                                + (($("#PortCharge").val()) - 0)
+                                                + (($("#ShippingCharge").val()) - 0)
+                                                + (($("#BerthOperatorCharge").val()) - 0)
+                                                + (($("#NOCCharge").val()) - 0)
+                                                + (($("#ExamineCharge").val()) - 0)
+                                                + (($("#SpecialDeliveryCharge").val()) - 0)
+                                                + (($("#AgencyCommission").val()) - 0)
+                                                + (($("#AmendmentCharge").val()) - 0)
+                                                + (($("#StampCharge").val()) - 0)
+                                                + (($("#BLVerifyCharge").val()) - 0)
+                                                + (($("#OtherCharge").val()) - 0)
+                                                + (($("#ChemicalTestCharge").val()) - 0)).toFixed(2)));
+
+            ExchangeAmountCalcultaion();
+    }
+
+
+
+    function ExchangeAmountCalcultaion() {
+
+        if (($("#TotalAmount").val() != "")) {
+            ($("#ExchangeValue").val((((($("#TotalAmount").val()) - 0)) * (($("#ExchangeRate").val()) - 0)).toFixed(2)));
+
+        }
+        else {
+            $("#ExchangeValue").val("");
+        }
+    }
+
+
+    //To clear operational/error message
+    ClearOperationalMessage();
+
+    //For removing operational & required message after triggering other event
+    ClearRequiredTextBoxRedColor();
+
+
+
+    //##############  C&F Agent/BuyerID PopUp   Start #######################
+
+    var BuyerIDWindow = $('#BuyerIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1352px",
+        height: "auto",
+        title: "List Of C&F Agent",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BuyerIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    CnfBillID: { editable: false, hidden: true },
+                    BuyerID: { editable: false, hidden: true },
+                    BuyerCode: { editable: false },
+                    BuyerName: { editable: false },
+                    ContactPerson: { editable: false, hidden: true },
+                    ContactNumber: { editable: false, hidden: true },
+                    EmailAddress: { editable: false, hidden: true },
+                    PhoneNo: { editable: false, hidden: true },
+                    BuyerAddressID: { editable: false },
+                    Address: { editable: false },
+                    LCID: { editable: false, hidden: true }
+
+
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BuyerIDGrid = $("#BuyerIDGrid").kendoGrid({
+        dataSource: BuyerIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 350,
+        columns:
+            [
+              { field: "BuyerID", title: "Agent ID", hidden: true, width: "60px", filterable: false, sortable: false, hidden: true },
+              { field: "CnfBillID", title: "CnfBil ID", hidden: true, width: "60px", filterable: false, sortable: false, hidden: true },
+              { field: "BuyerCode", title: "Agent Code" },
+              { field: "BuyerName", title: "Agent Name" },
+              { field: "ContactPerson", title: "Contact Person" },
+              { field: "ContactNumber", title: "Contact Number", hidden: true },
+              { field: "EmailAddress", title: "Email Address", hidden: true },
+              { field: "PhoneNo", title: "Phone No" },
+              { field: "BuyerAddressID", title: "Agent Address ID ", hidden: true },
+              { field: "Address", title: "Address" },
+              { field: "LCID", title: "LC ID", hidden: true },
+            ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keypress(function (e) {
+        if ($("#BuyerCode").is(":focus")) {
+
+            if (e.keyCode == 120) {
+
+                $.ajax({
+                    url: '@Url.Action("GetCnFBuyerList", "CnFBills")',
+                    type: "GET",
+                    //data: { bankCategory: "BNK", bankType: "LOC" },
+
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#BuyerIDGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('BuyerIDGrid');
+                BuyerIDWindow.open();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnBuyerIDWindowOK').click(function () {
+        ListOfValueCnFAgentGridEvent('BuyerIDGrid');
+        BuyerIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnBuyerIDWindowCancel').click(function () {
+        BuyerIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#BuyerIDWindow").dblclick(function () {
+        ListOfValueCnFAgentGridEvent('BuyerIDGrid');
+        BuyerIDWindow.close();
+    });
+
+
+    // Select Data through keypress From PopUp
+    $("#BuyerIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueCnFAgentGridEvent('BuyerIDGrid');
+            BuyerIDWindow.close();
+        }
+        else if (keycode == '27') {
+            BuyerIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueCnFAgentGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#BuyerID").val(selectedItem.BuyerID);
+        $("#BuyerCode").val(selectedItem.BuyerCode);
+        $("#LCID").val(selectedItem.LCID);
+        $("#CnfBillID").val("");
+        $("#CnfAgentID").val("");
+
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+    function Reset() {
+
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+    }
+
+    //##############  C&F Agent/BuyerID PopUp END #######################
+
+
+
+
+
+    // ##################### Select LCNo from PopUp
+
+    var LCIDWindow = $('#LCIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1352px",
+        height: "auto",
+        title: "List Of LC No.",
+        position: { top: 100, left: 50 },
+        modal: true,
+        filterable:true,
+        draggable: true
+    }).data('kendoWindow');
+    var LCIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LCID",
+                fields: {
+                    LCID: { editable: false, filterable: true },
+                    LCNo: { editable: false, filterable: true },
+                    PIID: { editable: false, filterable: true },
+                    PINo: { editable: false, filterable: true },
+                    CIID: { editable: false, filterable: true },
+                    CINo: { editable: false, filterable: true }
+
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LCIDGrid = $("#LCIDGrid").kendoGrid({
+        dataSource: LCIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 350,
+        columns: [
+              { field: "LCID", title: "LCID", width: "60px", filterable: true, sortable: false,hidden:true },
+              { field: "LCNo", title: "LCNo", filterable: true},
+              { field: "PINo", title: "PINo", filterable: true },
+              { field: "PIID", title: "PIID", filterable: true, hidden: true },
+              { field: "CIID", title: "CIID", filterable: true, hidden: true },
+              { field: "CINo", title: "CINo", filterable: true }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keypress(function (e) {
+        if ($("#LCNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetLCNoList", "CnFBills")',
+                    type: "GET",
+                    //data: { bankCategory: "BNK", bankType: "LOC" },
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#LCIDGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('LCIDGrid');
+
+                LCIDWindow.open();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnLCIDWindowOK').click(function () {
+        ListOfValueOpeningLCIDGridGridEvent('LCIDGrid');
+        LCIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnLCIDWindowCancel').click(function () {
+        LCIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#LCIDWindow").dblclick(function () {
+        ListOfValueOpeningLCIDGridGridEvent('LCIDGrid');
+        LCIDWindow.close();
+    });
+
+
+    // Select Data through keypress From PopUp
+    $("#LCIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningLCIDGridGridEvent('LCIDGrid');
+            LCIDWindow.close();
+        }
+        else if (keycode == '27') {
+            LCIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningLCIDGridGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#LCID").val(selectedItem.LCID);
+        $("#PIID").val(selectedItem.LCID);
+        $("#LCID").val(selectedItem.LCID);
+
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+
+
+    // ##################### End of LCNo  PopUp
+
+    //function Reset() {
+
+    //    $('.Dropdown').val('');
+    //    $('.FormBody input[type=text]').val('');
+        
+
+    //    $('.FormBody input[type=text]').val('');
+    //    $('.txtBox').val('');
+
+    //    $('.FormBody input[type=hidden]').val('');
+    //    $('.FormBody input[type=number]').val('');
+    //    $('.FormBody input[type=button]').attr('disabled', false);
+    //    $('#MessageText').html('');
+    //    $('.FormBody .datePicker').val('');
+    //    $('#btnSubmit').attr('disabled', false);
+    //    $('#btnDelete').attr('disabled', false);
+    //    $("#Remarks").val("");
+    //    $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        
+    //}
+    // ##################### Save Data ###################################
+
+
+
+    var obDataSet = {
+        "CnfBillID": "",
+        "CnfBillNo": "",
+        "RefCnfBillNo": "",
+        "CnfBillDate": "",
+        "LCID": "",
+        "LCNo": "",
+        "CIID": "",
+        "CINo": "",
+        "BillOfEntryNo": "",
+        "BillOfEntryDate": "",
+        "AssesmentValue": "",
+        "CnfBillNote": "",
+        "CnfAgentID": "",
+        "DutyAccountCharge": "",
+        "PortCharge": "",
+        "ShippingCharge": "",
+        "BerthOperatorCharge": "",
+        "NOCCharge": "",
+        "ExamineCharge": "",
+        "SpecialDeliveryCharge": "",
+        "AmendmentCharge": "",
+        "ChemicalTestCharge": "",
+        "AgencyCommission": "",
+        "StampCharge":"",
+        "BLVerifyCharge": "",
+        "OtherCharge": "",
+        "TotalAmount": "",
+        "CnfBillCurrency": "",
+        "ExchangeCurrency": "",
+        "ExchangeRate": "",
+        "ExchangeValue": "",
+        "RecordStatus": "",
+        "Remarks": "",
+
+        "BuyerID": "",
+        "BuyerCode": "",
+        "BuyerName": "",
+        "BuyerAddressID": "",
+        "Address": ""
+
+    };
+
+        function Save() {
+            saveStatus = 1;
+
+        CheckRequiredTextBoxMaxLength('BuyerCode', 30);
+        CheckRequiredTextBoxMaxLength('LCNo', 30);
+
+        if (saveStatus == 1) {
+
+            obDataSet.LCID = $("#LCID").val();
+            obDataSet.CnfBillID = $("#CnfBillID").val();
+            obDataSet.CnfBillNo = $("#CnfBillNo").val();
+            obDataSet.RefCnfBillNo = $("#RefCnfBillNo").val();
+            obDataSet.CIID = $("#CIID").val();
+            obDataSet.CINo = $("#CINo").val();
+            obDataSet.CnfBillDate = $("#CnfBillDate").val();
+            obDataSet.LCNo = $("#LCNo").val();
+            obDataSet.OtherCharge = $("#OtherCharge").val();
+            obDataSet.AssesmentValue = $("#AssesmentValue").val();
+            obDataSet.BillOfEntryNo = $("#BillOfEntryNo").val();
+            obDataSet.BillOfEntryDate = $("#BillOfEntryDate").val();
+            obDataSet.CnfBillNote = $("#CnfBillNote").val();
+            obDataSet.CnfAgentID = $("#BuyerID").val();
+            obDataSet.DutyAccountCharge = $("#DutyAccountCharge").val();
+            obDataSet.PortCharge = $("#PortCharge").val();
+            obDataSet.ShippingCharge = $("#ShippingCharge").val();
+            obDataSet.BerthOperatorCharge = $("#BerthOperatorCharge").val();
+            obDataSet.NOCCharge = $("#NOCCharge").val();
+            obDataSet.ExamineCharge = $("#ExamineCharge").val();
+            obDataSet.SpecialDeliveryCharge = $("#SpecialDeliveryCharge").val(); 
+            obDataSet.StampCharge = $("#StampCharge").val();
+            obDataSet.BLVerifyCharge = $("#BLVerifyCharge").val();
+            obDataSet.ExchangeCurrency = $("#ExchangeCurrency").find('.select').val();//.find('.select').val(data33.ExchangeCurrency);
+            obDataSet.ExchangeRate = $("#ExchangeRate").val();
+            obDataSet.ExchangeValue = $("#ExchangeValue").val();
+            obDataSet.AmendmentCharge = $("#AmendmentCharge").val();
+            obDataSet.ChemicalTestCharge = $("#ChemicalTestCharge").val();
+            obDataSet.AgencyCommission = $("#AgencyCommission").val();
+            obDataSet.TotalAmount = $("#TotalAmount").val();
+            obDataSet.CnfBillCurrency = $("#CnfBillCurrency").find('.select').val();
+            obDataSet.RecordStatus = $("#RecordStatus").val();
+            obDataSet.Remarks = $("#Remarks").val();
+
+
+            if (obDataSet.CnfBillID == "") {
+
+                // INSERT DATA
+                $("#divLoading").show();
+
+                $.ajax({
+                    type: "POST",
+
+                    url: '@Url.Action("Save", "CnFBills")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        //console.log(data);
+                        if (data.msg.Type == 2) {
+                            //$("#divLoading").hide();
+                            $("#CnfBillNo").val(data.ReturnCode);
+                            $("#CnfBillID").val(data.ReturnId);
+                            
+                            
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                           //Reset();
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+
+                    complete: function(data) {
+                     $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // UPDATE DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "CnFBills")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+
+                            //$("#LimID").val(data.ReturnId);
+                            //$("#LimNo").val(data.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    failure: function (respnse) {
+
+                    }
+                });
+            }
+        }
+
+    }
+
+
+
+    // ######## Search ###################
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetCnFBillInfo", "CnFBills", "CnfAgentID,LCID,CnfBillID");
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchLcmCnFBillInfoByLCNo", "CnFBills");
+    });
+
+    AutoComplete("GetAutoCompleteData", "CnFBills");
+
+
+    function ListOfValueSearchGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#CnfBillID").val(selectedItem.CnfBillID);
+
+
+
+        $.ajax({
+            url: '@Url.Action("GetCnFBillInfoByCnfBillID", "CnFBills")',
+            type: 'GET',
+            data: { CnfBillID: selectedItem.CnfBillID },
+            success: function (response) {
+
+                $("#LCID").val(response.LCID);
+                $("#CnfBillID").val(response.CnfBillID);
+                $("#CnfBillNo").val(response.CnfBillNo);
+                $("#CnfBillDate").val(response.CnfBillDate);//RefCnfBillNo
+                $("#RefCnfBillNo").val(response.RefCnfBillNo);
+
+                $("#Address").val(response.Address);
+                $("#EmailAddress").val(response.EmailAddress);
+                $("#ContactPerson").val(response.ContactPerson);
+                $("#ContactNumber").val(response.ContactNumber);
+                $("#PhoneNo").val(response.PhoneNo);
+
+
+
+
+                $("#LCNo").val(response.LCNo);
+                $("#CIID").val(response.CIID);
+                $("#CINo").val(response.CINo);
+                $("#AssesmentValue").val(response.AssesmentValue);
+                $("#BillOfEntryNo").val(response.BillOfEntryNo);
+                $("#BillOfEntryDate").val(response.BillOfEntryDate);
+                $("#CnfBillNote").val(response.CnfBillNote);
+                $("#ExchangeCurrency").val(response.ExchangeCurrency);
+                $("#ExchangeRate").val(response.ExchangeRate);
+                $("#ExchangeValue").val(response.ExchangeValue);
+                $("#CnfAgentID").val(response.CnfAgentID);
+                $("#DutyAccountCharge").val(response.DutyAccountCharge);
+                $("#PortCharge").val(response.PortCharge);
+                $("#ShippingCharge").val(response.ShippingCharge);
+                $("#BerthOperatorCharge").val(response.BerthOperatorCharge);
+                $("#NOCCharge").val(response.NOCCharge);
+                $("#ExamineCharge").val(response.ExamineCharge);
+                $("#SpecialDeliveryCharge").val(response.SpecialDeliveryCharge); 
+                $("#StampCharge").val(response.StampCharge); 
+                $("#OtherCharge").val(response.OtherCharge);
+                $("#BLVerifyCharge").val(response.BLVerifyCharge);
+                $("#TotalAmount").val(response.TotalAmount);
+                $("#ChemicalTestCharge").val(response.ChemicalTestCharge);
+                $("#AmendmentCharge").val(response.AmendmentCharge);
+                $("#AgencyCommission").val(response.AgencyCommission);
+                $("#CnfBillCurrency").val(response.CnfBillCurrency);
+                $("#RecordStatus").val(response.RecordStatus);
+                $("#BuyerID").val(response.BuyerID);
+                $("#Remarks").val(response.Remarks);
+                $("#BuyerName").val(response.BuyerName);
+                $("#BuyerCode").val(response.BuyerCode);
+                $("#PINo").val(response.PINo);
+                $("#RecordStatus").val(response.RecordStatus);
+
+                if (selectedItem.RecordStatus == "Not Confirmed") {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                }
+                else if (selectedItem.RecordStatus == "Checked") {
+                    $("#btnCheck").attr('disabled', 'disabled');
+
+                }
+                    //else {
+                    //    $("#btnCheck").removeAttr('disabled');
+                    //}
+
+                else if (selectedItem.RecordStatus == "Confirmed") {
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnCheck").attr('disabled', 'disabled');
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+
+                }
+                else {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').removeAttr('disabled');
+                }
+
+            },
+            error: function (xhr, status, error) {
+                //alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+
+        });
+    }
+
+    $("#btnChecked").click(function () {
+        CheckRequiredTextBoxMaxLength('Remarks', 100);
+        $.ajax({
+            url: '@Url.Action("UpdateRecordStatus", "CnFBills")',
+            type: 'POST',
+            data: { remarks: $("#Remarks").val(), cnfBillID: $("#CnfBillID").val() },
+            success: function (data) {
+                console.log(data);
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnChecked").attr('disabled', 'disabled');
+
+
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            }
+        });
+        return false;
+    });
+
+    $("#btnConfirm").click(function () {
+        $.ajax({
+            url: '@Url.Action("ConfirmRecordStatus", "CnFBills")',
+            type: 'POST',
+            data: { cnfBillID: $("#CnfBillID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            }
+        });
+        return false;
+    });
+
+
+
+
+
+
+
+    //###################### DELETE #################
+    // Delete CnF Bill ID with data from Database.
+
+    var CnFBillDeleteWindow = $('#DeleteCnFBillListConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    $("#btnDelete").click(function () {
+        if ($("#CnfBillID").val() != "") {
+            gridToDelete = "all";
+            CnFBillDeleteWindow.open();
+            CnFBillDeleteWindow.center();
+        } else if ($("#CnfBillID").val() == "" && changeStatus == 1) {
+            $('#MessageText').html("The record you are trying to delete is not in the database.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+
+        }
+    });
+
+
+    $('#btnDeleteCnFBillListOK').click(function () {
+        if (gridToDelete == "all") {
+            if ($("#CnfBillID").val() != "") {
+                var cnfBillID = $("#CnfBillID").val();
+                $.ajax({
+                    url: '@Url.Action("DeleteCnFBillList", "CnFBills")',
+                    type: 'GET',
+                    data: ({ "cnfBillID": cnfBillID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                        CnFBillDeleteWindow.close();
+                    }
+                });
+            }
+            gridToDelete = "";
+            CnFBillDeleteWindow.close();
+        }
+    });
+    $("#btnDeleteCnFBillListCancel").click(function () {
+        CnFBillDeleteWindow.close();
+    });
+
+</script>

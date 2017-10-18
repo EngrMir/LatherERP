@@ -1,0 +1,937 @@
+﻿@{
+    ViewBag.Title = "Loan Return Issue";
+    ViewBag.SearchTitle = "Loan Return Request No ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+<div class="row">
+    <div class="FormBody">
+        <input type="hidden" value="" id="RequestID" name="RequestID" readonly="readonly" />
+        <input type="hidden" value="" id="SelectedRequestID" name="SelectedRequestID" readonly="readonly" />
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Request Of</label>
+            </div>
+            <div class="col-lg-4">
+                <label id="RequestType">Received Loan Return Issue (RLRR)</label>
+                @*<input type="text" id="RequestType" class="col-lg-10" name="RequestType" value="Loan Receive Requesr (LNRR)" readonly="readonly" />*@
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-4">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Return From</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="RequestFrom" class="" name="RequestFrom" value="" readonly="readonly" />
+                <input type="text" id="ChemicalStoreName" class="" name="ChemicalStoreName" value="" readonly="readonly" placeholder="Press F9" />
+                @Html.Partial("~/Views/Common/_ddStore.cshtml")
+            </div>
+            <div class="col-lg-2">
+                <label>Request No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" readonly="readonly" id="RequestNo" name="RequestNo" value="" placeholder="Auto" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Return Note</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ReturnNote" name="ReturnNote" value="" />
+                @*<input type="hidden" id="RequestTo" class="" name="RequestTo" value="" readonly="readonly" />
+                    <input type="text" id="SupplierID" class="SupplierID" name="SupplierID" value="" readonly="readonly" placeholder="Press F9" />
+                    @Html.Partial("~/Views/Common/_ddSupplier.cshtml")*@
+            </div>
+            <div class="col-lg-2">
+                <label>Request Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="RequestDate" class="datePicker" name="RequestDate" tabindex="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+
+            </div>
+            <div class="col-lg-4">
+                @*<input type="text" id="RequestDate" class="datePicker" name="RequestDate" tabindex="" />*@
+            </div>
+            <div class="col-lg-2">
+                <label>Return By</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ReturnDate" name="ReturnDate" tabindex="" placeholder="Days" onblur="return IsNumber('ReturnDate');" />
+            </div>
+        </div>
+
+        <div class="row">
+            <br />
+            <div class="col-lg-12">
+                <div id="LoanReceiveGrid">
+
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <br />
+                <div id="LoanReceiveReturnGrid">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="FormBody">
+            <div class="row">
+                <div class="col-lg-12">
+                   <div id="LoanReceiveGrid"></div>
+                   <div id="LoanReturnGrid"></div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+
+            <div class="col-lg-2">
+                <input type="text" id="CheckedBy" readonly="readonly" class="col-lg-10" name="CheckedBy" value="" />
+                <input type="text" id="CheckComments" class="col-lg-10" name="CheckComments" value="" placeholder="Comments..." />
+                <input type="button" id="btnCheck" value="Checked" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Recommended By</label>
+            </div>
+
+            <div class="col-lg-2">
+                <input type="text" id="RecommendBy" readonly="readonly" class="col-lg-10" name="RecommendBy" value="" />
+                <input type="text" id="RecommendComments" class="col-lg-10" name="RecommendComments" value="" placeholder="Comments..." />
+                <input type="button" id="btnRecommend" value="Recommend" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Approved By</label>
+            </div>
+
+            <div class="col-lg-2">
+                <input type="text" id="ApprovedBy" readonly="readonly" class="col-lg-10" name="ApprovedBy" value="" />
+                <input type="text" id="ApproveComments" class="col-lg-10" name="ApproveComments" value="" placeholder="Comments..." />
+                <input type="button" id="btnApproved" value="Approved" />
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+
+<div id="Supplier2Window" style="display: none;">
+    <p>Ref Supplier Name:<input type="text" id="txtSupplier2" style="width: 250px;" /><input type="button" id="btnSupplier2GridSearch" value="Search" /></p>
+
+    <div id="Supplier2WindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplier2WindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplier2WindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ChemicalWindow" style="display: none;">
+    <p>Chemical:<input type="text" id="txtChemical" style="width: 250px;" /><input type="button" id="btnChemicalGridSearch" value="Search" /></p>
+
+    <div id="ChemicalWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    Reset();
+    $("select").addClass("select");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+    var obTRDataSet = {
+        "RequestID": "", "RequestType": "", "RequestFrom": "", "Remarks": "", "RequestNo": "", "RequestDate": "",
+        "ExpectetReturnTime": "", "CheckedBy": "", "CheckComments": "", "RecommendBy": "", "RecommendComments": "", "ApproveComments": "", "ApprovedBy": "", "RefRequestID": "", "lstLoanReturnIssueItems": []
+    };
+
+    var lstLoanReturnIssueItems = {
+        "ItemID": "", "ItemName": "", "TransRequestItemID":"","ReceiveQty": "", "ReceiveUnitID": "", "ReceiveUnitName": "", "AlreadyReturnQty": "", "RemainingQty": "",
+        "ReturnMethodID": "", "ReturnMethodValue": "", "ReceiveCurrencyID": "", "ReceiveCurrencyName": "", "ReceiveRate": "", "ReceiveValue": "", "ReturnItemID": "", "ReturnItemName": "", "ReturnUnitID": "", "ReturnUnitIDName": ""
+        , "ReturnCurrencyID": "", "ReturnCurrencyName": "", "ReturnRate": "", "ReturnExchangeRate": "", "ReturnQuantity": "", "ReferenceQty": "", "ReferenceUnit": ""
+    };
+
+    // ############# Return Item Dropdown #########################
+    var ddReturnItemDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemId",
+                fields: {
+                    ItemId: { editable: false },
+                    ItemName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("ChemicalItemDropdown", "LoanReturnRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddReturnItem(container, options) {
+        $('<input name="ddReturnItem" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "ItemName",
+                    dataValueField: "ItemID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+
+
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ReturnItemName", dataItem.ItemName);
+                        options.model.set("ReturnItemID", dataItem.ItemID);
+                        //var cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(10)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').closeCell(cell);
+                        //cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(11)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: ddReturnItemDataSource
+                });
+    };
+    // ############# Return Currency Dropdown #########################
+    function ddReturnCurrency(container, options) {
+        $('<input name="ddReturnCurrency" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "CurrencyName",
+                    dataValueField: "CurrencyID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ReturnCurrencyName", dataItem.CurrencyName);
+                        options.model.set("ReturnCurrencyID", dataItem.CurrencyID);
+                        //var cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(12)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').closeCell(cell);
+                        //cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(13)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: ddReceivedCurrencyDataSource
+                });
+    };
+
+    // ############# Receive Currency Dropdown #########################
+
+    var ddReceivedCurrencyDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CurrencyID",
+                fields: {
+                    CurrencyID: { editable: false },
+                    CurrencyName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetCurrencyList", "Currency")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddReceivedCurrency(container, options) {
+        $('<input name="ddReceiveCurrency" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "CurrencyName",
+                    dataValueField: "CurrencyID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ReceiveCurrencyName", dataItem.CurrencyName);
+                        options.model.set("ReceiveCurrencyID", dataItem.CurrencyID);
+                        //var cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(7)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').closeCell(cell);
+                        //cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(8)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: ddReceivedCurrencyDataSource
+                });
+    };
+
+    // ############## Return Method Dropdown ###################
+    var data = [
+                        { text: "Dolar to Dolar", value: "DTD" },
+                        { text: "Exc. Other Item", value: "EOI" },
+                        { text: "Exc. Same Item", value: "ESI" }
+    ];
+    function ddReturnMethod(container, options) {
+        $('<input name="ddReturnMethod" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ReturnMethodValue", dataItem.text);
+                        options.model.set("ReturnMethodID", dataItem.value);
+                        //var cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(6)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').closeCell(cell);
+                        //cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(7)'); // or different cell
+                        //$('#LoanReceiveReturnGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: data
+                });
+    };
+    //############### Receive Unit Start #####################
+    var ddReturnUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetUnit", "Unit")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+
+    function ddReturnUnit(container, options) {
+        $('<input name="ddReturnUnit" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "UnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ReturnUnitIDName", dataItem.UnitName);
+                        options.model.set("ReturnUnitID", dataItem.UnitID);
+                        ////var cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(11)'); // or different cell
+                        ////$('#LoanReceiveReturnGrid').data('kendoGrid').closeCell(cell);
+                        ////cell = $('#LoanReceiveReturnGrid').find('tbody tr:eq(0) td:eq(12)'); // or different cell
+                        ////$('#LoanReceiveReturnGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: ddReturnUnitDataSource
+                });
+    };
+
+    // ############# Loan Received Grid Start #############
+    var loanReceiveDataSet = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RequestID",
+                fields: {
+                    RequestID: { editable: false },
+                    RequestNo: { editable: false },
+                    RequestDate: { editable: false },
+                    ReturnMethod: { editable: false }
+                }
+            }
+        },
+        pageSize: 10,
+        transport: {
+            read: {
+                url: '@Url.Action("LoanRequestData", "LoanReturnRequest")',
+                type: "GET",
+                data: { type: 'LNRR' },
+                dataType: "JSON"
+            }
+        }
+    });
+
+    var gridReceivedLoan = $("#LoanReceiveGrid").kendoGrid({
+        dataSource: loanReceiveDataSet,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 250,
+        change: function (arg) {
+            var RequestID = 0;
+            $.map(this.select(), function (item) {
+                RequestID = $(item).find('td').first().text();
+            });
+
+            $("#SelectedRequestID").val(RequestID);
+            $("#RequestID").val("");
+            $("#RequestNo").val("");
+            $.ajax({
+                url: '@Url.Action("LoanRequestDataWithItem", "LoanReturnRequest")',
+                type: "GET",
+                data: { type: 'LNRR', RequestID: RequestID },
+                dataType: "JSON",
+                success: function (data) {
+                    $("#LoanReceiveReturnGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        },
+        columns: [
+              { field: "RequestID", title: "SL No", width: "60px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "RequestNo", title: "Request No", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "RequestDate", title: "Loan Receive Date", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ReturnMethod", title: "Loan Return Method", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+              //{ command: [{ name: "Loan Item", text: "Select", click: _getLoanItem }], title: "Loan Details", width: 50 }
+        ]
+    }).data('kendoGrid');
+
+    //############## LoanReceiveReturnGrid Start ############
+    var loanReceiveReturnDataSet = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RequestID",
+                fields: {
+                    TransRequestItemID: { editable: false },
+                    ItemID: { editable: false },
+                    ItemName: { editable: false },
+                    ReceiveQty: { editable: false },
+                    ReceiveUnitID: { editable: false },
+                    ReceiveUnitName: { editable: false },
+                    AlreadyReturnQty: { editable: false },
+                    RemainingQty: { editable: false },
+                    ReturnMethodID: { editable: true },
+                    ReturnMethodValue: { editable: true },
+                    ReceiveCurrencyID: { editable: true },
+                    ReceiveCurrencyName: { editable: true },
+                    ReceiveRate: { editable: true },
+                    ReceiveValue: { editable: true },
+                    ReturnItemID: { editable: true },
+                    ReturnItemName: { editable: true },
+                    ReturnUnitID: { editable: true },
+                    ReturnUnitIDName: { editable: true },
+                    ReturnCurrencyID: { editable: true },
+                    ReturnCurrencyName: { editable: true },
+                    ReturnExchangeRate: { editable: true, validation: { min: 0, required: true } },
+                    ReturnRate: { editable: true, validation: { min: 0, required: true } },
+                    ReturnQuantity: { editable: true, validation: { min: 0, required: true } },
+                    RefRequestID: { editable: true }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var gridReceivedLoan = $("#LoanReceiveReturnGrid").kendoGrid({
+        dataSource: loanReceiveReturnDataSet,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        save: function (e) {
+        },
+        edit: function (e) {
+
+
+            //$("[name='ReturnQuantity']", e.container).blur(function () {
+            //    var price = 0;
+            //    var grid = $("#LoanReceiveReturnGrid").data("kendoGrid");
+            //    var row = $(this).closest("tr");
+            //    if (grid.dataItem(row).ReturnMethodID == "DTD") {
+
+            //        var take = (grid.dataItem(row).RemainingQty - 0) * (grid.dataItem(row).ReceiveRate - 0) * (grid.dataItem(row).ReturnExchangeRate - 0);
+            //        var retu = (grid.dataItem(row).ReturnQuantity - 0) * (grid.dataItem(row).ReturnRate - 0);
+            //        if (take < retu)
+            //        {
+            //            alert("Your return quantity is grater than remaining quantity.");
+            //        }
+            //        price = take - retu;
+            //        e.model.set("RemainingQty", price.toFixed(2));
+            //    }
+            //    else {
+            //        price = (grid.dataItem(row).RemainingQty - 0) - (grid.dataItem(row).ReturnQuantity - 0);
+            //        grid.dataItem(row).RemainingQty = price;
+            //        if (price < 0)
+            //        {
+            //            alert("Your return quantity is grater than remaining quantity.");
+            //        }
+            //        e.model.set("RemainingQty", price.toFixed(2));
+            //    }
+            //});
+
+            $("[name='ReceiveRate']", e.container).blur(function () {
+                var price = 0;
+                var grid = $("#LoanReceiveReturnGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+
+                if (grid.dataItem(row).ReturnMethodID != "DTD")
+                {
+                    return;
+                }
+
+                console.log(grid.dataItem(row));
+                if ((grid.dataItem(row).ReceiveQty - 0) != 0 && (grid.dataItem(row).ReceiveRate - 0) >= 0) {
+                    price = 0;
+                    price = grid.dataItem(row).ReceiveQty * grid.dataItem(row).ReceiveRate;
+                    grid.dataItem(row).ReceiveValue = price;
+                    e.model.set("ReceiveValue", price.toFixed(2));
+                }
+                else {
+                    grid.dataItem(row).ReturnQuantity = price;
+                    e.model.set("ReceiveValue", price.toFixed(2));
+                }
+            });
+
+            $("[name='ReturnRate']", e.container).blur(function () {
+
+                var grid = $("#LoanReceiveReturnGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var price = 0;
+                if (grid.dataItem(row).ReturnMethodID != "DTD") {
+                    return;
+                }
+                if (grid.dataItem(row).ReceiveCurrencyID == grid.dataItem(row).ReturnCurrencyID) {
+                    if ((grid.dataItem(row).ReceiveValue - 0) > 0 && (grid.dataItem(row).ReturnExchangeRate - 0) >= 0) {
+                        price = 0;
+                        price = (grid.dataItem(row).ReceiveValue -0) / (grid.dataItem(row).ReturnRate -0);
+                        grid.dataItem(row).ReturnQuantity = price;
+                        e.model.set("ReturnQuantity", price.toFixed(2));
+                    }
+                }
+                else if (grid.dataItem(row).ReceiveCurrencyID != grid.dataItem(row).ReturnCurrencyID) {
+                    if ((grid.dataItem(row).ReceiveValue - 0) > 0 && (grid.dataItem(row).ReturnExchangeRate - 0) >= 0) {
+                        price = 0;
+                        price = ((grid.dataItem(row).ReceiveValue - 0) * (grid.dataItem(row).ReturnRate - 0)) / (grid.dataItem(row).ExchangeRate - 0);
+                        grid.dataItem(row).ReturnQuantity = price;
+                        e.model.set("ReturnQuantity", price.toFixed(2));
+                    }
+                }
+                else {
+                    grid.dataItem(row).ReturnQuantity = price;
+                    e.model.set("ReturnQuantity", price.toFixed(2));
+                }
+            });
+
+            $("[name='ReturnExchangeRate']", e.container).blur(function () {
+
+                var grid = $("#LoanReceiveReturnGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var price = 0;
+                if (grid.dataItem(row).ReturnMethodID != "DTD") {
+                    return;
+                }
+                if (grid.dataItem(row).ReceiveCurrencyID == grid.dataItem(row).ReturnCurrencyID) {
+                    if ((grid.dataItem(row).ReceiveValue - 0) > 0 && (grid.dataItem(row).ReturnExchangeRate - 0) >= 0) {
+                        price = 0;
+                        price = grid.dataItem(row).ReceiveValue / grid.dataItem(row).ReturnRate;
+                        grid.dataItem(row).ReturnQuantity = price;
+                        e.model.set("ReturnQuantity", price.toFixed(2));
+                    }
+                    else {
+                        grid.dataItem(row).ReturnQuantity = price;
+                        e.model.set("ReturnQuantity", price.toFixed(2));
+                    }
+                }
+
+                else {
+                    price = 0;
+                    if ((grid.dataItem(row).ReceiveValue - 0) > 0 && (grid.dataItem(row).ReturnExchangeRate - 0) >= 0) {
+
+                        price = ((grid.dataItem(row).ReceiveValue * grid.dataItem(row).ReturnExchangeRate) / (grid.dataItem(row).ReturnRate - 0));
+                        grid.dataItem(row).ReturnQuantity = price;
+                        e.model.set("ReturnQuantity", price.toFixed(2));
+                    }
+                    else {
+                        grid.dataItem(row).ReturnQuantity = price;
+                        e.model.set("ReturnQuantity", price.toFixed(2));
+                    }
+                }
+            });
+
+        },
+        height: 250,
+        columns: [
+              //{ field: "ItemID", title: "SL No", width: "50px", width: "50px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; background: gray;" } },
+              { field: "ItemName", title: "Loan Item", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; background: gray;" } },
+              { field: "ReceiveQty", title: "Receive Qty", width: "50px", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;background: gray;" } },
+              { field: "ReceiveUnitName", title: "Receive Unit", width: "70px", width: "80px", editable: false, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;background: gray;" } },
+              { field: "AlreadyReturnQty", title: "Already Ret.Qty", width: "50px", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;background: gray;" } },
+              { field: "RemainingQty", title: "Remain. Qty", width: "50px", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;background: gray;" } },
+              { field: "ReturnMethodValue", title: "Return Method", width: "110px", width: "110px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddReturnMethod },
+              { field: "ReceiveCurrencyName", title: "Rec. Currency", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddReceivedCurrency },
+              { field: "ReceiveRate", title: "Rec. Rate", width: "40px", width: "50px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ReceiveValue", title: "Rec. Value", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;background: gray;" } },
+              { field: "ReturnItemName", title: "Return Item", width: "100px", width: "110px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddReturnItem },
+              { field: "ReturnUnitIDName", title: "Return Unit", width: "100px", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddReturnUnit },
+              { field: "ReturnCurrencyName", title: "Return Currency", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddReturnCurrency },
+              { field: "ReturnRate", title: "Return Rate", width: "40px", width: "50px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+               { field: "ReturnExchangeRate", title: "Ret. Exc. Rate", width: "40px", width: "50px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ReturnQuantity", title: "Ret.Qty", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;background: gray;" } }
+
+        ]
+    }).data('kendoGrid');
+    //############## LoanReceiveReturnGrid END ############
+
+
+    //function _getLoanItem(event) {
+
+    //}
+
+    function ListOfValueStoreGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#ChemicalStoreName").val(selectedItem.StoreName);
+        $("#RequestFrom").val(selectedItem.StoreID);
+
+    }
+
+    //################# Search #################
+    $("#btnSearch").click(function () {
+        SearchResult("GetLoanReturnRequestInfo", "LoanReturnRequest");
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchLoanReturnRequest", "LoanReturnRequest");
+    });
+
+    AutoComplete("GetAutoCompleteData", "LoanReturnRequest");
+
+    function ListOfValueSearchGridEvent(gridName) {
+        $('#btnDelete').attr('disabled', true);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetLoanReturnRequestInfoByID", "LoanReturnRequest")',
+            type: 'GET',
+            data: { RequestID: selectedItem.RequestID },
+            success: function (data) {
+                //if (data.RecordStatus == "CHK" || data.RecordStatus == "CNF") {
+                //    $("#btnApprove").css("display", "none");
+                //}
+                //$('#MessageText').html("");
+                //if (selectedItem.RecordStatus == "CNF") {
+                //    $('.FormBody').find('input, textarea, button, select').attr('disabled', 'disabled');
+                //    $('#btnSubmit').attr('disabled', 'disabled');
+                //}
+                //else {
+                //    $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+                //    $('#btnSubmit').attr('disabled', false);
+                //}
+                console.log(data[0].lstLoanReturnIssueItems[0].TransRequestItemID);
+                $("#SelectedRequestID").val(data[0].lstLoanReturnIssueItems[0].TransRequestItemID);
+                $("#RequestID").val(data[0].RequestID);
+                $("#ChemicalStoreName").val(data[0].RequestFromName);
+                $("#RequestFrom").val(data[0].RequestFrom);
+
+                //$("#RequestDate").val(data[0].RequestDate);
+
+
+                $("#RequestNo").val(data[0].RequestNo);
+                $("#ReturnDate").val(data[0].ExpectetReturnTime);
+                $("#ReturnNote").val(data[0].Remarks);
+                $("#CheckComments").val(data[0].CheckComments);
+                $("#ApproveComments").val(data[0].ApproveComments);
+                $("#RecommendComments").val(data[0].RecommendComments);
+
+                $("#CheckedBy").val(data[0].CheckedBy);
+                $("#RecommendBy").val(data[0].RecommendBy);
+                $("#ApprovedBy").val(data[0].ApprovedBy);
+
+                $("#LoanReceiveReturnGrid").data("kendoGrid").dataSource.data(data[0].lstLoanReturnIssueItems);
+
+                if (data.RecordStatus == "CNF") {
+                    $("#btnApprove").css("display", "none");
+                    $("#btnCheck").css("display", "none");
+                }
+                else if (data.RecordStatus == "CHK") {
+                    $("#btnCheck").css("display", "none");
+                    $("#btnApprove").css("display", "block");
+                }
+                else {
+                    $("#btnCheck").css("display", "block");
+                    $("#btnApprove").css("display", "block");
+                }
+                $("#divLoading").hide();
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+                $("#divLoading").hide();
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    // ############## Save/Update ###############
+    function Save() {
+         obTRDataSet = {
+            "RequestID": "", "RequestType": "", "RequestFrom": "", "Remarks": "", "RequestNo": "", "RequestDate": "",
+            "ExpectetReturnTime": "", "CheckedBy": "", "CheckComments": "", "RecommendBy": "", "RecommendComments": "", "ApproveComments": "", "ApprovedBy": "", "RefRequestID": "", "lstLoanReturnIssueItems": []
+        };
+
+         lstLoanReturnIssueItems = {
+            "ItemID": "", "ItemName": "", "TransRequestItemID": "", "ReceiveQty": "", "ReceiveUnitID": "", "ReceiveUnitName": "", "AlreadyReturnQty": "", "RemainingQty": "",
+            "ReturnMethodID": "", "ReturnMethodValue": "", "ReceiveCurrencyID": "", "ReceiveCurrencyName": "", "ReceiveRate": "", "ReceiveValue": "", "ReturnItemID": "", "ReturnItemName": "", "ReturnUnitID": "", "ReturnUnitIDName": ""
+            , "ReturnCurrencyID": "", "ReturnCurrencyName": "", "ReturnRate": "", "ReturnExchangeRate": "", "ReturnQuantity": "", "ReferenceQty": "", "ReferenceUnit": ""
+        };
+
+
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('ChemicalStoreName', 300);
+        CheckRequiredTextBoxMaxLength('RequestDate', 15);
+        CheckRequiredTextBoxMaxLength('ReturnDate', 15);
+
+        if (saveStatus == 1) {
+            obTRDataSet.RequestType = "RLRR";
+            obTRDataSet.RequestID = $("#RequestID").val();
+            obTRDataSet.RefRequestID = $("#SelectedRequestID").val();
+            obTRDataSet.RequestFrom = $("#RequestFrom").val();
+            obTRDataSet.Remarks = $("#ReturnNote").val();
+            obTRDataSet.RequestNo = $("#RequestNo").val();
+            obTRDataSet.RequestDate = $("#RequestDate").val();
+            obTRDataSet.ExpectetReturnTime = $("#ReturnDate").val();
+            obTRDataSet.CheckedBy = $("#CheckedBy").val();
+            obTRDataSet.CheckComments = $("#CheckComments").val();
+            obTRDataSet.RecommendBy = $("#CheckedBy").val();
+            obTRDataSet.RecommendComments = $("#CheckComments").val();
+            var ChemicalItemGrid = $("#LoanReceiveReturnGrid").data("kendoGrid").dataSource;
+            var requestItemData = ChemicalItemGrid.data();
+            for (var i = 0; i < requestItemData.length; i++) {
+                if (requestItemData[i]) {
+                    console.log(requestItemData[i]);
+                    lstLoanReturnIssueItems.ItemID = requestItemData[i].ItemID;
+                    lstLoanReturnIssueItems.TransRequestItemID = requestItemData[i].TransRequestItemID;
+                    lstLoanReturnIssueItems.ReceiveCurrencyID = requestItemData[i].ReceiveCurrencyID;
+                    lstLoanReturnIssueItems.ReturnMethodID = requestItemData[i].ReturnMethodID;
+                    lstLoanReturnIssueItems.ReturnMethodValue = requestItemData[i].ReturnMethodValue;
+                    lstLoanReturnIssueItems.ReceiveRate = requestItemData[i].ReceiveRate;
+                    lstLoanReturnIssueItems.ReceiveValue = requestItemData[i].ReceiveValue;
+                    lstLoanReturnIssueItems.ReturnItemID = requestItemData[i].ReturnItemID;
+                    lstLoanReturnIssueItems.ReturnUnitID = requestItemData[i].ReturnUnitID;
+                    lstLoanReturnIssueItems.ReturnCurrencyID = requestItemData[i].ReturnCurrencyID;
+                    lstLoanReturnIssueItems.ReturnRate = requestItemData[i].ReturnRate;
+                    lstLoanReturnIssueItems.ExchangeRate = requestItemData[i].ExchangeRate;
+                    lstLoanReturnIssueItems.ReturnQuantity = requestItemData[i].ReturnQuantity;
+                    lstLoanReturnIssueItems.ReferenceQty = requestItemData[i].ReceiveQty;
+                    lstLoanReturnIssueItems.ReferenceUnit = requestItemData[i].ReceiveUnitID;
+                    lstLoanReturnIssueItems.ReturnExchangeRate = requestItemData[i].ReturnExchangeRate;
+                    lstLoanReturnIssueItems.RemainingQty = requestItemData[i].RemainingQty;
+                    obTRDataSet.lstLoanReturnIssueItems.push(lstLoanReturnIssueItems);
+                    lstLoanReturnIssueItems = {
+                        "ItemID": "", "ItemName": "", "TransRequestItemID": "", "ReceiveQty": "", "ReceiveUnitID": "", "ReceiveUnitName": "", "AlreadyReturnQty": "", "RemainingQty": "",
+                        "ReturnMethodID": "", "ReturnMethodValue": "", "ReceiveCurrencyID": "", "ReceiveCurrencyName": "", "ReceiveRate": "", "ReceiveValue": "", "ReturnItemID": "", "ReturnItemName": "", "ReturnUnitID": "", "ReturnUnitIDName": ""
+                         , "ReturnCurrencyID": "", "ReturnCurrencyName": "", "ReturnRate": "", "ReturnExchangeRate": "", "ReturnQuantity": "", "ReferenceQty": "", "ReferenceUnit": ""
+                    };
+                }
+            }
+
+            $("#divLoading").show();
+            if ($("#RequestID").val() == "") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "LoanReturnRequest")',
+                    data: JSON.stringify(obTRDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $("#RequestID").val(data.msg.ReturnId);
+                            $("#RequestNo").val(data.msg.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // Update
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "LoanReturnRequest")',
+                    data: JSON.stringify(obTRDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $("#RequestID").val(data.msg.ReturnId);
+                            $("#RequestNo").val(data.msg.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+
+
+        }
+    }
+
+    $("#btnCheck").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoanReturnRequestStatusUpdate", "LoanReturnRequest")',
+            type: 'POST',
+            data: { type: "Checker", note: $("#CheckComments").val(), requestID: $("#RequestID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnCheck").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    $("#btnApproved").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoanReturnRequestStatusUpdate", "LoanReturnRequest")',
+            type: 'POST',
+            data: { type: "Approver", note: $("#btnApproved").val(), requestID: $("#RequestID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnApproved").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    $("#btnRecommend").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoanReturnRequestStatusUpdate", "LoanReturnRequest")',
+            type: 'POST',
+            data: { type: "Recommend", note: $("#RecommendComments").val(), requestID: $("#RequestID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnRecommend").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    $("#btnApproved").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoanReturnRequestStatusUpdate", "LoanReturnRequest")',
+            type: 'POST',
+            data: { type: "Approve", note: $("#ApproveComments").val(), requestID: $("#SelectedRequestID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnApproved").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+   
+</script>
+
+

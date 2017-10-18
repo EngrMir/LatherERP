@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Insurace Info Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("InsuranceInfoEntryReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            @ViewBag.Message
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">Insurance Opening Report</div>
+                </div>
+                <div class="col-lg-3">
+                    <label id="MessageText"></label>
+                </div>
+                <div class="col-lg-3">
+
+                    <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 5%; float: right;" tabindex="3" checked="checked" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> PDF</label>
+
+                    <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 5%; float: right;" tabindex="4" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> Excel</label>
+
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="ClearAll();" />
+                    <input type="submit" id="btnSubmit" class="Button" value="Show Report" style="position: absolute; right: 100px;" />
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label> Insurance No:</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input id="InsuranceNo" type="text" name="InsuranceNo" value="" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="Insurance"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#InsuranceNo").val("");
+
+    function ClearAll() {
+        $("#InsuranceNo").val("");
+    }
+
+        var GradeRangeFormatGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "InsuranceNo",
+                    fields: {
+                        InsuranceNo: { editable: false },
+                        InsuranceChallanNo: { editable: false },
+                        InsurancChallanDate: { editable: false },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetInsuranceInfoData", "Reports")',
+                    dataType: "JSON",
+                    method: "POST",
+
+                }
+
+            },
+            pageSize: 10
+        });
+
+
+        var grid = $("#Insurance").kendoGrid({
+            dataSource: GradeRangeFormatGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            groupable: true,
+            sortable: true,
+            height: 350,
+            columns: [
+
+                  { field: "InsuranceNo", title: "Insurance No" },
+                  { field: "InsuranceChallanNo", title: "Insurance Challan No" },
+                  { field: "InsurancChallanDate", title: "Insuranc Challan Date" },
+                     { field: "RecordStatus", title: "Record Status" }
+
+            ],
+            change: function (arg) {
+                var selected = $.map(this.select(), function (item) {
+                    return $(item).find('td').first().text();
+                });
+                $("#InsuranceNo").val(selected);
+            }
+        }).data('kendoGrid');
+
+
+
+</script>

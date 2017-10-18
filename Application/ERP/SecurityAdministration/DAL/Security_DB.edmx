@@ -1,0 +1,1778 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BLC_DEVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccessLog">
+          <Key>
+            <PropertyRef Name="AccessSerial" />
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="AccessSerial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserType" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="LoginDeviceName" Type="varchar" MaxLength="15" />
+          <Property Name="LoginIPAddress" Type="varchar" MaxLength="20" />
+          <Property Name="LoginTime" Type="datetime" Nullable="false" />
+          <Property Name="LogoutTime" Type="datetime" />
+          <Property Name="PasswordAttemptCount" Type="tinyint" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdditionalOperationPermissions">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="OperationID" Type="tinyint" Nullable="false" />
+          <Property Name="HaveAccess" Type="bit" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdditionalOperationPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="OperationID" Type="tinyint" Nullable="false" />
+          <Property Name="HaveAccess" Type="bit" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdditionalScreenPermissions">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="ScreenCode" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="AccessRight" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdditionalScreenPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="AccessRight" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApplicationPolicies">
+          <Key>
+            <PropertyRef Name="PolicyID" />
+          </Key>
+          <Property Name="PolicyID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApplicationID" Type="tinyint" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApplicationPoliciesAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="PolicyID" Type="tinyint" Nullable="false" />
+          <Property Name="ApplicationID" Type="tinyint" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="ApplicationID" />
+          </Key>
+          <Property Name="ApplicationID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Designations">
+          <Key>
+            <PropertyRef Name="DesignationID" />
+          </Key>
+          <Property Name="DesignationID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MenuItems">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="Caption" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="MenuLevel" Type="int" Nullable="false" />
+          <Property Name="ItemOrder" Type="int" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="HasChild" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Modules">
+          <Key>
+            <PropertyRef Name="ModuleID" />
+          </Key>
+          <Property Name="ModuleID" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="ApplicationID" Type="tinyint" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RolesAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleID" Type="tinyint" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoleWiseOperationPermissions">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="OperationID" Type="tinyint" Nullable="false" />
+          <Property Name="HaveAccess" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoleWiseOperationPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OperationID" Type="tinyint" Nullable="false" />
+          <Property Name="HaveAccess" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoleWiseScreenPermissions">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="ScreenCode" />
+          </Key>
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="AccessRight" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoleWiseScreenPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleID" Type="tinyint" Nullable="false" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="AccessRight" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScreenOperations">
+          <Key>
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="OperationID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OperationTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScreenOperationsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OperationID" Type="tinyint" Nullable="false" />
+          <Property Name="OperationTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Screens">
+          <Key>
+            <PropertyRef Name="ScreenCode" />
+          </Key>
+          <Property Name="ScreenCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="ModuleID" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="Type" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="URL" Type="varchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserCredentialInformation">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="LoginID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="varchar(max)" Nullable="false" />
+          <Property Name="LastPasswordChangedDate" Type="datetime" Nullable="false" />
+          <Property Name="IsPasswordAccepted" Type="bit" Nullable="false" />
+          <Property Name="IsLocked" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserCredentialInformationAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="LoginID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="varchar(max)" Nullable="false" />
+          <Property Name="LastPasswordChangedDate" Type="datetime" Nullable="false" />
+          <Property Name="IsPasswordAccepted" Type="bit" Nullable="false" />
+          <Property Name="IsLocked" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInRoles">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInRolesAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="RoleID" Type="tinyint" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataStatusFlag" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserCode" Type="varchar" MaxLength="50" />
+          <Property Name="UserType" Type="tinyint" />
+          <Property Name="Title" Type="nvarchar" MaxLength="8" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DesignationID" Type="tinyint" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="SupervisorUserID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="SetOn" Type="datetime" Nullable="false" />
+          <Property Name="SetBy" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BLC_DEV.dbo.vw_MenuInScreen' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_MenuInScreen">
+          <Key>
+            <PropertyRef Name="MenuID" />
+            <PropertyRef Name="Caption" />
+            <PropertyRef Name="ItemOrder" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="Caption" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ItemOrder" Type="int" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="URL" Type="varchar(max)" />
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AccessLog_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AccessLog" Type="Self.AccessLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AccessLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalOperationPermissions_ScreenOperations">
+          <End Role="ScreenOperations" Type="Self.ScreenOperations" Multiplicity="1" />
+          <End Role="AdditionalOperationPermissions" Type="Self.AdditionalOperationPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScreenOperations">
+              <PropertyRef Name="OperationID" />
+            </Principal>
+            <Dependent Role="AdditionalOperationPermissions">
+              <PropertyRef Name="OperationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalOperationPermissions_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AdditionalOperationPermissions" Type="Self.AdditionalOperationPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdditionalOperationPermissions">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalScreenPermissions_Screens">
+          <End Role="Screens" Type="Self.Screens" Multiplicity="1" />
+          <End Role="AdditionalScreenPermissions" Type="Self.AdditionalScreenPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screens">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="AdditionalScreenPermissions">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalScreenPermissions_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="AdditionalScreenPermissions" Type="Self.AdditionalScreenPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdditionalScreenPermissions">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApplicationPolicies_Applications">
+          <End Role="Applications" Type="Self.Applications" Multiplicity="1" />
+          <End Role="ApplicationPolicies" Type="Self.ApplicationPolicies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Applications">
+              <PropertyRef Name="ApplicationID" />
+            </Principal>
+            <Dependent Role="ApplicationPolicies">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MenuItems_Screens">
+          <End Role="Screens" Type="Self.Screens" Multiplicity="0..1" />
+          <End Role="MenuItems" Type="Self.MenuItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screens">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="MenuItems">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Modules_Applications">
+          <End Role="Applications" Type="Self.Applications" Multiplicity="1" />
+          <End Role="Modules" Type="Self.Modules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Applications">
+              <PropertyRef Name="ApplicationID" />
+            </Principal>
+            <Dependent Role="Modules">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseOperationPermissions_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="RoleWiseOperationPermissions" Type="Self.RoleWiseOperationPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="RoleWiseOperationPermissions">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseOperationPermissions_ScreenOperations">
+          <End Role="ScreenOperations" Type="Self.ScreenOperations" Multiplicity="1" />
+          <End Role="RoleWiseOperationPermissions" Type="Self.RoleWiseOperationPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScreenOperations">
+              <PropertyRef Name="OperationID" />
+            </Principal>
+            <Dependent Role="RoleWiseOperationPermissions">
+              <PropertyRef Name="OperationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseScreenPermissions_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="RoleWiseScreenPermissions" Type="Self.RoleWiseScreenPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="RoleWiseScreenPermissions">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseScreenPermissions_Screens">
+          <End Role="Screens" Type="Self.Screens" Multiplicity="1" />
+          <End Role="RoleWiseScreenPermissions" Type="Self.RoleWiseScreenPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screens">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="RoleWiseScreenPermissions">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScreenOperations_Screens">
+          <End Role="Screens" Type="Self.Screens" Multiplicity="1" />
+          <End Role="ScreenOperations" Type="Self.ScreenOperations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screens">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="ScreenOperations">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Screens_Modules">
+          <End Role="Modules" Type="Self.Modules" Multiplicity="1" />
+          <End Role="Screens" Type="Self.Screens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Modules">
+              <PropertyRef Name="ModuleID" />
+            </Principal>
+            <Dependent Role="Screens">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCredentialInformation_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserCredentialInformation" Type="Self.UserCredentialInformation" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCredentialInformation">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInRoles_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UserInRoles" Type="Self.UserInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="UserInRoles">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInRoles_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserInRoles" Type="Self.UserInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserInRoles">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Designation">
+          <End Role="Designations" Type="Self.Designations" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Designations">
+              <PropertyRef Name="DesignationID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="DesignationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BLC_DEVModelStoreContainer">
+          <EntitySet Name="AccessLog" EntityType="Self.AccessLog" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AdditionalOperationPermissions" EntityType="Self.AdditionalOperationPermissions" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AdditionalOperationPermissionsAudit" EntityType="Self.AdditionalOperationPermissionsAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AdditionalScreenPermissions" EntityType="Self.AdditionalScreenPermissions" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AdditionalScreenPermissionsAudit" EntityType="Self.AdditionalScreenPermissionsAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="ApplicationPolicies" EntityType="Self.ApplicationPolicies" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="ApplicationPoliciesAudit" EntityType="Self.ApplicationPoliciesAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="Applications" EntityType="Self.Applications" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="Designations" EntityType="Self.Designations" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="MenuItems" EntityType="Self.MenuItems" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="Modules" EntityType="Self.Modules" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="RolesAudit" EntityType="Self.RolesAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="RoleWiseOperationPermissions" EntityType="Self.RoleWiseOperationPermissions" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="RoleWiseOperationPermissionsAudit" EntityType="Self.RoleWiseOperationPermissionsAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="RoleWiseScreenPermissions" EntityType="Self.RoleWiseScreenPermissions" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="RoleWiseScreenPermissionsAudit" EntityType="Self.RoleWiseScreenPermissionsAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="ScreenOperations" EntityType="Self.ScreenOperations" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="ScreenOperationsAudit" EntityType="Self.ScreenOperationsAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="Screens" EntityType="Self.Screens" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="UserCredentialInformation" EntityType="Self.UserCredentialInformation" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="UserCredentialInformationAudit" EntityType="Self.UserCredentialInformationAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="UserInRoles" EntityType="Self.UserInRoles" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="UserInRolesAudit" EntityType="Self.UserInRolesAudit" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="vw_MenuInScreen" EntityType="Self.vw_MenuInScreen" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_MenuInScreen].[MenuID] AS [MenuID], 
+    [vw_MenuInScreen].[Caption] AS [Caption], 
+    [vw_MenuInScreen].[ItemOrder] AS [ItemOrder], 
+    [vw_MenuInScreen].[ParentID] AS [ParentID], 
+    [vw_MenuInScreen].[URL] AS [URL], 
+    [vw_MenuInScreen].[RoleID] AS [RoleID]
+    FROM [dbo].[vw_MenuInScreen] AS [vw_MenuInScreen]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_AccessLog_Users" Association="Self.FK_AccessLog_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AccessLog" EntitySet="AccessLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalOperationPermissions_ScreenOperations" Association="Self.FK_AdditionalOperationPermissions_ScreenOperations">
+            <End Role="ScreenOperations" EntitySet="ScreenOperations" />
+            <End Role="AdditionalOperationPermissions" EntitySet="AdditionalOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalOperationPermissions_Users" Association="Self.FK_AdditionalOperationPermissions_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AdditionalOperationPermissions" EntitySet="AdditionalOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalScreenPermissions_Screens" Association="Self.FK_AdditionalScreenPermissions_Screens">
+            <End Role="Screens" EntitySet="Screens" />
+            <End Role="AdditionalScreenPermissions" EntitySet="AdditionalScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalScreenPermissions_Users" Association="Self.FK_AdditionalScreenPermissions_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AdditionalScreenPermissions" EntitySet="AdditionalScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApplicationPolicies_Applications" Association="Self.FK_ApplicationPolicies_Applications">
+            <End Role="Applications" EntitySet="Applications" />
+            <End Role="ApplicationPolicies" EntitySet="ApplicationPolicies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MenuItems_Screens" Association="Self.FK_MenuItems_Screens">
+            <End Role="Screens" EntitySet="Screens" />
+            <End Role="MenuItems" EntitySet="MenuItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Modules_Applications" Association="Self.FK_Modules_Applications">
+            <End Role="Applications" EntitySet="Applications" />
+            <End Role="Modules" EntitySet="Modules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseOperationPermissions_Roles" Association="Self.FK_RolewiseOperationPermissions_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RoleWiseOperationPermissions" EntitySet="RoleWiseOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseOperationPermissions_ScreenOperations" Association="Self.FK_RolewiseOperationPermissions_ScreenOperations">
+            <End Role="ScreenOperations" EntitySet="ScreenOperations" />
+            <End Role="RoleWiseOperationPermissions" EntitySet="RoleWiseOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseScreenPermissions_Roles" Association="Self.FK_RolewiseScreenPermissions_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RoleWiseScreenPermissions" EntitySet="RoleWiseScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseScreenPermissions_Screens" Association="Self.FK_RolewiseScreenPermissions_Screens">
+            <End Role="Screens" EntitySet="Screens" />
+            <End Role="RoleWiseScreenPermissions" EntitySet="RoleWiseScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScreenOperations_Screens" Association="Self.FK_ScreenOperations_Screens">
+            <End Role="Screens" EntitySet="Screens" />
+            <End Role="ScreenOperations" EntitySet="ScreenOperations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Screens_Modules" Association="Self.FK_Screens_Modules">
+            <End Role="Modules" EntitySet="Modules" />
+            <End Role="Screens" EntitySet="Screens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCredentialInformation_Users" Association="Self.FK_UserCredentialInformation_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserCredentialInformation" EntitySet="UserCredentialInformation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInRoles_Roles" Association="Self.FK_UserInRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserInRoles" EntitySet="UserInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInRoles_Users" Association="Self.FK_UserInRoles_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserInRoles" EntitySet="UserInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Designation" Association="Self.FK_Users_Designation">
+            <End Role="Designations" EntitySet="Designations" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BLC_DEVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BLC_DEVEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccessLogs" EntityType="BLC_DEVModel.AccessLog" />
+          <EntitySet Name="AdditionalOperationPermissions" EntityType="BLC_DEVModel.AdditionalOperationPermission" />
+          <EntitySet Name="AdditionalOperationPermissionsAudits" EntityType="BLC_DEVModel.AdditionalOperationPermissionsAudit" />
+          <EntitySet Name="AdditionalScreenPermissions" EntityType="BLC_DEVModel.AdditionalScreenPermission" />
+          <EntitySet Name="AdditionalScreenPermissionsAudits" EntityType="BLC_DEVModel.AdditionalScreenPermissionsAudit" />
+          <EntitySet Name="ApplicationPolicies" EntityType="BLC_DEVModel.ApplicationPolicy" />
+          <EntitySet Name="ApplicationPoliciesAudits" EntityType="BLC_DEVModel.ApplicationPoliciesAudit" />
+          <EntitySet Name="Applications" EntityType="BLC_DEVModel.Application" />
+          <EntitySet Name="Designations" EntityType="BLC_DEVModel.Designation" />
+          <EntitySet Name="Modules" EntityType="BLC_DEVModel.Module" />
+          <EntitySet Name="Roles" EntityType="BLC_DEVModel.Role" />
+          <EntitySet Name="RolesAudits" EntityType="BLC_DEVModel.RolesAudit" />
+          <EntitySet Name="RoleWiseOperationPermissions" EntityType="BLC_DEVModel.RoleWiseOperationPermission" />
+          <EntitySet Name="RoleWiseOperationPermissionsAudits" EntityType="BLC_DEVModel.RoleWiseOperationPermissionsAudit" />
+          <EntitySet Name="RoleWiseScreenPermissions" EntityType="BLC_DEVModel.RoleWiseScreenPermission" />
+          <EntitySet Name="RoleWiseScreenPermissionsAudits" EntityType="BLC_DEVModel.RoleWiseScreenPermissionsAudit" />
+          <EntitySet Name="ScreenOperations" EntityType="BLC_DEVModel.ScreenOperation" />
+          <EntitySet Name="ScreenOperationsAudits" EntityType="BLC_DEVModel.ScreenOperationsAudit" />
+          <EntitySet Name="Screens" EntityType="BLC_DEVModel.Screen" />
+          <EntitySet Name="UserCredentialInformations" EntityType="BLC_DEVModel.UserCredentialInformation" />
+          <EntitySet Name="UserCredentialInformationAudits" EntityType="BLC_DEVModel.UserCredentialInformationAudit" />
+          <EntitySet Name="UserInRoles" EntityType="BLC_DEVModel.UserInRole" />
+          <EntitySet Name="UserInRolesAudits" EntityType="BLC_DEVModel.UserInRolesAudit" />
+          <EntitySet Name="Users" EntityType="BLC_DEVModel.User" />
+          <AssociationSet Name="FK_AccessLog_Users" Association="BLC_DEVModel.FK_AccessLog_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AccessLog" EntitySet="AccessLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalOperationPermissions_ScreenOperations" Association="BLC_DEVModel.FK_AdditionalOperationPermissions_ScreenOperations">
+            <End Role="ScreenOperation" EntitySet="ScreenOperations" />
+            <End Role="AdditionalOperationPermission" EntitySet="AdditionalOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalOperationPermissions_Users" Association="BLC_DEVModel.FK_AdditionalOperationPermissions_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AdditionalOperationPermission" EntitySet="AdditionalOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalScreenPermissions_Screens" Association="BLC_DEVModel.FK_AdditionalScreenPermissions_Screens">
+            <End Role="Screen" EntitySet="Screens" />
+            <End Role="AdditionalScreenPermission" EntitySet="AdditionalScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdditionalScreenPermissions_Users" Association="BLC_DEVModel.FK_AdditionalScreenPermissions_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AdditionalScreenPermission" EntitySet="AdditionalScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApplicationPolicies_Applications" Association="BLC_DEVModel.FK_ApplicationPolicies_Applications">
+            <End Role="Application" EntitySet="Applications" />
+            <End Role="ApplicationPolicy" EntitySet="ApplicationPolicies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Modules_Applications" Association="BLC_DEVModel.FK_Modules_Applications">
+            <End Role="Application" EntitySet="Applications" />
+            <End Role="Module" EntitySet="Modules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Designation" Association="BLC_DEVModel.FK_Users_Designation">
+            <End Role="Designation" EntitySet="Designations" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Screens_Modules" Association="BLC_DEVModel.FK_Screens_Modules">
+            <End Role="Module" EntitySet="Modules" />
+            <End Role="Screen" EntitySet="Screens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseOperationPermissions_Roles" Association="BLC_DEVModel.FK_RolewiseOperationPermissions_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="RoleWiseOperationPermission" EntitySet="RoleWiseOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseScreenPermissions_Roles" Association="BLC_DEVModel.FK_RolewiseScreenPermissions_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="RoleWiseScreenPermission" EntitySet="RoleWiseScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInRoles_Roles" Association="BLC_DEVModel.FK_UserInRoles_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="UserInRole" EntitySet="UserInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseOperationPermissions_ScreenOperations" Association="BLC_DEVModel.FK_RolewiseOperationPermissions_ScreenOperations">
+            <End Role="ScreenOperation" EntitySet="ScreenOperations" />
+            <End Role="RoleWiseOperationPermission" EntitySet="RoleWiseOperationPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolewiseScreenPermissions_Screens" Association="BLC_DEVModel.FK_RolewiseScreenPermissions_Screens">
+            <End Role="Screen" EntitySet="Screens" />
+            <End Role="RoleWiseScreenPermission" EntitySet="RoleWiseScreenPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScreenOperations_Screens" Association="BLC_DEVModel.FK_ScreenOperations_Screens">
+            <End Role="Screen" EntitySet="Screens" />
+            <End Role="ScreenOperation" EntitySet="ScreenOperations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCredentialInformation_Users" Association="BLC_DEVModel.FK_UserCredentialInformation_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserCredentialInformation" EntitySet="UserCredentialInformations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInRoles_Users" Association="BLC_DEVModel.FK_UserInRoles_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserInRole" EntitySet="UserInRoles" />
+          </AssociationSet>
+          <EntitySet Name="vw_MenuInScreen" EntityType="BLC_DEVModel.vw_MenuInScreen" />
+          <EntitySet Name="MenuItems" EntityType="BLC_DEVModel.MenuItem" />
+          <AssociationSet Name="FK_MenuItems_Screens" Association="BLC_DEVModel.FK_MenuItems_Screens">
+            <End Role="Screen" EntitySet="Screens" />
+            <End Role="MenuItem" EntitySet="MenuItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AccessLog">
+          <Key>
+            <PropertyRef Name="AccessSerial" />
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="AccessSerial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="LoginDeviceName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="LoginIPAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LogoutTime" Type="DateTime" Precision="3" />
+          <Property Name="PasswordAttemptCount" Type="Byte" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="BLC_DEVModel.FK_AccessLog_Users" FromRole="AccessLog" ToRole="User" />
+        </EntityType>
+        <EntityType Name="AdditionalOperationPermission">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="OperationID" Type="Byte" Nullable="false" />
+          <Property Name="HaveAccess" Type="Boolean" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ScreenOperation" Relationship="BLC_DEVModel.FK_AdditionalOperationPermissions_ScreenOperations" FromRole="AdditionalOperationPermission" ToRole="ScreenOperation" />
+          <NavigationProperty Name="User" Relationship="BLC_DEVModel.FK_AdditionalOperationPermissions_Users" FromRole="AdditionalOperationPermission" ToRole="User" />
+        </EntityType>
+        <EntityType Name="AdditionalOperationPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="OperationID" Type="Byte" Nullable="false" />
+          <Property Name="HaveAccess" Type="Boolean" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AdditionalScreenPermission">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="ScreenCode" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="AccessRight" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Screen" Relationship="BLC_DEVModel.FK_AdditionalScreenPermissions_Screens" FromRole="AdditionalScreenPermission" ToRole="Screen" />
+          <NavigationProperty Name="User" Relationship="BLC_DEVModel.FK_AdditionalScreenPermissions_Users" FromRole="AdditionalScreenPermission" ToRole="User" />
+        </EntityType>
+        <EntityType Name="AdditionalScreenPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="AccessRight" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ApplicationPolicy">
+          <Key>
+            <PropertyRef Name="PolicyID" />
+          </Key>
+          <Property Name="PolicyID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Byte" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <NavigationProperty Name="Application" Relationship="BLC_DEVModel.FK_ApplicationPolicies_Applications" FromRole="ApplicationPolicy" ToRole="Application" />
+        </EntityType>
+        <EntityType Name="ApplicationPoliciesAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PolicyID" Type="Byte" Nullable="false" />
+          <Property Name="ApplicationID" Type="Byte" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="ApplicationID" />
+          </Key>
+          <Property Name="ApplicationID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ApplicationPolicies" Relationship="BLC_DEVModel.FK_ApplicationPolicies_Applications" FromRole="Application" ToRole="ApplicationPolicy" />
+          <NavigationProperty Name="Modules" Relationship="BLC_DEVModel.FK_Modules_Applications" FromRole="Application" ToRole="Module" />
+        </EntityType>
+        <EntityType Name="Designation">
+          <Key>
+            <PropertyRef Name="DesignationID" />
+          </Key>
+          <Property Name="DesignationID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="BLC_DEVModel.FK_Users_Designation" FromRole="Designation" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Module">
+          <Key>
+            <PropertyRef Name="ModuleID" />
+          </Key>
+          <Property Name="ModuleID" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="ApplicationID" Type="Byte" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Application" Relationship="BLC_DEVModel.FK_Modules_Applications" FromRole="Module" ToRole="Application" />
+          <NavigationProperty Name="Screens" Relationship="BLC_DEVModel.FK_Screens_Modules" FromRole="Module" ToRole="Screen" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RoleWiseOperationPermissions" Relationship="BLC_DEVModel.FK_RolewiseOperationPermissions_Roles" FromRole="Role" ToRole="RoleWiseOperationPermission" />
+          <NavigationProperty Name="RoleWiseScreenPermissions" Relationship="BLC_DEVModel.FK_RolewiseScreenPermissions_Roles" FromRole="Role" ToRole="RoleWiseScreenPermission" />
+          <NavigationProperty Name="UserInRoles" Relationship="BLC_DEVModel.FK_UserInRoles_Roles" FromRole="Role" ToRole="UserInRole" />
+        </EntityType>
+        <EntityType Name="RolesAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Byte" Nullable="false" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="RoleWiseOperationPermission">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="OperationID" Type="Byte" Nullable="false" />
+          <Property Name="HaveAccess" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="BLC_DEVModel.FK_RolewiseOperationPermissions_Roles" FromRole="RoleWiseOperationPermission" ToRole="Role" />
+          <NavigationProperty Name="ScreenOperation" Relationship="BLC_DEVModel.FK_RolewiseOperationPermissions_ScreenOperations" FromRole="RoleWiseOperationPermission" ToRole="ScreenOperation" />
+        </EntityType>
+        <EntityType Name="RoleWiseOperationPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OperationID" Type="Byte" Nullable="false" />
+          <Property Name="HaveAccess" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="RoleWiseScreenPermission">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="ScreenCode" />
+          </Key>
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="AccessRight" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="BLC_DEVModel.FK_RolewiseScreenPermissions_Roles" FromRole="RoleWiseScreenPermission" ToRole="Role" />
+          <NavigationProperty Name="Screen" Relationship="BLC_DEVModel.FK_RolewiseScreenPermissions_Screens" FromRole="RoleWiseScreenPermission" ToRole="Screen" />
+        </EntityType>
+        <EntityType Name="RoleWiseScreenPermissionsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Byte" Nullable="false" />
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="AccessRight" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ScreenOperation">
+          <Key>
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="OperationID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OperationTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdditionalOperationPermissions" Relationship="BLC_DEVModel.FK_AdditionalOperationPermissions_ScreenOperations" FromRole="ScreenOperation" ToRole="AdditionalOperationPermission" />
+          <NavigationProperty Name="RoleWiseOperationPermissions" Relationship="BLC_DEVModel.FK_RolewiseOperationPermissions_ScreenOperations" FromRole="ScreenOperation" ToRole="RoleWiseOperationPermission" />
+          <NavigationProperty Name="Screen" Relationship="BLC_DEVModel.FK_ScreenOperations_Screens" FromRole="ScreenOperation" ToRole="Screen" />
+        </EntityType>
+        <EntityType Name="ScreenOperationsAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OperationID" Type="Byte" Nullable="false" />
+          <Property Name="OperationTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Screen">
+          <Key>
+            <PropertyRef Name="ScreenCode" />
+          </Key>
+          <Property Name="ScreenCode" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="ModuleID" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="URL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdditionalScreenPermissions" Relationship="BLC_DEVModel.FK_AdditionalScreenPermissions_Screens" FromRole="Screen" ToRole="AdditionalScreenPermission" />
+          <NavigationProperty Name="Module" Relationship="BLC_DEVModel.FK_Screens_Modules" FromRole="Screen" ToRole="Module" />
+          <NavigationProperty Name="RoleWiseScreenPermissions" Relationship="BLC_DEVModel.FK_RolewiseScreenPermissions_Screens" FromRole="Screen" ToRole="RoleWiseScreenPermission" />
+          <NavigationProperty Name="ScreenOperations" Relationship="BLC_DEVModel.FK_ScreenOperations_Screens" FromRole="Screen" ToRole="ScreenOperation" />
+          <NavigationProperty Name="MenuItems" Relationship="BLC_DEVModel.FK_MenuItems_Screens" FromRole="Screen" ToRole="MenuItem" />
+        </EntityType>
+        <EntityType Name="UserCredentialInformation">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="LoginID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastPasswordChangedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsPasswordAccepted" Type="Boolean" Nullable="false" />
+          <Property Name="IsLocked" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="BLC_DEVModel.FK_UserCredentialInformation_Users" FromRole="UserCredentialInformation" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserCredentialInformationAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoginID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastPasswordChangedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsPasswordAccepted" Type="Boolean" Nullable="false" />
+          <Property Name="IsLocked" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="UserInRole">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="BLC_DEVModel.FK_UserInRoles_Roles" FromRole="UserInRole" ToRole="Role" />
+          <NavigationProperty Name="User" Relationship="BLC_DEVModel.FK_UserInRoles_Users" FromRole="UserInRole" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserInRolesAudit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Byte" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="DataStatusFlag" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="Byte" />
+          <Property Name="Title" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DesignationID" Type="Byte" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="SupervisorUserID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SetOn" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AccessLogs" Relationship="BLC_DEVModel.FK_AccessLog_Users" FromRole="User" ToRole="AccessLog" />
+          <NavigationProperty Name="AdditionalOperationPermissions" Relationship="BLC_DEVModel.FK_AdditionalOperationPermissions_Users" FromRole="User" ToRole="AdditionalOperationPermission" />
+          <NavigationProperty Name="AdditionalScreenPermissions" Relationship="BLC_DEVModel.FK_AdditionalScreenPermissions_Users" FromRole="User" ToRole="AdditionalScreenPermission" />
+          <NavigationProperty Name="Designation" Relationship="BLC_DEVModel.FK_Users_Designation" FromRole="User" ToRole="Designation" />
+          <NavigationProperty Name="UserCredentialInformation" Relationship="BLC_DEVModel.FK_UserCredentialInformation_Users" FromRole="User" ToRole="UserCredentialInformation" />
+          <NavigationProperty Name="UserInRoles" Relationship="BLC_DEVModel.FK_UserInRoles_Users" FromRole="User" ToRole="UserInRole" />
+        </EntityType>
+        <Association Name="FK_AccessLog_Users">
+          <End Type="BLC_DEVModel.User" Role="User" Multiplicity="1" />
+          <End Type="BLC_DEVModel.AccessLog" Role="AccessLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AccessLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalOperationPermissions_ScreenOperations">
+          <End Type="BLC_DEVModel.ScreenOperation" Role="ScreenOperation" Multiplicity="1" />
+          <End Type="BLC_DEVModel.AdditionalOperationPermission" Role="AdditionalOperationPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScreenOperation">
+              <PropertyRef Name="OperationID" />
+            </Principal>
+            <Dependent Role="AdditionalOperationPermission">
+              <PropertyRef Name="OperationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalOperationPermissions_Users">
+          <End Type="BLC_DEVModel.User" Role="User" Multiplicity="1" />
+          <End Type="BLC_DEVModel.AdditionalOperationPermission" Role="AdditionalOperationPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdditionalOperationPermission">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalScreenPermissions_Screens">
+          <End Type="BLC_DEVModel.Screen" Role="Screen" Multiplicity="1" />
+          <End Type="BLC_DEVModel.AdditionalScreenPermission" Role="AdditionalScreenPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="AdditionalScreenPermission">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdditionalScreenPermissions_Users">
+          <End Type="BLC_DEVModel.User" Role="User" Multiplicity="1" />
+          <End Type="BLC_DEVModel.AdditionalScreenPermission" Role="AdditionalScreenPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdditionalScreenPermission">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApplicationPolicies_Applications">
+          <End Type="BLC_DEVModel.Application" Role="Application" Multiplicity="1" />
+          <End Type="BLC_DEVModel.ApplicationPolicy" Role="ApplicationPolicy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="ApplicationID" />
+            </Principal>
+            <Dependent Role="ApplicationPolicy">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Modules_Applications">
+          <End Type="BLC_DEVModel.Application" Role="Application" Multiplicity="1" />
+          <End Type="BLC_DEVModel.Module" Role="Module" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="ApplicationID" />
+            </Principal>
+            <Dependent Role="Module">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Designation">
+          <End Type="BLC_DEVModel.Designation" Role="Designation" Multiplicity="0..1" />
+          <End Type="BLC_DEVModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Designation">
+              <PropertyRef Name="DesignationID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="DesignationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Screens_Modules">
+          <End Type="BLC_DEVModel.Module" Role="Module" Multiplicity="1" />
+          <End Type="BLC_DEVModel.Screen" Role="Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Module">
+              <PropertyRef Name="ModuleID" />
+            </Principal>
+            <Dependent Role="Screen">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseOperationPermissions_Roles">
+          <End Type="BLC_DEVModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="BLC_DEVModel.RoleWiseOperationPermission" Role="RoleWiseOperationPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="RoleWiseOperationPermission">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseScreenPermissions_Roles">
+          <End Type="BLC_DEVModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="BLC_DEVModel.RoleWiseScreenPermission" Role="RoleWiseScreenPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="RoleWiseScreenPermission">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInRoles_Roles">
+          <End Type="BLC_DEVModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="BLC_DEVModel.UserInRole" Role="UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseOperationPermissions_ScreenOperations">
+          <End Type="BLC_DEVModel.ScreenOperation" Role="ScreenOperation" Multiplicity="1" />
+          <End Type="BLC_DEVModel.RoleWiseOperationPermission" Role="RoleWiseOperationPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScreenOperation">
+              <PropertyRef Name="OperationID" />
+            </Principal>
+            <Dependent Role="RoleWiseOperationPermission">
+              <PropertyRef Name="OperationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolewiseScreenPermissions_Screens">
+          <End Type="BLC_DEVModel.Screen" Role="Screen" Multiplicity="1" />
+          <End Type="BLC_DEVModel.RoleWiseScreenPermission" Role="RoleWiseScreenPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="RoleWiseScreenPermission">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScreenOperations_Screens">
+          <End Type="BLC_DEVModel.Screen" Role="Screen" Multiplicity="1" />
+          <End Type="BLC_DEVModel.ScreenOperation" Role="ScreenOperation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="ScreenOperation">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCredentialInformation_Users">
+          <End Type="BLC_DEVModel.User" Role="User" Multiplicity="1" />
+          <End Type="BLC_DEVModel.UserCredentialInformation" Role="UserCredentialInformation" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCredentialInformation">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInRoles_Users">
+          <End Type="BLC_DEVModel.User" Role="User" Multiplicity="1" />
+          <End Type="BLC_DEVModel.UserInRole" Role="UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="vw_MenuInScreen">
+          <Key>
+            <PropertyRef Name="MenuID" />
+            <PropertyRef Name="Caption" />
+            <PropertyRef Name="ItemOrder" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="MenuID" Type="Byte" Nullable="false" />
+          <Property Name="Caption" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ItemOrder" Type="Byte" Nullable="false" />
+          <Property Name="ParentID" Type="Byte" />
+          <Property Name="URL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MenuItem">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="Caption" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MenuLevel" Type="Int32" Nullable="false" />
+          <Property Name="ItemOrder" Type="Int32" Nullable="false" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="ScreenCode" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="HasChild" Type="Boolean" Nullable="false" />
+          <Property Name="SetOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SetBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Screen" Relationship="BLC_DEVModel.FK_MenuItems_Screens" FromRole="MenuItem" ToRole="Screen" />
+        </EntityType>
+        <Association Name="FK_MenuItems_Screens">
+          <End Type="BLC_DEVModel.Screen" Role="Screen" Multiplicity="0..1" />
+          <End Type="BLC_DEVModel.MenuItem" Role="MenuItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenCode" />
+            </Principal>
+            <Dependent Role="MenuItem">
+              <PropertyRef Name="ScreenCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BLC_DEVModelStoreContainer" CdmEntityContainer="BLC_DEVEntities">
+          <EntitySetMapping Name="AccessLogs">
+            <EntityTypeMapping TypeName="BLC_DEVModel.AccessLog">
+              <MappingFragment StoreEntitySet="AccessLog">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="PasswordAttemptCount" ColumnName="PasswordAttemptCount" />
+                <ScalarProperty Name="LogoutTime" ColumnName="LogoutTime" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="LoginIPAddress" ColumnName="LoginIPAddress" />
+                <ScalarProperty Name="LoginDeviceName" ColumnName="LoginDeviceName" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="AccessSerial" ColumnName="AccessSerial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdditionalOperationPermissions">
+            <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalOperationPermission">
+              <MappingFragment StoreEntitySet="AdditionalOperationPermissions">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+                <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdditionalOperationPermissionsAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalOperationPermissionsAudit">
+              <MappingFragment StoreEntitySet="AdditionalOperationPermissionsAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+                <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdditionalScreenPermissions">
+            <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalScreenPermission">
+              <MappingFragment StoreEntitySet="AdditionalScreenPermissions">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdditionalScreenPermissionsAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalScreenPermissionsAudit">
+              <MappingFragment StoreEntitySet="AdditionalScreenPermissionsAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApplicationPolicies">
+            <EntityTypeMapping TypeName="BLC_DEVModel.ApplicationPolicy">
+              <MappingFragment StoreEntitySet="ApplicationPolicies">
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="PolicyID" ColumnName="PolicyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApplicationPoliciesAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.ApplicationPoliciesAudit">
+              <MappingFragment StoreEntitySet="ApplicationPoliciesAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="PolicyID" ColumnName="PolicyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="BLC_DEVModel.Application">
+              <MappingFragment StoreEntitySet="Applications">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Designations">
+            <EntityTypeMapping TypeName="BLC_DEVModel.Designation">
+              <MappingFragment StoreEntitySet="Designations">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Modules">
+            <EntityTypeMapping TypeName="BLC_DEVModel.Module">
+              <MappingFragment StoreEntitySet="Modules">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="BLC_DEVModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RolesAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.RolesAudit">
+              <MappingFragment StoreEntitySet="RolesAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleWiseOperationPermissions">
+            <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseOperationPermission">
+              <MappingFragment StoreEntitySet="RoleWiseOperationPermissions">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+                <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleWiseOperationPermissionsAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseOperationPermissionsAudit">
+              <MappingFragment StoreEntitySet="RoleWiseOperationPermissionsAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+                <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleWiseScreenPermissions">
+            <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseScreenPermission">
+              <MappingFragment StoreEntitySet="RoleWiseScreenPermissions">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleWiseScreenPermissionsAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseScreenPermissionsAudit">
+              <MappingFragment StoreEntitySet="RoleWiseScreenPermissionsAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScreenOperations">
+            <EntityTypeMapping TypeName="BLC_DEVModel.ScreenOperation">
+              <MappingFragment StoreEntitySet="ScreenOperations">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="OperationTitle" ColumnName="OperationTitle" />
+                <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScreenOperationsAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.ScreenOperationsAudit">
+              <MappingFragment StoreEntitySet="ScreenOperationsAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="OperationTitle" ColumnName="OperationTitle" />
+                <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Screens">
+            <EntityTypeMapping TypeName="BLC_DEVModel.Screen">
+              <MappingFragment StoreEntitySet="Screens">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCredentialInformations">
+            <EntityTypeMapping TypeName="BLC_DEVModel.UserCredentialInformation">
+              <MappingFragment StoreEntitySet="UserCredentialInformation">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+                <ScalarProperty Name="IsPasswordAccepted" ColumnName="IsPasswordAccepted" />
+                <ScalarProperty Name="LastPasswordChangedDate" ColumnName="LastPasswordChangedDate" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCredentialInformationAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.UserCredentialInformationAudit">
+              <MappingFragment StoreEntitySet="UserCredentialInformationAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+                <ScalarProperty Name="IsPasswordAccepted" ColumnName="IsPasswordAccepted" />
+                <ScalarProperty Name="LastPasswordChangedDate" ColumnName="LastPasswordChangedDate" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInRoles">
+            <EntityTypeMapping TypeName="BLC_DEVModel.UserInRole">
+              <MappingFragment StoreEntitySet="UserInRoles">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInRolesAudits">
+            <EntityTypeMapping TypeName="BLC_DEVModel.UserInRolesAudit">
+              <MappingFragment StoreEntitySet="UserInRolesAudit">
+                <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BLC_DEVModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="SupervisorUserID" ColumnName="SupervisorUserID" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_MenuInScreen">
+            <EntityTypeMapping TypeName="BLC_DEVModel.vw_MenuInScreen">
+              <MappingFragment StoreEntitySet="vw_MenuInScreen">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ItemOrder" ColumnName="ItemOrder" />
+                <ScalarProperty Name="Caption" ColumnName="Caption" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MenuItems">
+            <EntityTypeMapping TypeName="BLC_DEVModel.MenuItem">
+              <MappingFragment StoreEntitySet="MenuItems">
+                <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+                <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+                <ScalarProperty Name="HasChild" ColumnName="HasChild" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ItemOrder" ColumnName="ItemOrder" />
+                <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
+                <ScalarProperty Name="Caption" ColumnName="Caption" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,1059 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .grdKendo {
+    }
+</style>
+
+<title>@ViewBag.formTiltle</title>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<input type="hidden" class="txtBox" id="SupplierID" />
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Supplier Agent Code<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="SupplierCode" readonly="readonly" style="width: 100%;" class="txtBox SetFocus ReadOnlyTextbox" name="SupplierCode" tabindex="" placeholder="Auto" />
+                @*<input type="text" id="SupplierCode" class="txtBox SetFocus RequiredTextBox" name="SupplierCode" tabindex="" />*@
+            </div>
+            <div class="col-lg-2">
+                <label>Supplier Agent Category</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="SupplierCategory" class="txtBox" tabindex="">
+                    <option value="">--Select--</option>
+                    <option value="Leather">Leather</option>
+                    <option value="Chemical">Chemical</option>
+                    @*<option value="Machineries">Machineries</option>
+                    <option value="Spare Parts">Spare Parts</option>*@
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label> Agent Country</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("CountryID", new SelectList(ViewBag.ddlCountryList, "CountryID", "CountryName"), "--Select--", new { @class = "txtBox" })
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Supplier Agent Name<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="SupplierName" class="txtBox RequiredTextBox" name="SupplierName" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Supplier Agent Type</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="SupplierType" class="txtBox" tabindex="">
+                    <option value="">--Select--</option>
+                    <option value="Local Agent">Local Agent</option>
+                    <option value="Foreign Agent">Foreign Agent</option>
+                    @*<option value="Manufacturer">Manufacturer</option>*@
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Status</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="IsActive" class="txtBox" tabindex="">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div id="SupplierAddressGrid" class="grdKendo" tabindex=""></div>
+    </div>
+</div>
+@*<div class="row">
+    <div class="FormBody">
+        <div id="SupplierAgentGrid" class="grdKendo"></div>
+    </div>
+</div>*@
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ChallanWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplierAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>
+    <div id="ChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>
+
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function () {
+                $("#divLoading").show();
+            },
+            complete: function () {
+                $("#divLoading").hide();
+            }
+        });
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+        //To Define Data Supplier for Kendo Grid
+        var dataSourceSupplierAddress = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "SupplierAddressID",
+                    fields: {
+                        SupplierAddressID: { editable: false },
+                        SupplierID: { editable: false },
+                        Address: { editable: true },
+                        ContactPerson: { editable: true },
+                        ContactNumber: { editable: true },
+                        EmailAddress: { editable: true },
+                        Website: { editable: true },
+                        FaxNo: { editable: true },
+                        PhoneNo: { editable: true },
+                        SkypeID: { editable: true },
+                        IsActive: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for Supplier Kendo Grid
+        var gridSupplierAddress = $('#SupplierAddressGrid').kendoGrid({
+            dataSource: dataSourceSupplierAddress,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add Supplier Agent Address", className: "btnSupplierAddressGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "SupplierAddressID", hidden: true, title: "AddressID", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SupplierID", hidden: true },
+                { field: "Address", title: "Address", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ContactPerson", title: "Contact Person", filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ContactNumber", title: "Contact Number", filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "EmailAddress", title: "Email", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Website", title: "Website", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "FaxNo", title: "FaxNo", filterable: false, width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PhoneNo",  title: "PhoneNo", filterable: false, width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SkypeID",  title: "Skype", filterable: false, width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Status", filterable: false, editor: ddlActive, width: 50, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleAddressDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        $(".btnSupplierAddressGrid").click(function () {
+            var supplieraddressgrid = $("#SupplierAddressGrid").data("kendoGrid");
+            $("#SupplierAddressGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieraddressgrid.addRow();
+        });
+
+        $("#SupplierAddressGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#SupplierAddressGrid").data("kendoGrid");
+                $("#SupplierAddressGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+        //To Define Data Supplier for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "SupplierAgentID",
+                    fields: {
+                        SupplierAgentID: { editable: false },
+                        SupplierID: { editable: true },
+                        SupplierName: { editable: true, defaultValue: 'Press F9' },
+                        AgentType: { editable: true },
+                        IsActive: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for Supplier Kendo Grid
+        var grid = $('#SupplierAgentGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add Supplier Agent", className: "btnSupplierAgentGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "SupplierAgentID", hidden: true, title: "SupplierAgentID", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SupplierID", hidden: true },
+                { field: "SupplierName", title: "Agent", width: 200, attributes: { "class": "agentInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "AgentType", title: "AgentType", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Status", editor: ddlActive, width: 110, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleAgentDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        var activeAgentDataSource = [{ text: "Active", value: "Active" }, { text: "Inactive", value: "Inactive" }];
+
+        function ddlActive(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: activeAgentDataSource
+                });
+        };
+
+        $(".btnSupplierAgentGrid").click(function () {
+            var supplieragentgrid = $("#SupplierAgentGrid").data("kendoGrid");
+            $("#SupplierAgentGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+        });
+
+        $("#SupplierAgentGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#SupplierAgentGrid").data("kendoGrid");
+                $("#SupplierAgentGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleAddressDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#SupplierAddressGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleAgentDelete(event) {
+            deleteStatus = 3;
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Agent Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#SupplierID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "SupplierAgent")',
+                        type: 'POST',
+                        data: JSON.stringify({ "supplierId": $("#SupplierID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#IsActive").val("Active");
+                                $("#SupplierAddressGrid").data("kendoGrid").dataSource.data([]);
+                                //$("#SupplierAgentGrid").data("kendoGrid").dataSource.data([]);
+
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.SupplierAddressID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedAddress", "SupplierAgent")',
+                        type: 'POST',
+                        data: JSON.stringify({ "supplierAddressId": dataitem.SupplierAddressID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#SupplierAddressGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#SupplierAddressGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            if (deleteStatus == 3) {
+                if (dataitem.SupplierAgentID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedAgent", "SupplierAgent")',
+                        type: 'POST',
+                        data: JSON.stringify({ "supplierAgentId": dataitem.SupplierAgentID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#SupplierAgentGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#SupplierAgentGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Focus SupplierName textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#IsActive").val("Active");
+                $("#SupplierAddressGrid").data("kendoGrid").dataSource.data([]);
+                $("#SupplierAgentGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#IsActive").val("Active");
+                $("#SupplierAddressGrid").data("kendoGrid").dataSource.data([]);
+                $("#SupplierAgentGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#SupplierID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "SupplierAgent")',
+                            type: 'POST',
+                            data: JSON.stringify({ "supplierId": $("#SupplierID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#IsActive").val("Active");
+                                    $("#SupplierAddressGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#SupplierAgentGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.SupplierAddressID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedAddress", "SupplierAgent")',
+                            type: 'POST',
+                            data: JSON.stringify({ "supplierAddressId": dataitem.SupplierAddressID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#SupplierAddressGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#SupplierAddressGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+                if (deleteStatus == 3) {
+                    if (dataitem.SupplierAgentID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedAgent", "SupplierAgent")',
+                            type: 'POST',
+                            data: JSON.stringify({ "supplierAgentId": dataitem.SupplierAgentID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#SupplierAgentGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                }
+                                else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#SupplierAgentGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    //var SupplierAgentModel = { "SupplierAgentID": "", "SupplierID": "", "AgentType": "", "IsActive": "" };
+    var SupplierAddressModel = { "SupplierAddressID": "", "SupplierID": "", "Address": "", "ContactPerson": "", "ContactNumber": "", "EmailAddress": "", "FaxNo": "", "PhoneNo": "", "SkypeID": "", "IsActive": "" };
+    var supplierModel = { "SupplierID": "", "SupplierCode": "", "SupplierName": "", "SupplierCategory": "", "IsActive": "", "SupplierType": "", "SupplierAddressList": [], "SupplierAgentList": [] };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Empty or Maximum Length in SupplierName
+        //CheckRequiredTextBoxMaxLength('SupplierCode', 12);
+        // Check Empty or Maximum Length in SupplierName
+        CheckRequiredTextBoxMaxLength('SupplierName', 80);
+        // Check Maximum Length in SupplierCategory
+        CheckNormalTextBoxMaxLength('SupplierCategory', 30);
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('SupplierType', 30);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            supplierModel.SupplierID = $("#SupplierID").val();
+            supplierModel.SupplierCode = $("#SupplierCode").val();
+            supplierModel.SupplierName = $("#SupplierName").val();
+            supplierModel.SupplierCategory = $("#SupplierCategory").val();
+            supplierModel.SupplierType = $("#SupplierType").val();
+            supplierModel.CountryID = $("#CountryID").val();
+            supplierModel.IsActive = $("#IsActive option:selected").val();
+
+
+            var dataSource = $("#SupplierAddressGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            supplierModel.SupplierAddressList = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].dirty) {
+                        SupplierAddressModel.SupplierAddressID = data[i].SupplierAddressID;
+                        SupplierAddressModel.SupplierID = data[i].SupplierID;
+                        SupplierAddressModel.Address = data[i].Address;
+                        SupplierAddressModel.ContactPerson = data[i].ContactPerson;
+                        SupplierAddressModel.ContactNumber = data[i].ContactNumber;
+                        SupplierAddressModel.EmailAddress = data[i].EmailAddress;
+                        SupplierAddressModel.FaxNo = data[i].FaxNo;
+                        SupplierAddressModel.PhoneNo = data[i].PhoneNo;
+                        SupplierAddressModel.SkypeID = data[i].SkypeID;
+                        SupplierAddressModel.Website = data[i].Website;
+                        SupplierAddressModel.IsActive = data[i].IsActive;
+
+                        supplierModel.SupplierAddressList.push(SupplierAddressModel);
+                        SupplierAddressModel = { "SupplierAddressID": "", "SupplierID": "", "Address": "", "ContactPerson": "", "ContactNumber": "", "EmailAddress": "", "FaxNo": "", "PhoneNo": "", "SkypeID": "", "IsActive": "" };
+                    }
+                }
+            }
+
+            //var dataSourceSupplierAgent = $("#SupplierAgentGrid").data("kendoGrid").dataSource;
+            //var dataSupplierAgent = dataSourceSupplierAgent.data(); // Get Detail Grid Data
+            //supplierModel.SupplierAgentList = [];
+            //if (dataSource.hasChanges) {
+            //    for (var i = 0; i <= dataSupplierAgent.length - 1; i++) {
+            //        if (dataSupplierAgent[i].dirty) {
+            //            if (dataSupplierAgent[i].SupplierName != "Press F9") {
+            //                SupplierAgentModel.SupplierAgentID = dataSupplierAgent[i].SupplierAgentID;
+            //                SupplierAgentModel.AgentID = dataSupplierAgent[i].SupplierID;
+            //                SupplierAgentModel.SupplierID = dataSupplierAgent[i].SupplierID;
+            //                SupplierAgentModel.AgentType = dataSupplierAgent[i].AgentType;
+            //                SupplierAgentModel.IsActive = dataSupplierAgent[i].IsActive;
+
+            //                supplierModel.SupplierAgentList.push(SupplierAgentModel);
+            //                SupplierAgentModel = { "SupplierAgentID": "", "SupplierID": "", "AgentType": "", "IsActive": "" };
+            //            }
+            //        }
+            //    }
+            //}
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("SupplierAgent", "SupplierAgent")',
+                    data: JSON.stringify(supplierModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#SupplierID').val(response.SupplierID);
+                            $('#SupplierCode').val(response.SupplierCode);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSupplierAddressAndAgentList", "SupplierAgent")',
+                                type: 'GET',
+                                data: { supplierId: $("#SupplierID").val() },
+                                success: function (data33) {
+                                    $("#SupplierAddressGrid").data("kendoGrid").dataSource.data(data33.SupplierAddressList);
+                                    $("#SupplierAgentGrid").data("kendoGrid").dataSource.data(data33.SupplierAgentList);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSupplierAddressAndAgentList", "SupplierAgent")',
+                                type: 'GET',
+                                data: { supplierId: $("#SupplierID").val() },
+                                success: function (data33) {
+                                    $("#SupplierAddressGrid").data("kendoGrid").dataSource.data(data33.SupplierAddressList);
+                                    $("#SupplierAgentGrid").data("kendoGrid").dataSource.data(data33.SupplierAgentList);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 1) {
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#SupplierName").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#IsActive").val("Active");
+            $("#SupplierAddressGrid").data("kendoGrid").dataSource.data([]);
+            $("#SupplierAgentGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    /////////////////////////////////////////////
+
+    var ChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierCode: { editable: false },
+                    AgentType: { editable: false },
+                    IsActive: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierAgentList", "SupplierAgent")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+        dataSource: ChallanGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierName", title: "Supplier", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierCode", title: "Supplier Code", width: "60px", filterable: false, sortable: false },
+            { field: "AgentType", title: "Agent Type", width: "60px", filterable: false, sortable: false },
+            { field: "IsActive", title: "Status", width: "60px" }
+        ]
+    });
+
+    var ChallanWindow = $('#ChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List Of Supplier Agent",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for Challan window grid
+    function ChallanWindowEvent() {
+        var WindowGrid = $("#ChallanWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var pageGrid = $("#SupplierAgentGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("SupplierID", WindowGridItem.SupplierID);
+        pageGridItem.set("SupplierName", WindowGridItem.SupplierName);
+        pageGridItem.set("AgentType", WindowGridItem.AgentType);
+        pageGridItem.set("IsActive", WindowGridItem.IsActive);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnChallanWindowOK').click(function () {
+        ChallanWindowEvent();
+        ChallanWindow.close();
+    });
+
+    $('#btnChallanWindowCancel').click(function () {
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindowGrid").dblclick(function () {
+        ChallanWindowEvent();
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ChallanWindowEvent();
+            ChallanWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChallanWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document).on('keyup', '.agentInfo', function (e) {
+        if (e.keyCode == 120) {
+            SelectedItemOfListOfValue('ChallanWindowGrid');
+            ChallanWindow.open();
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#txtSupplier").val("");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierCategory: { editable: false },
+                    SupplierType: { editable: false },
+                    CountryID: { editable: false },
+                    CountryName: { editable: false },
+                    IsActive: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierName", title: "Agent", width: "60px" },
+            { field: "SupplierCode", title: "Agent Code", width: "60px" },
+            { field: "SupplierCategory", title: "Agent Category", width: "60px" },
+            { field: "SupplierType", title: "Agent Type", width: "60px" },
+            { field: "CountryID", hidden: true },
+            { field: "CountryName", title: "Country", width: "60px" },
+            { field: "IsActive", title: "Status", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Supplier Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetSupplierForSearchList", "SupplierAgent")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#SupplierID").val(selectedItem.SupplierID);
+        $("#SupplierCode").val(selectedItem.SupplierCode);
+        $("#SupplierName").val(selectedItem.SupplierName);
+        $("#SupplierCategory").val(selectedItem.SupplierCategory);
+        $("#SupplierType").val(selectedItem.SupplierType);
+        $("#CountryID").val(selectedItem.CountryID);
+        $("#IsActive").val(selectedItem.IsActive);
+        $.ajax({
+            url: '@Url.Action("GetSupplierAddressAndAgentList", "SupplierAgent")',
+            type: 'GET',
+            data: { supplierId: $("#SupplierID").val() },
+            success: function (data33) {
+                $("#SupplierAddressGrid").data("kendoGrid").dataSource.data(data33.SupplierAddressList);
+                //$("#SupplierAgentGrid").data("kendoGrid").dataSource.data(data33.SupplierAgentList);
+            }
+        });
+    }
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "SupplierAgent")',// "/Supplier/GetSupplierListForSearch",
+                type: "GET"
+            }
+        }
+    });
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+    $("#txtSupplierAgent").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier with Name",
+    });
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    $("#btnGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierList", "SupplierAgent")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierList);
+                if (data33.Count == 1) {
+                    SearchWindowEvents();
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierList", "SupplierAgent")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    $("#txtSupplierAgent").keyup(function (event) {
+        if ($("#txtSupplierAgent").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierAgentSearchList", "SupplierAgent")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplierAgent").val() },
+                    success: function (data33) {
+                        $("#ChallanWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierAgentList);
+                        if (data33.Count == 1) {
+                            ChallanWindowEvent();
+                            ChallanWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    $("#btnGridSearchAgent").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierAgentSearchList", "SupplierAgent")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplierAgent").val() },
+            success: function (data33) {
+                $("#ChallanWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierAgentList);
+                if (data33.Count == 1) {
+                    ChallanWindowEvent();
+                    ChallanWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+</script>

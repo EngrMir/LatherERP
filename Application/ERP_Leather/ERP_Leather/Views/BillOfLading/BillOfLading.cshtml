@@ -1,0 +1,1567 @@
+﻿@{
+    ViewBag.Title = "BillOfLading";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Bill of Lading</div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+            </div>
+            <div id="" class="col-lg-3">
+                <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row FormBody" style="min-height: 75px;">
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Bill of Lading No</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtBillOfLadingId" class="textField" style="width: 150px; display: none;" />
+                <input type="text" id="txtBillOfLadingNo" class="textField" style="width: 150px;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Bill of Lading Date</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtBillOfLadingDate" class="datePicker textField" style="width: 150px;" />
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-4">
+                <label>CI no.</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtCiId" class="textField" style="width: 250px; display: none;" />
+                <input type="text" id="txtCiNo" class="textField" style="width: 250px;" placeholder="Press (F9)" readonly />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>L/C no.</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtLcNo" class="textField" style="width: 250px; " readonly />
+                <input type="text" id="txtLcId" class="textField" style="width: 250px; display: none;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>PI no.</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtPiNo" class="textField" style="width: 250px;" readonly />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row FormBody" style="min-height: 130px;">
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Shipped on Board Date</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtShippedOnBoardDate" class="datePicker textField" style="width: 150px;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Expected Time of Arival</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtExpectedTimeOfArrival" class="textField" style="width: 150px;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Shipper Line</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtShipperId" style="width: 150px; display: none;" />
+                <input type="text" id="txtShipperName" class="textField" placeholder="Press (F9)" style="width: 150px;" readonly />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Shipment Mode</label>
+            </div>
+            <div class="col-lg-8">
+                <select id="ddlShipmentMode" class="textField" style="width: 150px;">
+                    <option value="">-- Select --</option>
+                    <option value="FCL">FCL</option>
+                    <option value="LCL">LCL</option>
+                    <option value="FL">FCL/LCL</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Vessel Name</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtVesselName" class="textField" style="width: 250px;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Voyage no.</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtVoyageNo" class="textField" style="width: 250px;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Trans Shipment Port</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtTransShipmentPortId" style="width: 250px; display: none;" />
+                <input type="text" id="txtTransShipmentPortName" class="textField" style="width: 250px;" placeholder="Press (F9)" readonly />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Port of Shipment</label>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="txtPortOfShipmentId" style="width: 250px; display: none;" />
+                <input type="text" id="txtPortOfShipmentName" class="textField" style="width: 250px;" placeholder="Press (F9)" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row FormBody">
+    <div class="row" style="margin-top: -10px; padding: 0 0 0 0;">
+        <div id="billOfLadingContainerGrid" style="padding: 0 0 0 0; width: 1221px; margin-left: 5px;">
+
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-lg-6" style="padding: 0 0 0 0;">
+            <label style="margin-left: 35px;">Check Note</label>
+
+            <input type="text" id="txtCheckNote" style="width: 350px;" />
+            <input type="button" id="btnCheck" value="Checked" />
+        </div>
+        <div class="col-lg-5" style="padding: 0 0 0 0;">
+            <label>Confirm Note</label>
+
+            <input type="text" id="txtConfirmNote" style="width: 350px;" />
+            <input type="button" id="btnConfirm" value="Confirm" />
+        </div>
+    </div>
+</div>
+<div id="CommercialInvoiceSearchWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">LC No.</label>
+        <input type="text" id="txtCommercialInvoice" style="width: 250px;" /><input type="button" id="btnCommercialInvoiceGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>*@
+    <div class="row" style="width: 99%;">
+        <div id="CommercialInvoiceSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnCommercialInvoiceWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnCommercialInvoiceWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="LCOpeningSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">LC No.</label>
+        <input type="text" id="txtLCOpening" style="width: 250px;" /><input type="button" id="btnLCOpeningGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 596px;">
+        <div id="LCOpeningSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnLCOpeningWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnLCOpeningWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="ShipperSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Shipper Name</label>
+        <input type="text" id="txtShipper" style="width: 250px;" /><input type="button" id="btnShipperGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 596px;">
+        <div id="ShipperSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnShipperWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnShipperWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="PortSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Port Name</label>
+        <input type="text" id="txtPort" style="width: 250px;" /><input type="button" id="btnPortGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 596px;">
+        <div id="PortSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnPortWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnPortWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="BlSearchWindow" style="display: none;">
+    <div class="row" style="width: 99%;">
+        <label style="margin-left: 20px;">LC No.</label>
+        <input type="text" id="txtBlNo" style="width: 250px;" /><input type="button" id="btnBlGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 99%;">
+        <div id="BlSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnBlWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBlWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="DeleteBillOfLadingConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOfLadingOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOfLadingCancel" value="Cancel" />
+</div>
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date()
+        });
+        $("#txtExpectedTimeOfArrival").kendoDatePicker({
+            format: "dd/MM/yyyy"
+        });
+        $("#txtBillOfLadingDate").attr("readonly", true);
+        $("#txtShippedOnBoardDate").attr("readonly", true);
+        $("#txtExpectedTimeOfArrival").attr("readonly", true);
+        // Create new row in packingListItemGrid
+        $(".btnAddContainer").click(function () {
+            var grid = $("#billOfLadingContainerGrid").data("kendoGrid");
+            $("#billOfLadingContainerGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            setTimeout(function () {
+                $("#billOfLadingContainerGrid tbody tr:first td:eq(0)").focus();
+            }, 1);
+        });
+        $("#billOfLadingContainerGrid").keyup(function (e) {
+            if (e.keyCode == "13") {
+                var grid = $("#billOfLadingContainerGrid").data("kendoGrid");
+                $("#billOfLadingContainerGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                if (grid.count > 0) { changeStatus = 1; }
+                setTimeout(function () {
+                    $("#packingListItemGrid tbody tr:first td:eq(0)").focus();
+                }, 1);
+            }
+        }); // Create new row in packingListItemGrid end
+    });// Document ready end
+    // Bill of Ladding Search Window definition
+    function getBasicBl() {
+        $.ajax({
+            url: '@Url.Action("GetBillOfLadingMin", "BillOfLading")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#BlSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    var BlWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "Blid",
+                fields: {
+                    Blid: { editable: false },
+                    BlNo: { editable: false },
+                    BlDate: { editable: false },
+                    LcNo: { editable: false },
+                    LcDate: { editable: false },
+                    SupplierName: { editable: false },
+                    PiNo: { editable: false },
+                    CiNo: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#BlSearchWindowGrid").kendoGrid({
+        dataSource: BlWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "BlNo", title: "BL No." },
+            { field: "BlDate", title: "BL Date" },
+            { field: "LcNo", title: "LC No." },
+            { field: "LcDate", title: "Lc Date" },
+            { field: "PiNo", title: "PI No." },
+            { field: "CiNo", title: "CI No." },
+            { field: "SupplierName", title: "Supplier" },
+            { field: "RecordStatus", title: "Status" }
+        ]
+    });
+    var BlWindow = $('#BlSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "90%",
+        height: "auto",
+        title: "Bill Of Lading Search",
+        position: { top: 70, left: 70 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');// Bill of Lading search window grid decleration end
+    // Activation of BlSearchWindow
+    $("#btnSearch").click(function (e) {
+        if (changeStatus == 1) {
+            formChangeReset = "search";
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            getBasicBl();
+            $("#txtBlNo").val("");
+            BlWindow.open();
+            //BlWindow.center();
+        }
+    });// Activation of blSearchWindow end
+
+    function LockFields(recStat) {
+        if (recStat == "CHK") {
+            $("#txtCheckNote").val(data.BlNote);
+            $("#btnCheck").attr("disabled", true);
+            recordStatus = "CHK";
+        }
+        if (recStat == "CNF") {
+            recordStatus = "CNF";
+            $("#txtBillOfLadingNo").attr("disabled", true);
+            $('#txtBillOfLadingDate').data('kendoDatePicker').enable(false);
+            $("#txtLcNo").attr("disabled", true);
+            $("#txtPiNo").attr("disabled", true);
+            $('#txtShippedOnBoardDate').data('kendoDatePicker').enable(false);
+            $('#txtExpectedTimeOfArrival').data('kendoDatePicker').enable(false);
+            $('#txtShipperName').attr("disabled", true);
+            $("#ddlShipmentMode").attr("disabled", true);
+            $("#txtVesselName").attr("disabled", true);
+            $("#txtVoyageNo").attr("disabled", true);
+            $("#txtTransShipmentPortName").attr("disabled", true);
+            $("#txtPortOfShipmentName").attr("disabled", true);
+            $("#txtCheckNote").attr("disabled", true);
+            $("#txtConfirmNote").attr("disabled", true);
+            $("#btnDelete").attr("disabled", true);
+            $("#btnSave").attr("disabled", true);
+            $("#btnCheck").attr("disabled", true);
+            $("#btnConfirm").attr("disabled", true);
+        }
+    }
+
+    // blSearchWindow events
+    function GetAndSetBillOfLading(blid) {
+        $.ajax({
+            url: '@Url.Action("GetBillOfLadingById","BillOfLading")',
+            type: 'GET',
+            data: { blid: blid },
+            success: function (data) {
+                $("#txtBillOfLadingId").val(data.Blid);
+                $("#txtBillOfLadingNo").val(data.BlNo);
+                $("#txtBillOfLadingDate").val(data.BlDate);
+                $("#txtCiId").val(data.CIID);
+                $("#txtCiNo").val(data.CINo);
+                $("#txtLcId").val(data.Lcid);
+                $("#txtLcNo").val(data.LcNo);
+                $("#txtPiNo").val(data.PiNo);
+                $("#txtShippedOnBoardDate").val(data.ShippedOnBoardDate);
+                $("#txtExpectedTimeOfArrival").val(data.ExpectedArrivalTime);
+                $("#txtShipperId").val(data.Shipper);
+                $("#txtShipperName").val(data.ShipperName);
+                $("#ddlShipmentMode").val(data.ShipmentMode);
+                $("#txtVesselName").val(data.VesselName);
+                $("#txtVoyageNo").val(data.VoyageNo);
+                $("#txtTransShipmentPortId").val(data.TransShipmentPort);
+                $("#txtTransShipmentPortName").val(data.TransShipmentPortName);
+                $("#txtPortOfShipmentId").val(data.ShipmentPort);
+                $("#txtPortOfShipmentName").val(data.ShipmentPortName);
+                LockFields(data.RecordStatus);
+                if (data.Containers.length > 0) {
+                    $("#billOfLadingContainerGrid").data("kendoGrid").dataSource.data(data.Containers);
+                }
+            }
+        });
+    }
+    function BlSearchEvents() {
+        var gridBlSearch = $("#BlSearchWindowGrid").data("kendoGrid");
+        var selectedBl = (gridBlSearch.dataItem(gridBlSearch.select())); //Selected Row
+        GetAndSetBillOfLading(selectedBl.Blid);
+    }
+    $("#btnBlWindowOK").click(function () {
+        BlSearchEvents();
+        BlWindow.close();
+    });
+    $("#btnBlWindowCancel").click(function () {
+        BlWindow.close();
+    });
+    $("#BlSearchWindowGrid").dblclick(function () {
+        BlSearchEvents();
+        BlWindow.close();
+    });
+    $("#BlSearchWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            BlSearchEvents();
+            BlWindow.close();
+        }
+        if (e.keyCode == 27) {
+            BlWindow.close();
+        }
+    });// BlSearchWindow events end
+
+    //Commercial Invoice search window definition
+    function getBasicCI() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetComInv", "BillOfLading")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#divLoading").hide();
+                CommercialInvoiceWindowGridDataSource.data(data);
+            },
+            error: function() {
+                $("#divLoading").hide();
+            }
+        });
+    }
+    var CommercialInvoiceWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    LCID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    LCNo: { editable: false },
+                    PINo: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#CommercialInvoiceSearchWindowGrid").kendoGrid({
+        dataSource: CommercialInvoiceWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "CINo", title: "CI No." },
+            { field: "CIDate", title: "Date" },
+            { field: "LCNo", title: "LC No." },
+            { field: "PINo", title: "PI No." },
+            { field: "RecordStatus", title: "Status" }
+        ]
+    });
+    var CommercialInvoiceWindow = $('#CommercialInvoiceSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "90%",
+        height: "auto",
+        title: "Commercial Invoice Search",
+        position: { top: 70, left: 70 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    $('#txtCiNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            getBasicCI();
+            CommercialInvoiceWindow.open();
+            //CommercialInvoiceWindow.center();
+        }
+    });//Commercial Invoice search window definition end
+
+    //Commercial Invoice Pop-up events
+    function SetComInv() {
+        var gridCiInvSearch = $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid");
+        var selectedCiInv = (gridCiInvSearch.dataItem(gridCiInvSearch.select()));
+        $('#txtCiId').val(selectedCiInv.CIID);
+        $('#txtCiNo').val(selectedCiInv.CINo);
+        $('#txtLcId').val(selectedCiInv.LCID);
+        $('#txtLcNo').val(selectedCiInv.LCNo);
+        $('#txtPiNo').val(selectedCiInv.PINo);
+    }
+
+    $('#CommercialInvoiceSearchWindowGrid').dblclick(function () {
+        SetComInv();
+        CommercialInvoiceWindow.close();
+    });
+
+    $('#btnCommercialInvoiceWindowOK').click(function () {
+        SetComInv();
+        CommercialInvoiceWindow.close();
+    });
+
+    $('#btnCommercialInvoiceWindowCancel').click(function () {
+        CommercialInvoiceWindow.close();
+    });
+
+    //LCOpening search window definition
+    function getLcBasicData() {
+        $.ajax({
+            url: '@Url.Action("GetLcInfo", "BillOfLading")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#LCOpeningSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    var LCOpeningWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "Lcid",
+                fields: {
+                    Lcid: { editable: false },
+                    LcNo: { editable: false },
+                    PiNo: { editable: false },
+                    LcDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#LCOpeningSearchWindowGrid").kendoGrid({
+        dataSource: LCOpeningWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "LcNo", title: "LC No." },
+            { field: "PiNo", title: "PI No." },
+            { field: "LcDate", title: "Date" }
+        ]
+    });
+    var LcWindow = $('#LCOpeningSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "LC Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow'); //LCOpening search window definition end
+    // Activation of LCOpeningSearchWindow
+    //$("#txtLcNo").keyup(function (e) {
+    //    if (e.keyCode == 120) {
+    //        getLcBasicData();
+    //        $("#txtLCOpening").val("");
+    //        LcWindow.open();
+    //        LcWindow.center();
+    //    }
+    //});// Activation of LCOpeningSearchWindow end
+    // LCOpeningSearchWindow events
+    function LcSearchWindowEvent() {
+        var gridLcOpeningSearch = $("#LCOpeningSearchWindowGrid").data("kendoGrid");
+        var selectedLcOpening = (gridLcOpeningSearch.dataItem(gridLcOpeningSearch.select())); //Selected Row
+        $("#txtLcId").val(selectedLcOpening.Lcid);
+        $("#txtLcNo").val(selectedLcOpening.LcNo);
+        $("#txtPiNo").val(selectedLcOpening.PiNo);
+        changeStatus = 1;
+        LcWindow.close();
+    }
+
+    $("#LCOpeningSearchWindowGrid").dblclick(function () {
+        LcSearchWindowEvent();
+    });
+    $("#btnLCOpeningWindowOK").click(function () {
+        LcSearchWindowEvent();
+    });
+    $("#btnLCOpeningWindowCancel").click(function () {
+        LcWindow.close();
+    });
+    // LCOpeningSearchWindow events end
+    //Shipper search window definition
+    function getShipperBasicData() {
+        $.ajax({
+            url: '@Url.Action("GetShipperInfo", "BillOfLading")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#ShipperSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    var ShipperWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "Id",
+                fields: {
+                    Id: { editable: false },
+                    Code: { editable: false },
+                    Name: { editable: false },
+                    Type: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#ShipperSearchWindowGrid").kendoGrid({
+        dataSource: ShipperWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "Code", title: "Code" },
+            { field: "Name", title: "Name" },
+            { field: "Type", title: "Type" }
+        ]
+    });
+    var ShipperWindow = $('#ShipperSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "Shipper Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow'); //Shipper search window definition end
+    // Activation of ShipperSearchWindow
+    $("#txtShipperName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            getShipperBasicData();
+            $("#txtShipper").val("");
+            ShipperWindow.open();
+            ShipperWindow.center();
+        }
+    });// Activation of ShipperSearchWindow end
+    // ShipperSearchWindow events
+    function ShipperSearchWindowEvent() {
+        var gridShipperSearch = $("#ShipperSearchWindowGrid").data("kendoGrid");
+        var selectedShipper = (gridShipperSearch.dataItem(gridShipperSearch.select())); //Selected Row
+        $("#txtShipperId").val(selectedShipper.Id);
+        $("#txtShipperName").val(selectedShipper.Name);
+        changeStatus = 1;
+        ShipperWindow.close();
+    }
+
+    $("#ShipperSearchWindowGrid").dblclick(function () {
+        ShipperSearchWindowEvent();
+    });
+    $("#btnShipperWindowOK").click(function () {
+        ShipperSearchWindowEvent();
+    });
+    $("#btnShipperWindowCancel").click(function () {
+        ShipperWindow.close();
+    });// ShipperSearchWindow events end
+    //Port search window definition
+    function getPortBasicData() {
+        $.ajax({
+            url: '@Url.Action("GetPortInfo", "BillOfLading")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#PortSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    var PortWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "Id",
+                fields: {
+                    Id: { editable: false },
+                    Code: { editable: false },
+                    Name: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#PortSearchWindowGrid").kendoGrid({
+        dataSource: PortWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "Code", title: "Code" },
+            { field: "Name", title: "Name" },
+            { field: "Address", title: "Address" }
+        ]
+    });
+    var PortWindow = $('#PortSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "Port Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow'); //Port search window definition end
+    // Activation of PortSearchWindow
+    $("#txtTransShipmentPortName").keyup(function (e) {
+        port = 0;
+        if (e.keyCode == 120) {
+            port = 1;
+            getPortBasicData();
+            $("#txtPort").val("");
+            PortWindow.open();
+            PortWindow.center();
+        }
+    });
+    $("#txtPortOfShipmentName").keyup(function (e) {
+        port = 0;
+        if (e.keyCode == 120) {
+            port = 2;
+            getPortBasicData();
+            $("#txtPort").val("");
+            PortWindow.open();
+            PortWindow.center();
+        }
+    });
+    // Activation of PortSearchWindow end
+    // PortSearchWindow events
+    function PortSearchWindowEvent() {
+        var gridPortSearch = $("#PortSearchWindowGrid").data("kendoGrid");
+        var selectedPort = (gridPortSearch.dataItem(gridPortSearch.select())); //Selected Row
+        if (port == 1) {
+            $("#txtTransShipmentPortId").val(selectedPort.Id);
+            $("#txtTransShipmentPortName").val(selectedPort.Name);
+        }
+        if (port == 2) {
+            $("#txtPortOfShipmentId").val(selectedPort.Id);
+            $("#txtPortOfShipmentName").val(selectedPort.Name);
+        }
+        changeStatus = 1;
+        PortWindow.close();
+    }
+
+    $("#PortSearchWindowGrid").dblclick(function () {
+        PortSearchWindowEvent();
+    });
+    $("#btnPortWindowOK").click(function () {
+        PortSearchWindowEvent();
+    });
+    $("#btnPortWindowCancel").click(function () {
+        PortWindow.close();
+    });// PortSearchWindow events end
+
+    // Bill of Lading Container Grid declaration
+    var billOfLadingContainerGridDatasource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BlcCntId",
+                fields: {
+                    BlcCntId: { editable: true },
+                    Blid: { editable: true },
+                    ContainerNo: { editable: true },
+                    ContainerType: { editable: true },
+                    SealNo: { editable: true },
+                    PackageQty: { editable: true },
+                    GrossWeight: { eidtable: true },
+                    WeightUnit: { editable: true },
+                    WeightUnitName: { editable: true, defaultValue: "KG" }
+
+                }
+            }
+        },
+        pageSize: 30
+    });
+    $("#billOfLadingContainerGrid").kendoGrid({
+        dataSource: billOfLadingContainerGridDatasource,
+        pageable: true,
+        edit: function (e) {
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+            if (recordStatus == "CNF") {
+                $('input[name = "ContainerNo"]').attr("readonly", true);
+                $('input[name = "SealNo"]').attr("readonly", true);
+                $('input[name = "PackageQty"]').attr("readonly", true);
+                $('input[name = "GrossWeight"]').attr("readonly", true);
+            }
+        },
+        save: function (e) {
+            setTimeout(function () { $("#totalGrossWeight").text(SumGrossWeight()); });
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 220,
+        toolbar: [{
+            text: "Add Container",
+            className: "btnAddContainer",
+            imageClass: "k-icon k-add"
+        }],
+        columns: [
+            { field: "ContainerNo", title: "Container No" },
+            { field: "ContainerType", title: "Container Type" },
+            { field: "SealNo", title: "Seal No." },
+            { field: "PackageQty", title: "Package Qty", footerTemplate: "Grand Total:" },
+            { field: "GrossWeight", title: "Gross Weight", footerTemplate: "<span id='totalGrossWeight'>#=SumGrossWeight()#</span>" },
+            { field: "WeightUnitName", title: "Unit", editor: WeightUnitDropDownEditor },
+            { command: [{ name: "DeletedRow", text: "Delete", click: handleDeleteBillOfLadingContainer }], title: "Delete" }
+        ]
+    });// Bill of Lading Container Grid declaration End
+    // Create drop down list editor for chemical unit
+    var ddlChemicalUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllUnitForChemical", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 8
+    });
+    function WeightUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                dataSource: ddlChemicalUnitDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("WeightUnitName", dataItem.UnitName);
+                    options.model.set("WeightUnit", dataItem.UnitID);
+                }
+            });
+    }// Create drop down list editor for chemical unit end
+    //// Drop down for container type
+    //var ddlContainerTypeDataSource = [{ text: "20HD", value: "20HD" }, { text: "30HD", value: "30HD" }];
+
+    //function ddlContainerType(container, options) {
+    //    $('<input data-bind="value:' + options.field + '"/>')
+    //        .appendTo(container)
+    //        .kendoDropDownList({
+    //            dataTextField: "text",
+    //            dataValueField: "value",
+    //            optionLabel: "Select",
+    //            autoBind: false,
+    //            change: function () {
+    //                changeStatus = 1;
+    //            },
+    //            dataSource: ddlContainerTypeDataSource
+    //        });
+    //};// Drop down for container type end
+    // Gross weight summation for billOfLadingContainerGrid
+    function SumGrossWeight() {
+        // assume this to be dynamically determined
+        var field = "GrossWeight";
+        // assume this to be dynamically determined
+        var dataSource = billOfLadingContainerGridDatasource;
+        // some custom calc logic
+        var newValue = 0;
+        $.each(dataSource.data(), function (index, model) {
+            newValue += parseFloat(model.get(field));
+        });
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        return newValue.toFixed(2);
+    }// Get sum of column CIQty end
+    // Delete row of Bill of Lading container grid
+    var confirmBillOfLadingDeleteWindow = $('#DeleteBillOfLadingConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+    function handleDeleteBillOfLadingContainer() {
+        del = "grid";
+        confirmBillOfLadingDeleteWindow.open();
+        confirmBillOfLadingDeleteWindow.center();
+        var grid = $("#billOfLadingContainerGrid").data("kendoGrid");
+        dataItem = {};
+        dataItem = (grid.dataItem(grid.select())); //Selected Row
+    };
+
+    $("#btnDelete").click(function () {
+        if ($("#txtBillOfLadingId").val() == "" && changeStatus == 1) {
+            $("#MessageText").html("This record does not exist in database.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#txtBillOfLadingId").val() != "") {
+                del = "all";
+                confirmBillOfLadingDeleteWindow.open();
+                confirmBillOfLadingDeleteWindow.center();
+            }
+        }
+    });
+    $('#btnDeleteBillOfLadingOK').click(function () {
+        if (del == "grid" && recordStatus != "CNF") {
+            if ($('#txtBillOfLadingId').val() != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteBillOfLadingContainer", "BillOfLading")',
+                    type: 'GET',
+                    data: ({ "blcCntId": dataItem.BlcCntId }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            changeStatus = 1;
+                        }
+                        else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                });
+                $("#billOfLadingContainerGrid").data("kendoGrid").dataSource.remove(dataItem);
+                confirmBillOfLadingDeleteWindow.close();
+            }
+            else {
+                $("#billOfLadingContainerGrid").data("kendoGrid").dataSource.remove(dataItem);
+                $('#MessageText').html("Item has been successfully removed");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                confirmBillOfLadingDeleteWindow.close();
+            }
+        }
+        if (del == "all") {
+            if ($('#txtBillOfLadingId').val() != "") {
+                var blcCntId = $('#txtBillOfLadingId').val();
+                $.ajax({
+                    url: '@Url.Action("DeleteBillOfLading", "BillOfLading")',
+                    type: 'GET',
+                    data: ({ "blcCntId": blcCntId }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            changeStatus = 1;
+                        }
+                        else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                });
+                confirmBillOfLadingDeleteWindow.close();
+                reset();
+            }
+        }
+    }); // Delete row of Bill of Lading container grid end
+    // Save and update Bill of Lading
+    function Save() {
+        if ($("#txtBillOfLadingNo").val() == "") {
+            $('#MessageText').html("Please input Bill no.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            $('#txtBillOfLadingNo').css({ 'box-shadow': '1px 1px 1px red' });
+            setTimeout(function () {
+                $('#txtBillOfLadingNo').focus();
+            }, 1);
+            return false;
+        }
+        $('#txtBillOfLadingNo').css({ 'box-shadow': 'none' });
+        clearBillOfLading();
+        billOfLading.Blid = $("#txtBillOfLadingId").val();
+        billOfLading.BlNo = $("#txtBillOfLadingNo").val();
+        billOfLading.BlDate = $("#txtBillOfLadingDate").val();
+        billOfLading.CIID = $("#txtCiId").val();
+        billOfLading.CINo = $("#txtCiNo").val();
+        billOfLading.Lcid = $("#txtLcId").val();
+        billOfLading.LcNo = $("#txtLcNo").val();
+        billOfLading.ShippedOnBoardDate = $("#txtShippedOnBoardDate").val();
+        billOfLading.ExpectedArrivalTime = $("#txtExpectedTimeOfArrival").val();
+        billOfLading.Shipper = $("#txtShipperId").val();
+        billOfLading.ShipperName = $("#txtShipperName").val();
+        billOfLading.ShipmentMode = $("#ddlShipmentMode option:selected").val();
+        billOfLading.VesselName = $("#txtVesselName").val();
+        billOfLading.VoyageNo = $("#txtVoyageNo").val();
+        billOfLading.TransShipmentPort = $("#txtTransShipmentPortId").val();
+        billOfLading.ShipmentPort = $("#txtPortOfShipmentId").val();
+        if ($("#txtCheckNote").val() != null) {
+            billOfLading.BlNote = $("#txtCheckNote").val();
+        }
+        if ($("#txtConfirmNote").val() != null) {
+            billOfLading.BlNote = $("#txtConfirmNote").val();
+        }
+        var containerDataSource = $("#billOfLadingContainerGrid").data("kendoGrid").dataSource;
+        var blContainers = containerDataSource.data();
+        if (blContainers.length > 0) {
+            for (var i = 0; i < blContainers.length; i++) {
+                Containers.BlcCntId = blContainers[i].BlcCntId;
+                Containers.ContainerNo = blContainers[i].ContainerNo;
+                Containers.ContainerType = blContainers[i].ContainerType;
+                Containers.SealNo = blContainers[i].SealNo;
+                Containers.PackageQty = blContainers[i].PackageQty;
+                Containers.GrossWeight = blContainers[i].GrossWeight;
+                Containers.WeightUnit = blContainers[i].WeightUnit;
+                billOfLading.Containers.push(Containers);
+                clearContainers();
+            }
+        }
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "BillOfLading")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: billOfLading }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Type == 2) {
+                    $("#txtBillOfLadingId").val(response.ReturnId);
+                    $("#txtBillOfLadingNo").val(response.ReturnCode);
+                    GetAndSetBillOfLading(response.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                } else if (response.Type == 3) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+            }
+        });
+        return true;
+    }//Save and update Bill of Lading end
+    // Activate save and update
+    $("#btnSave").click(function () {
+        var gridCheck = doesDataSourceHaveChanges(billOfLadingContainerGridDatasource);
+        if (gridCheck == true) {
+            changeStatus = 1;
+        }
+        if (changeStatus == 1) {
+            Save();
+        } else {
+            $('#MessageText').html("No changes to save.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    });// Activate save and update
+    // Check and confirm
+    function checkNconfirm(state) {
+        var blid = $("#txtBillOfLadingId").val();
+        if (state == "chk") {
+            var checkNote = $("#txtCheckNote").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Check", "BillOfLading")',
+                dataType: 'JSON',
+                data: JSON.stringify({ blid: blid, checkNote: checkNote }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.Type == 2) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        LockFields("CHK");
+                    }
+                    else {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        if (state == "cnf") {
+            var confirmNote = $("#txtConfirmNote").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Confirm", "BillOfLading")',
+                dataType: 'JSON',
+                data: JSON.stringify({ blid: blid, confirmNote: confirmNote }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.Type == 2) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        LockFields("CNF");
+                    }
+                    else {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    }//Check and confrim form end
+    //Check and confrim form acivation
+    $("#btnCheck").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#txtPackingListId").val() != "") {
+                state = "chk";
+                checkNconfirm(state);
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+    });
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#txtPackingListId").val() != "") {
+                state = "cnf";
+                checkNconfirm(state);
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+    });//Check and confrim form acivation end
+    // Variables
+    var del = "";
+    var changeStatus = 0;
+    var port = 0;
+    var dataItem;
+    var saveStatus = 0;
+    var resetStatus = 0;
+    var formChangeReset = "";
+    var state = "";
+    var recordStatus = "";
+    var billOfLading = {
+        "Blid": "", "BlNo": "", "BlDate": "", "CIID": "", "CINo": "", "Lcid": "", "LcNo": "", "PiNo": "", "ShippedOnBoardDate": "", "ExpectedArrivalTime": "",
+        "Shipper": "", "ShipperName": "", "ShipmentMode": "", "VesselName": "", "VoyageNo": "", "TransShipmentPort": "",
+        "TransShipmentPortName": "", "ShipmentPort": "", "ShipmentPortName": "", "BlNote": "", "RecordStatus": "", "Containers": []
+    };
+
+    function clearBillOfLading() {
+        billOfLading = {
+            "Blid": "", "BlNo": "", "BlDate": "", "CIID": "", "CINo": "", "Lcid": "", "LcNo": "", "PiNo": "", "ShippedOnBoardDate": "", "ExpectedArrivalTime": "",
+            "Shipper": "", "ShipperName": "", "ShipmentMode": "", "VesselName": "", "VoyageNo": "", "TransShipmentPort": "",
+            "TransShipmentPortName": "", "ShipmentPort": "", "ShipmentPortName": "", "BlNote": "", "RecordStatus": "", "Containers": []
+        };
+    }
+
+    var Containers = {
+        "BlcCntId": "", "Blid": "", "ContainerNo": "", "ContainerType": "", "SealNo": "", "PackageQty": "", "GrossWeight": "",
+        "WeightUnit": "WeightUnitName", "": ""
+    };
+
+    function clearContainers() {
+        Containers = {
+            "BlcCntId": "", "Blid": "", "ContainerNo": "", "ContainerType": "", "SealNo": "", "PackageQty": "", "GrossWeight": "",
+            "WeightUnit": "WeightUnitName", "": ""
+        };
+    }
+
+    // Variables end
+    // Detect changes
+    $(".textField").on('change', function () {
+        changeStatus = 1;
+    });
+    $(".grdKendo").on('input', function () {
+        changeStatus = 1;
+    });
+    function doesDataSourceHaveChanges(ds) {
+        //var ds = commercialInvoiceItemGridDataSource;
+        var dirty = false;
+
+        $.each(ds._data, function () {
+            if (this.dirty == true) {
+                dirty = true;
+            }
+        });
+        if (ds._destroyed.length > 0) dirty = true;
+        return dirty;
+    }
+    // Detect changes end
+    //SaveChange window decleration
+    SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Confirmation!",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');//SaveChange window decleration end
+    //SaveChange window events
+    $("#btnSaveChangeWindowOk").click(function () {
+        if (formChangeReset == "reset") {
+            reset();
+            SaveChangeWindow.close();
+        }
+        if (formChangeReset == "search") {
+            reset();
+            getBasicBl();
+            $("#txtBlNo").val("");
+            BlWindow.open();
+            //BlWindow.center();
+            SaveChangeWindow.close();
+        }
+    });
+    $("#btnSaveChangeWindowCancel").click(function () {
+        SaveChangeWindow.close();
+    });//SaveChange window events end
+    //Reset the page
+    function reset() {
+        $(".textField").val("");
+        formChangeReset = "";
+        state = "";
+        saveStatus = 0;
+        resetStatus = 0;
+        changeStatus = 0;
+        recordStatus = "";
+        $('#txtBillOfLadingNo').css({ 'box-shadow': 'none' });
+        $("#txtCheckNote").val("");
+        $("#txtConfirmNote").val("");
+        $("#billOfLadingContainerGrid").data('kendoGrid').dataSource.data([]);
+        $('#txtBillOfLadingDate').data('kendoDatePicker').enable(true);
+        $('#txtShippedOnBoardDate').data('kendoDatePicker').enable(true);
+        $('#txtExpectedTimeOfArrival').data('kendoDatePicker').enable(true);
+        $("#txtBillOfLadingDate").attr("readonly", true);
+        $("#txtShippedOnBoardDate").attr("readonly", true);
+        $("#txtExpectedTimeOfArrival").attr("readonly", true);
+        $("#txtBillOfLadingNo").attr("disabled", false);
+        $("#txtLcNo").attr("disabled", false);
+        $("#txtPiNo").attr("disabled", false);
+        $('#txtShipperName').attr("disabled", false);
+        $("#ddlShipmentMode").attr("disabled", false);
+        $("#txtVesselName").attr("disabled", false);
+        $("#txtVoyageNo").attr("disabled", false);
+        $("#txtTransShipmentPortName").attr("disabled", false);
+        $("#txtPortOfShipmentName").attr("disabled", false);
+        $("#txtCheckNote").attr("disabled", false);
+        $("#txtConfirmNote").attr("disabled", false);
+        $("#btnDelete").attr("disabled", false);
+        $("#btnSave").attr("disabled", false);
+        $("#btnCheck").attr("disabled", false);
+        $("#btnConfirm").attr("disabled", false);
+    }//Reset the page end
+    // Reset actiovation
+    $("#btnReset").click(function () {
+        if (changeStatus == 1) {
+            formChangeReset = "reset";
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            reset();
+        }
+    });// Reset actiovation end
+    // Common function calls
+    ClearOperationalMessage();
+
+    // Auto Complete Start
+    // Search by LC No in LcWindow
+    var dataSourceLC = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLcInfoForSearch", "CommercialInvoice")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtLCOpening").kendoAutoComplete({
+        dataSource: dataSourceLC,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search LC No..."
+    });
+    $("#btnLCOpeningWindowOK").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetLcInfoByLcNo", "CommercialInvoice")',
+            type: 'GET',
+            data: { lcNo: $("#txtLCOpening").val() },
+            success: function (data) {
+                $("#LCOpeningSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    $("#txtLcId").val(data[0].LCID);
+                    $("#txtLCNo").val(data[0].LCNo);
+                    $("#txtPiNo").val(data[0].PINo);
+                    changeStatus = 1;
+                    LcWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtLCOpening").keyup(function (event) {
+        if ($("#txtLCOpening").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetLcInfoByLcNo", "CommercialInvoice")',
+                    type: 'GET',
+                    data: { lcNo: $("#txtLCOpening").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#LCOpeningSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            $("#txtLcId").val(data[0].LCID);
+                            $("#txtLcNo").val(data[0].LCNo);
+                            $("#txtPiNo").val(data[0].PINo);
+                            changeStatus = 1;
+                            LcWindow.close();
+                            LcWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });// Search by LC No in LcWindow End
+    // Search by Shipper Name in Shipper Window
+    var dataSourceShipper = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetShipperForSearch", "BillOfLading")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtShipper").kendoAutoComplete({
+        dataSource: dataSourceShipper,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search shipper name..."
+    });
+    $("#btnShipperGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetShipperByName", "BillOfLading")',
+            type: 'GET',
+            data: { name: $("#txtShipper").val() },
+            success: function (data) {
+                $("#ShipperSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    $("#txtShipperId").val(data[0].Id);
+                    $("#txtShipperName").val(data[0].Name);
+                    changeStatus = 1;
+                    ShipperWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtShipper").keyup(function (event) {
+        if ($("#txtShipper").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetShipperByName", "BillOfLading")',
+                    type: 'GET',
+                    data: { name: $("#txtShipper").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#ShipperSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            $("#txtShipperId").val(data[0].Id);
+                            $("#txtShipperName").val(data[0].Name);
+                            changeStatus = 1;
+                            ShipperWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });//Search by Shipper Name in Shipper Window end
+    // Search by Port name in Port Window
+    var dataSourcePort = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetPortForSearch", "BillOfLading")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtPort").kendoAutoComplete({
+        dataSource: dataSourcePort,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search port name..."
+    });
+    $("#btnPortGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetPortByName", "BillOfLading")',
+            type: 'GET',
+            data: { name: $("#txtPort").val() },
+            success: function (data) {
+                $("#PortSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    if (port == 1) {
+                        $("#txtTransShipmentPortId").val(data[0].Id);
+                        $("#txtTransShipmentPortName").val(data[0].Name);
+                    }
+                    if (port == 2) {
+                        $("#txtPortOfShipmentId").val(data[0].Id);
+                        $("#txtPortOfShipmentName").val(data[0].Name);
+                    }
+                    changeStatus = 1;
+                    PortWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtPort").keyup(function (event) {
+        if ($("#txtPort").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetPortByName", "BillOfLading")',
+                    type: 'GET',
+                    data: { name: $("#txtPort").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#PortSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            if (port == 1) {
+                                $("#txtTransShipmentPortId").val(data[0].Id);
+                                $("#txtTransShipmentPortName").val(data[0].Name);
+                            }
+                            if (port == 2) {
+                                $("#txtPortOfShipmentId").val(data[0].Id);
+                                $("#txtPortOfShipmentName").val(data[0].Name);
+                            }
+                            changeStatus = 1;
+                            PortWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });// Search by Port name in Port Window end
+    // Search bill of lading by blno in bl search window
+    var dataSourceBl = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBillOfLadingForSearch", "BillOfLading")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtBlNo").kendoAutoComplete({
+        dataSource: dataSourceBl,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Bl No..."
+    });
+    $("#btnBlGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetBillOfLadingByBlno", "BillOfLading")',
+            type: 'GET',
+            data: { blno: $("#txtBlNo").val() },
+            success: function (data) {
+                $("#BlSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length == 1) {
+                    GetAndSetBillOfLading(data[0].Blid);
+                    BlWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtBlNo").keyup(function (event) {
+        if ($("#txtBlNo").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetBillOfLadingByBlno", "BillOfLading")',
+                    type: 'GET',
+                    data: { blno: $("#txtBlNo").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#BlSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                        if (data.length == 1) {
+                            GetAndSetBillOfLading(data[0].Blid);
+                            BlWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+</script>

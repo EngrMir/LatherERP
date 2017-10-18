@@ -1,0 +1,276 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model DesignationVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style type="text/css">
+    p, h5, em, span {
+        padding: 0;
+        margin: 0;
+    }
+    .btn-link-delete {
+        cursor: pointer;
+    }
+ .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Designation Setup
+                    @Html.ValidationSummary(true)
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        @*Code Removed section 1*@
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Designation Name</label>
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.Designation.DesignationID)
+                                    @Html.TextBoxFor(model => model.Designation.Name, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Designation.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Description</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Designation.Description, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Designation.Description)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                       
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Status</label>
+                                <div class="col-xs-8">
+                                    @Html.EditorFor(model => model.Designation.IsActive)
+                                    @Html.ValidationMessageFor(model => model.Designation.IsActive)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-lg-offset-10">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearDesignationData();" />
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Designations
+            </div>
+
+            <div class="panel-body">
+                @(Html.Telerik().Grid<DesignationView>()
+                    .BindTo(ViewBag.DesignationList as List<DesignationView>)
+                    .Name("gvDesignationList")
+                    .DataKeys(keys => keys.Add(k => k.DesignationID))
+                    .Filterable()
+                    .Columns(column =>
+                    {
+                        column.Bound(s => s.DesignationID).Hidden().Template(@<input type="hidden" id="@item.DesignationID" value="@item.DesignationID" />);
+                        column.Bound(s => s.DesignationID);
+                        column.Bound(s => s.Name);
+                        column.Bound(s => s.Description);
+                        column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>);
+                        column.Bound(s => s.SetOn);
+                        column.Bound(s => s.SetBy);
+                        column.Bound(s => s.DesignationID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                    })
+                    .Selectable()
+                    .Pageable(pages => pages.PageSize(10))
+                    .Scrollable(scroll => scroll.Height(200))
+                    .Sortable()
+                    .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    @Html.Partial("_ConfirmationView")
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+    });
+
+    $("#btnSave").click(function () {
+        if (validateDesignation()) {
+            var jsonObject = {
+                "DesignationID": $('#Designation_DesignationID').val(),
+                "Name": $('#Designation_Name').val(),
+                "Description": $('#Designation_Description').val(),
+                "IsActive": $('#Designation_IsActive').is(":checked")
+            };
+
+            var trNew = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "Designation")',
+                data: JSON.stringify({ designationView: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (data == 1) {
+                        showMessage('Designation ID already exists.', 'warning', 'Warning!');
+                    }
+                    else {
+                        trNew = "<tr>";
+                        trNew = trNew + "<td style='display:none'><input id='" + data.DesignationID + "' type='hidden' value='" + data.DesignationID + "'></td>";
+                        trNew = trNew + "<td>" + data.DesignationID + "</td>";
+                        trNew = trNew + "<td>" + data.Name + "</td>";
+                        trNew = trNew + "<td>" + data.Description + "</td>";
+                        trNew = trNew + "<td>" + "<label for=\"\">";
+                        if (data.IsActive == true) {
+                            trNew = trNew + "Active";
+                        } else {
+                            trNew = trNew + "In-Active";
+                        }
+                        trNew = trNew + "</label> </td>";
+                        trNew = trNew + "<td>" + data.SetOn + "</td>";
+                        trNew = trNew + "<td>" + data.SetBy + "</td>";
+                        trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                        trNew = trNew + " </tr>";
+
+                        if ($("#hdnIsInsert").val() == "true") {
+                            $("#gvDesignationList .t-grid-content tbody").prepend(trNew);
+                            $('#gvDesignationList .t-grid-content tbody .t-no-data').remove();
+                        } else {
+                            var tr = $('#' + data.DesignationID).parent().parent();
+                            tr.replaceWith(trNew);
+                        }
+                        showMessage('Saved successfully.', 'success', 'Success!');
+                    }
+                    clearDesignationData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+
+    $("#gvDesignationList").delegate("a.btn-link", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        editDesignationData(id.trim());
+    });
+
+
+    $("#gvDesignationList").delegate("a.btn-link-delete", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        $('#commonIdForDelete').val(id);
+        $('#myModal').modal('show');
+    });
+
+
+    function editDesignationData(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDesignation", "Designation")',
+            data: { id: id },
+            cache: false,
+            success: function (data) {
+                $('#Designation_DesignationID').val(data.DesignationID);
+                $('#Designation_Name').val(data.Name);
+                $('#Designation_Description').val(data.Description);
+                $('#Designation_IsActive').prop("checked", data.IsActive);
+                $("#hdnIsInsert").val(false);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function deleteItem(id) {
+        id = id.trim();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "Designation")',
+            data: { id: id },
+            cache: false,
+            success: function () {
+                $('#' + id).parent().parent().remove();
+                $("#myModal").modal('hide');
+                showMessage('Deleted successfully.', 'success', 'Success!');
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function validateDesignation() {
+        if ($('#Designation_Name').val() == "") {
+            showMessage('Name is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#Designation_Description').val() == "") {
+            showMessage('Description required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+    function clearDesignationData() {
+        $('#Designation_DesignationID').val("");
+        $('#Designation_Name').val("");
+        $('#Designation_Description').val("");
+        $('#Designation_IsActive').prop("checked", false);
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+          {
+              'message': message,
+              'priority': priority,
+              'title': title
+          }
+        ]);
+    }
+
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

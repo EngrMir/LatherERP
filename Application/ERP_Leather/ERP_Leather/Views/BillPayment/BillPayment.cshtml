@@ -1,0 +1,1304 @@
+﻿@{
+    ViewBag.Title = "Bill Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <fieldset>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Supplier Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="SupplierCode" placeholder="Press F9" class="txtBox SetFocus" name="SupplierCode" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Supplier</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="SupplierName" class="txtBox" name="SupplierName" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Address<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="Address" class="txtBox" name="Address" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="PageDetailGrid" class="grdKendo" style="width: 568px;" tabindex=""></div>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+</div>
+
+<input id="SupplierAddressID" type="hidden" class="txtBox" />
+<input id="SupplierID" type="hidden" class="txtBox" />
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bill Payment No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentID" readonly="readonly" class="txtBox ReadOnlyTextbox" name="PaymentID" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Payment Method<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("PaymentMethod", new SelectList(ViewBag.PaymentMethodList, "ID", "Name"), "--Select--", new { @class = "txtBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Bill Amount<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BillAmount" class="txtBox txtBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bill Payment Date<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentDate" class="txtBox datePicker" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Payment Doc</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentDoc" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Vat Amount</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Payment Type<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentTypeList, "ID", "Name"), "--Select--", new { @class = "txtBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Payment Curreny<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("Currency", new SelectList(ViewBag.ddlPaymentCurrencyList, "CurrencyID", "CurrencyName"), "TK", new { @class = "txtBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Deduct Amount</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="DeductAmount" class="txtBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>PurchaseYear<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PurchaseYear" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Remarks" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Payment Amount</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentAmount" class="txtBox ReadOnlyTextbox" name="" tabindex="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Recommended By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtRecommendedBy" class="txtCommandBox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Approved By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-lg-2">
+                    <label>Checked Status</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="ddlChecked" class="txtCommandBox">
+                        <option value="CHK">Checked</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label>Recommended Status</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="ddlRecommended" class="txtCommandBox">
+                        <option value="RCM">Recommended</option>
+                        <option value="NRC">Not Recommended</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label>Approved Status</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="ddlApproved" class="txtCommandBox">
+                        <option value="APV">Approved</option>
+                        <option value="NAP">Not Approved</option>
+                        <option value="APP">Pending</option>
+                    </select>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" style="border-radius:10px 10px 10px 10px" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RecommendedComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnRecommended" value="Recommended" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Approved" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="BillRefWindow" style="display: none;">
+    <div id="BillRefWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBillRefWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBillRefWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSearchSupplier" style="width: 250px;" /><input type="button" id="btnSearchSupplier" value="Search" /></p>
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    $(document).ready(function () {
+        $(".SetFocus").focus();
+        OnlyNumericValue('PurchaseYear');
+        NumericAndDecimalValue('BillAmount');
+        NumericAndDecimalValue('VatAmount');
+        NumericAndDecimalValue('DeductAmount');
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date() // sets max date to Jan 1st, 2013
+        });
+
+        // Delete Button
+        $("#datePicker").click(function () {
+            changeStatus = 1;
+        });
+
+        $("#PaymentDate").attr("readonly", true);
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        var billRefGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PaymentID",
+                    fields: {
+                        PaymentID: { editable: false },
+                        SupplierBillID: { editable: true, defaultValue: 'Press F9' },
+                        SupplierBillNo: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var billRefGrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: billRefGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Bill Ref.", className: "btnBillRefGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            height: 150,
+            columns: [
+                { field: "PaymentID", width: "30px", hidden: true, filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SupplierBillID", title: "Bill No.", editable: true, filterable: false, width: "80px", attributes: { "class": "BillRef" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SupplierBillNo", title: "Bill Ref.", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        $(".btnBillRefGrid").click(function () {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+            }
+        });
+
+        function handleDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for master delete confirmation
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#PaymentID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedBillPayment", "BillPayment")',
+                        type: 'POST',
+                        data: JSON.stringify({ "paymentId": $("#PaymentID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                changeStatus = 0;
+                                CheckRecordStatusForButton("NCF");
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                //if ((dataitem.SupplierBillID != "Press F9") || (dataitem.SupplierBillID != "")) {
+                if (dataitem.SupplierBillID != "Press F9") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedBillRefGridData", "BillPayment")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SupplierBillID": dataitem.SupplierBillID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                CheckRecordStatusForButton("NCF");
+                $(".txtCommandBox").val("");
+                ResetOnlyMasterPageData();
+                $(".txtBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                $(".txtCommandBox").val("");
+                ResetOnlyMasterPageData();
+                $(".txtBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#PaymentID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedBillPayment", "BillPayment")',
+                            type: 'POST',
+                            data: JSON.stringify({ "paymentId": $("#PaymentID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    changeStatus = 0;
+                                    CheckRecordStatusForButton("NCF");
+                                    ClearOperationalMessage();
+                                    $(".txtCommandBox").val("");
+                                    ResetOnlyMasterPageData();
+                                    $(".txtBox").css("border-color", "");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    //if ((dataitem.SupplierBillID != "Press F9") || (dataitem.SupplierBillID != "")) {
+                    if (dataitem.SupplierBillID != "Press F9") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedBillRefGridData", "BillPayment")',
+                            type: 'POST',
+                            data: JSON.stringify({ "supplierBillId": dataitem.SupplierBillID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+    }); //End of Document.Ready()
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "Supplier")',// "/Supplier/GetSupplierListForSearch",
+                type: "GET"
+            }
+        }
+    });
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+    $("#btnGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierList", "Supplier")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierList);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SupplierWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierList", "Supplier")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            ListOfValueGridEvent('SupplierWindowGrid');
+                            SupplierWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////////////////
+
+    var dataSource2 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "BillPayment")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtSearchSupplier").kendoAutoComplete({
+        dataSource: dataSource2,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+    $("#btnSearchSupplier").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetBillPaymentListForSearch", "BillPayment")',
+            type: 'GET',
+            data: { supplier: $("#txtSearchSupplier").val() },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33.BillPaymentList);
+                if (data33.Count == 1) {
+                    SearchWindowEvents();
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtSearchSupplier").keyup(function (event) {
+        if ($("#txtSearchSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetBillPaymentListForSearch", "BillPayment")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSearchSupplier").val() },
+                    success: function (data33) {
+                        $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33.BillPaymentList);
+                        if (data33.Count == 1) {
+                            SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            ClearOperationalMessage();
+            $(".txtCommandBox").val("");
+            ResetOnlyMasterPageData();
+            $(".txtBox").css("border-color", "");
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    // Declare Object
+    var PrqBillPaymentReferenceModel = { "PaymentID": "", "SupplierBillID": "", "SupplierBillNo": "", "RecordStatus": "" };
+    var PrqBillPaymentModel = {
+        "PaymentID": "", "PaymentDate": "", "SupplierID": "", "SupplierAddressID": "", "PurchaseYear": "", "PaymentType": "",
+        "PaymentMethod": "", "Currency": "", "PaymentDoc": "", "BillAmount": "", "VatPercentage": "", "VatAmount": "", "DeductAmount": "",
+        "PaymentAmount": "", "Remarks": "", "BillPaymentReferenceList": []
+    };
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+
+        //Check Maximum Length in PaymentDate
+        CheckRequiredTextBoxMaxLength('SupplierID', 10);
+        //Check Maximum Length in PaymentDate
+        CheckRequiredTextBoxMaxLength('SupplierCode', 12);
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('SupplierAddressID', 10);
+        //Check Maximum Length in PaymentDate
+        CheckRequiredTextBoxMaxLength('Address', 100);
+        //Check Maximum Length in PaymentDate
+        CheckRequiredTextBoxMaxLength('PaymentDate', 10);
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('PurchaseYear', 4);
+        //Check Maximum Length in PaymentType
+        CheckRequiredTextBoxMaxLength('PaymentType', 10);
+        //Check Empty or Maximum Length in PaymentMethod
+        CheckRequiredTextBoxMaxLength('PaymentMethod', 10);
+        //Check Empty or Maximum Length in Currency
+        CheckRequiredTextBoxMaxLength('Currency', 10);
+        //Check Maximum Length in BillAmount
+        CheckRequiredTextBoxMaxLength('BillAmount', 21);
+        //Check Empty or Maximum Length in PaymentDoc
+        CheckNormalTextBoxMaxLength('PaymentDoc', 50);
+        //Check Empty or Maximum Length in Currency
+        CheckNormalTextBoxMaxLength('VatAmount', 21);
+        //Check Maximum Length in BillAmount
+        CheckNormalTextBoxMaxLength('DeductAmount', 21);
+        //Check SysDate And IssueDate
+        CheckDiffSysDateAndOneInpDates((new Date).getDate() + "/" + ((new Date).getMonth() + 1) + "/" + (new Date).getFullYear(), 'PaymentDate');
+
+        if (saveStatus == 1) {
+            PrqBillPaymentModel.PaymentID = $('#PaymentID').val();
+            PrqBillPaymentModel.PaymentDate = $('#PaymentDate').val();
+            PrqBillPaymentModel.SupplierID = $('#SupplierID').val();
+            PrqBillPaymentModel.SupplierAddressID = $('#SupplierAddressID').val();
+            PrqBillPaymentModel.PurchaseYear = $('#PurchaseYear').val();
+            PrqBillPaymentModel.PaymentType = $('#PaymentType').val();
+            PrqBillPaymentModel.PaymentMethod = $('#PaymentMethod').val();
+            PrqBillPaymentModel.Currency = $('#Currency').val();
+            PrqBillPaymentModel.PaymentDoc = $('#PaymentDoc').val();
+            PrqBillPaymentModel.VatPercentage = $('#VatPercentage').val();
+            PrqBillPaymentModel.BillAmount = $('#BillAmount').val();
+            PrqBillPaymentModel.VatAmount = $('#VatAmount').val();
+            PrqBillPaymentModel.DeductAmount = $('#DeductAmount').val();
+            PrqBillPaymentModel.PaymentAmount = $('#PaymentAmount').val();
+            PrqBillPaymentModel.Remarks = $('#Remarks').val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            PrqBillPaymentModel.BillPaymentReferenceList = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                    ////if (!CheckRequiredNumericLength(data[i].Level, 10) || !CheckNumericLength(data[i].Sl, 10) || ((data[i].InternalMailAdress != null) && (data[i].IntermailAddressStatus == "")) || ((data[i].InternalMailAdress == null) && (data[i].IntermailAddressStatus != "")) || ((data[i].ExternalMailAdress != null) && (data[i].ExternalMailAdressStatus == "")) || ((data[i].ExternalMailAdress == null) && (data[i].ExternalMailAdressStatus != ""))) {
+                    //if (!CheckRequiredNumericLength(data[i].Level, 10) || !CheckNumericLength(data[i].Sl, 10) || !checkEmail(data[i].InternalMailAdress) || !checkEmail(data[i].ExternalMailAdress) || ((data[i].InternalMailAdress != null) && (data[i].IntermailAddressStatus == "")) || ((data[i].InternalMailAdress == null) && (data[i].IntermailAddressStatus != "")) || ((data[i].ExternalMailAdress != null) && (data[i].ExternalMailAdressStatus == "")) || ((data[i].ExternalMailAdress == null) && (data[i].ExternalMailAdressStatus != ""))) {
+                    //    CheckStatusGridData = 0; // Wrong Data
+                    //    break;
+                    //}
+                    if (data[i].dirty) {
+                        PrqBillPaymentReferenceModel.SupplierBillID = data[i].SupplierBillID;
+                        PrqBillPaymentReferenceModel.SupplierBillNo = data[i].SupplierBillNo;
+                        PrqBillPaymentReferenceModel.PaymentID = data[i].PaymentID;
+                        PrqBillPaymentModel.BillPaymentReferenceList.push(PrqBillPaymentReferenceModel);
+                        PrqBillPaymentReferenceModel = { "PaymentID": "", "SupplierBillID": "", "SupplierBillNo": "", "RecordStatus": "" };
+                    }
+                }
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("BillPayment", "BillPayment")',
+                    data: JSON.stringify(PrqBillPaymentModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PaymentID").val(respnse.PaymentID);
+                            $.ajax({
+                                url: '@Url.Action("GetPayBillRefInfo", "BillPayment")',
+                                type: 'GET',
+                                data: { PaymentID: $("#PaymentID").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (respnse.msg.Type == 3) {
+                            changeStatus = 0;
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetPayBillRefInfo", "BillPayment")',
+                                type: 'GET',
+                                data: { PaymentID: $("#PaymentID").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    }
+
+    $(document.body).keyup(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#txtSupplier").val("");
+                ListOfValueGridEventSupplier();
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        }
+    });
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".txtBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PaymentID",
+                fields: {
+                    SupplierName: { editable: false },
+                    PaymentID: { editable: false },
+                    PaymentDate: { editable: false },
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    Address: { editable: false },
+                    PurchaseYear: { editable: false },
+                    PaymentType: { editable: false },
+                    PaymentTypeName: { editable: false },
+                    PaymentMethod: { editable: false },
+                    Currency: { editable: false },
+                    PaymentDoc: { editable: false },
+                    BillAmount: { editable: false },
+                    VatPercentage: { editable: false },
+                    VatAmount: { editable: false },
+                    DeductAmount: { editable: false },
+                    PaymentAmount: { editable: false },
+                    RecordStatus: { editable: false },
+                    RecordStatusName: { editable: false },
+                    Remarks: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "SupplierName", title: "Supplier", width: "80px" },
+            { field: "PaymentID", title: "Payment No.", width: "60px" },
+            { field: "PaymentDate", title: "PaymentDate", width: "60px" },
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierCode", hidden: true },
+            { field: "SupplierAddressID", hidden: true },
+            { field: "Address", hidden: true },
+            { field: "PurchaseYear", hidden: true },
+            { field: "PaymentType", hidden: true },
+            { field: "PaymentTypeName", title: "PaymentType", width: "60px" },
+            { field: "PaymentMethod", hidden: true },
+            { field: "Currency", hidden: true },
+            { field: "PaymentDoc", hidden: true },
+            { field: "BillAmount", hidden: true },
+            { field: "VatPercentage", hidden: true },
+            { field: "VatAmount", hidden: true },
+            { field: "DeductAmount", hidden: true },
+            { field: "PaymentAmount", title: "PaymentAmount", width: "60px" },
+            { field: "RecordStatus", hidden: true },
+            { field: "RecordStatusName", title: "RecordStatus", width: "60px" },
+            { field: "Remarks", hidden: true }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Bill Payment Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetBillPaymentInformation", "BillPayment")',
+            type: 'GET',
+            //data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        $("#SupplierID").val(selectedItem.SupplierID);
+        $("#SupplierCode").val(selectedItem.SupplierCode);
+        $("#SupplierName").val(selectedItem.SupplierName);
+        $("#SupplierAddressID").val(selectedItem.SupplierAddressID);
+        $("#Address").val(selectedItem.Address);
+
+        $("#PaymentID").val(selectedItem.PaymentID);
+        $("#PaymentDate").val(selectedItem.PaymentDate);
+        $("#PurchaseYear").val(selectedItem.PurchaseYear);
+        $("#PaymentType").val(selectedItem.PaymentType);
+        $("#PaymentMethod").val(selectedItem.PaymentMethod);
+        $("#Currency").val(selectedItem.Currency);
+        $("#VatPercentage").val(selectedItem.VatPercentage);
+        $("#BillAmount").val(selectedItem.BillAmount);
+        $("#VatAmount").val(selectedItem.VatAmount);
+        $("#DeductAmount").val(selectedItem.DeductAmount);
+        $("#PaymentAmount").val(selectedItem.PaymentAmount);
+        $("#PaymentDoc").val(selectedItem.PaymentDoc);
+        $("#Remarks").val(selectedItem.Remarks);
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+        $.ajax({
+            url: '@Url.Action("GetPayBillRefInfo", "BillPayment")',
+            type: 'GET',
+            data: { "PaymentID": selectedItem.PaymentID },
+            success: function (data) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierName", title: "Supplier Name", width: "60px" },
+            { field: "SupplierCode", title: "Supplier Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierAddressID", hidden: true },
+            { field: "Address", title: "Address", width: "60px" }
+        ]
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#SupplierID").val(selectedItem.SupplierID);
+        $("#SupplierCode").val(selectedItem.SupplierCode);
+        $("#SupplierName").val(selectedItem.SupplierName);
+        $("#SupplierAddressID").val(selectedItem.SupplierAddressID);
+        $("#Address").val(selectedItem.Address);
+        changeStatus = 1;
+    }
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    function ListOfValueGridEventSupplier() {
+        $.ajax({
+            url: '@Url.Action("GetSupplierList", "BillPayment")',
+            type: 'GET',
+            success: function (data) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    ///////////////////////////////////////////
+
+    $(document).on('keyup', '.BillRef', function (e) {
+        if (e.keyCode == 120) {
+            GetBillRefList();
+            SelectedItemOfListOfValue('BillRefWindowGrid');
+            BillRefWindow.open();
+        }
+    });
+
+    function GetBillRefList() {
+        $.ajax({
+            url: '@Url.Action("GetBillRefList", "BillPayment")',
+            type: 'GET',
+            data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#BillRefWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var BillRefWindow = $('#BillRefWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of BillRef",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BillRefGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierBillID",
+                fields: {
+                    PaymentID: { editable: false },
+                    SupplierBillID: { editable: false },
+                    SupplierBillNo: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var BillRefGrid = $("#BillRefWindowGrid").kendoGrid({
+        dataSource: BillRefGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "PaymentID", hidden: true },
+            { field: "SupplierBillID", title: "Bill No.", width: "60px", filterable: true, sortable: false },
+            { field: "SupplierBillNo", title: "BillRef", width: "60px", filterable: true, sortable: false }
+        ]
+    });
+
+    var isDuplicate = 0;
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventBillRef(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+        var dataSourceBillRef = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var dataBillRef = dataSourceBillRef.data(); // Get Detail Grid Data
+        for (var j = 0; j <= dataBillRef.length - 1; j++) {
+            if (dataBillRef[j].SupplierBillID == selectedItem.SupplierBillID) {
+                isDuplicate = 1;
+                break;
+            }
+        }
+        if (isDuplicate == 0) {
+            pageGridItem.set("PaymentID", selectedItem.PaymentID);
+            pageGridItem.set("SupplierBillID", selectedItem.SupplierBillID);
+            pageGridItem.set("SupplierBillNo", selectedItem.SupplierBillNo);
+        } else {
+            isDuplicate = 0;
+            $('#MessageText').html("Duplicate Bill Ref. No.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+    }
+
+    //Handling button click for BillRef window grid
+    $('#btnBillRefWindowOK').click(function () {
+        ListOfValueGridEventBillRef('BillRefWindowGrid');
+        BillRefWindow.close();
+    });
+    $('#btnBillRefWindowCancel').click(function () {
+        BillRefWindow.close();
+    });
+    $("#BillRefWindow").dblclick(function () {
+        ListOfValueGridEventBillRef('BillRefWindowGrid');
+        BillRefWindow.close();
+    });
+    $("#BillRefWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventBillRef('BillRefWindowGrid');
+            BillRefWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            BillRefWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $('#BillAmount').focusout(function () {
+        $('#PaymentAmount').val(parseFloat($('#BillAmount').val() == "" ? 0 : $('#BillAmount').val()) + parseFloat($('#VatAmount').val() == "" ? 0 : $('#VatAmount').val()) - parseFloat($('#DeductAmount').val() == "" ? 0 : $('#DeductAmount').val()));
+    });
+
+    $('#VatAmount').focusout(function () {
+        $('#PaymentAmount').val(parseFloat($('#BillAmount').val() == "" ? 0 : $('#BillAmount').val()) + parseFloat($('#VatAmount').val() == "" ? 0 : $('#VatAmount').val()) - parseFloat($('#DeductAmount').val() == "" ? 0 : $('#DeductAmount').val()));
+    });
+    $('#DeductAmount').focusout(function () {
+        $('#PaymentAmount').val(parseFloat($('#BillAmount').val() == "" ? 0 : $('#BillAmount').val()) + parseFloat($('#VatAmount').val() == "" ? 0 : $('#VatAmount').val()) - parseFloat($('#DeductAmount').val() == "" ? 0 : $('#DeductAmount').val()));
+    });
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("BillPaymentChecked", "BillPayment")',
+                data: JSON.stringify({ paymentId: $("#PaymentID").val(), checkComment: $("#CheckComment").val(), recordStatus: "CHK" }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        changeStatus = 0;
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("At First Saved Then Checked.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            //alert("At First Saved Then Checked.");
+        }
+    });
+
+    $("#btnRecommended").click(function () {
+        if (changeStatus == 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("BillPaymentRecommended", "BillPayment")',
+                data: JSON.stringify({ paymentId: $("#PaymentID").val(), recommendedComment: $("#RecommendedComment").val(), recordStatus: "RCM" }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        changeStatus = 0;
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("At First Saved Then Recommended.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            //alert("At First Saved Then Checked.");
+        }
+    });
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("BillPaymentApproved", "BillPayment")',
+                data: JSON.stringify({ paymentId: $("#PaymentID").val(), approveComment: $("#ApproveComment").val(), recordStatus: "APV" }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("At First Saved Then Approved.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            //alert("At First Saved Then Checked.");
+        }
+    });
+
+    PrqBillPaymentReferenceModel = { "PaymentID": "", "SupplierBillID": "", "SupplierBillNo": "", "RecordStatus": "" };
+    PrqBillPaymentModel = { "PaymentID": "", "PaymentDate": "", "SupplierID": "", "SupplierAddressID": "", "PurchaseYear": "", "PaymentType": "", "PaymentMethod": "", "Currency": "", "PaymentDoc": "", "BillAmount": "", "VatPercentage": "", "VatAmount": "", "DeductAmount": "", "PaymentAmount": "", "Remarks": "", "BillPaymentReferenceList": [] };
+
+    $("#PaymentType").change(function () {
+        if ($("#PaymentType option:selected").text() == "Against Bill") {
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            if (data.length > 0) {
+                PrqBillPaymentModel.BillPaymentReferenceList = [];
+                for (var i = 0; i <= data.length - 1; i++) {
+                    PrqBillPaymentReferenceModel.SupplierBillID = data[i].SupplierBillID;
+                    PrqBillPaymentReferenceModel.SupplierBillNo = data[i].SupplierBillNo;
+                    PrqBillPaymentReferenceModel.PaymentID = data[i].PaymentID;
+                    PrqBillPaymentModel.BillPaymentReferenceList.push(PrqBillPaymentReferenceModel);
+                    PrqBillPaymentReferenceModel = { "PaymentID": "", "SupplierBillID": "", "SupplierBillNo": "", "RecordStatus": "" };
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetSupplierBillPaymentAmount", "BillPayment")',
+                    data: JSON.stringify(PrqBillPaymentModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        $("#BillAmount").val(respnse.BillAmount);
+                        $("#DeductAmount").val(respnse.DeductAmount);
+                        $("#PaymentAmount").val(respnse.PaymentAmount);
+                    }
+                });
+            } else {
+                //$('#MessageText').html("Please Add Bill Ref.");
+                //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                alert("Please Add Bill Ref. From Grid");
+            }
+
+        } else {
+            $("#BillAmount").val("");
+            $("#VatAmount").val("");
+            $("#DeductAmount").val("");
+            $("#PaymentAmount").val("");
+        }
+    });
+</script>

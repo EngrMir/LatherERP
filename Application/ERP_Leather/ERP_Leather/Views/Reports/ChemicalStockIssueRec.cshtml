@@ -1,0 +1,432 @@
+﻿@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ChemicalStockIssueRec", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="FormHeader">
+        <div class="row">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Chemical Stock &amp; Issue Receive Report</div>
+            </div>
+            <div id="MessageText" class="col-lg-4">
+
+            </div>
+            <div class="col-lg-2" style="">
+                <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+                <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" id="btnShowReport" value="Show Report" style="position: absolute; right: 80px; width: 80px; font-size: 12px;" />
+                <input type="button" id="btnReset" value="Reset" onclick="Reset();" style="position: absolute; right:16px; width: 62px; font-size: 12px;" />
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-6" style="padding-left: 0; padding-right: 0;">
+                <div id="supplierInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Supplier</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="SupplierCode" class="txtBox" name="SupplierCode" placeholder="Press F9" readonly="readonly" />
+                        <input type="text" id="SupplierName" name="SupplierName" class="txtBox" readonly="readonly" />
+                        <input type="hidden" id="SupplierID" class="txtBox" name="SupplierID" />
+                    </div>
+                </div>
+
+                <div id="StoreInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Store</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0;">
+                        @Html.DropDownList("StoreID", new SelectList(ViewBag.Store, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })
+                    </div>
+                </div>
+
+                <div id="ItemTypeInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Chemical Item</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0;">
+                        @*@Html.DropDownList("ItemTypeID", new SelectList(ViewBag.ItemType, "ItemTypeID", "ItemTypeName"), "--Select--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })*@
+                        <input type="hidden" id="ItemID" class="col-lg-8" name="ItemID" placeholder="Press F9" value="" readonly="readonly" />
+                            <input type="text" id="ItemName" class="col-lg-8" name="ItemName" placeholder="Press F9" value="" readonly="readonly" />
+                        </div>
+                </div>
+
+             
+
+                <div class="row col-lg-12" style="margin-bottom: 15px;">
+                    <div class="col-lg-3">
+                        <label style="">From Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateFrom" name="DateFrom" class="datePicker txtBox" style="min-width: 100px; width: 100%;" />
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <label style="padding-right: 0; padding-left: 0; margin-left: 50px;">To Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateTo" name="DateTo" class="datePicker txtBox" style="min-width: 100px; width: 100%;" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-10 text-right">
+                            <label style="">Chemical Inventory </label>
+                        </div>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="radioSummary" name="ReportName" value="Filter" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10 text-right">
+                            <label style="">Chemical Inventory By Stock</label>
+                        </div>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="radioDetails" name="ReportName" value="Details" checked="checked" />
+                        </div>
+                    </div>
+                   
+                </div>
+
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+}
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+<div id="ItemWindow" style="display: none;">
+    <p>Item Type:<input type="text" id="txtItem" style="width: 250px;" /><input type="button" id="btnItemGridSearch" value="Search" /></p>
+
+    <div id="ItemWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnItemWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnItemWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+            //value: new Date()
+        });
+
+        var supplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+                        Address: { editable: false },
+                        SupplierAddressID: { editable: false },
+                        ContactPerson: { editable: false },
+                        ContactNumber: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllChemicalSupplier", "CommonChemical")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 30
+
+        });
+
+        var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: supplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 400,
+
+            columns: [
+                  { field: "SupplierID", hidden: true },
+                  { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+                  { field: "SupplierName", title: "Supplier Name", width: "120px" },
+                  { field: "Address", title: "Address", width: "80px" },
+                  { field: "ContactPerson", title: "Contact Person", width: "80px" },
+                  { field: "ContactNumber", title: "Contact Number", width: "60px" }
+            ]
+        });
+
+    });
+
+    var supplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                supplierWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        alert("test");
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            supplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    $("#btnReset").click(function () {
+        $("#StoreID").val("").attr("selected", "selected");
+        $("#ItemName").val("");
+        $("#SupplierCode").val("");
+        $("#SupplierName").val("");
+        $("#ItemID").val("");
+        $("#MessageText").html("");
+    });
+
+
+    
+    //########################### Item Popup Value #############################
+    $(document.body).keypress(function (e) {
+        if ($("#ItemName").is(":focus")) {
+            if (e.keyCode == 120) {
+                ListOfValueGridEventItemInfo('ItemWindowGrid');
+                ItemWindow.open();
+            }
+        }
+    });
+    var ItemWindow = $('#ItemWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Item",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: false },
+                    ItemCategory: { editable: false },
+                    ItemName: { editable: false },
+                    HSCode: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });  
+    var ItemGrid = $("#ItemWindowGrid").kendoGrid({
+        dataSource: ItemGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+                  { field: "ItemCategory", title: "Item Category", width: "60px" },
+                  { field: "ItemName", title: "Item Name", width: "120px" },
+                  { field: "HSCode", title: "Item Code", width: "80px" }
+                ]
+    });
+
+    function ListOfValueGridEventItemInfo() {
+        $.ajax({
+            url: '@Url.Action("GetItemInfo", "Utility")',
+            type: 'GET',           
+            success: function (data) {
+                $("#ItemWindowGrid").data("kendoGrid").dataSource.data(data);               
+            }
+        });
+    }
+
+    //Handling button click for Item window grid
+    $('#btnItemWindowOK').click(function () {
+        ListOfValuItemeGridEvent('ItemWindowGrid');
+        ItemWindow.close();
+    });
+
+    $('#btnItemWindowCancel').click(function () {
+        ItemWindow.close();
+    });
+
+    $("#ItemWindow").dblclick(function () {
+        ListOfValuItemeGridEvent('ItemWindowGrid');
+        ItemWindow.close();
+    });
+
+    $("#ItemWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuItemeGridEvent('ItemWindowGrid');
+            ItemWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ItemWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnItemGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchItemByFirstName", "Utility")',
+            type: 'GET',
+            data: { search: $("#txtItem").val()},
+            success: function (data33) {
+                $("#ItemWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('ItemWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtItem").keyup(function (event) {
+        if ($("#txtItem").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchItemByFirstName", "Utility")',
+                    type: 'GET',
+                    data: { search: $("#txtItem").val() },
+                    success: function (data33) {
+                        $("#ItemWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceItem = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetItemAutocompleteData", "Utility")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtItem").kendoAutoComplete({
+        dataSource: dataSourceItem,
+        filter: "startswith",
+        dataTextField: "ItemName",
+        placeholder: "Search Item...",
+    });
+
+    function ListOfValuItemeGridEvent(gridName) {
+        //$("#SelectionComplete").val("");
+        //$("#SelectionDue").val("");
+        //$("#UnitName").val("");
+        //$("#ClosingProductionkPcs").val("");
+        //$("#ClosingProductionSide").val("");
+        //$("#ClosingProductionArea").val("");
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        //$("#ItemTypeName").val(selectedItem.ItemTypeName);
+        //$("#ItemID").val(selectedItem.ItemID);
+        //$("#LeatherStatusName").val(selectedItem.LeatherStatusName);
+        //$("#SelectionComplete").val(selectedItem.SelectionComplete);
+        //$("#SelectionComplete").val(selectedItem.SelectionQty);
+        //$("#SelectionDue").val(selectedItem.SelectionDueQty);
+        //$("#ProductionQty").val(selectedItem.ProductionQty);
+        //$("#ItemQty").val(selectedItem.ItemQty);
+        ////$("#UnitID").val(selectedItem.AreaUnit);
+        //// $("#UnitName").val(selectedItem.ItemQty);
+        //$("#ItemTypeID").val(selectedItem.ItemTypeID);
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+  
+</script>

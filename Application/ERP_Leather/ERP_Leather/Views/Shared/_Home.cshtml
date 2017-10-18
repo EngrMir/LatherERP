@@ -1,0 +1,410 @@
+﻿
+@* ************************************************************************
+                 * Main Layout  Page
+                 * Description : this  page used for main layout page
+
+    ***************************************************************************@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Bengal Leather ERP</title>
+    @Styles.Render("~/Content/css/bootstrap.min.css")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            padding: 0px;
+            margin: 0px;
+            background: #E4E7EA;
+            width: 100%;
+            height: auto;
+        }
+
+        #header-nav {
+            height: 90px;
+            background: -webkit-linear-gradient(#b7e1f7 5%, #fffdff 25%);
+            background: -o-linear-gradient(#b7e1f7 5%, #fffdff 25%);
+            background: -moz-linear-gradient(#b7e1f7 5%, #fffdff 25%);
+            background: linear-gradient(#b7e1f7 5%, #fffdff 25%);
+            border-style: solid;
+            /*border-width: 6px 0px 0px 0px;*/
+            border-color: #80c4e9;
+            margin-bottom: 10px;
+        }
+
+        #header-bar {
+            height: 7px;
+            border-style: none;
+            background-color: #4b96cd;
+            background: -webkit-linear-gradient(#78b7e6 20%, #2a75ac 100%);
+            background: -o-linear-gradient(#78b7e6 20%, #2a75ac 100%);
+            background: -moz-linear-gradient(#78b7e6 20%, #2a75ac 100%);
+            background: linear-gradient(#78b7e6 20%, #2a75ac 100%);
+            margin-top: 16px;
+        }
+
+        .row {
+            margin-left: 0px;
+            margin-right: -34px;
+        }
+
+        #wrapper {
+            padding-left: 70px;
+            transition: all .4s ease 0s;
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+        }
+
+        #body-content {
+            margin-top: -65px;
+            margin-bottom: 50px;
+        }
+
+        #sidebar-wrapper {
+            margin-left: -200px;
+            left: 70px;
+            width: 160px;
+            background: #F1F2F2;
+            height: auto;
+            z-index: 10000;
+            transition: all .4s ease 0s;
+            clear: both;
+        }
+
+        .sidebar-nav {
+            display: block;
+            float: left;
+            width: 160px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #page-content-wrapper {
+            padding-left: 0;
+            margin-left: -39px;
+            margin-top: 100px;
+            width: 100%;
+            height: auto;
+        }
+
+        #wrapper.active {
+            padding-left: 200px;
+        }
+
+            #wrapper.active #sidebar-wrapper {
+                left: 200px;
+            }
+
+        #page-content-wrapper {
+            width: 100%;
+        }
+
+        #sidebar_menu li a, .sidebar-nav li a {
+            borer-bottom: 1px solid #DDDDDD;
+            display: block;
+            text-align: left;
+            vertical-align: middle;
+            width: 160px;
+        }
+
+        .sidebar_name {
+            padding-top: 25px;
+            color: #fff;
+            opacity: .7;
+        }
+
+        .sidebar-nav li {
+            line-height: 40px;
+            text-indent: 20px;
+        }
+
+            .sidebar-nav li a, a:ACTIVE, a:VISITED {
+                color: #266092;
+                font-family: Verdana;
+                font-weight: normal;
+                font-variant: normal;
+                text-decoration: none;
+            }
+
+                .sidebar-nav li a:hover {
+                    border-radius: 1px;
+                    background-color: #f0f0f0;
+                    background: -webkit-linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    background: -o-linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    background: -moz-linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    background: linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    -webkit-transition: border linear .2s, box-shadow linear .2s;
+                    -moz-transition: border linear .2s, box-shadow linear .2s;
+                    -o-transition: border linear .2s, box-shadow linear .2s;
+                    transition: border linear .2s, box-shadow linear .2s;
+                }
+
+                .sidebar-nav li a:active,
+                .sidebar-nav li a:focus {
+                    text-decoration: none;
+                }
+
+        .sidebar-nav > .sidebar-brand {
+            height: 65px;
+            line-height: 60px;
+            font-size: 18px;
+        }
+
+            .sidebar-nav > .sidebar-brand a {
+                color: #266092;
+                font-family: Verdana;
+                font-weight: normal;
+                font-variant: normal;
+                text-decoration: none;
+            }
+
+                .sidebar-nav > .sidebar-brand a:hover {
+                    border-radius: 1px;
+                    background-color: #f0f0f0;
+                    background: -webkit-linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    background: -o-linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    background: -moz-linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    background: linear-gradient(#fffdff 20%, #d0d1d5 90%);
+                    -webkit-transition: border linear .2s, box-shadow linear .2s;
+                    -moz-transition: border linear .2s, box-shadow linear .2s;
+                    -o-transition: border linear .2s, box-shadow linear .2s;
+                    transition: border linear .2s, box-shadow linear .2s;
+                }
+
+        #main_icon {
+            float: right;
+            padding-right: 9px;
+            padding-top: 22px;
+        }
+
+        .sub_icon {
+            float: right;
+            padding-right: 9px;
+            padding-top: 13px;
+        }
+
+        .content-header {
+            height: 65px;
+            line-height: 65px;
+        }
+
+            .content-header h1 {
+                margin: 0;
+                margin-left: 20px;
+                line-height: 65px;
+                display: inline-block;
+            }
+
+        #btnGroup {
+            position: absolute;
+            right: 45px;
+            top: 15px;
+        }
+
+        #btnLog {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+        }
+
+        #btnToggle {
+            height: 60px;
+            border: 0;
+            background-color: transparent;
+        }
+
+
+        #btnUser {
+            border: 0;
+            background-color: transparent;
+        }
+
+        .foot-fixed-bottom {
+            bottom: 0;
+            display: block;
+            left: 0;
+            margin-bottom: 0;
+            position: fixed;
+            right: 0;
+            z-index: 1030;
+            border-top: solid #acd6ed 5px;
+            background-color: #d4eaf5;
+            background: -webkit-linear-gradient(#d4eaf5 5%, #fffdff 70%);
+            background: -o-linear-gradient(#d4eaf5 5%, #fffdff 70%);
+            background: -moz-linear-gradient(#d4eaf5 5%, #fffdff 70%);
+            background: linear-gradient(#d4eaf5 5%, #fffdff 70%);
+            color: #919191;
+            height: 25px;
+        }
+
+        footer .container {
+            margin-top: 0px;
+            width: 1230px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: transparent;
+            color: #9b9a9a;
+            text-align: left;
+        }
+
+        /* 2nd level */
+        .tree > li > label {
+            padding: 0px 0px;
+        }
+
+        /* 3rd level */
+        .tree > li > ul > li > a {
+            color: #cc0000;
+            font-size: 10pt;
+            margin-left: 15px;
+        }
+
+        .tree li a {
+            border-bottom: 1px solid #DDDDDD;
+            display: block;
+            text-align: left;
+            vertical-align: middle;
+            width: 160px;
+            height: 43px;
+            padding-top: 0px;
+        }
+
+        .menuList {
+            display: inline-block;
+            font-weight: bold;
+            height: 43px;
+            margin-bottom: -15px;
+            margin-left: -20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper" class="active">
+        <!--Start Header Nav-->
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="header-nav">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="~/Images/logoSamp1.jpg" alt="Logo here!" />
+                </div>
+                <div class="col-md-9">
+                    <div id="btnGroup" class="btn-group">
+                        <button type="button" id="btnUser" class="btn btn-default"><img src="~/Images/ProfileSmall.jpg" class="img-circle img-thumbnail" /> Employee Name</button>
+                        <button type="button" id="btnToggle" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Action</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Another action </a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-envelope"></span> Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div role="navigation" id="header-bar">
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul id="sidebar_menu" class="sidebar-nav">
+                <li class="sidebar-brand sidebar-toggler-wrapper"><a id="menu-toggle" href="#">Menu<span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a></li>
+            </ul>
+            <ul class="sidebar-nav" id="sidebar">
+                <li class="sidebar-toggler-wrapper"><a href="../Home/Index"> Home <span class="sub_icon glyphicon glyphicon-link"></span></a></li>
+                <li class="sidebar-toggler-wrapper"><a href="../Home/About"> About <span class="sub_icon glyphicon glyphicon-link"></span></a></li>
+                <li class="sidebar-toggler-wrapper"><a href="../Home/Contact"> Contact <span class="sub_icon glyphicon glyphicon-link"></span></a></li>
+                <li class="sidebar-toggler-wrapper"><a href="../Home/Index"> Home <span class="sub_icon glyphicon glyphicon-link"></span></a></li>
+                <li class="sidebar-toggler-wrapper">
+                    <label class="tree-toggle menuList"><a href="#"> About <span class="sub_icon glyphicon glyphicon-link"></span></a></label>
+                    <ul class="nav tree">
+                        <li>
+                            <a href="../Home/About">About 1</a>
+                        </li>
+                        <li>
+                            <a href="../Home/About">About 2</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-toggler-wrapper">
+                    <label class="tree-toggle menuList"><a>Test Purpose<span class="sub_icon glyphicon glyphicon-link"></span></a></label>
+                    <ul class="nav tree">
+                        <li>
+                            <a href="#">Test 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Test 2</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <!-- Keep all page content within the page-content inset div! -->
+            <div class="page-content inset" id="body-page-content">
+                <div class="row">
+                    <div class="col-md-12" id="body-content">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Footer content
+        <div id="footer">
+            <div class="container">&copy; Copy right.</div>
+        </div>*@
+
+
+    <!-- /end of your main content container -->
+    <footer>
+        <div class="foot-fixed-bottom">
+            <div class="container">
+                <span class="glyphicon glyphicon-copyright-mark"></span> Copyright Square InformitiX Limited.
+            </div>
+        </div>
+    </footer>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+</body>
+</html>
+
+<script type="text/javascript">
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("active");
+    });
+
+    $('.tree-toggle').click(function () {
+        $(this).parent().children('ul.tree').toggle(200);
+    });
+
+    $('#sidebar').affix({
+        offset: {
+            top: 230,
+            bottom: 100
+        }
+    });
+
+</script>

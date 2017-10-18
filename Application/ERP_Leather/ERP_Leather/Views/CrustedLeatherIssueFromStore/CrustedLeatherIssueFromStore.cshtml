@@ -1,0 +1,2847 @@
+﻿@{
+    ViewBag.Title = "Crusted Leather Issue From Store";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row FormHeader" style="padding: 5px 0 5px 0;">
+
+    <div id="FormTitlePannel" class="col-lg-4">
+        <div id="FormTitle" style="font-size:larger; font-weight:bold;">Crusted Leather Issue From Store</div>
+    </div>
+    <div id="MessageText" class="col-lg-5">
+    </div>
+    <div id="" class="col-lg-3" style="padding: 0 0 0 0;">
+        @*<button type="button" id="btnSave" title="Save" onclick="" class="btnFrm" style="margin-left: 10px; width: 58px; font-size: 12px;">Save</button>
+
+            <button type="button" id="btnSearch" onclick="" value="Search" class="" style="width: 58px; font-size: 12px;">Search</button>
+
+            <button type="button" id="btnReset" onclick="" value="Reset" class="" style="margin-left: 10px; width: 58px; font-size: 12px; ">Reset</button>
+
+            <button type="button" id="btnDelete" onclick="" value="Delete" class="btnFrm" style="width: 58px; font-size: 12px;">Delete</button>*@
+
+        <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 2px 5px 2px 5px; ">
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Issue No</label>
+            <input type="text" id="txtCLIFSIssueId" class="txtField" style="display: none;" />
+            <input type="text" id="txtCLIFSIssueNo" class="txtField" style="margin-left: 12px;" placeholder="(Auto)" readonly="readonly" />
+        </div>
+        <div class="col-lg-4">
+            <label>Issue Category</label>
+            <select id="ddlCLIFSIssueCatergory" class="txtField" style="width: 126px; padding: 3px 3px 3px 3px;">
+                <option value="" style="display: none">-- Select --</option>
+                <option value="STTF">Store Transfer</option>
+                <option value="PROD">Production</option>
+                @*<option value="AFQC">After QC</option>*@
+            </select>
+        </div>
+        <div class="col-lg-4">
+            <label>Issue From</label>
+            <select id="ddlCLIFSIssueFrom" class="txtField" style="width: 170px; padding: 3px 3px 3px 3px;">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Issue Date</label>
+            <input type="text" id="txtCLIFSIssueDate" class="datePicker txtField" />
+        </div>
+        <div class="col-lg-4">
+            <label>Issue For</label>
+            @*<input type="text" id="txtCLIFSIssueFor" class="txtField" style="margin-left: 12px;" />*@
+            <select id="ddlCLIFSIssueFor" class="txtField" style="width: 126px; padding: 3px 3px 3px 3px; margin-left: 35px;">
+                <option value="" style="display: none">-- Select --</option>
+                <option value="Against Order">Against Order</option>
+                <option value="Without Order">Without Order</option>
+            </select>
+        </div>
+        <div class="col-lg-4">
+            <label>Issue To</label>
+            <select id="ddlCLIFSIssueTo" class="txtField" style="width: 170px; margin-left: 18px; padding: 3px 3px 3px 3px;">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div id="" class="row FormBody" style="padding: 2px 5px 2px 5px; ">
+
+    <div class="col-lg-12">
+        <div class="col-lg-4">
+            <input type="radio" id="QCStatus" name="QCStatus" value="PASS" tabindex="" checked="checked" />
+            <label>Passed</label>
+        </div>
+        <div class="col-lg-4">
+            <input type="radio" id="QCStatus" name="QCStatus" value="FAIL" tabindex="" />
+            <label>Failed</label>
+        </div>
+        <div class="col-lg-4">
+            <input type="radio" id="QCStatus" name="QCStatus" value="ALL" tabindex="" />
+            <label>All</label>
+        </div>
+    </div>
+
+</div>
+
+<div id="filters" class="row FormBody" style="padding: 2px 5px 2px 5px; ">
+    <div class="row">
+        <div class="col-lg-3">
+            <label>Requisition Month</label>
+            @*<input type="text" id="txtCLIFSProductionMonth" class="" placeholder="Press (F9)" />*@
+            <select id="txtCLIFSProductionMonth" class="" style="width: 126px; padding: 3px 3px 3px 3px;">
+                <option value="">--Select--</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+        <div class="col-lg-5">
+            <label>Requisition Category</label>
+            <input type="text" id="txtCLIFSSelectionNo" class="" value="Crust Requisition For Finishing Process" style="margin-left: 13px; width: 250px;" readonly="readonly" />
+        </div>
+        <div class="col-lg-4">
+            <label>Requisition Code</label>
+            <input type="text" id="txtCLIFSRequisitionId" class="" style="display: none;" />
+            <input type="text" id="txtCLIFSRequisitionNo" class="" placeholder="Press (F9)" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <label>Requisition Year</label>
+            <input type="text" id="txtCLIFSProductionYear" class="" style=" margin-left: 12px;" maxlength="4" />
+        </div>
+        <div class="col-lg-5">
+            <label>Production Floor</label>
+            <select id="txtCLIFSProductionFloor" class="txtField" style="width: 250px; margin-left: 37px; padding: 3px 3px 3px 3px;">
+                <option value="" style="display: none;">-- Select --</option>
+            </select>
+        </div>
+        @*<div class="col-lg-4">
+                <div class="col-lg-4">
+                    <input type="radio" id="QCStatus" name="QCStatus" value="PASS" tabindex="" checked="checked" />
+                    <label>Passed</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="radio" id="QCStatus" name="QCStatus" value="FAIL" tabindex="" />
+                    <label>Failed</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="radio" id="QCStatus" name="QCStatus" value="ALL" tabindex="" />
+                    <label>All</label>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 0 15px 5px 15px;">
+    <div class="row">
+        <div id="IssueItemsGrid"></div>
+    </div>
+    <div class="row">
+        <div id="IssueItemsColorGrid"></div>
+    </div>
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-lg-6">
+            <label>Check Note</label>
+            <input id="txtCLIFSCheckNote" type="text" class="txtArea" style="width: 400px;" />
+            <button id="btnCheck">Checked</button>
+        </div>
+        <div class="col-lg-6">
+            <label>Issue Note</label>
+            <input id="txtCLIFSIssueNote" type="text" class="txtArea" style="width: 400px;" placeholder="" />
+            <button id="btnConfirm">Issue</button>
+        </div>
+    </div>
+</div>
+
+<div id="RequisitionWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Requisition No.</label>
+        <input type="text" id="txtRequisitionNo" style="width: 250px;" /><input type="button" id="btnRequisitionGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="RequisitionWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnRequisitionWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnRequisitionWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="BuyerWindow" style="display: none;">
+    <div class="row" style="width: 99%;">
+        <label style="margin-left: 20px;">Buyer Name</label>
+        <input type="text" id="txtBuyerName" style="width: 250px;" /><input type="button" id="btnBuyerGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 99%;">
+        <div id="BuyerWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="BuyerOrderWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Order No.</label>
+        <input type="text" id="txtOrderNo" style="width: 250px;" /><input type="button" id="btnBuyerOrderGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="BuyerOrderWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Article Name</label>
+        <input type="text" id="txtArticleName" style="width: 250px;" /><input type="button" id="btnArticleGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ArticleWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ColorsWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Color Name</label>
+        <input type="text" id="txtColorsName" style="width: 250px;" /><input type="button" id="btnColorsGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ColorsWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnColorsWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnColorsWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="GradeWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Grade Name</label>
+        <input type="text" id="txtGradeName" style="width: 250px;" /><input type="button" id="btnGradeGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="GradeWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="IssueWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Issue No</label>
+        <input type="text" id="txtIssueNo" style="width: 250px;" /><input type="button" id="btnIssueGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="IssueWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnIssueWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnIssueWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="DeleteWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to delete?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnDeleteConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnDeleteConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+
+<div id="IssueConfirmWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to issue?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnIssueConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnIssueConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+
+<div id="divLoading" style="margin: 0; padding: 0; position: fixed; right: 0; top: 0; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 45%; left: 45%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+
+    // ######################################## Document Ready ######################################## //
+
+    $(document).ready(function () {
+        $("#filters").hide();
+        $('#txtCLIFSIssueDate').kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date(),
+            value: new Date()
+        });
+
+        function createItemRow() {
+            var grid = $("#IssueItemsGrid").data("kendoGrid");
+            $("#IssueItemsGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            var gridItem = $("#IssueItemsGrid").data("kendoGrid");
+            var ds = issueItemsGridDataSource.data();
+            rowAdd = ds.length;
+            var selectedRefGrid = (gridItem.dataItem(gridItem.select()));
+            selectedRefGrid.SlNo = rowAdd;
+            if (currSlNo == 0) {
+                currSlNo = selectedRefGrid.SlNo;
+            }
+            var cell = $('#IssueItemsGrid').find('tr.k-state-selected td:eq(0)');
+            $('#IssueItemsGrid').data('kendoGrid').closeCell(cell);
+            cell = $('#IssueItemsGrid').find('tr.k-state-selected td:eq(1)');
+            $('#IssueItemsGrid').data('kendoGrid').editCell(cell);
+            gridDataSave();
+        }
+
+        $('.btnAddItems').click(function () {
+            createItemRow();
+        });
+
+        $('#IssueItemsGrid').keyup(function (e) {
+            if (e.keyCode == 13) {
+                createItemRow();
+            }
+        });
+
+        function createItemColorRow() {
+            var gridItem = $("#IssueItemsGrid").data("kendoGrid");
+            var selectedItemGrid = (gridItem.dataItem(gridItem.select()));
+            if (selectedItemGrid != null) {
+                var gridColor = $("#IssueItemsColorGrid").data("kendoGrid");
+                $("#IssueItemsColorGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                gridColor.addRow();
+                var ds = issueItemsColorGridDataSource.data();
+                rowAdd2 = ds.length;
+                var selectedcolorGrid = (gridColor.dataItem(gridColor.select()));
+                selectedcolorGrid.SlNo = selectedItemGrid.SlNo;
+                selectedcolorGrid.SlNo2 = rowAdd2;
+                var cell = $('#IssueItemsColorGrid').find('tr.k-state-selected td:eq(0)');
+                $('#IssueItemsColorGrid').data('kendoGrid').closeCell(cell);
+                cell = $('#IssueItemsColorGrid').find('tr.k-state-selected td:eq(1)');
+                $('#IssueItemsColorGrid').data('kendoGrid').editCell(cell);
+            } else {
+                $('#MessageText').html("Please select a row in the item grid first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+
+        $('.btnAddColor').click(function () {
+            createItemColorRow();
+        });
+    });
+
+    // ######################################## Document Ready End ######################################## //
+
+    // ######################################## Grid And Window Declaration ######################################## //
+
+    // ************ Issue Items Grid Declaration ************ //
+
+    var issueItemsGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CrustLeatherIssueItemID",
+                fields: {
+                    SlNo: { editable: true },
+                    CrustLeatherIssueItemID: { editable: true },
+                    CrustLeatherIssueID: { editable: true, defaultValue: "Press F9" },
+                    RequisitionDateID: { editable: true },
+                    RequisitionNo: { editable: true },
+                    BuyerID: { editable: true },
+                    BuyerName: { editable: true, defaultValue: "Press F9" },
+                    BuyerOrderID: { editable: true },
+                    BuyerOrderNo: { editable: true },
+                    ArticleID: { editable: true },
+                    ArticleNo: { editable: true },
+                    ArticleChallanID: { editable: true },
+                    ArticleChallanNo: { editable: true },
+                    ArticleName: { editable: true },
+                    ItemTypeID: { editable: true },
+                    ItemTypeName: { editable: true },
+                    LeatherTypeID: { editable: true },
+                    LeatherTypeName: { editable: true },
+                    LeatherStatusID: { editable: true },
+                    LeatherStatusName: { editable: true }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    var IssueItemsGrid = $("#IssueItemsGrid").kendoGrid({
+        dataSource: issueItemsGridDataSource,
+        pageable: true,
+        edit: function (e) {
+            $("[name='BuyerName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    if ($('#ddlCLIFSIssueFrom').val() != "") {
+                        GetBuyers($('#ddlCLIFSIssueFrom').val(), $('input:radio[name=QCStatus]:checked').val());
+                        BuyerWindow.open();
+                        BuyerWindow.center();
+                    } else {
+                        $('#MessageText').html("Please select a Store first.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            });
+            //$("[name='BuyerOrderNo']", e.container).keyup(function (event) {
+            //    if (event.keyCode == 120) {
+            //        var grid = $("#IssueItemsGrid").data("kendoGrid");
+            //        var row = $(this).closest("tr");
+            //        if (grid.dataItem(row).BuyerID != "") {
+            //            var storeId = $('#ddlCLIFSIssueFrom').val();
+            //            getBuyerOrders(storeId, grid.dataItem(row).BuyerID);
+            //            BuyerOrderWindow.open();
+            //            BuyerOrderWindow.center();
+
+            //        } else {
+            //            $('#MessageText').html("Please select a buyer first.");
+            //            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            //        }
+
+            //    }
+            //});
+            $("[name='ArticleName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    ArticleWindow.open();
+                    ArticleWindow.center();
+                }
+            });
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        height: 185,
+        toolbar: [
+            {
+                text: "Add Items",
+                className: "btnAddItems",
+                imageClass: "k-icon k-add"
+            }
+        ],
+        columns: [
+            //{ field: "SlNo", title: "Sl No", width: 60 },
+            { field: "RequisitionNo", title: "Requisition No", width: 100 },
+            { field: "BuyerName", title: "Party Name", width: 100, editable: true },
+            { field: "BuyerOrderNo", title: "Order", width: 100, editable: true },
+            { field: "ArticleName", title: "Article", width: 100, editable: true },
+            { field: "ArticleChallanNo", title: "Challan", width: 100, editable: true },
+            { field: "ItemTypeName", title: "Item Type", width: 100, editable: false },
+            { field: "LeatherTypeName", title: "Leather Type", width: 100, editable: false },
+            { field: "LeatherStatusName", title: "Leather Status", width: 100, editable: false },
+            { command: [{ name: "DeltedRow", text: "Delete", click: ItemDelete }], title: "Delete", width: "80px" }
+        ]
+    });
+
+    // ************ Issue Items Grid Declaration End ************ //
+
+    // ************ Issue Items Color Grid Declaration ************ //
+
+    var issueItemsColorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CrustLeatherIssueColorID",
+                fields: {
+                    SlNo: { editable: true },
+                    SlNo2: { editable: true },
+                    CrustLeatherIssueColorID: { editable: true },
+                    CrustLeatherIssueItemID: { editable: true },
+                    CrustLeatherIssueID: { editable: true },
+                    ArticleColorNo: { editable: true },
+                    ColorID: { editable: true },
+                    ColorName: { editable: true, defaultValue: "Press F9" },
+                    //GradeID: { editable: true },
+                    GradeRange: { editable: true },
+                    ClosingStockPcs: { editable: true },
+                    ClosingStockSide: { editable: true },
+                    ClosingStockArea: { editable: true },
+                    IssuePcs: { editable: true },
+                    IssueSide: { editable: true },
+                    IssueArea: { editable: true },
+                    SideArea: { editable: true },
+                    AreaUnit: { editable: true },
+                    UnitName: { editable: true },
+                    CrustQCLabel: { editable: true }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    var IssueItemsColorGrid = $("#IssueItemsColorGrid").kendoGrid({
+        dataSource: issueItemsColorGridDataSource,
+        pageable: true,
+        edit: function (e) {
+            //ColorsWindow
+            $("[name='ColorName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    ColorsWindow.open();
+                    ColorsWindow.center();
+                }
+            });
+            $("[name='GradeName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    GradeWindow.open();
+                    GradeWindow.center();
+                }
+            });
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+        },
+        save: function (e) {
+
+            if (e.model.dirty) {
+                if (itemColors.length > 0) {
+                    for (var i = 0; i < itemColors.length; i++) {
+                        var flag = false;
+                        if (itemColors[i].SlNo == e.model.SlNo && itemColors[i].SlNo2 == e.model.SlNo2) {
+                            flag = true;
+                        }
+                        if (flag == true) {
+                            itemColors[i].SlNo = e.model.SlNo;
+                            itemColors[i].SlNo2 = e.model.SlNo2;
+                            itemColors[i].CrustLeatherIssueColorID = e.model.CrustLeatherIssueColorID;
+                            itemColors[i].CrustLeatherIssueItemID = e.model.CrustLeatherIssueItemID;
+                            itemColors[i].CrustLeatherIssueID = e.model.CrustLeatherIssueID;
+                            itemColors[i].ColorID = e.model.ColorID;
+                            itemColors[i].ColorName = e.model.ColorName;
+                            ////itemColors[i].GradeID = e.model.GradeID;
+                            ////itemColors[i].GradeName = e.model.GradeName;
+                            itemColors[i].GradeRange = e.model.GradeRange;
+                            itemColors[i].IssuePcs = e.model.IssuePcs;
+                            itemColors[i].IssueSide = e.model.IssueSide;
+                            itemColors[i].IssueArea = e.model.IssueArea;
+                            itemColors[i].ClosingStockPcs = e.model.ClosingStockPcs;
+                            itemColors[i].ClosingStockSide = e.model.ClosingStockSide;
+                            itemColors[i].ClosingStockArea = e.model.ClosingStockArea;
+                            itemColors[i].AreaUnit = e.model.AreaUnit;
+                            itemColors[i].AreaUnitName = e.model.AreaUnitName;
+                            itemColors[i].CrustQCLabel = e.model.CrustQCLabel;
+                            itemColors[i].SideArea = e.model.SideArea;
+                            itemColors[i].ArticleColorNo = e.model.ArticleColorNo;
+                        }
+                    }
+                }
+            }
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        height: 185,
+        toolbar: [{
+            text: "Add Color",
+            className: "btnAddColor",
+            imageClass: "k-icon k-add"
+        }],
+        columns: [
+            //{ field: "SlNo", title: "Sl No" },
+            { field: "ArticleColorNo", title: "Color No" },
+            { field: "ColorName", title: "Color" },
+            { field: "GradeRange", title: "Grade Range", editable: true },
+            { field: "ClosingStockPcs", title: "Stock Pcs", editable: true },
+            { field: "ClosingStockSide", title: "Stock Side", editable: true },
+            { field: "ClosingStockArea", title: "Stock Area", editable: true },
+            { field: "IssuePcs", title: "Issue Pcs", editable: true },
+            { field: "IssueSide", title: "Issue Side", editable: true },
+            { field: "IssueArea", title: "Issue Area", editable: true },
+            { field: "SideArea", title: "Side Area", editable: true },
+            { field: "UnitName", title: "Area Unit", editable: true, editor: UnitDropDownEditor },
+            { field: "CrustQCLabel", title: "QC Status", editable: true },
+            { command: [{ name: "DeltedRow", text: "Delete", click: ColorDelete }], title: "Delete", width: "80px" }
+        ]
+    });
+
+    // ************ Issue Items Color Grid Declaration End ************ //
+
+    // ************ Requisition Window & Grid Declaration ************ //
+
+    var RequisitionWindow = $('#RequisitionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "auto",
+        title: "List Of Requisitions",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var RequisitionDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RequisitionDateID",
+                fields: {
+                    RequisitionDateID: { editable: false },
+                    RequisitionNo: { editable: false },
+                    RequiredDate: { editable: false },
+                    RequisitionStatus: { editable: false },
+                    RecordStatus: { editable: false },
+                    IssueFrom: { editable: false },
+                    IssueTo: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var RequisitionGrid = $("#RequisitionWindowGrid").kendoGrid({
+        dataSource: RequisitionDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "RequisitionNo", title: "Req No", width: "60px", filterable: false, sortable: false },
+            { field: "RequiredDate", title: "Date", width: "60px", filterable: false, sortable: false },
+            { field: "RequisitionStatus", title: "Req Status", width: "60px", filterable: false, sortable: false },
+            { field: "RecordStatus", title: "Rec Status", width: "60px" }]
+    });
+
+    function GetRequisition() {
+
+        var year = "0";
+        if ($('#txtCLIFSProductionYear').val() != "") {
+            year = $('#txtCLIFSProductionYear').val();
+        }
+        var month = "0";
+        if ($('#txtCLIFSProductionMonth').val() != 0) {
+            month = $('#txtCLIFSProductionMonth').val();
+        }
+        var floor = 0;
+        if ($('#txtCLIFSProductionFloor').val() != 0) {
+            floor = $('#txtCLIFSProductionFloor').val();
+        }
+        $.ajax({
+            url: '@Url.Action("GetRequisition", "CrustedLeatherIssueFromStore")',
+            type: 'GET',
+            data: ({ "year": year, "month": month, "floor": floor }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    RequisitionDataSource.data(data);
+                    RequisitionWindow.open();
+                    RequisitionWindow.center();
+                } else {
+                    $('#MessageText').html("Requisitions does not exist with this combination.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            }
+        });
+        //console.log(RequisitionDataSource.data());
+    }
+
+    $('#txtCLIFSRequisitionNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            GetRequisition();
+        }
+    });
+
+    // ************ Requisition Window & Grid Declaration End ************ //
+
+    // ************ Buyer Window & Grid Declaration ************ //
+
+    var BuyerWindow = $('#BuyerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "80%", height: "auto",
+        title: "List Of Buyers", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var BuyerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TransectionID",
+                fields: {
+                    TransectionID: { editable: false },
+                    CrustQCLabel: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleName: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false },
+                    LeatherTypeID: { editable: false },
+                    LeatherTypeName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BuyerGrid = $("#BuyerWindowGrid").kendoGrid({
+        dataSource: BuyerGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+
+            { field: "BuyerName", title: "Buyer Name", width: "60px", filterable: false, sortable: false },
+            { field: "BuyerOrderNo", title: "Buyer Order No", width: "60px", filterable: false, sortable: false },
+            { field: "ArticleName", title: "Article", width: "60px", filterable: false, sortable: false },
+            { field: "ItemTypeName", title: "Item Type Name", width: "60px", filterable: false, sortable: false },
+            { field: "LeatherStatusName", title: "Leather Status Name", width: "60px", filterable: false, sortable: false },
+            { field: "LeatherTypeName", title: "Leather Type Name", width: "60px", filterable: false, sortable: false }
+        ]
+    });
+
+    function GetBuyers(id, lbl) {
+        $.ajax({
+            url: '@Url.Action("GetBuyerByStore", "CrustedLeatherIssueFromStore")',
+            type: 'GET',
+            data: ({ storeId: id, qcLabel: lbl }),
+            contentType: 'application/json;', dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    BuyerGridDataSource.data(data);
+                    buyerChk = true;
+                } else {
+                    buyerChk = false;
+                }
+            }
+        });
+    }
+
+    // ************ Buyer Window & Grid Declaration End ************ //
+
+    // ************ Order Window & Grid Declaration ************ //
+
+    var BuyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Buyer Orders", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var BuyerOrderGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    LeatherTypeID: { editable: false },
+                    LeatherTypeName: { editable: false },
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false }
+                    //BuyerId: { editable: false },
+                    //BuyerName: { editable: false },
+                    //RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BuyerOrderGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+        dataSource: BuyerOrderGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BuyerOrderNo", title: "Order No.", width: "60px", filterable: false, sortable: false },
+            { field: "ArticleNo", title: "Article", width: "60px", filterable: false, sortable: false },
+            { field: "ArticleChallanNo", title: "Challan", width: "60px", filterable: false, sortable: false },
+            { field: "ItemTypeName", title: "Item Type", width: "60px", filterable: false, sortable: false },
+            { field: "LeatherTypeName", title: "Leather Type", width: "60px", filterable: false, sortable: false },
+            { field: "LeatherStatusName", title: "Leather Status", width: "60px", filterable: false, sortable: false }
+            //{ field: "RecordStatus", title: "Status", width: "60px", filterable: false, sortable: false }
+        ]
+    });
+
+    function getBuyerOrders(storeId, buyerId) {
+        $.ajax({
+            url: '@Url.Action("GetOrderByBuyer", "CrustedLeatherIssueFromStore")',
+            type: 'GET',
+            data: ({ storeId: storeId, buyerId: buyerId }),
+            contentType: 'application/json;', dataType: 'json',
+            success: function (data) {
+                //console.log(data);
+                if (data != null) {
+                    BuyerOrderGridDataSource.data(data);
+                    orderChk = true;
+                } else {
+                    orderChk = false;
+                }
+            }
+        });
+    }
+
+    // ************ Order Window & Grid Declaration End ************ //
+
+    // ************ Article Window & Grid Declaration ************ //
+
+    var ArticleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Articles", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var ArticleGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleId",
+                fields: {
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleChallanNo: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetArticles", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+        dataSource: ArticleGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "ArticleNo", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "ArticleName", title: "Name", width: "60px", filterable: false, sortable: false },
+            { field: "ArticleChallanNo", title: "Challan No", width: "60px", filterable: false, sortable: false }
+        ]
+    });
+
+    // ************ Article Window & Grid Declaration End ************ //
+
+    // ************ Colors Window & Grid Declaration ************ //
+
+    var ColorsWindow = $('#ColorsWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Colors", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var ColorsGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ColorId",
+                fields: {
+                    ColorId: { editable: false },
+                    ColorCode: { editable: false },
+                    ColorName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetColors", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var ColorsGrid = $("#ColorsWindowGrid").kendoGrid({
+        dataSource: ColorsGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "ColorCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "ColorName", title: "Name", width: "60px", filterable: false, sortable: false }]
+    });
+
+    // ************ Colors Window & Grid Declaration End ************ //
+
+    // ************ Grade Window & Grid Declaration ************ //
+
+    var GradeWindow = $('#GradeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Grades", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var GradeGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    GradeID: { editable: false },
+                    GradeName: { editable: false },
+                    Description: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetGrade", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var GradeGrid = $("#GradeWindowGrid").kendoGrid({
+        dataSource: GradeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "GradeName", title: "Name", width: "60px", filterable: false, sortable: false },
+            { field: "Description", title: "Description", width: "60px", filterable: false, sortable: false }]
+    });
+
+    // ************ Grade Window & Grid Declaration End ************ //
+
+    // ************ Issue Window & Grid Declaration ************ //
+
+    var IssueWindow = $('#IssueWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Issue", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var IssueGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CrustLeatherIssueID",
+                fields: {
+                    CrustLeatherIssueID: { editable: false },
+                    CrustLeatherIssueNo: { editable: false },
+                    CrustLeatherIssueDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetIssue", "CrustedLeatherIssueFromStore")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var IssueGrid = $("#IssueWindowGrid").kendoGrid({
+        dataSource: IssueGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "CrustLeatherIssueNo", title: "Issue No", width: "60px", filterable: false, sortable: false },
+            { field: "CrustLeatherIssueDate", title: "Date", width: "60px", filterable: false, sortable: false },
+            { field: "RecordStatus", title: "Status", width: "60px", filterable: false, sortable: false }
+        ]
+    });
+
+    $('#btnSearch').click(function () {
+        $("#IssueWindowGrid").data("kendoGrid").dataSource.read();
+        if (changeStatus == 1) {
+            rstVal = "";
+            rstVal = "search";
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            IssueWindow.open();
+            IssueWindow.center();
+        }
+
+    });
+
+    // ************ Issue Window & Grid Declaration End ************ //
+
+    // ************ Save Changes Window Declaration End ************ //
+
+    SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Reset Data",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Save Changes Window Declaration End ************ //
+
+    // ************ Confirm Window Declaration ************ //
+
+    ConfirmWindow = $('#ConfirmWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Bill Confirmation",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Confirm Window Declaration End ************ //
+
+    // ************ Approve Window Declaration ************ //
+
+    ApproveWindow = $('#ApproveWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Bill Approval",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Approve Window Declaration End ************ //
+
+    // ************ Delete Window Declaration ************ //
+
+    DeleteWindow = $('#DeleteWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "300px",
+        height: "auto",
+        title: "Delete Confirmation",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Delete Window Declaration End ************ //
+
+    // ************ Issue Window Declaration ************ //
+
+    IssueConfirmWindow = $('#IssueConfirmWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "320px",
+        height: "auto",
+        title: "Issue Confirmation",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Issue Window Declaration End ************ //
+
+    // ######################################## Grid And Window Declaration End ######################################## //
+
+    // ######################################## Drop Down Declaration ######################################## //
+
+    // ************ Item type Drop Down List ************ //
+
+    var ddlItemTypeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemTypeID",
+                fields: {
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetItemTypes", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 8
+    });
+
+    function ItemTypeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "ItemTypeName",
+                dataValueField: "ItemTypeID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlItemTypeDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("ItemTypeName", dataItem.ItemTypeName);
+                    options.model.set("ItemTypeID", dataItem.ItemTypeID);
+                    var cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(6)');
+                    $('#IssueItemsGrid').data('kendoGrid').closeCell(cell);
+                    cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(7)');
+                    $('#IssueItemsGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+
+    // ************ Item type Drop Down List End ************ //
+
+    // ************ Leather Status Drop Down List ************ //
+
+    var ddlLeatherStatusDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LeatherStatusID",
+                fields: {
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLeatherStatus", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 8
+    });
+
+    function LeatherStatusDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "LeatherStatusName",
+                dataValueField: "LeatherStatusID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlLeatherStatusDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("LeatherStatusName", dataItem.LeatherStatusName);
+                    options.model.set("LeatherStatusID", dataItem.LeatherStatusID);
+                    var cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(8)');
+                    $('#IssueItemsGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(8)');
+                    //$('#IssueItemsGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+
+    // ************ Leather Status Drop Down List End ************ //
+
+    // ************ Leather Type Drop Down List ************ //
+
+    var ddlLeatherTypeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LeatherTypeID",
+                fields: {
+                    LeatherTypeID: { editable: false },
+                    LeatherTypeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLeatherType", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 8
+    });
+
+    function LeatherTypeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "LeatherTypeName",
+                dataValueField: "LeatherTypeID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlLeatherTypeDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("LeatherTypeName", dataItem.LeatherTypeName);
+                    options.model.set("LeatherTypeID", dataItem.LeatherTypeID);
+                    var cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(7)');
+                    $('#IssueItemsGrid').data('kendoGrid').closeCell(cell);
+                    cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(8)');
+                    $('#IssueItemsGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+
+    // ************ Leather Type Drop Down List End ************ //
+
+    // ************ Unit Drop Down List ************ //
+
+    var ddlUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetUnitsForLeather", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 8
+    });
+
+    function UnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlUnitDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("UnitName", dataItem.UnitName);
+                    options.model.set("AreaUnit", dataItem.UnitID);
+                    var cell = $('#IssueItemsColorGrid').find('.k-state-selected td:eq(10)');
+                    $('#IssueItemsColorGrid').data('kendoGrid').closeCell(cell);
+                    cell = $('#IssueItemsColorGrid').find('.k-state-selected td:eq(11)');
+                    $('#IssueItemsColorGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+
+    // ************ Leather Type Drop Down List End ************ //
+
+    // ************ Issue From & Issue To Drop Down List ************ //
+
+    function SetDropDownData(data) {
+        $('#ddlCLIFSIssueFrom').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+        $('#ddlCLIFSIssueTo').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                $('#ddlCLIFSIssueFrom').append($('<option></option>').val(data[i].StoreID).html(data[i].StoreName));
+                $('#ddlCLIFSIssueTo').append($('<option></option>').val(data[i].StoreID).html(data[i].StoreName));
+            }
+        }
+    }
+
+    function GetStoreValue(value) {
+        if (value == "STTF") {
+            $.ajax({
+                url: '@Url.Action("GetStoreByTrans", "CrustedLeatherIssueFromStore")',
+                type: 'GET',
+                success: function (data) {
+                    SetDropDownData(data);
+                }
+            });
+        }
+        if (value == "PROD") {
+            $.ajax({
+                url: '@Url.Action("GetStoreByTrans", "CrustedLeatherIssueFromStore")',
+                type: 'GET',
+                success: function (data) {
+                    $('#ddlCLIFSIssueFrom').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+                    if (data != null) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#ddlCLIFSIssueFrom').append($('<option></option>').val(data[i].StoreID).html(data[i].StoreName));
+                        }
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '@Url.Action("GetStoreByProd", "CrustedLeatherIssueFromStore")',
+                type: 'GET',
+                success: function (data) {
+                    $('#ddlCLIFSIssueTo').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+                    if (data != null) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#ddlCLIFSIssueTo').append($('<option></option>').val(data[i].StoreID).html(data[i].StoreName));
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+
+    $('#ddlCLIFSIssueCatergory').change(function (e) {
+        GetStoreValue(this.value);
+        if (this.value == "PROD") {
+            $('#filters').show(300);
+        } else {
+            $('#filters').hide(300);
+        }
+    });
+
+    // ************ Issue From & Issue To Drop Down List End ************ //
+
+    // ************ Production Floor Drop Down List ************ //
+
+    $.getJSON("/CrustedLeatherIssueFromStore/GetProdFloor/", function (data) {
+        $('#txtCLIFSProductionFloor').children().remove().end().append('<option selected value="" style="display: none;">-- Select --</option>');
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                $('#txtCLIFSProductionFloor').append($('<option></option>').val(data[i].StoreID).html(data[i].StoreName));
+            }
+        }
+    });
+
+    // ************ Production Floor Drop Down List End ************ //
+
+    // ######################################## Drop Down Declaration End ######################################## //
+
+    // ######################################## Pop-up events ######################################## //
+
+    // ************ Requisition Window Pop-up Event ************ //
+
+    function SetRequisition() {
+        var gridRequisition = $("#RequisitionWindowGrid").data("kendoGrid");
+        var selectedReqGrid = (gridRequisition.dataItem(gridRequisition.select()));
+        $('#txtCLIFSRequisitionNo').val(selectedReqGrid.RequisitionNo);
+        var qcLabel = $('input:radio[name=QCStatus]:checked').val();
+        if (selectedReqGrid != null) {
+            var items = [];
+            //var colors = [];
+            $.ajax({
+                url: '@Url.Action("GetReqById", "CrustedLeatherIssueFromStore")',
+                type: 'GET',
+                data: ({
+                    reqDateId: selectedReqGrid.RequisitionDateID, issueFrom: selectedReqGrid.IssueFrom,
+                    issueTo: selectedReqGrid.IssueTo, qcLabel: qcLabel
+                }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    var reqno;
+
+
+                    //if (data.length > 0) {
+                    //    for (var i = 0; i < data.length; i++) {
+                    //        issueItem.SlNo = i + 1;
+                    //        issueItem.RequisitionDateID = data[i].RequisitionDateID;
+                    //        issueItem.RequisitionNo = data[i].RequisitionNo;
+                    //        reqno = data[i].RequisitionNo;
+                    //        issueItem.BuyerID = data[i].BuyerID;
+                    //        issueItem.BuyerName = data[i].BuyerName;
+                    //        issueItem.BuyerOrderID = data[i].BuyerOrderID;
+                    //        issueItem.BuyerOrderNo = data[i].BuyerOrderNo;
+                    //        issueItem.ArticleID = data[i].ArticleID;
+                    //        issueItem.ArticleNo = data[i].ArticleNo;
+                    //        issueItem.ArticleChallanNo = data[i].ArticleChallanNo;
+                    //        issueItem.ArticleName = data[i].ArticleName;
+                    //        issueItem.ItemTypeID = data[i].ItemTypeID;
+                    //        issueItem.ItemTypeName = data[i].ItemTypeName;
+                    //        issueItem.LeatherTypeID = data[i].LeatherTypeID;
+                    //        issueItem.LeatherTypeName = data[i].LeatherTypeName;
+                    //        issueItem.LeatherStatusID = data[i].LeatherStatusID;
+                    //        issueItem.LeatherStatusName = data[i].LeatherStatusName;
+                    //        items.push(issueItem);
+                    //        for (var j = 0; j < data[i].Colors.length; j++) {
+                    //            itemColor.SlNo = i + 1;
+                    //            itemColor.ArticleColorNo = data[i].Colors[j].ArticleColorNo;
+                    //            itemColor.ColorID = data[i].Colors[j].ColorID;
+                    //            itemColor.ColorName = data[i].Colors[j].ColorName;
+                    //            itemColor.GradeRange = data[i].Colors[j].GradeRange;
+                    //            itemColor.IssuePcs = data[i].Colors[j].IssuePcs;
+                    //            itemColor.IssueSide = data[i].Colors[j].IssueSide;
+                    //            itemColor.IssueArea = data[i].Colors[j].IssueArea;
+                    //            colors.push(itemColor);
+                    //            ClearColors();
+                    //        }
+                    //        ClearItems();
+                    //    }
+
+                    ////    $('#txtCLIFSRequisitionNo').val(reqno);
+                    ////    issueItemsGridDataSource.data(items);
+                    ////    issueItemsColorGridDataSource.data(colors);
+
+                    ////}
+                    itemColors = [];
+                    if (data.length > 0) {
+                        $.ajax({
+                            url: '@Url.Action("GetStoreByTrans", "CrustedLeatherIssueFromStore")',
+                            type: 'GET',
+                            success: function (res) {
+                                $('#ddlCLIFSIssueFrom').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+                                if (res != null) {
+                                    for (var k = 0; k < res.length; k++) {
+                                        $('#ddlCLIFSIssueFrom').append($('<option></option>').val(res[k].StoreID).html(res[k].StoreName));
+                                    }
+                                    $('#ddlCLIFSIssueFrom').val(selectedReqGrid.IssueFrom);
+                                }
+                            }
+                        });
+
+                        $.ajax({
+                            url: '@Url.Action("GetStoreByProd", "CrustedLeatherIssueFromStore")',
+                            type: 'GET',
+                            success: function (res) {
+                                $('#ddlCLIFSIssueTo').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+                                if (res != null) {
+                                    var count = res.length;
+                                    for (var l = 0; l < count; l++) {
+                                        $('#ddlCLIFSIssueTo').append($('<option></option>').val(res[l].StoreID).html(res[l].StoreName));
+                                    }
+                                    $('#ddlCLIFSIssueTo').val(selectedReqGrid.IssueTo);
+                                }
+                            }
+                        });
+                        for (var i = 0; i < data.length; i++) {
+                            issueItem.SlNo = (i + 1) - 0;
+                            issueItem.CrustLeatherIssueItemID = data[i].CrustLeatherIssueItemID;
+                            issueItem.CrustLeatherIssueID = data[i].CrustLeatherIssueID;
+                            issueItem.RequisitionDateID = data[i].RequisitionDateID;
+                            issueItem.RequisitionNo = selectedReqGrid.RequisitionNo;
+                            //reqno = data[i].RequisitionNo;
+                            issueItem.BuyerID = data[i].BuyerID;
+                            issueItem.BuyerName = data[i].BuyerName;
+                            issueItem.BuyerOrderID = data[i].BuyerOrderID;
+                            issueItem.BuyerOrderNo = data[i].BuyerOrderNo;
+                            issueItem.ArticleID = data[i].ArticleID;
+                            issueItem.ArticleNo = data[i].ArticleNo;
+                            issueItem.ArticleChallanNo = data[i].ArticleChallanNo;
+                            issueItem.ArticleName = data[i].ArticleName;
+                            issueItem.ItemTypeID = data[i].ItemTypeID;
+                            issueItem.ItemTypeName = data[i].ItemTypeName;
+                            issueItem.LeatherTypeID = data[i].LeatherTypeID;
+                            issueItem.LeatherTypeName = data[i].LeatherTypeName;
+                            issueItem.LeatherStatusID = data[i].LeatherStatusID;
+                            issueItem.LeatherStatusName = data[i].LeatherStatusName;
+                            items.push(issueItem);
+                            var count2 = data[i].Colors.length;
+                            if (count2 > 0) {
+                                for (var j = 0; j < count2; j++) {
+
+                                    itemColor.SlNo = issueItem.SlNo;
+                                    itemColor.SlNo2 = j + 1;
+                                    itemColor.CrustLeatherIssueColorID = data[i].Colors[j].CrustLeatherIssueColorID;
+                                    itemColor.CrustLeatherIssueItemID = data[i].CrustLeatherIssueItemID;
+                                    itemColor.CrustLeatherIssueID = data[i].CrustLeatherIssueID;
+                                    itemColor.ArticleColorNo = data[i].Colors[j].ArticleColorNo;
+                                    itemColor.ColorID = data[i].Colors[j].ColorID;
+                                    itemColor.ColorName = data[i].Colors[j].ColorName;
+                                    itemColor.GradeID = data[i].Colors[j].GradeID;
+                                    itemColor.GradeName = data[i].Colors[j].GradeName;
+                                    itemColor.GradeRange = data[i].Colors[j].GradeRange;
+                                    itemColor.ClosingStockPcs = data[i].Colors[j].ClosingStockPcs;
+                                    itemColor.ClosingStockSide = data[i].Colors[j].ClosingStockSide;
+                                    itemColor.ClosingStockArea = data[i].Colors[j].ClosingStockArea;
+                                    itemColor.IssuePcs = data[i].Colors[j].IssuePcs;
+                                    itemColor.IssueSide = data[i].Colors[j].IssueSide;
+                                    itemColor.IssueArea = data[i].Colors[j].IssueArea;
+                                    itemColor.SideArea = data[i].Colors[j].SideArea;
+                                    itemColor.AreaUnit = data[i].Colors[j].AreaUnit;
+                                    itemColor.UnitName = data[i].Colors[j].UnitName;
+                                    itemColor.CrustQCLabel = data[i].Colors[j].CrustQCLabel;
+                                    itemColors.push(itemColor);
+                                    ClearColors();
+                                }
+                            }
+                            ClearItems();
+                        }
+                    }
+                    //$('#txtCLIFSRequisitionNo').val(reqno);
+                    issueItemsGridDataSource.data(items);
+                    RequisitionWindow.close();
+                }
+            });
+        }
+    }
+
+    $('#btnRequisitionWindowOK').click(function () {
+        SetRequisition();
+    });
+
+    $('#RequisitionWindowGrid').dblclick(function () {
+        SetRequisition();
+    });
+
+    $('#RequisitionWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetRequisition();
+        }
+    });
+
+    $('#btnRequisitionWindowCancel').click(function () {
+        RequisitionWindow.close();
+    });
+
+    // ************ Requisition Window Pop-up Event End ************ //
+
+    // ************ Buyer Window Pop-up Event ************ //
+
+    function setBuyer() {
+        var gridBuyerSearch = $("#BuyerWindowGrid").data("kendoGrid");
+        var selectedBuyerGrid = (gridBuyerSearch.dataItem(gridBuyerSearch.select())); //Selected Row
+        var grid = $("#IssueItemsGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        var storeId = $('#ddlCLIFSIssueFrom').val();
+        var lbl = $('input:radio[name=QCStatus]:checked').val();
+        //issueItem.SlNo = selectedBuyerGrid.SlNo;
+        var ds = issueItemsGridDataSource.data();
+
+        selectedItem.set("SlNo", ds.length);
+        selectedItem.set("BuyerID", selectedBuyerGrid.BuyerID);
+        selectedItem.set("BuyerName", selectedBuyerGrid.BuyerName);
+        selectedItem.set("BuyerOrderID", selectedBuyerGrid.BuyerOrderID);
+        selectedItem.set("BuyerOrderNo", selectedBuyerGrid.BuyerOrderNo);
+        selectedItem.set("ArticleID", selectedBuyerGrid.ArticleID);
+        selectedItem.set("ArticleNo", selectedBuyerGrid.ArticleNo);
+        selectedItem.set("ArticleChallanID", selectedBuyerGrid.ArticleChallanID);
+        selectedItem.set("ArticleChallanNo", selectedBuyerGrid.ArticleChallanNo);
+        selectedItem.set("ArticleName", selectedBuyerGrid.ArticleName);
+        selectedItem.set("ItemTypeID", selectedBuyerGrid.ItemTypeID);
+        selectedItem.set("ItemTypeName", selectedBuyerGrid.ItemTypeName);
+        selectedItem.set("LeatherTypeID", selectedBuyerGrid.LeatherTypeID);
+        selectedItem.set("LeatherTypeName", selectedBuyerGrid.LeatherTypeName);
+        selectedItem.set("LeatherStatusID", selectedBuyerGrid.LeatherStatusID);
+        selectedItem.set("LeatherStatusName", selectedBuyerGrid.LeatherStatusName);
+        $.ajax({
+            url: '@Url.Action("GetColorByComb", "CrustedLeatherIssueFromStore")',
+            type: 'GET',
+            data: ({
+                storeId: storeId, qcLabel: lbl, buyerId: selectedBuyerGrid.BuyerID,
+                buyerOrderId: selectedBuyerGrid.BuyerOrderID, articleId: selectedBuyerGrid.ArticleID,
+                articleChallanId: selectedBuyerGrid.ArticleChallanID, itemTypeId: selectedBuyerGrid.ItemTypeID,
+                leatherTypeId: selectedBuyerGrid.LeatherTypeID, leatherStatusId: selectedBuyerGrid.LeatherStatusID
+            }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                var reqno;
+                if (data.length > 0) {
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            itemColor.SlNo = selectedItem.SlNo;
+                            itemColor.SlNo2 = i + 1;
+                            itemColor.CrustLeatherIssueColorID = data[i].CrustLeatherIssueColorID;
+                            itemColor.CrustLeatherIssueItemID = data[i].CrustLeatherIssueItemID;
+                            itemColor.CrustLeatherIssueID = data[i].CrustLeatherIssueID;
+                            itemColor.ArticleColorNo = data[i].ArticleColorNo;
+                            itemColor.ColorID = data[i].ColorID;
+                            itemColor.ColorName = data[i].ColorName;
+                            itemColor.GradeID = data[i].GradeID;
+                            itemColor.GradeName = data[i].GradeName;
+                            itemColor.GradeRange = data[i].GradeRange;
+                            itemColor.IssuePcs = data[i].IssuePcs;
+                            itemColor.IssueSide = data[i].IssueSide;
+                            itemColor.IssueArea = data[i].IssueArea;
+                            itemColor.ClosingStockPcs = data[i].ClosingStockPcs;
+                            itemColor.ClosingStockSide = data[i].ClosingStockSide;
+                            itemColor.ClosingStockArea = data[i].ClosingStockArea;
+                            itemColor.AreaUnit = data[i].AreaUnit;
+                            itemColor.AreaUnitName = data[i].AreaUnitName;
+                            itemColor.CrustQCLabel = data[i].CrustQCLabel;
+                            itemColor.SideArea = data[i].SideArea;
+                            itemColors.push(itemColor);
+                            ClearColors();
+                        }
+                    }
+                    var showColor = [];
+                    if (itemColors.length > 0) {
+                        for (var k = 0; k < itemColors.length; k++) {
+                            if (currSlNo == itemColors[k].SlNo) {
+                                itemColor.SlNo = currSlNo;
+                                itemColor.SlNo2 = itemColors[k].SlNo2;
+                                itemColor.CrustLeatherIssueColorID = itemColors[k].CrustLeatherIssueColorID;
+                                itemColor.CrustLeatherIssueItemID = itemColors[k].CrustLeatherIssueItemID;
+                                itemColor.CrustLeatherIssueID = itemColors[k].CrustLeatherIssueID;
+                                itemColor.ArticleColorNo = itemColors[k].ArticleColorNo;
+                                itemColor.ColorID = itemColors[k].ColorID;
+                                itemColor.ColorName = itemColors[k].ColorName;
+                                itemColor.GradeID = itemColors[k].GradeID;
+                                itemColor.GradeName = itemColors[k].GradeName;
+                                itemColor.GradeRange = itemColors[k].GradeRange;
+                                itemColor.IssuePcs = itemColors[k].IssuePcs;
+                                itemColor.IssueSide = itemColors[k].IssueSide;
+                                itemColor.IssueArea = itemColors[k].IssueArea;
+                                itemColor.ClosingStockPcs = itemColors[k].ClosingStockPcs;
+                                itemColor.ClosingStockSide = itemColors[k].ClosingStockSide;
+                                itemColor.ClosingStockArea = itemColors[k].ClosingStockArea;
+                                itemColor.AreaUnit = itemColors[k].AreaUnit;
+                                itemColor.AreaUnitName = itemColors[k].AreaUnitName;
+                                itemColor.CrustQCLabel = itemColors[k].CrustQCLabel;
+                                itemColor.SideArea = itemColors[k].SideArea;
+                                showColor.push(itemColor);
+                                ClearColors();
+                            }
+                        }
+                    }
+                    if (showColor.length > 0) {
+                        $("#IssueItemsColorGrid").data('kendoGrid').dataSource.data(showColor);
+                    }
+                    BuyerWindow.close();
+                }
+            }
+        });
+
+    }
+
+    $('#btnBuyerWindowOK').click(function () {
+        setBuyer();
+    });
+
+    $('#BuyerWindowGrid').dblclick(function () {
+        setBuyer();
+    });
+
+    $('#BuyerWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            setBuyer();
+        }
+    });
+
+    $('#btnBuyerWindowCancel').click(function () {
+        BuyerWindow.close();
+    });
+
+    // ************ Buyer Window Pop-up Event End ************ //
+
+    // ************ Buyer Order Window Pop-up Event ************ //
+
+    function GetColor(slNo, storeId, buyerId, orderId, articleId, itemTypeId, leatherTypeId, leatherStatusId) {
+        var colors = [];
+        $.ajax({
+            url: '@Url.Action("GetColorByComb", "CrustedLeatherIssueFromStore")',
+            type: 'GET',
+            data: ({ "storeId": storeId, "buyerId": buyerId, "orderId": orderId, "articleId": articleId, "itemTypeId": itemTypeId, "leatherTypeId": leatherTypeId, "leatherStatusId": leatherStatusId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                if (data != null) {
+                    for (var i = 0; i < data.length; i++) {
+                        itemColor.SlNo = slNo;
+                        itemColor.ArticleColorNo = data[i].ArticleColorNo;
+                        itemColor.ColorID = data[i].ColorID;
+                        itemColor.ColorName = data[i].ColorName;
+                        itemColor.GradeID = data[i].GradeID;
+                        itemColor.GradeName = data[i].GradeName;
+                        itemColor.GradeRange = data[i].GradeRange;
+                        itemColor.ClosingStockPcs = data[i].ClosingStockPcs;
+                        itemColor.ClosingStockPcs = data[i].ClosingStockPcs;
+                        itemColor.ClosingStockPcs = data[i].ClosingStockPcs;
+                        itemColor.CrustQCLabel = data[i].CrustQCLabel;
+                        colors.push(itemColor);
+                        ClearColors();
+                    }
+                    issueItemsColorGridDataSource.data(colors);
+                }
+            }
+        });
+    }
+
+    function setBuyerOrder() {
+        var gridBuyerOrderSearch = $("#BuyerOrderWindowGrid").data("kendoGrid");
+        var selectedBuyerOrderGrid = (gridBuyerOrderSearch.dataItem(gridBuyerOrderSearch.select())); //Selected Row
+        var gridItem = $("#IssueItemsGrid").data("kendoGrid");
+        var selectedItem = (gridItem.dataItem(gridItem.select()));
+        if (selectedBuyerOrderGrid != null) {
+            selectedItem.set("BuyerOrderID", selectedBuyerOrderGrid.BuyerOrderID);
+            selectedItem.set("BuyerOrderNo", selectedBuyerOrderGrid.BuyerOrderNo);
+            selectedItem.set("ArticleID", selectedBuyerOrderGrid.ArticleID);
+            selectedItem.set("ArticleNo", selectedBuyerOrderGrid.ArticleNo);
+            selectedItem.set("ArticleName", selectedBuyerOrderGrid.ArticleName);
+            selectedItem.set("ArticleChallanNo", selectedBuyerOrderGrid.ArticleChallanNo);
+            selectedItem.set("ItemTypeID", selectedBuyerOrderGrid.ItemTypeID);
+            selectedItem.set("ItemTypeName", selectedBuyerOrderGrid.ItemTypeName);
+            selectedItem.set("LeatherTypeID", selectedBuyerOrderGrid.LeatherTypeID);
+            selectedItem.set("LeatherTypeName", selectedBuyerOrderGrid.LeatherTypeName);
+            selectedItem.set("LeatherStatusID", selectedBuyerOrderGrid.LeatherStatusID);
+            selectedItem.set("LeatherStatusName", selectedBuyerOrderGrid.LeatherStatusName);
+            //console.log(selectedBuyerOrderGrid);
+            var cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(3)'); // or different cell
+            $('#IssueItemsGrid').data('kendoGrid').editCell(cell);
+            var storeId = $('#ddlCLIFSIssueFrom').val();
+            GetColor(selectedItem.SlNo, storeId, selectedBuyerOrderGrid.BuyerID, selectedBuyerOrderGrid.BuyerOrderID, selectedBuyerOrderGrid.ArticleID,
+                selectedBuyerOrderGrid.ItemTypeID, selectedBuyerOrderGrid.LeatherTypeID, selectedBuyerOrderGrid.LeatherStatusID);
+            BuyerOrderWindow.close();
+        } else {
+            alert("Select an order first!");
+        }
+    }
+
+    $('#btnBuyerOrderWindowOK').click(function () {
+        setBuyerOrder();
+    });
+
+    $('#BuyerOrderWindowGrid').dblclick(function () {
+        setBuyerOrder();
+    });
+
+    $('#BuyerOrderWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            setBuyerOrder();
+        }
+    });
+
+    $('#btnBuyerOrderWindowCancel').click(function () {
+        BuyerOrderWindow.close();
+    });
+
+    // ************ Buyer Order Window Pop-up Event End ************ //
+
+    // ************ Article Window Pop-up Event End ************ //
+
+    function setArticle() {
+        var gridArticleSearch = $("#ArticleWindowGrid").data("kendoGrid");
+        var selectedArticleGrid = (gridArticleSearch.dataItem(gridArticleSearch.select())); //Selected Row
+        var gridItem = $("#IssueItemsGrid").data("kendoGrid");
+        var selectedItem = (gridItem.dataItem(gridItem.select()));
+        if (selectedArticleGrid != null) {
+            selectedItem.set("ArticleID", selectedArticleGrid.ArticleID);
+            selectedItem.set("ArticleNo", selectedArticleGrid.ArticleNo);
+            selectedItem.set("ArticleName", selectedArticleGrid.ArticleName);
+            selectedItem.set("ArticleChallanNo", selectedArticleGrid.ArticleChallanNo);
+            var cell = $('#IssueItemsGrid').find('.k-state-selected td:eq(5)'); // or different cell
+            $('#IssueItemsGrid').data('kendoGrid').editCell(cell);
+            ArticleWindow.close();
+        } else {
+            alert("Select an article first!");
+        }
+    }
+
+    $('#btnArticleWindowOK').click(function () {
+        setArticle();
+    });
+
+    $('#ArticleWindowGrid').dblclick(function () {
+        setArticle();
+    });
+
+    $('#ArticleWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            setArticle();
+        }
+    });
+
+    $('#btnArticleWindowCancel').click(function () {
+        ArticleWindow.close();
+    });
+
+    // ************ Article Window Pop-up Event End ************ //
+
+    // ************ Color Window Pop-up Event ************ //
+
+    function setColor() {
+        var gridColorSearch = $("#ColorsWindowGrid").data("kendoGrid");
+        var selectedColorGrid = (gridColorSearch.dataItem(gridColorSearch.select())); //Selected Row
+        var gridColor = $("#IssueItemsColorGrid").data("kendoGrid");
+        var selectedRow = (gridColor.dataItem(gridColor.select()));
+        if (selectedColorGrid != null) {
+            selectedRow.set("ColorID", selectedColorGrid.ColorID);
+            selectedRow.set("ColorName", selectedColorGrid.ColorName);
+            var cell = $('#IssueItemsColorGrid').find('.k-state-selected td:eq(1)'); // or different cell
+            $('#IssueItemsColorGrid').data('kendoGrid').editCell(cell);
+            ColorsWindow.close();
+        } else {
+            alert("Select an article first!");
+        }
+    }
+
+    $('#btnColorWindowOK').click(function () {
+        setColor();
+    });
+
+    $('#ColorsWindowGrid').dblclick(function () {
+        setColor();
+    });
+
+    $('#ColorsWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            setColor();
+        }
+    });
+
+    $('#btnColorWindowCancel').click(function () {
+        ColorsWindow.close();
+    });
+
+    // ************ Color Window Pop-up Event End ************ //
+
+    // ************ Grade Window Pop-up Event ************ //
+
+    function setGrade() {
+        var gridGradeSearch = $("#GradeWindowGrid").data("kendoGrid");
+        var selectedGradeGrid = (gridGradeSearch.dataItem(gridGradeSearch.select())); //Selected Row
+        var gridColor = $("#IssueItemsColorGrid").data("kendoGrid");
+        var selectedRow = (gridColor.dataItem(gridColor.select()));
+        if (selectedGradeGrid != null) {
+            selectedRow.set("GradeID", selectedGradeGrid.GradeID);
+            selectedRow.set("GradeName", selectedGradeGrid.GradeName);
+            var cell = $('#IssueItemsColorGrid').find('.k-state-selected td:eq(2)'); // or different cell
+            $('#IssueItemsColorGrid').data('kendoGrid').editCell(cell);
+            GradeWindow.close();
+        } else {
+            alert("Select an article first!");
+        }
+    }
+
+    $('#btnGradeWindowOK').click(function () {
+        setGrade();
+    });
+
+    $('#GradeWindowGrid').dblclick(function () {
+        setGrade();
+    });
+
+    $('#GradeWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            setGrade();
+        }
+    });
+
+    $('#btnGradeWindowCancel').click(function () {
+        GradeWindow.close();
+    });
+
+    // ************ Grade Window Pop-up Event End ************ //
+
+    // ************ Issue Window Pop-up Event ************ //
+
+    function SetIssue(issueId) {
+        var items = [];
+        $.ajax({
+            url: '@Url.Action("GetIssueById", "CrustedLeatherIssueFromStore")',
+            type: 'GET',
+            data: ({ "issueId": issueId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $('#txtCLIFSIssueId').val(data.CrustLeatherIssueID);
+                    $('#txtCLIFSIssueNo').val(data.CrustLeatherIssueNo);
+                    $('#txtCLIFSIssueDate').val(data.CrustLeatherIssueDate);
+                    $('#ddlCLIFSIssueCatergory').val(data.IssueCategory);
+                    GetStoreValue(data.IssueCategory);
+                    $('#ddlCLIFSIssueFor').val(data.IssueFor);
+
+                    issueFrom = "";
+                    issueFrom = data.IssueFrom;
+                    CheckRecordStatusForButton(data.RecordStatus);
+                    $.ajax({
+                        url: '@Url.Action("GetStoreByTrans", "CrustedLeatherIssueFromStore")',
+                        type: 'GET',
+                        success: function (res) {
+                            $('#ddlCLIFSIssueFrom').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+                            if (res != null) {
+                                for (var k = 0; k < res.length; k++) {
+                                    $('#ddlCLIFSIssueFrom').append($('<option></option>').val(res[k].StoreID).html(res[k].StoreName));
+                                }
+                                $('#ddlCLIFSIssueFrom').val(data.IssueFrom);
+                            }
+                        }
+                    });
+                    if (data.IssueCategory == "STTF") {
+                        $.ajax({
+                            url: '@Url.Action("GetStoreByTrans", "CrustedLeatherIssueFromStore")',
+                            type: 'GET',
+                            success: function (res) {
+                                $('#ddlCLIFSIssueTo').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+
+                                if (res != null) {
+                                    var count = res.length;
+                                    for (var l = 0; l < count; l++) {
+                                        $('#ddlCLIFSIssueTo').append($('<option></option>').val(res[l].StoreID).html(res[l].StoreName));
+                                    }
+                                    $('#ddlCLIFSIssueTo').val(data.IssueTo);
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: '@Url.Action("GetStoreByProd", "CrustedLeatherIssueFromStore")',
+                            type: 'GET',
+                            success: function (res) {
+                                $('#ddlCLIFSIssueTo').children().remove().end().append('<option selected value="" style="display:none;">-- Select --</option>');
+                                if (res != null) {
+                                    for (var l = 0; l < res.length; l++) {
+                                        $('#ddlCLIFSIssueTo').append($('<option></option>').val(res[l].StoreID).html(res[l].StoreName));
+                                    }
+                                    $('#ddlCLIFSIssueTo').val(data.IssueTo);
+                                }
+                            }
+                        });
+                    }
+
+                    $('#txtCLIFSCheckNote').val(data.CheckNote);
+                    $('#txtCLIFSIssueNote').val(data.IssueNote);
+                    $("#IssueItemsGrid").data('kendoGrid').dataSource.data([]);
+                    $("#IssueItemsColorGrid").data('kendoGrid').dataSource.data([]);
+                    itemColors = [];
+                    if (data.Items.length > 0) {
+                        for (var i = 0; i < data.Items.length; i++) {
+                            issueItem.SlNo = (i + 1) - 0;
+                            issueItem.CrustLeatherIssueItemID = data.Items[i].CrustLeatherIssueItemID;
+                            issueItem.CrustLeatherIssueID = data.Items[i].CrustLeatherIssueID;
+                            issueItem.RequisitionDateID = data.Items[i].RequisitionDateID;
+                            issueItem.RequisitionNo = data.Items[i].RequisitionNo;
+                            issueItem.BuyerID = data.Items[i].BuyerID;
+                            issueItem.BuyerName = data.Items[i].BuyerName;
+                            issueItem.BuyerOrderID = data.Items[i].BuyerOrderID;
+                            issueItem.BuyerOrderNo = data.Items[i].BuyerOrderNo;
+                            issueItem.ArticleID = data.Items[i].ArticleID;
+                            issueItem.ArticleNo = data.Items[i].ArticleNo;
+                            issueItem.ArticleChallanID = data.Items[i].ArticleChallanID;
+                            issueItem.ArticleChallanNo = data.Items[i].ArticleChallanNo;
+                            issueItem.ArticleName = data.Items[i].ArticleName;
+                            issueItem.ItemTypeID = data.Items[i].ItemTypeID;
+                            issueItem.ItemTypeName = data.Items[i].ItemTypeName;
+                            issueItem.LeatherTypeID = data.Items[i].LeatherTypeID;
+                            issueItem.LeatherTypeName = data.Items[i].LeatherTypeName;
+                            issueItem.LeatherStatusID = data.Items[i].LeatherStatusID;
+                            issueItem.LeatherStatusName = data.Items[i].LeatherStatusName;
+                            items.push(issueItem);
+                            var count2 = data.Items[i].Colors.length;
+                            if (count2 > 0) {
+                                for (var j = 0; j < count2; j++) {
+
+                                    itemColor.SlNo = issueItem.SlNo;
+                                    itemColor.SlNo2 = j + 1;
+                                    itemColor.CrustLeatherIssueColorID = data.Items[i].Colors[j].CrustLeatherIssueColorID;
+                                    itemColor.CrustLeatherIssueItemID = data.Items[i].CrustLeatherIssueItemID;
+                                    itemColor.CrustLeatherIssueID = data.CrustLeatherIssueID;
+                                    itemColor.ArticleColorNo = data.Items[i].Colors[j].ArticleColorNo;
+                                    itemColor.ColorID = data.Items[i].Colors[j].ColorID;
+                                    itemColor.ColorName = data.Items[i].Colors[j].ColorName;
+                                    itemColor.GradeID = data.Items[i].Colors[j].GradeID;
+                                    itemColor.GradeName = data.Items[i].Colors[j].GradeName;
+                                    itemColor.GradeRange = data.Items[i].Colors[j].GradeRange;
+                                    itemColor.ClosingStockPcs = data.Items[i].Colors[j].ClosingStockPcs;
+                                    itemColor.ClosingStockSide = data.Items[i].Colors[j].ClosingStockSide;
+                                    itemColor.ClosingStockArea = data.Items[i].Colors[j].ClosingStockArea;
+                                    itemColor.IssuePcs = data.Items[i].Colors[j].IssuePcs;
+                                    itemColor.IssueSide = data.Items[i].Colors[j].IssueSide;
+                                    itemColor.IssueArea = data.Items[i].Colors[j].IssueArea;
+                                    itemColor.SideArea = data.Items[i].Colors[j].SideArea;
+                                    itemColor.AreaUnit = data.Items[i].Colors[j].AreaUnit;
+                                    itemColor.UnitName = data.Items[i].Colors[j].UnitName;
+                                    itemColor.CrustQCLabel = data.Items[i].Colors[j].CrustQCLabel;
+                                    itemColors.push(itemColor);
+                                    ClearColors();
+                                }
+                            }
+                            ClearItems();
+                        }
+                    }
+                    issueItemsGridDataSource.data(items);
+                    IssueWindow.close();
+                }
+            }
+
+        });
+    }
+
+    function PreSetIssue() {
+        if (changeStatus == 1) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            var gridIssueSearch = $("#IssueWindowGrid").data("kendoGrid");
+            var selectedIssueGrid = (gridIssueSearch.dataItem(gridIssueSearch.select()));
+            SetIssue(selectedIssueGrid.CrustLeatherIssueID);
+            IssueWindow.close();
+        }
+    }
+
+    $('#btnIssueWindowOK').click(function () {
+        PreSetIssue();
+    });
+
+    $('#IssueWindowGrid').dblclick(function () {
+        PreSetIssue();
+    });
+
+    $('#IssueWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            PreSetIssue();
+        }
+    });
+
+    $('#btnIssueWindowCancel').click(function () {
+        IssueWindow.close();
+    });
+
+    // ************ Issue Window Pop-up Event End ************ //
+
+    // ************ Issue Confirm Window Pop-up Event ************ //
+
+    $('#btnIssueConfirmationOK').click(function () {
+        issueConfirm();
+        IssueConfirmWindow.close();
+    });
+
+    $("#btnIssueConfirmationCancel").click(function () {
+        IssueConfirmWindow.close();
+    });
+
+    // ************ Issue Confirm Window Pop-up Event End ************ //
+
+    // ************ Delete Confirm Window Pop-up Event ************ //
+
+    $("#btnDeleteConfirmationOK").click(function () {
+        var id;
+        if (del == "all") {
+            id = $("#txtCLIFSIssueId").val();
+            Delete(id, "all");
+            DeleteWindow.close();
+        }
+        if (del == "item") {
+            id = deleteItem.CrustLeatherIssueItemID;
+            Delete(id, "item");
+            DeleteWindow.close();
+        }
+        if (del == "color") {
+            id = deleteItem.CrustLeatherIssueColorID;
+            Delete(id, "color");
+            DeleteWindow.close();
+        }
+    });
+
+    $("#btnDeleteConfirmationCancel").click(function () {
+        DeleteWindow.close();
+    });
+
+    // ************ Delete Confirm Window Pop-up Event End ************ //
+
+
+    // ************ Issue From & Issue To Drop Down Change Event ************ //
+
+    $('#ddlCLIFSIssueFrom').change(function () {
+        issueFrom = "";
+        issueFrom = $('#ddlCLIFSIssueFrom').val();
+    });
+
+    $('#ddlCLIFSIssueTo').change(function () {
+        issueTo = "";
+        issueTo = $('#ddlCLIFSIssueTo').val();
+    });
+
+    // ************ Issue From & Issue To Drop Down Change Event End ************ //
+
+    // ************ SaveChange Window Pop-up Event End ************ //
+
+    $('#btnSaveChangeWindowOk').click(function () {
+        if (rstVal == "reset") {
+            reset();
+            SaveChangeWindow.close();
+        }
+        if (rstVal == "search") {
+            reset();
+            SaveChangeWindow.close();
+            IssueWindow.open();
+            IssueWindow.center();
+        }
+    });
+
+    $('#btnSaveChangeWindowCancel').click(function () {
+        SaveChangeWindow.close();
+    });
+
+    // ************ SaveChange Window Pop-up Event ************ //
+
+    // ######################################## Pop-up events End ######################################## //
+
+    // ######################################## Buyer Order Item Grid Events ######################################## //
+
+
+    function insColor(color) {
+        var vri = new Object();
+        vri.SlNo = prevSlNo;
+        vri.SlNo2 = color.SlNo2;
+        vri.CrustLeatherIssueColorID = color.CrustLeatherIssueColorID;
+        vri.CrustLeatherIssueItemID = color.CrustLeatherIssueItemID;
+        vri.CrustLeatherIssueID = color.CrustLeatherIssueID;
+        vri.ArticleColorNo = color.ArticleColorNo;
+        vri.ColorID = color.ColorID;
+        vri.ColorName = color.ColorName;
+        //vri.GradeID = color.GradeID;
+        //vri.GradeName = color.GradeName;
+        vri.GradeRange = color.GradeRange;
+        vri.IssuePcs = color.IssuePcs;
+        vri.IssueSide = color.IssueSide;
+        vri.IssueArea = color.IssueArea;
+        vri.ClosingStockPcs = color.ClosingStockPcs;
+        vri.ClosingStockSide = color.ClosingStockSide;
+        vri.ClosingStockArea = color.ClosingStockArea;
+        vri.AreaUnit = color.AreaUnit;
+        vri.AreaUnitName = color.AreaUnitName;
+        vri.CrustQCLabel = color.CrustQCLabel;
+        vri.SideArea = color.SideArea;
+        itemColors.push(vri);
+        //ClearColors();
+    }
+
+    function gridDataSave() {
+        var clrs = [];
+        if (currSlNo != 0) {
+            slNoCount++;
+        }
+        var gridItemSearch = $("#IssueItemsGrid").data("kendoGrid");
+        var selectedItem = (gridItemSearch.dataItem(gridItemSearch.select()));
+        if (selectedItem != null) {
+
+            if (slNoCount > 1 || itemColors.length > 0) {
+                prevSlNo = currSlNo;
+                currSlNo = selectedItem.SlNo;
+            }
+
+            if (prevSlNo != currSlNo) {
+                var colorGrid = issueItemsColorGridDataSource.data();
+
+                if (colorGrid.length > 0) {
+                    if (itemColors.length > 0) {
+                        for (var j = 0; j < itemColors.length; j++) {
+                            if (itemColors[j].SlNo != currSlNo) {
+                                clrs.push(itemColors[j]);
+                            } 
+                            if (clrs.length > 0) {
+                                itemColors = [];
+                                itemColors = clrs;
+                            }
+                            for (var x = 0; x < colorGrid.length; x++) {
+                                insColor(colorGrid[x]);
+                            }
+                        }
+                    } else {
+                        for (var y = 0; y < colorGrid.length; y++) {
+                            insColor(colorGrid[y]);
+                        }
+                    }
+                }
+            }
+
+            $("#IssueItemsColorGrid").data('kendoGrid').dataSource.data([]);
+            var showColor = [];
+            if (itemColors.length > 0) {
+                for (var k = 0; k < itemColors.length; k++) {
+                    if (currSlNo == itemColors[k].SlNo) {
+                        showColor.push(itemColors[k]);
+                    }
+                }
+            }
+            if (showColor.length > 0) {
+                $("#IssueItemsColorGrid").data('kendoGrid').dataSource.data(showColor);
+            }
+        }
+    }
+
+    $("#IssueItemsGrid").on('click', 'tr', function () {
+        gridDataSave();
+
+    });
+
+
+
+    // ######################################## Buyer Order Item Grid Events End ######################################## //
+
+    // ######################################## Save & Update ######################################## //
+
+    function save() {
+
+        ClearIssue();
+        ClearItems();
+        ClearColors();
+        issue.CrustLeatherIssueID = $("#txtCLIFSIssueId").val();
+        issue.CrustLeatherIssueNo = $("#txtCLIFSIssueNo").val();
+        issue.CrustLeatherIssueDate = $("#txtCLIFSIssueDate").val();
+        issue.IssueCategory = $("#ddlCLIFSIssueCatergory").val();
+        issue.IssueFor = $("#ddlCLIFSIssueFor").val();
+        issue.IssueFrom = $('#ddlCLIFSIssueFrom').val();
+        issue.IssueTo = $('#ddlCLIFSIssueTo').val();
+
+        var colorData = issueItemsColorGridDataSource.data();
+        var tempClr = [];
+        if (colorData.length > 0) {
+            for (var l = 0; l < itemColors.length; l++) {
+                if (colorData[0].SlNo != itemColors[l].SlNo) {
+                    tempClr.push(itemColors[l]);
+                }
+            }
+        }
+        if (tempClr.length > 0) {
+            itemColors = [];
+            itemColors = tempClr;
+            for (var m = 0; m < colorData.length; m++) {
+                itemColor.SlNo = currSlNo;
+                itemColor.SlNo2 = colorData[m].SlNo2;
+                itemColor.CrustLeatherIssueColorID = colorData[m].CrustLeatherIssueColorID;
+                itemColor.CrustLeatherIssueItemID = colorData[m].CrustLeatherIssueItemID;
+                itemColor.CrustLeatherIssueID = colorData[m].CrustLeatherIssueID;
+                itemColor.ArticleColorNo = colorData[m].ArticleColorNo;
+                itemColor.ColorID = colorData[m].ColorID;
+                itemColor.ColorName = colorData[m].ColorName;
+                itemColor.GradeID = colorData[m].GradeID;
+                itemColor.GradeName = colorData[m].GradeName;
+                itemColor.GradeRange = colorData[m].GradeRange;
+                itemColor.IssuePcs = colorData[m].IssuePcs;
+                itemColor.IssueSide = colorData[m].IssueSide;
+                itemColor.IssueArea = colorData[m].IssueArea;
+                itemColor.ClosingStockPcs = colorData[m].ClosingStockPcs;
+                itemColor.ClosingStockSide = colorData[m].ClosingStockSide;
+                itemColor.ClosingStockArea = colorData[m].ClosingStockArea;
+                itemColor.AreaUnit = colorData[m].AreaUnit;
+                itemColor.AreaUnitName = colorData[m].AreaUnitName;
+                itemColor.CrustQCLabel = colorData[m].CrustQCLabel;
+                itemColor.SideArea = colorData[m].SideArea;
+                itemColors.push(itemColor);
+                ClearColors();
+            }
+        }
+
+        var itemGridData = issueItemsGridDataSource.data();
+        if (itemGridData.length > 0) {
+            for (var i = 0; i < itemGridData.length; i++) {
+                issueItem.CrustLeatherIssueItemID = itemGridData[i].CrustLeatherIssueItemID;
+                issueItem.CrustLeatherIssueID = $("#txtCLIFSIssueId").val();
+                issueItem.RequisitionDateID = itemGridData[i].RequisitionDateID;
+                issueItem.RequisitionNo = itemGridData[i].RequisitionNo;
+                issueItem.BuyerID = itemGridData[i].BuyerID;
+                issueItem.BuyerOrderID = itemGridData[i].BuyerOrderID;
+                issueItem.BuyerOrderNo = itemGridData[i].BuyerOrderNo;
+                issueItem.ArticleID = itemGridData[i].ArticleID;
+                issueItem.ArticleNo = itemGridData[i].ArticleNo;
+                issueItem.ArticleChallanID = itemGridData[i].ArticleChallanID;
+                issueItem.ArticleChallanNo = itemGridData[i].ArticleChallanNo;
+                issueItem.ItemTypeID = itemGridData[i].ItemTypeID;
+                issueItem.LeatherTypeID = itemGridData[i].LeatherTypeID;
+                issueItem.LeatherStatusID = itemGridData[i].LeatherStatusID;
+                if (itemColors.length > 0) {
+                    for (var j = 0; j < itemColors.length; j++) {
+                        if (itemGridData[i].SlNo == itemColors[j].SlNo) {
+                            itemColor.CrustLeatherIssueColorID = itemColors[j].CrustLeatherIssueColorID;
+                            itemColor.CrustLeatherIssueItemID = itemColors[j].CrustLeatherIssueItemID;
+                            itemColor.CrustLeatherIssueID = itemColors[j].CrustLeatherIssueID;
+                            itemColor.ArticleColorNo = itemColors[j].ArticleColorNo;
+                            itemColor.ColorID = itemColors[j].ColorID;
+                            itemColor.ColorName = itemColors[j].ColorName;
+                            itemColor.GradeID = itemColors[j].GradeID;
+                            itemColor.GradeName = itemColors[j].GradeName;
+                            itemColor.GradeRange = itemColors[j].GradeRange;
+                            itemColor.IssuePcs = itemColors[j].IssuePcs == null ? 0 : itemColors[j].IssuePcs;
+                            itemColor.IssueSide = itemColors[j].IssueSide == null ? 0 : itemColors[j].IssueSide;
+                            itemColor.IssueArea = itemColors[j].IssueArea == null ? 0 : itemColors[j].IssueArea;
+                            itemColor.ClosingStockPcs = itemColors[j].ClosingStockPcs;
+                            itemColor.ClosingStockSide = itemColors[j].ClosingStockSide;
+                            itemColor.ClosingStockArea = itemColors[j].ClosingStockArea;
+                            itemColor.AreaUnit = itemColors[j].AreaUnit;
+                            itemColor.AreaUnitName = itemColors[j].AreaUnitName;
+                            itemColor.CrustQCLabel = itemColors[j].CrustQCLabel;
+                            itemColor.SideArea = itemColors[j].SideArea;
+                            issueItem.Colors.push(itemColor);
+                            ClearColors();
+                        }
+                    }
+                }
+                issue.Items.push(issueItem);
+                ClearItems();
+            }
+        }
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "CrustedLeatherIssueFromStore")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: issue }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $("#txtCLIFSIssueId").val(data.ReturnId);
+                    $("#txtCLIFSIssueNo").val(data.ReturnCode);
+                    SetIssue(data.ReturnId);
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else if (data.Type == 3) {
+                    SetIssue(data.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Connection error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnSave').click(function () {
+        doesDataSourceHaveChanges(issueItemsGridDataSource);
+
+        doesDataSourceHaveChanges(issueItemsColorGridDataSource);
+
+        if (changeStatus == 0) {
+            $('#MessageText').html("No changes to save.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            save();
+        }
+    });
+
+    // ######################################## Save & Update End ######################################## //
+
+    // ######################################## Check ######################################## //
+
+    function check() {
+        if ($("#txtCLIFSIssueId").val() != "") {
+            var issueId = $("#txtCLIFSIssueId").val();
+            var comment = $("#txtCLIFSCheckNote").val();
+            $("#divLoading").show();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Check", "CrustedLeatherIssueFromStore")',
+                dataType: 'JSON',
+                data: JSON.stringify({ issueId: issueId, comment: comment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Type == 2) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        changeStatus = 0;
+                    } else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 0;
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("Please save first!");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }
+
+    $('#btnCheck').click(function () {
+        check();
+    });
+
+
+    // ######################################## Check End ######################################## //
+
+    // ######################################## Issue ######################################## //
+
+    function issueConfirm() {
+        if ($("#txtCLIFSIssueId").val() != "") {
+
+            //ClearIssue();
+            //ClearItems();
+            //ClearColors();
+            //issue.CrustLeatherIssueID = $("#txtCLIFSIssueId").val();
+            //issue.CrustLeatherIssueNo = $("#txtCLIFSIssueNo").val();
+            //issue.CrustLeatherIssueDate = $("#txtCLIFSIssueDate").val();
+            //issue.IssueCategory = $("#ddlCLIFSIssueCatergory").val();
+            //issue.IssueFor = $("#ddlCLIFSIssueFor").val();
+            //issue.IssueFrom = $('#ddlCLIFSIssueFrom').val();
+            //issue.IssueTo = $('#ddlCLIFSIssueTo').val();
+
+            //var itemGridData = issueItemsGridDataSource.data();
+            //if (itemGridData.length > 0) {
+            //    for (var i = 0; i < itemGridData.length; i++) {
+            //        issueItem.CrustLeatherIssueItemID = itemGridData[i].CrustLeatherIssueItemID;
+            //        issueItem.CrustLeatherIssueID = $("#txtCLIFSIssueId").val();
+            //        issueItem.RequisitionDateID = itemGridData[i].RequisitionDateID;
+            //        issueItem.RequisitionNo = itemGridData[i].RequisitionNo;
+            //        issueItem.BuyerID = itemGridData[i].BuyerID;
+            //        issueItem.BuyerOrderID = itemGridData[i].BuyerOrderID;
+            //        issueItem.BuyerOrderNo = itemGridData[i].BuyerOrderNo;
+            //        issueItem.ArticleID = itemGridData[i].ArticleID;
+            //        issueItem.ArticleNo = itemGridData[i].ArticleNo;
+            //        issueItem.ArticleChallanID = itemGridData[i].ArticleChallanID;
+            //        issueItem.ArticleChallanNo = itemGridData[i].ArticleChallanNo;
+            //        issueItem.ItemTypeID = itemGridData[i].ItemTypeID;
+            //        issueItem.LeatherTypeID = itemGridData[i].LeatherTypeID;
+            //        issueItem.LeatherStatusID = itemGridData[i].LeatherStatusID;
+            //        var colorData = issueItemsColorGridDataSource.data();
+            //        var count = 0;
+            //        var tempClr = [];
+            //        if (colorData.length > 0) {
+            //            for (var l = 0; l < itemColors.length; l++) {
+            //                if (colorData[0].SlNo != itemColors[l].SlNo) {
+            //                    tempClr.push(itemColors[l]);
+            //                }
+            //            }
+            //        }
+            //        if (tempClr.length > 0) {
+            //            itemColors = tempClr;
+            //            for (var m = 0; m < colorData.length; m++) {
+            //                itemColor.SlNo = currSlNo;
+            //                itemColor.SlNo2 = colorData[m].SlNo2;
+            //                itemColor.CrustLeatherIssueColorID = colorData[m].CrustLeatherIssueColorID;
+            //                itemColor.CrustLeatherIssueItemID = colorData[m].CrustLeatherIssueItemID;
+            //                itemColor.CrustLeatherIssueID = colorData[m].CrustLeatherIssueID;
+            //                itemColor.ArticleColorNo = colorData[m].ArticleColorNo;
+            //                itemColor.ColorID = colorData[m].ColorID;
+            //                itemColor.ColorName = colorData[m].ColorName;
+            //                itemColor.GradeID = colorData[m].GradeID;
+            //                itemColor.GradeName = colorData[m].GradeName;
+            //                itemColor.GradeRange = colorData[m].GradeRange;
+            //                itemColor.IssuePcs = colorData[m].IssuePcs;
+            //                itemColor.IssueSide = colorData[m].IssueSide;
+            //                itemColor.IssueArea = colorData[m].IssueArea;
+            //                itemColor.ClosingStockPcs = colorData[m].ClosingStockPcs;
+            //                itemColor.ClosingStockSide = colorData[m].ClosingStockSide;
+            //                itemColor.ClosingStockArea = colorData[m].ClosingStockArea;
+            //                itemColor.AreaUnit = colorData[m].AreaUnit;
+            //                itemColor.AreaUnitName = colorData[m].AreaUnitName;
+            //                itemColor.CrustQCLabel = colorData[m].CrustQCLabel;
+            //                itemColor.SideArea = colorData[m].SideArea;
+            //                itemColors.push(itemColor);
+            //                ClearColors();
+            //            }
+            //        }
+
+
+            //        if (itemColors.length > 0) {
+            //            for (var j = 0; j < itemColors.length; j++) {
+            //                if (itemGridData[i].SlNo == itemColors[j].SlNo) {
+            //                    itemColor.CrustLeatherIssueColorID = itemColors[j].CrustLeatherIssueColorID;
+            //                    itemColor.CrustLeatherIssueItemID = itemColors[j].CrustLeatherIssueItemID;
+            //                    itemColor.CrustLeatherIssueID = itemColors[j].CrustLeatherIssueID;
+            //                    itemColor.ArticleColorNo = itemColors[j].ArticleColorNo;
+            //                    itemColor.ColorID = itemColors[j].ColorID;
+            //                    itemColor.ColorName = itemColors[j].ColorName;
+            //                    itemColor.GradeID = itemColors[j].GradeID;
+            //                    itemColor.GradeName = itemColors[j].GradeName;
+            //                    itemColor.GradeRange = itemColors[j].GradeRange;
+            //                    itemColor.IssuePcs = itemColors[j].IssuePcs == null ? 0 : itemColors[j].IssuePcs;
+            //                    itemColor.IssueSide = itemColors[j].IssueSide == null ? 0 : itemColors[j].IssueSide;
+            //                    itemColor.IssueArea = itemColors[j].IssueArea == null ? 0 : itemColors[j].IssueArea;
+            //                    itemColor.ClosingStockPcs = itemColors[j].ClosingStockPcs;
+            //                    itemColor.ClosingStockSide = itemColors[j].ClosingStockSide;
+            //                    itemColor.ClosingStockArea = itemColors[j].ClosingStockArea;
+            //                    itemColor.AreaUnit = itemColors[j].AreaUnit;
+            //                    itemColor.AreaUnitName = itemColors[j].AreaUnitName;
+            //                    itemColor.CrustQCLabel = itemColors[j].CrustQCLabel;
+            //                    itemColor.SideArea = itemColors[j].SideArea;
+            //                    issueItem.Colors.push(itemColor);
+            //                    ClearColors();
+            //                }
+            //            }
+            //        }
+            //        issue.Items.push(issueItem);
+            //        ClearItems();
+            //    }
+            //}
+            $("#divLoading").show();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Issue", "CrustedLeatherIssueFromStore")',
+                dataType: 'JSON',
+                data: JSON.stringify({ crustId: $("#txtCLIFSIssueId").val() }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Type == 2) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        //CheckRecordStatusForButton("CNF");
+                        SetIssue(data.ReturnId);
+                        saveStatus = 1;
+                        changeStatus = 0;
+                    } else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 0;
+                    }
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $('#MessageText').html("Connection error occured please try again later.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        }
+    }
+
+    $('#btnConfirm').click(function () {
+        if ($("#txtCLIFSIssueId").val() == "") {
+            $('#MessageText').html("Please save first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            IssueConfirmWindow.open();
+            IssueConfirmWindow.center();
+
+        }
+
+    });
+
+    $('#btnIssueConfirmationOK').click(function () {
+        issueConfirm();
+    });
+
+    // ######################################## Issue End ######################################## //
+
+    // ######################################## Delete ######################################## //
+
+
+    function Delete(id, del) {
+        var dsColor;
+        var i;
+        var deleteColor;
+        if ($('#txtCLIFSIssueId').val() != "") {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("Delete", "CrustedLeatherIssueFromStore")',
+                type: 'GET',
+                data: ({ "id": id, "del": del }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 4) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 1;
+
+                        if (del == "all") {
+                            reset();
+                        }
+                        if (del == "color") {
+                            $("#IssueItemsColorGrid").data("kendoGrid").dataSource.remove(deleteItem);
+                            if (itemColors.length > 0) {
+                                for (var m = 0; m < itemColors.length; m++) {
+                                    if (itemColors[m].SlNo == deleteItem.SlNo && itemColors[m].SlNo2 == deleteItem.SlNo2) {
+                                        itemColors.pop(itemColors[m]);
+                                    }
+                                }
+                            }
+                        }
+                        if (del == "item") {
+                            $("#IssueItemsGrid").data("kendoGrid").dataSource.remove(deleteItem);
+                            dsColor = issueItemsColorGridDataSource.data();
+                            if (dsColor.length > 0) {
+                                for (i = 0; i < dsColor.length + 1; i++) {
+                                    deleteColor = "";
+                                    if (dsColor[i].SlNo == deleteItem.SlNo) {
+                                        deleteColor = dsColor[i];
+                                        $("#IssueItemsColorGrid").data("kendoGrid").dataSource.remove(deleteColor);
+                                    }
+                                }
+                                if (itemColors.length > 0) {
+                                    for (var k = 0; k < itemColors.length; k++) {
+                                        if (itemColors[k].SlNo == deleteItem.SlNo) {
+                                            itemColors.pop(itemColors[k]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $("#divLoading").hide();
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        del = "";
+                    }
+                    del = "";
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Unknown error occured please try again.");
+                    $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        } else {
+            $("#divLoading").hide();
+            if (del == "color") {
+                $("#IssueItemsColorGrid").data("kendoGrid").dataSource.remove(deleteItem);
+                if (itemColors.length > 0) {
+                    for (var n = 0; n < itemColors.length; n++) {
+                        if (itemColors[n].SlNo == deleteItem.SlNo && itemColors[n].SlNo2 == deleteItem.SlNo2) {
+                            itemColors.pop(itemColors[n]);
+                        }
+                    }
+                }
+            }
+            if (del == "item") {
+                $("#IssueItemsGrid").data("kendoGrid").dataSource.remove(deleteItem);
+                dsColor = issueItemsColorGridDataSource.data();
+                if (dsColor.length > 0) {
+                    for (i = 0; i < dsColor.length + 1; i++) {
+                        deleteColor = "";
+                        if (dsColor[i].SlNo == deleteItem.SlNo) {
+                            deleteColor = dsColor[i];
+                            $("#IssueItemsColorGrid").data("kendoGrid").dataSource.remove(deleteColor);
+                        }
+                    }
+                    if (itemColors.length > 0) {
+                        for (var j = 0; j < itemColors.length; j++) {
+                            if (itemColors[j].SlNo == deleteItem.SlNo) {
+                                itemColors.pop(itemColors[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $('#btnDelete').click(function () {
+        if (recordStatus == "CNF") {
+
+        } else {
+            del = "all";
+            DeleteWindow.open();
+            DeleteWindow.center();
+        }
+    });
+
+    function ItemDelete() {
+        if (recordStatus == "CNF") {
+
+        } else {
+            del = "item";
+            var grid = $("#IssueItemsGrid").data("kendoGrid");
+            deleteItem = {};
+            deleteItem = (grid.dataItem(grid.select()));
+            DeleteWindow.open();
+            DeleteWindow.center();
+        }
+    }
+
+    function ColorDelete() {
+        if (recordStatus == "CNF") {
+
+        } else {
+            del = "";
+            del = "color";
+            var grid = $("#IssueItemsColorGrid").data("kendoGrid");
+            deleteItem = {};
+            deleteItem = (grid.dataItem(grid.select()));
+            DeleteWindow.open();
+            DeleteWindow.center();
+        }
+    }
+
+    // ######################################## Delete End ######################################## //
+
+    // ######################################## Variables ######################################## //
+
+    var rowAdd = 0;
+    var recordStatus = "";
+    var orderChk;
+    var buyerChk;
+    var changeStatus = 0;
+    var saveStatus = 0;
+    var issueFrom;
+    var issueTo;
+    var del;
+    var deleteItem;
+    var rstVal;
+    var rowAdd2 = 0;
+    var prevSlNo = 0;
+    var currSlNo = 0;
+    var slNoCount = 0;
+
+    function clearVar() {
+        rowAdd = 0; recordStatus = 0; orderChk = false; buyerChk = false;
+        changeStatus = 0; saveStatus = 0; issueFrom = ""; issueTo = "";
+        del = "";
+    }
+
+    var issue = {
+        "CrustLeatherIssueID": "", "CrustLeatherIssueNo": "", "CrustLeatherIssueDate": "", "IssueCategory": "", "IssueFor": "",
+        "IssueFrom": "", "IssueTo": "", "CheckNote": "", "IssueNote": "", "RecordStatus": "", "Items": []
+    };
+
+    function ClearIssue() {
+        issue = {
+            "CrustLeatherIssueID": "", "CrustLeatherIssueNo": "", "CrustLeatherIssueDate": "", "IssueCategory": "", "IssueFor": "",
+            "IssueFrom": "", "IssueTo": "", "CheckNote": "", "IssueNote": "", "RecordStatus": "", "Items": []
+        };
+    }
+
+    var issueItem = {
+        "SlNo": "", "CrustLeatherIssueItemID": "", "CrustLeatherIssueID": "", "BuyerID": "", "BuyerName": "", "BuyerOrderID": "", "BuyerOrderNo": "",
+        "ArticleID": "", "ArticleNo": "", "ArticleChallanID": "", "ArticleChallanNo": "", "ArticleName": "", "ItemTypeID": "",
+        "ItemTypeName": "", "LeatherTypeID": "", "LeatherTypeName": "", "LeatherStatusID": "", "LeatherStatusName": "",
+        "RequisitionDateID": "", "RequisitionNo": "", "Colors": []
+    };
+
+    function ClearItems() {
+        issueItem = {
+            "SlNo": "", "CrustLeatherIssueItemID": "", "CrustLeatherIssueID": "", "BuyerID": "", "BuyerName": "",
+            "BuyerOrderID": "", "BuyerOrderNo": "", "ArticleID": "", "ArticleNo": "", "ArticleChallanID": "",
+            "ArticleChallanNo": "", "ArticleName": "", "ItemTypeID": "", "ItemTypeName": "", "LeatherTypeID": "",
+            "LeatherTypeName": "", "LeatherStatusID": "", "LeatherStatusName": "", "RequisitionDateID": "",
+            "RequisitionNo": "", "Colors": []
+        };
+    }
+
+    var itemColors = [];
+
+    var itemColor = {
+        "SlNo": "", "SlNo2": "", "CrustLeatherIssueColorID": "", "CrustLeatherIssueItemID": "", "CrustLeatherIssueID": "",
+        "ColorID": "", "ColorName": "", "GradeID": "", "GradeName": "", "ClosingStockPcs": "", "ClosingStockSide": "",
+        "ClosingStockArea": "", "IssuePcs": "", "IssueSide": "", "IssueArea": "", "AreaUnit": "", "UnitName": "",
+        "CrustQCLabel": "", "SideArea": "", "ArticleColorNo": "", "GradeRange": ""
+    };
+
+    function ClearColors() {
+        itemColor = {
+            "SlNo": "", "SlNo2": "", "CrustLeatherIssueColorID": "", "CrustLeatherIssueItemID": "", "CrustLeatherIssueID": "",
+            "ColorID": "", "ColorName": "", "GradeID": "", "GradeName": "", "ClosingStockPcs": "", "ClosingStockSide": "",
+            "ClosingStockArea": "", "IssuePcs": "", "IssueSide": "", "IssueArea": "", "AreaUnit": "", "UnitName": "",
+            "CrustQCLabel": "", "SideArea": "", "ArticleColorNo": "", "GradeRange": ""
+        };
+    }
+    // ######################################## Variables End ######################################## //
+
+    // ######################################## Reset ######################################## //
+
+    function reset() {
+        $('#filters').hide(300);
+        $('.txtField').val("");
+        $('#txtArea').val("");
+        $("#IssueItemsGrid").data('kendoGrid').dataSource.data([]);
+        $("#IssueItemsColorGrid").data('kendoGrid').dataSource.data([]);
+        rowAdd = 0;
+        recordStatus = "NCF";
+        changeStatus = 0;
+        CheckRecordStatusForButton(recordStatus);
+        slNoCount = 0;
+        prevSlNo = 0;
+        currSlNo = 0;
+        itemColors = [];
+        clearVar();
+    }
+
+    $("#btnReset").click(function () {
+        if (changeStatus == 1) {
+            rstVal = "";
+            rstVal = "reset";
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            reset();
+        }
+    });
+
+    // ######################################## Reset End ######################################## //
+
+    function lock() {
+        if (recordStatus == "CNF") {
+            $("#btnSave").attr("disabled", disabled);
+            $("#btnDelete").attr("disabled", disabled);
+        }
+    }
+
+    function doesDataSourceHaveChanges(ds) {
+        var dirty = false;
+        $.each(ds._data, function () {
+            if (this.dirty == true) { dirty = true; changeStatus = 1; }
+        });
+        if (ds._destroyed.length > 0) { dirty = true; changeStatus = 1; }
+        return dirty;
+    }
+
+    $('.txtField').change(function () {
+        changeStatus = 1;
+    });
+    ClearOperationalMessage();
+</script>

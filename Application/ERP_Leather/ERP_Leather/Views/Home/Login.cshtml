@@ -1,0 +1,74 @@
+﻿@model ERP.EntitiesModel.AppSetupModel.LoginModel
+@{
+    Layout = null;
+    ViewBag.Title = "frmLogin";
+}
+
+<!DOCTYPE html>
+<html>
+    <head >
+        <title>Bengal Leather Complex </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href=@Url.Content("~/Content/CSS/cssLogin.css") rel="stylesheet" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <script src="@Url.Content("~/Scripts/jquery-2.0.3.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+        <div id="body">
+            <div id="baner">
+                Bengal Leather Complex Management Information System(BLCMIS)
+            </div>
+            <div id="ContentBodyLeftMidRight">
+                <div id="ContentBodyLeft">
+                </div>
+                <div id="ContentBodyMid">
+                    @using (Html.BeginForm("Login", "Home"))
+                    {
+                        @Html.ValidationSummary(true)
+                        if (!string.IsNullOrEmpty(ViewBag.msg))
+                        {
+                            <p style="color:red; text-shadow:1px 0px 0px green;">
+                                @ViewBag.msg
+                            </p>
+                        }
+                        <table style="font-size: 14px">
+                            <tr>
+                                <td>
+                                    Login ID:
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.LoginID)
+                                    @Html.ValidationMessageFor(model => model.LoginID)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Password:
+                                </td>
+                                <td>
+                                    @Html.PasswordFor(model => model.Password)
+                                    @Html.ValidationMessageFor(model => model.Password)
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="submit" id="btnLogin" value="Login" />
+                                </td>
+                            </tr>
+
+                        </table>
+                    }
+
+                </div>
+            </div>
+            <div id="footer">
+                <div style="text-align: center;">Powered By: <font face="Century Gothic" color="navy" size="2">Square InformatiX Limited</font></div>
+            </div>
+        </div>
+    </body>
+</html>

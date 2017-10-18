@@ -1,0 +1,2623 @@
+﻿@{
+    ViewBag.Title = "Wet Blue Issue From Store";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var pageOperation = new[] {"CHK", "CNF", "APV"};
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button disabled" value="Save" onclick="SaveData()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Issue Category</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown " id="IssueCategory">
+                    <option value="PROD">Production</option>
+                    <option value="SRTF">Transfer</option>
+                </select>
+            </div>
+
+            <div class="col-lg-1">
+                <label>Issue From</label>
+            </div>
+            <div class="col-lg-3">
+                @Html.DropDownList("IssueFrom", new SelectList(ViewBag.ddlStoreFrom, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Issue No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="WetBlueIssueNo" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" />
+                <input type="hidden" id="WetBlueIssueID" class="txtBox" />
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Issue For</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="IssueFor">
+                    <option value="Production Against Order">Production Against Order</option>
+                    <option value="Production Without Order">Production Without Order</option>
+                    <option value="Store Transfer">Store Transfer</option>
+                </select>
+            </div>
+
+            <div class="col-lg-1">
+                <label>Issue To</label>
+            </div>
+            <div class="col-lg-3">
+                @Html.DropDownList("IssueTo", new SelectList("", "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Issue Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="WBIssueDate" class="datePicker" required="required" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition No </label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionNo" class="txtBox" name="RequisitionNo" placeholder="Press F9" readonly="readonly" />
+                <input type="hidden" id="RequisitionDateID" class="txtBox" name="RequisitionDateID" />
+            </div>
+            <div class="col-lg-8">
+            </div>
+        </div>
+
+        <div class="FormBody" id="divPageRefGrid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="PageRefGrid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <label>Search By Grade Name : </label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="txtGrade" class="txtBox" name="txtGrade" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Search By Supplier Name : </label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="txtSupplierName" class="txtBox" name="txtSupplierName" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Search By Purchase No : </label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="txtPurchaseNo" class="txtBox" name="txtPurchaseNo" />
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="PageDetailGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="FormBody" style="font-size: 12px;">
+            <div class="row">
+                <div class="col-lg-1" style=" padding-right:0;">
+                    <label style="">Check Note</label>
+                </div>
+                <div class="col-lg-4" style="padding-left:0; padding-right:0;">
+                    <textarea id="checkComment" class="txtBox" tabindex="" style="float:left; width:410px;height:60px; "></textarea>
+                </div>
+                <div class="col-lg-1">
+                    <input type="button" tabindex="" id="btnCheck" value="Check" style="position: absolute;  font-size: 12px;" />
+                </div>
+                <div class="col-lg-1" style=" padding-right:0;">
+                    <label style="">Confirmation Note</label>
+                </div>
+                <div class="col-lg-4" style="padding-left:0; padding-right:0;">
+                    <textarea id="confirmComment" class="txtBox" tabindex="" style="float: left; width:410px; height: 60px;"></textarea>
+                </div>
+                <div class="col-lg-1">
+                    <input type="button" tabindex="" id="btnConfirm" value="Confirm" style="position: absolute; font-size: 12px; " />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ChemicalWindow" style="display: none;">
+        <div id="ChemicalWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="SearchWindow" style="display: none;">
+        <div id="SearchWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="DeleteConfirmWindow" style="display: none;">
+        <p><h5>Are you sure to delete?</h5></p>
+        <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+    </div>
+
+    <div id="SaveChangeWindow" style="display: none;">
+        <p><h5>Data will be lost if you continue.</h5></p>
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+    </div>
+
+    <div id="RequisitionWindowForCrust" style="display: none;">
+        <div class="row">
+            <div id="RequisitionWindowForCrustGrid" class="PopUpGrid" style="margin-left: 20px;">
+            </div>
+        </div>
+        <div class="row">
+            <input type="button" id="btnRequisitionWindowForCrustCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+            <input type="button" id="btnRequisitionWindowForCrustOK" class="PopUpButton" value="OK" />
+        </div>
+    </div>
+
+    <div id="BuyerWindow" style="display: none;">
+        <div class="row" style="width: 596px;">
+            <div id="BuyerWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+            </div>
+        </div>
+        <div class="row" style="width: 596px;">
+            <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+            <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+        </div>
+    </div>
+
+    <div id="BuyerOrderWindow" style="display: none;">
+        <div class="row" style="width: 596px;">
+            <div id="BuyerOrderWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+            </div>
+        </div>
+        <div class="row" style="width: 596px;">
+            <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+            <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+        </div>
+    </div>
+
+    <div id="SupplierWindow" style="display: none;">
+        @*<p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>*@
+        <div id="SupplierWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+    </div>
+    <div id="ChallanWindow" style="display: none;">
+        <div id="ChallanWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="LeatherInfoWindow" style="display: none;">
+        <div id="LeatherInfoWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnLeatherInfoWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnLeatherInfoWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="ArticleWindow" style="display: none;">
+        <div id="ArticleWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="ChallanArticleWindow" style="display: none;">
+        <div id="ChallanArticleWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnChallanArticleWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnChallanArticleWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+        <p style="position: absolute; top: 50%; left: 42%; color: White;">
+            Please wait... <img src="../../images/ajax-loading.gif">
+        </p>
+    </div>
+</div>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var recordStatus = "";
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var ItemGridchangeStatus = 0;
+    var dataitem = {};
+    var tempWetBlueIssueRefID = 0;
+    var saveStatus = 1;
+
+    $("#IssueCategory").change(function () {
+        if ($("#IssueCategory").val() == "SRTF") {
+            $("#divPageRefGrid").hide();
+        } else {
+            $("#divPageRefGrid").show();
+        }
+    });
+
+
+    //$("#IssueFor").change(function () {
+    //    if ($("#IssueFor").val() == "Production Against Order") {
+    //        $("#RequisitionNo").removeAttr("disabled");
+    //        $("#RequisitionNo").css("background-color", "transparent");
+    //    } else {
+    //        $("#RequisitionNo").attr("disabled", "disabled");
+    //        $("#RequisitionNo").css("background-color", "silver");
+    //    }
+    //});
+    // Start For Article
+
+
+    $(document).on('keyup', '.ArticleName', function (e) {
+        if (e.keyCode == 120) {
+            GetArticleInfo();
+            SelectedItemOfListOfValue('ArticleWindowGrid');
+            articleWindow.open();
+            articleWindow.center();
+        }
+    });
+    function GetArticleInfo() {
+        $.ajax({
+            url: '@Url.Action("GetArticleInfo", "WetBlueIssue")',
+            type: 'GET',
+            success: function (response) {
+                $("#ArticleWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+    var articleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Article Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ArticleDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleID",
+                fields: {
+                    ArticleID: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleColor: { editable: false },
+                    ColorName: { editable: false },
+                    ArticleChallanNo: { editable: false }
+                }
+            }
+        },
+        pageSize: 25
+    });
+
+    var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+        dataSource: ArticleDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 320,
+        columns: [
+              { field: "ArticleID", hidden: true },
+              { field: "ArticleName", title: "Article Name", width: "60px" },
+              { field: "ArticleNo", title: "Article No", width: "60px" },
+              { field: "ArticleColor", hidden: true },
+              { field: "ColorName", title: "Color", width: "60px" },
+              { field: "ArticleChallanNo", title: "Challan No", width: "60px" }
+        ]
+    });
+
+    function ArticleWindowEvent() {
+        var gridSearch = $("#ArticleWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        var gridCiItem = $("#PageRefGrid").data("kendoGrid");
+        var setData = (gridCiItem.dataItem(gridCiItem.select()));
+        setData.set("ArticleID", selected.ArticleID);
+        setData.set("ArticleNo", selected.ArticleNo);
+        setData.set("ArticleName", selected.ArticleName);
+        changeStatus = 1;
+    };
+
+    $('#btnArticleWindowOK').click(function () {
+        ArticleWindowEvent();
+        articleWindow.close();
+    });
+
+    $('#btnArticleWindowCancel').click(function () {
+        articleWindow.close();
+    });
+
+    $("#ArticleWindow").dblclick(function () {
+        ArticleWindowEvent();
+        articleWindow.close();
+    });
+
+    $("#ArticleWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ArticleWindowEvent();
+            articleWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            articleWindow.close();
+        }
+        event.stopPropagation();
+    });
+    // end For Article
+
+
+    // Start For ChallanArticle
+
+
+    $(document).on('keyup', '.ChallanArticleName', function (e) {
+        if (e.keyCode == 120) {
+            GetChallanArticleInfo();
+            SelectedItemOfListOfValue('ChallanArticleWindowGrid');
+            challanArticleWindow.open();
+            challanArticleWindow.center();
+        }
+    });
+    function GetChallanArticleInfo() {
+        $.ajax({
+            url: '@Url.Action("GetChallanArticleInfo", "WetBlueIssue")',
+            type: 'GET',
+            success: function (response) {
+                $("#ChallanArticleWindowGrid").data('kendoGrid').dataSource.data(response);
+            }
+        });
+    }
+    var challanArticleWindow = $('#ChallanArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Challan Article Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ChallanArticleDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleChallanID",
+                fields: {
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleColor: { editable: false },
+                    ColorName: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false }
+
+
+                }
+            }
+        },
+        pageSize: 25
+    });
+
+    var ChallanArticleGrid = $("#ChallanArticleWindowGrid").kendoGrid({
+        dataSource: ChallanArticleDataSource,
+        pageable: true,
+        groupable: false,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 320,
+        columns: [
+              { field: "ArticleChallanID", hidden: true },
+              { field: "ArticleChallanNo", title: "Challan No", width: "60px" },
+              { field: "ArticleID", hidden: true },
+              { field: "ArticleName", title: "Article Name", width: "60px" },
+              { field: "ArticleNo", hidden: true, title: "Article No", width: "60px" },
+              { field: "ArticleColor", hidden: true },
+              { field: "ColorName", hidden: true, title: "Color", width: "60px" },
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerName", title: "Buyer Name", width: "80px" }
+        ]
+    });
+
+    function ChallanArticleWindowEvent() {
+        var gridSearch = $("#ChallanArticleWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        var gridCiItem = $("#PageRefGrid").data("kendoGrid");
+        var setData = (gridCiItem.dataItem(gridCiItem.select()));
+
+        setData.set("ArticleChallanID", selected.ArticleChallanID);
+        setData.set("ArticleChallanNo", selected.ArticleChallanNo);
+        setData.set("ArticleID", selected.ArticleID);
+        setData.set("ArticleNo", selected.ArticleNo);
+        setData.set("ArticleName", selected.ArticleName);
+        setData.set("BuyerID", selected.BuyerID);
+        setData.set("BuyerName", selected.BuyerName);
+
+
+        $.ajax({
+            url: '@Url.Action("GetChallanAllInfo", "WetBlueIssue")',
+            type: 'GET',
+            data: { articleChallanId: selected.ArticleChallanID },
+            success: function (response) {
+                setData.set("AvgSize", response.AvgSize);
+                setData.set("SideDescription", response.SideDescription);
+                setData.set("SelectionRange", response.SelectionRange);
+                setData.set("Thickness", response.Thickness);
+                setData.set("UnitID", response.UnitID);
+                setData.set("UnitName", response.UnitName);
+                setData.set("ThicknessAtID", response.ThicknessAtID);
+                setData.set("ThicknessAt", response.ThicknessAt);
+            }
+        });
+        changeStatus = 1;
+
+    };
+
+
+    $('#btnChallanArticleWindowOK').click(function () {
+        ChallanArticleWindowEvent();
+        challanArticleWindow.close();
+    });
+
+    $('#btnChallanArticleWindowCancel').click(function () {
+        challanArticleWindow.close();
+    });
+
+    $("#ChallanArticleWindow").dblclick(function () {
+        ChallanArticleWindowEvent();
+        challanArticleWindow.close();
+    });
+
+    $("#ChallanArticleWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ChallanArticleWindowEvent();
+            challanArticleWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            articleWindow.close();
+        }
+        event.stopPropagation();
+    });
+    // end For ChallanArticle
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "{0:dd/MM/yyyy}",
+        value: new Date(),
+        max: new Date(),
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+
+
+
+    $(document).ready(function () {
+
+        //--------------------------To enable search option in supplier list of value pop up-------------------------------------
+        // CheckRecordStatusForButton(recordStatus);
+        //OnlyNumericValue('RequiredByTime');
+        var supplierSearchDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSupplierListForSearch", "Supplier")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtSupplier").kendoAutoComplete({
+            dataSource: supplierSearchDataSource,
+            filter: "startswith",
+            placeholder: "Search Supplier...",
+        });
+
+        $("#btnGridSearch").click(function () {
+            $.ajax({
+                url: '@Url.Action("GetSupplierListSearchById", "Common")',
+                type: 'GET',
+                data: { supplier: $("#txtSupplier").val() },
+                success: function (data33) {
+                    $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                    if (data33.Count == 1) {
+                        ListOfValueGridEvent('SupplierWindowGrid');
+                        SearchWindow.close();
+                    }
+                }
+            });
+        });
+        $("#txtSupplier").keyup(function (event) {
+            if ($("#txtSupplier").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("GetSupplierListSearchById", "Common")',
+                        type: 'GET',
+                        data: { supplier: $("#txtSupplier").val() },
+                        success: function (data33) {
+                            $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                            if (data33.Count == 1) {
+                                ListOfValueGridEvent('SupplierWindowGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //--------------------------End of enabling search option in supplier list of value pop up-------------------------------------
+
+        CheckUnSavedOnlyMasterData();
+
+        ClearAllData();
+        CheckRecordStatusForButton("NCF");
+
+        $("#IssueCategory").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetAllActiveProductionNCrustStore", "WetBlueIssue")',
+                type: 'GET',
+                data: { issueCategory: $("#IssueCategory").val() },
+                success: function (data33) {
+                    SetDropdownValue(data33, "IssueTo", -1);
+                }
+            });
+        });
+
+    }); //End of Document.Ready()
+        //--------------------------------------Start of defining Page Ref Datagrid--------------------------------------------------------
+
+
+
+        var gridRefDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "WetBlueIssueRefID",
+                    fields: {
+                        WetBlueIssueRefID: { editable: true },
+                        BuyerID: { editable: true },
+                        BuyerName: { editable: true, defaultValue: 'Press F9' },
+                        BuyerOrderID: { editable: true },
+                        BuyerOrderNo: { editable: true, defaultValue: 'Press F9' },
+                        ArticleChallanID: { editable: true },
+                        ArticleChallanNo: { editable: true, defaultValue: 'Press F9' },
+                        ArticleID: { editable: true },
+                        ArticleName: { editable: true, defaultValue: 'Press F9' },
+                        //SizeID: { editable: true, validation: { required: false } },
+                        SizeName: { editable: true, validation: { required: false } },
+                        SideDescription: { editable: true, validation: { required: false } },
+                        SelectionRange: { editable: true, validation: { required: false } },
+                        Thickness: {
+                            editable: true, type: "string", validation: {
+                                required: false, validateTitle: function (input) {
+                                    if (input.val().length > 30) {
+                                        input.attr("data-validateTitle-msg", "Max length exceeded 30 characters only");
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                            }
+                        },
+                        UnitID: { editable: true },
+                        UnitName: { editable: true },
+                        ThicknessAt: { editable: true },
+                        Remarks: { editable: true }
+
+                    }
+                }
+            },
+            pageSize: 25
+        });
+        var itemRefgrid = $("#PageRefGrid").kendoGrid({
+            dataSource: gridRefDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            resizable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            toolbar: [{ text: "Add Buyer Party", className: "btnPageRefGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 200,
+            columns: [
+                { field: "WetBlueIssueRefID", hidden: true, attributes: { "class": "txtBox" } },
+                { field: "BuyerID", hidden: true },
+                { field: "BuyerName", title: "Party/Buyer<span style='color:red'>*</span", width: "60px", filterable: false, attributes: { "class": "BuyerName", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "BuyerOrderID", hidden: true, },
+                { field: "BuyerOrderNo", title: "OrderNo<span style='color:red'>*</span", width: "60px", filterable: false, attributes: { "class": "BuyerOrderNo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ArticleChallanID", hidden: true },
+                { field: "ArticleChallanNo", title: "Article Challan<span style='color:red'>*</span>", width: "60px", filterable: false, attributes: { "class": "ChallanArticleName" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ArticleID", hidden: true },
+                { field: "ArticleName", title: "Article", width: "60px", filterable: false, attributes: { "class": "ArticleName" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                //{ field: "SizeID", hidden: true },
+                { field: "AvgSize", title: "Size", width: "60px", editable: true, filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "SideDescription", title: "Side", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "SelectionRange", title: "Selection Range", editable: true, width: "60px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Thickness", title: "Thickness", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "UnitID", hidden: true },
+                { field: "UnitName", title: "Unit", width: "50px", editor: ddlUnit, filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "ThicknessAtID", hidden: true },
+                { field: "ThicknessAt", title: "Thickness At", editor: ddlChallanCategory, editable: true, filterable: false, width: "80px", attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Remarks", title: "Remarks", editable: true, filterable: false, width: "80px", attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteRef }], title: "Action", width: 50, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; text-align:center" } }
+            ]
+
+        });
+
+        var ddlThicknessAtDataSource = [{ text: "After Shaving", value: "After Shaving" }, { text: "After Finishing", value: "After Finishing" }];
+
+        function ddlChallanCategory(container, options) {
+            $('<input id="ThicknessAt" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        optionLabel: "Select",
+                        change: function (e) {
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlThicknessAtDataSource
+                    });
+        };
+
+        $(".btnPageRefGrid").click(function () {
+            var refGrid = $("#PageRefGrid").data("kendoGrid");
+            $("#PageRefGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            refGrid.addRow();
+        });
+
+        //$("#PageRefGrid").keyup(function (e) {
+        //    if (e.keyCode == 13) {
+        //        var refGrid = $("#PageRefGrid").data("kendoGrid");
+        //        $("#PageRefGrid").data().kendoGrid.bind('dataBound', function () {
+        //            this.element.find('tbody tr:first').addClass('k-state-selected');
+        //        });
+        //        refGrid.addRow();
+        //    }
+        //});
+
+
+        //--------------------------------------End of defining PageRefgrid--------------------------------------------------------
+
+
+        //--------------------------------------Start of defining Page Datail Datagrid--------------------------------------------------------
+
+
+
+        var gridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "WBSIssueItemID",
+                    fields: {
+                        WBSIssueItemID: { editable: true },
+                        GradeID: { editable: true },
+                        GradeName: { editable: true, defaultValue: 'Press F9' },
+                        SizeQtyRef: { editable: true },
+                        SupplierID: { editable: true },
+                        SupplierName: { editable: true },
+                        PurchaseID: { editable: true },
+                        PurchaseNo: { editable: true },
+                        LotNo: { editable: true },
+                        ItemTypeID: { editable: true },
+                        ItemTypeName: { editable: true },
+                        LeatherStatusID: { editable: true },
+                        LeatherStatusName: { editable: true },
+                        ClosingStockPcs: { editabe: true },
+                        ClosingStockSide: { editable: true },
+                        ClosingStockArea: { editable: true },
+                        IssuePcs: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 }, defaultValue: '' },
+                        PcsToSide: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 }, defaultValue: '' },
+                        IssueSide: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 }, defaultValue: '' },
+                        IssueArea: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 }, defaultValue: '' }
+                    }
+                }
+            },
+            pageSize: 25
+        });
+        //var isPcsGreater = false;
+        //var isSideGreater = false;
+        //var isAreaGreater = false;
+        var itemgrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: gridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            resizable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Item", className: "btnPageDetailGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            //height: 250,
+            edit: function (e) {
+
+                //$('input[name = "ClosingStockPcs"]').attr("readonly", true);
+                $("[name='IssuePcs']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    if (grid.dataItem(row).IssuePcs > grid.dataItem(row).ClosingStockPcs) {
+                        // isPcsGreater = true;
+                        $('#MessageText').html("Issue Quantity must be less than Stock Quantity.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 0;
+                    } else {
+                       // isPcsGreater = false;
+                        saveStatus = 1;
+                        $('#MessageText').html("");
+                    }
+                });
+
+                //$('input[name = "ClosingStockSide"]').attr("readonly", true);
+                $("[name='IssueSide']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    if (grid.dataItem(row).IssueSide > grid.dataItem(row).ClosingStockSide) {
+                        //isSideGreater = true;
+                        $('#MessageText').html("Issue Quantity must be less than Stock Quantity.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 0;
+                    }
+                    else {
+                        //isSideGreater = false;
+                        saveStatus = 1;
+                        $('#MessageText').html("");
+                    }
+                });
+               // $('input[name = "ClosingStockArea"]').attr("readonly", true);
+                $("[name='IssueArea']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    if (grid.dataItem(row).IssueArea > grid.dataItem(row).ClosingStockArea) {
+                        //isAreaGreater = true;
+                        $('#MessageText').html("Issue Quantity must be less than Stock Quantity.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 0;
+                    }
+                    else {
+                        //isAreaGreater = false;
+                        saveStatus = 1;
+                        $('#MessageText').html("");
+                    }
+                });
+
+                //if (isPcsGreater || isSideGreater || isAreaGreater) {
+                //    $('#MessageText').html("Issue Quantity must be less than Stock Quantity.");
+                //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                //   saveStatus = 0;
+                //} else {
+                //    saveStatus = 1;
+                //    $('#MessageText').html("");
+                //}
+
+                var fieldName = e.container.find("input").attr("name");
+
+                switch (fieldName) {
+                    case "PurchaseNo":
+                        this.closeCell();
+                        break;
+                    case "ItemTypeName":
+                        this.closeCell();
+                        break;
+                    case "LeatherStatusName":
+                        this.closeCell();
+                        break;
+                    case "SupplierName":
+                        this.closeCell();
+                        break;
+                    case "ClosingStockPcs":
+                        this.closeCell();
+                        break;
+                    case "ClosingStockSide":
+                        this.closeCell();
+                        break;
+                    case "ClosingStockArea":
+                        this.closeCell();
+                        break;
+                }
+
+            },
+            columns: [
+                { field: "WBSIssueItemID", hidden: true, },
+                { field: "GradeID", hidden: true },
+                { field: "GradeName", title: "Grade", width: "50px", filterable: false, sortable: false, attributes: { "class": "GradeName" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SizeQtyRef", title: "Ref Data Category", width: "80px", filterable: false, sortable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SupplierID", hidden: true },
+                { field: "SupplierName", title: "Supplier", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PurchaseID", hidden: true },
+                { field: "PurchaseNo", title: "PurchaseNo", width: "80px", filterable: false, editable: true, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LotNo", title: "LotNo", width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "ItemTypeID", hidden: true },
+                { field: "ItemTypeName", title: "Item Type", width: "60px", filterable: false, sortable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "LeatherStatusID", hidden: true },
+                { field: "LeatherStatusName", title: "Leather Status", width: "60px", filterable: false, sortable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "ClosingStockPcs", title: "Stock PCS", editable: false, width: "50px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "ClosingStockSide", title: "Stock Side", editable: false, width: "60px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; " } },
+
+                { field: "ClosingStockArea", title: "Stock Area", editable: false, width: "50px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; " } },
+                
+                { field: "IssuePcs", title: "Issue PCS", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PcsToSide", title: "Pcs To Side", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IssueSide", title: "Issue Side", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "IssueArea", title: "IssueArea", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteItem }], title: "Action", width: 50, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; text-align:center" } }
+            ]
+
+        });
+
+        $(".btnPageDetailGrid").click(function () {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+
+
+
+        });
+
+        //$("#PageDetailGrid").keyup(function (e) {
+        //    if (e.keyCode == 13) {
+        //        var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+        //        $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+        //            this.element.find('tbody tr:first').addClass('k-state-selected');
+        //        });
+        //        supplieragentgrid.addRow();
+        //    }
+        //});
+
+        //--------------------------------------End of defining Datagrid--------------------------------------------------------
+
+
+
+        // ------------Start Grid Detail ddl List panel----------------
+        // Data Source of ddlUnit
+        var ddlUnitDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForThickness", "CommonChemical")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+        function ddlUnit(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "UnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    dataSource: ddlUnitDataSource,
+                    change: function (e) {
+                        changeStatus = 1;
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("UnitName", dataItem.UnitName);
+                        options.model.set("UnitID", dataItem.UnitID);
+                    },
+                });
+        }
+
+        // ------------End Grid Detail ddl List panel----------------
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For  All dataset
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Changes Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Changes Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+        //Handling Delete event for PageRefGrid row
+        function handleDeleteRef() {
+            deleteStatus = 2;//For grid data
+            var grid1 = $("#PageRefGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //if (changeStatus == 1) {
+            OpenConfirmationDialog();
+            //}
+            //else {
+            //    resetEditDeleteStatus = 3;
+            //    OpenSaveChangesDialog();
+            //}
+        };
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteItem() {
+            deleteStatus = 3;//For grid data
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //if (changeStatus == 1) {
+            OpenConfirmationDialog();
+            //}
+            //else {
+            //    resetEditDeleteStatus = 3;
+            //    OpenSaveChangesDialog();
+            //}
+        };
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+
+            if (deleteStatus == 1) {
+                if ($("#WetBlueIssueID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedWetBlueIssue", "WetBlueIssue")',
+                        type: 'POST',
+                        data: JSON.stringify({ "wetBlueIssueId": $("#WetBlueIssueID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                //ClearOperationalMessage();
+                                ResetOnlyParentData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#PageRefGrid").data("kendoGrid").dataSource.data([]);
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 2) {
+                if (dataitem.WetBlueIssueRefID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedWetBlueIssueRef", "WetBlueIssue")',
+                        type: 'POST',
+                        data: JSON.stringify({ "wetBlueIssueRefId": dataitem.WetBlueIssueRefID, recordStatus: recordStatus }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                //ClearOperationalMessage();
+
+                                if ($("#PageRefGrid").data("kendoGrid").dataSource.data().length > 1) {
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageRefGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    ResetOnlyParentData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageRefGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                }
+
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                else {
+                    $("#PageRefGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 3) {
+                if (dataitem.WBSIssueItemID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedWBSIssueItem", "WetBlueIssue")',
+                        type: 'POST',
+                        data: JSON.stringify({ "wBSIssueItemID": dataitem.WBSIssueItemID, recordStatus: recordStatus }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        @*CheckUnSavedOnlyMasterData();
+
+        ClearAllData();
+        CheckRecordStatusForButton("NCF");
+
+        $("#IssueCategory").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetAllActiveProductionNCrustStore", "WetBlueIssue")',
+                type: 'GET',
+                data: { issueCategory: $("#IssueCategory").val() },
+                success: function (data33) {
+                    SetDropdownValue(data33, "IssueTo", -1);
+                }
+            });
+        });*@
+
+
+   // }); //End of Document.Ready()
+
+    function SetDropdownValue(data, ddl, selectedIndex) {
+        try {
+            if (data.length > 0) {
+                var options = new Array();
+                options.push('<option value="">-Select-</option>');
+                for (var i = 0; i < data.length; i++) {
+                    //push item from dataList with value and text
+                    if (selectedIndex == data[i].StoreID)
+                        options.push('<option selected value="' + data[i].StoreID + '">' + data[i].StoreName + '</option>');
+                    else
+                        options.push('<option  value="' + data[i].StoreID + '">' + data[i].StoreName + '</option>');
+                }
+                $("#" + ddl).html(options.join(''));
+            } else {
+                $("#" + ddl).html('<option value="">-Select-</option>');
+            }
+        } catch (err) {
+        }
+    }
+
+    //--------------------------------------End of Defining Datasource & Dropdown--------------------------------------------
+
+    //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+
+    var supplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    var challanWindow = $('#ChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Final Grade Data",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    var buyerWindow = $('#BuyerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Buyer Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var buyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "Buyer Order Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var requisitionWindowForCrust = $('#RequisitionWindowForCrust').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List of Requisition for Crust",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+
+    //Start Requisition For Crust Production  Search
+    $(document.body).keypress(function (e) {
+        if ($("#RequisitionNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                // if ($("#IssueFor").val() == "Production Against Order") {
+                SelectedItemOfListOfValue('RequisitionWindowForCrustGrid');
+                requisitionWindowForCrust.open();
+                requisitionWindowForCrust.center();
+                ////} else {
+                // $('#MessageText').html('Please Select Production Against Order');
+                //  $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                //}
+            }
+        }
+    });
+    //Requisition For Crust Production  search window definition
+    var RequisitionWindowForCrustSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RequisitionDateID",
+                fields: {
+                    RequisitionDateID: { editable: false },
+                    RequisitionNo: { editable: false },
+                    RequiredDate: { editable: false },
+                    RequisitionStatus: { editable: false },
+                    RecordStatus: { editable: false },
+                    ReqPcs: { editable: false },
+                    ReqSide: { editable: false },
+                    ReqArea: { editable: false },
+                    IssuePcs: { editable: false },
+                    IssueSide: { editable: false },
+                    IssueArea: { editable: false },
+                    RemainPcs: { editable: false },
+                    RemainSide: { editable: false },
+                    RemainArea: { editable: false }
+
+                }
+            }
+        },
+
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllRequisitionForCrust", "WetBlueIssue")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 25
+    });
+    var requisitionForCrust = $("#RequisitionWindowForCrustGrid").kendoGrid({
+        dataSource: RequisitionWindowForCrustSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        //detailInit: detailInit,
+        //dataBound: function () {
+        //    this.expandRow(this.tbody.find("tr.k-master-row").first());
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "RequisitionDateID", hidden: true, title: "Requisition ID", width: "50px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align:left" } },
+            { field: "RequisitionNo", title: "Requisition No", width: "100px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RequiredDate", title: "Required Date", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RequisitionStatus", hidden: true, title: "Requisition Status", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RecordStatus", hidden: true, title: "Record Status", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReqPcs", title: "Requisition Pcs", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReqSide", title: "Requisition Side", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReqArea", title: "Requisition Area", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "IssuePcs", title: "Issue Pcs", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "IssueSide", title: "Issue Side", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "IssueArea", title: "Issue Area", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RemainPcs", title: "Remaining Pcs", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RemainSide", title: "Remaining Side", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RemainArea", title: "Remaining Area", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+
+        ]
+    });
+
+    function detailInit(e) {
+        e.detailRow.find(".reqDetail").kendoGrid({
+        //$("<div/>").appendTo(e.detailCell).kendoGrid({
+            dataSource: {
+                schema: {
+                    model: {
+                        id: "ReqItemColorID",
+                        fields: {
+                            ReqItemColorID: { editable: false },
+                            ColorID: { editable: false },
+                            ColorName: { editable: false },
+                            ReqPcs: { editable: false },
+                            ReqSide: { editable: false },
+                            ReqArea: { editable: false }
+                        }
+                    }
+                },
+                transport: {
+                    read:
+                    {
+                        url: '@Url.Action("GetAllRequisitionItemsForCrust", "WetBlueIssue")',
+                        type: "GET",
+                        dataType: "JSON"
+                        ,data: { "requisitionId": e.data.RequisitionDateID }
+                    }
+                },
+
+                //serverPaging: true,
+                //serverSorting: true,
+                //serverFiltering: true,
+                pageSize: 20
+                //,filter: { field: "RequisitionDateID", operator: "eq", value: e.data.RequisitionDateID }
+            },
+
+            scrollable: true,
+            sortable: true,
+            pageable: true,
+            //autoBind: true,
+            columns: [
+                { field: "ReqItemColorID", hidden: true },
+                { field: "ColorID", hidden: true },
+                { field: "ColorName", title: "Color Name", width: "60px" },
+                { field: "ReqPcs", title: "Req Pcs", width: "60px" },
+                { field: "ReqSide", title: "Req Side", width: "60px" },
+                { field: "ReqArea", title: "Req Area", width: "60px" }
+            ]
+        });
+    }
+    @*var RequisitionItemsForCrustSearchGridDataSource = new kendo.data.DataSource({
+
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllRequisitionForCrust", "WetBlueIssue")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+    });*@
+
+    $("#btnRequisitionWindowForCrustOK").click(function () {
+        ListOfValueGridEvent('RequisitionWindowForCrustGrid');
+        getBuyerRequisition();
+        requisitionWindowForCrust.close();
+    });
+    $("#RequisitionWindowForCrust").dblclick(function () {
+        ListOfValueGridEvent('RequisitionWindowForCrustGrid');
+        getBuyerRequisition();
+        requisitionWindowForCrust.close();
+    });
+
+    function getBuyerRequisition() {
+
+        var gridSearch = $("#RequisitionWindowForCrustGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select()));
+        $.ajax({
+            url: '@Url.Action("GetAllReqBuyerItems", "WetBlueIssue")',
+            type: 'GET',
+            data: { "requisitionId": selected.RequisitionDateID },
+            success: function (data) {
+                $("#PageRefGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    $("#RequisitionWindowForCrust").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('RequisitionWindowForCrustGrid');
+            getBuyerRequisition();
+            requisitionWindowForCrust.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            requisitionWindowForCrust.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnRequisitionWindowForCrustCancel").click(function () {
+        requisitionWindowForCrust.close();
+    });
+
+    //  End Requisition For Crust Production events End
+    ///////////////
+
+
+
+    //Start Buyer search
+    $(document).on('keyup', '.BuyerName', function (e) {
+        if (e.keyCode == 120) {
+            //listOfValueGridEventBuyerOrder();
+            SelectedItemOfListOfValue('BuyerWindowGrid');
+            buyerWindow.open();
+            buyerWindow.center();
+        }
+    });
+    //Buyer search window definition
+    var BuyerSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCode: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: '@Url.Action("GetAllWetBlueBuyer", "CommonChemical")',
+            type: 'GET',
+            data: 'JSON'
+        },
+        pageSize: 25
+    });
+    var buyerGrid = $("#BuyerWindowGrid").kendoGrid({
+        dataSource: BuyerSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        scrollable: true,
+        height: 400,
+        columns: [
+            //{ field: "BuyerID", title: "Buyer ID", width: "30px" },
+            { field: "BuyerName", title: "Buyer Name", width: "70px" },
+            { field: "BuyerCode", title: "Buyer Code", width: "30px" }
+        ]
+    });
+
+    // Buyer search window events
+    function BuyerSearchEvents() {
+        var gridSearch = $("#BuyerWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        var gridCiItem = $("#PageRefGrid").data("kendoGrid");
+        var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+        selectedCiigItem.set("BuyerID", selected.BuyerID);
+        selectedCiigItem.set("BuyerName", selected.BuyerName);
+        changeStatus = 1;
+    }
+
+    $("#btnBuyerWindowOK").click(function () {
+        BuyerSearchEvents();
+        buyerWindow.close();
+    });
+    $("#BuyerWindowGrid").dblclick(function () {
+        BuyerSearchEvents();
+        buyerWindow.close();
+    });
+    $("#BuyerWindowGrid").keyup(function (e) {
+        var gridSearch = $("#BuyerWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        if (selected != null) {
+            if (e.keyCode == 13) {
+                BuyerSearchEvents();
+                buyerWindow.close();
+            }
+        }
+    });
+    $("#btnBuyerWindowCancel").click(function () {
+        buyerWindow.close();
+    });
+    $("#BuyerWindow").keyup(function (e) {
+        if (e.keyCode == 27) {
+            buyerWindow.close();
+        }
+    });
+    //End Buyer search
+
+    function listOfValueGridEventBuyerOrder() {
+        var grid = $("#PageRefGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $.ajax({
+            url: '@Url.Action("GetAllSLSBuyerOrderOG", "WetBlueIssue")',
+            type: 'GET',
+            data: { "buyerId": selectedItem.BuyerID },
+            success: function (data) {
+                $("#BuyerOrderWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    //Start Buyer Order Search
+    $(document).on('keyup', '.BuyerOrderNo', function (e) {
+        if (e.keyCode == 120) {
+            listOfValueGridEventBuyerOrder();
+            SelectedItemOfListOfValue('BuyerOrderWindowGrid');
+            buyerOrderWindow.open();
+            buyerOrderWindow.center();
+        }
+    });
+    //Buyer search window definition
+    var BuyerOrderSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    OrderNo: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false }
+                }
+            }
+        }
+    });
+    var buyerOrderGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+        dataSource: BuyerOrderSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        scrollable: true,
+        height: 300,
+        columns: [
+            { field: "BuyerOrderID", hidden: true, title: "Order ID", width: "50px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align:left" } },
+            { field: "BuyerOrderNo", title: "Buyer Order No", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "OrderNo", title: "Order No", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ArticleID", hidden: true },
+            { field: "ArticleNo", title: "ArticleNo", width: "60px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ArticleName", title: "Article", width: "120px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    // Buyer search window events
+    function BuyerOrderSearchEvents() {
+        var gridSearch = $("#BuyerOrderWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        var gridCiItem = $("#PageRefGrid").data("kendoGrid");
+        var setData = (gridCiItem.dataItem(gridCiItem.select()));
+        setData.set("BuyerOrderID", selected.BuyerOrderID);
+        setData.set("BuyerOrderNo", selected.BuyerOrderNo);
+        setData.set("OrderNo", selected.OrderNo);
+        setData.set("ArticleID", selected.ArticleID);
+        setData.set("ArticleNo", selected.ArticleNo);
+        setData.set("ArticleName", selected.ArticleName);
+        changeStatus = 1;
+    }
+
+    $("#btnBuyerOrderWindowOK").click(function () {
+        BuyerOrderSearchEvents();
+        buyerOrderWindow.close();
+    });
+    $("#BuyerOrderWindowGrid").dblclick(function () {
+        BuyerOrderSearchEvents();
+        buyerOrderWindow.close();
+    });
+    $("#BuyerOrderWindowGrid").keyup(function (e) {
+        var gridSearch = $("#BuyerOrderWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        if (selected != null) {
+            if (e.keyCode == 13) {
+                BuyerOrderSearchEvents();
+                buyerOrderWindow.close();
+            }
+        }
+    });
+    $("#btnBuyerOrderWindowCancel").click(function () {
+        buyerOrderWindow.close();
+    });
+    $("#BuyerOrderWindow").keyup(function (e) {
+        if (e.keyCode == 27) {
+            buyerOrderWindow.close();
+        }
+    });
+    //  End Buyer Order search window events End
+
+    //Start Supplier search window events
+    @*$(document).on('keyup', '.SupplierName', function(e) {
+        if (e.keyCode == 120) {
+            $("#txtSupplier").val("");
+            listOfSupplierByStroreId();
+            SelectedItemOfListOfValue('SupplierWindowGrid');
+            supplierWindow.open();
+            supplierWindow.center();
+        }
+    });
+
+
+    // Supplier search window events
+    function SupplierSearchEvents() {
+        var gridSearch = $("#SupplierWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        var gridCiItem = $("#PageDetailGrid").data("kendoGrid");
+        var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+        selectedCiigItem.set("SupplierID", selected.SupplierID);
+        selectedCiigItem.set("SupplierName", selected.SupplierName);
+    }
+
+    // Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function() {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function() {
+        supplierWindow.close();
+    });
+    $("#SupplierWindowGrid").dblclick(function() {
+        SupplierSearchEvents();
+        supplierWindow.close();
+    });
+    $("#SupplierWindowGrid").keyup(function(event) {
+
+        var gridSearch = $("#SupplierWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        if (selected != null) {
+            if (event.keyCode == 13) {
+                SupplierSearchEvents();
+                supplierWindow.close();
+            }
+                // Close Window with escape key
+            else if (event.keycode == '27') {
+                supplierWindow.close();
+            }
+            event.stopPropagation();
+        }
+            // Close Window with escape key
+        else if (event.keycode == '27') {
+            supplierWindow.close();
+        }
+        event.stopPropagation();
+
+    });
+
+
+    var supplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: supplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "SupplierID", hidden: true, title: "Supplier ID", width: "60px" },
+              { field: "SupplierName", title: "Supplier Name", width: "80px" },
+              { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+
+    function listOfSupplierByStroreId() {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListByStoreId", "WetBlueIssue")',
+            type: 'GET',
+            data: { "storeId": $("#IssueFrom").val() },
+            success: function (data) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }*@
+
+    //END Supplier search window events
+
+
+    //Start Supplier Purchase Challan Search
+    $(document).on('keyup', '.GradeName', function (e) {
+        if (e.keyCode == 120) {
+
+            if ($('#IssueCategory').val() != null && $('#IssueFrom').val() != "" && $('#IssueTo').val() != "") {
+
+                listOfValueGridEventChallan();
+                SelectedItemOfListOfValue('ChallanWindowGrid');
+                challanWindow.open();
+
+            } else {
+                $('#MessageText').html("Select Issue Category And Both Issue From  & Issue To Store. ");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    });
+    //Challan search window definition
+    var ChallanSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    GradeID: { editable: false },
+                    GradeName: { editable: false },
+                    SizeQtyRef: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    AverageStockArea: { editable: false },
+                    StoreID: { editable: false },
+                    StoreName: { editable: false },
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    PurchaseID: { editable: false },
+                    PurchaseNo: { editable: false },
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false },
+                    IsSelect: { editable: false }
+                }
+            }
+        },
+        @*transport: {
+        read: '@Url.Action("GetWetBlueStockForCrust", "WetBlueIssue")',
+        type: 'GET',
+        data: 'JSON'
+        },*@
+        pageSize: 50
+    });
+    var challanGrid = $("#ChallanWindowGrid").kendoGrid({
+        dataSource: ChallanSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+                { field: "GradeID", hidden: true },
+                { field: "GradeName", title: "Grade", width: "50px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SizeQtyRef", title: "Ref Data Category", width: "50px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "AverageStockArea", title: "Average Area", width: "60px", filterable: false, attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "StoreID", hidden: true },
+                { field: "StoreName", title: "Store Name", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SupplierID", hidden: true },
+                { field: "SupplierName", title: "Supplier Name", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PurchaseID", hidden: true },
+                { field: "PurchaseNo", title: "Purchase No", width: "60px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ItemTypeID", hidden: true },
+                { field: "ItemTypeName", title: "Item Type", width: "60px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                { field: "LeatherStatusID", hidden: true },
+                { field: "LeatherStatusName", title: "Leather Status", width: "60px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsSelect",hidden: true, title: "Is Check", filterable: false, template: "<input type='checkbox'  value='#= GradeID #'/>", width: "60px" }
+
+        ]
+    });
+
+    // Buyer search window events
+    function ChallanSearchEvents() {
+        var gridSearch = $("#ChallanWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        var gridCiItem = $("#PageDetailGrid").data("kendoGrid");
+        var setData = (gridCiItem.dataItem(gridCiItem.select()));
+        setData.set("GradeID", selected.GradeID);
+        setData.set("GradeName", selected.GradeName);
+        setData.set("SizeQtyRef", selected.SizeQtyRef);
+        setData.set("StoreID", selected.StoreID);
+        setData.set("StoreName", selected.StoreName);
+        setData.set("SupplierID", selected.SupplierID);
+        setData.set("SupplierName", selected.SupplierName);
+        setData.set("PurchaseID", selected.PurchaseID);
+        setData.set("PurchaseNo", selected.PurchaseNo);
+        setData.set("ItemTypeID", selected.ItemTypeID);
+        setData.set("ItemTypeName", selected.ItemTypeName);
+        setData.set("LeatherStatusID", selected.LeatherStatusID);
+        setData.set("LeatherStatusName", selected.LeatherStatusName);
+        setData.set("ClosingStockPcs", selected.ClosingStockPcs);
+        setData.set("ClosingStockSide", selected.ClosingStockSide);
+        setData.set("ClosingStockArea", selected.ClosingStockArea);
+
+        setData.set("IssuePcs", selected.ClosingStockPcs);
+        setData.set("IssueSide", selected.ClosingStockSide);
+        setData.set("IssueArea", selected.ClosingStockArea);
+        changeStatus = 1;
+
+    }
+    $("#btnChallanWindowOK").click(function () {
+        ChallanSearchEvents();
+        challanWindow.close();
+    });
+    $("#ChallanWindowGrid").dblclick(function () {
+        ChallanSearchEvents();
+        challanWindow.close();
+    });
+    $("#ChallanWindowGrid").keyup(function (e) {
+        var gridSearch = $("#ChallanWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        if (selected != null) {
+            if (e.keyCode == 13) {
+                ChallanSearchEvents();
+                challanWindow.close();
+            }
+        }
+    });
+    $("#btnChallanWindowCancel").click(function () {
+        challanWindow.close();
+    });
+    $("#ChallanWindow").keyup(function (e) {
+        if (e.keyCode == 27) {
+            challanWindow.close();
+        }
+    });
+
+
+    function listOfValueGridEventChallan() {
+        var grid = $("#PageDetailGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetWetBlueStockForCrust", "WetBlueIssue")',
+            type: 'GET',
+            data: { "storeId": $('#IssueFrom').val(), "gradeName": $('#txtGrade').val(), "supplierName": $('#txtSupplierName').val(), "purchaseNo": $('#txtPurchaseNo').val() },
+            success: function (data) {
+                $("#ChallanWindowGrid").data("kendoGrid").dataSource.data(data);
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    //  End Challan search window events End
+
+
+    //-------------------------------------------------Common Function--------------------------------------------------------
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function listOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //------------------------------To Add new row to any grid----------------------------------------------------
+
+
+    $("#PageDetailGrid").on('input', function () {
+        changeStatus = 1;
+        ItemGridchangeStatus = 1;
+    });
+
+    $("#PageRefGrid").on('input', function () {
+        changeStatus = 1;
+    });
+
+
+    $("#PageRefGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            var checkRowCreation = 1;
+
+            var pageRefGridDataSource = $("#PageRefGrid").data("kendoGrid").dataSource;
+            var refGridData = pageRefGridDataSource.data();
+
+            for (var i = 0; i < refGridData.length; i++) {
+                if (refGridData[i].isNew()) {
+                    checkRowCreation = 0;
+                    break;
+                }
+            }
+            $("#PageDetailGrid").data('kendoGrid').dataSource.data([]);
+            if (checkRowCreation == 1 && ItemGridchangeStatus == 0) {
+                var grid = $("#PageRefGrid").data("kendoGrid");
+
+                $("#PageRefGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                //e.preventDefault();
+                $("#WetBlueIssueRefID").val();
+                $("#PageDetailGrid").data('kendoGrid').dataSource.data([]);
+            }
+            //else {
+            //    $('#MessageText').html("You have unsaved Item");
+            //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            //}
+        }
+    });
+
+    //$(".btnPageRefGrid").click(function (e) {
+
+    //    var checkRowCreation = 1;
+
+    //    var pageRefGridDataSource = $("#PageRefGrid").data("kendoGrid").dataSource;
+    //    var refGridData = pageRefGridDataSource.data();
+
+    //    for (var i = 0; i < refGridData.length; i++) {
+    //        if (refGridData[i].isNew()) {
+    //            checkRowCreation = 0;
+    //            break;
+    //        }
+    //    }
+
+    //    if (checkRowCreation == 1 && ItemGridchangeStatus == 0) {
+    //        var grid = $("#PageRefGrid").data("kendoGrid");
+
+    //        $("#PageRefGrid").data().kendoGrid.bind('dataBound', function () {
+    //            this.element.find('tbody tr:first').addClass('k-state-selected');
+    //        });
+    //        grid.addRow();
+    //        $("#WetBlueIssueRefID").val();
+    //        $("#PageDetailGrid").data('kendoGrid').dataSource.data([]);
+    //    }
+    //    else {
+    //        $('#MessageText').html("You have unsaved Item");
+    //        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+    //        e.stopImmediatePropagation();
+    //    }
+
+    //});
+    function SetRefFirstRowValue() {
+
+        var parentGrid = $("#PageRefGrid").data("kendoGrid");
+        var parentGridRow = parentGrid.select();
+        var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+        var childGrid = $("#PageDetailGrid").data("kendoGrid");
+        $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        childGrid.addRow();
+        //e.preventDefault();
+        //$("#WetBlueIssueRefID").val(parentGridItem.WetBlueIssueRefID);
+    }
+
+    $("#PageDetailGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            // SetRefFirstRowValue();
+        }
+    });
+
+    //$(".btnPageDetailGrid").click(function () {
+    //    SetRefFirstRowValue();
+    //});
+    //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+
+    // Stop multiple ref data for different items
+    @*//To face child data into another grid for a grid row on click
+    $("#PageRefGrid").on("click", "tr", function (e) {
+
+        var itemGridDataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var itemGridData = itemGridDataSource.data();
+
+        var checkUnsavedData = 0;
+        for (var i = 0; i < itemGridData.length; i++) {
+            if (itemGridData[i].isNew()) {
+                checkUnsavedData = 1;
+                break;
+            }
+        }
+
+        if (checkUnsavedData == 0) {
+            var parentGrid = $("#PageRefGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+            if (parentGridItem.WetBlueIssueRefID != "") {
+                tempWetBlueIssueRefID = parentGridItem.WetBlueIssueRefID;
+
+                $.ajax({
+                    url: '@Url.Action("GetItemsByBuyerRefId", "WetBlueIssue")',
+                    type: 'GET',
+                    data: { "wetBlueIssueRefId": parentGridItem.WetBlueIssueRefID, "storeId": $('#IssueFrom').val() ,wetBlueIssueId: $("#WetBlueIssueID").val() },
+                    success: function (response) {
+
+                        if (response != null) {
+
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                            //changeStatus = 0;
+                        }
+
+                    } //End of Success Call
+                });
+            }
+            else {
+                $("#PageDetailGrid").data('kendoGrid').dataSource.data([]);
+            }
+        }
+        else {
+            //alert("You have Unsaved data in item grid");
+        }
+    });*@
+    //End of facing child data into another grid for a grid row on click
+
+
+    //------------------------------------------------- End Common Function--------------------------------------------------------
+
+
+    //-------------------------------------Start CRUD Opreation--------------------------------------------------
+
+    // Declare Object
+    var ItemModel = { "WBSIssueItemID": "", "WetBlueIssueRefID": "", "WetBlueIssueID": "", "SupplierID": "", "PurchaseID": "", "LotNo": "", "ItemTypeID": "", "LeatherStatusID": "", "GradeID": "", "SizeQtyRef": "", "IssuePcs": "","PcsToSide": "", "IssueSide": "", "IssueArea": "" };
+    var RefModel = { "WetBlueIssueRefID": "", "WetBlueIssueID": "", "WetBlueReqID": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "","ArticleChallanID": "", "ArticleChallanNo": "", "AvgSize": "", "SideDescription": "", "SelectionRange": "", "Thickness": "", "UnitID": "", "ThicknessAt": "" };
+    var DataModel = { "WetBlueIssueID": "", "RequisitionDateID": "", "IssueFor": "", "IssueCategory": "", "IssueFrom": "", "IssueTo": "", "WetBlueIssueDate": "", "RefModels": [], "ItemModels": [] };
+
+
+    function SaveData() {
+        CheckRequiredTextBoxMaxLength('IssueFor', 40);
+        CheckRequiredTextBoxMaxLength('IssueCategory', 30);
+        CheckRequiredTextBoxMaxLength('IssueFrom', 50);
+        CheckRequiredTextBoxMaxLength('IssueTo', 50);
+        CheckRequiredTextBoxMaxLength('WBIssueDate', 15);
+
+        var refDataSource = $("#PageRefGrid").data("kendoGrid").dataSource;
+        var refData = refDataSource.data(); // Get Detail Grid Data
+        var itemDataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var itemData = itemDataSource.data(); // Get Detail Grid Data
+
+        if ($('#IssueCategory').val() == 'PROD') {
+            if (refData.length > 0) {
+                for (i = 0; i <= refData.length - 1; i++) {
+
+                    if ((refData[i].ArticleID == "") && refData[i].ArticleChallanID == "" && refData[i].BuyerID =="" && refData[i].BuyerOrderID=="") {
+                        checkGridData = 0;
+                        //saveStatus = 0;
+                        break;
+                    }
+                }
+            } else {
+                checkGridData = 0;
+            }
+        }
+        //for (i = 0; i <= itemData.length - 1; i++) {
+
+        //    if ((itemData[i].PurchaseID == "") && (itemData[i].SupplierID == "")) {
+        //        checkGridData = 0;
+        //        saveStatus = 0;
+        //        break;
+        //    }
+        //}
+        if (saveStatus == 1 && checkGridData==1) {
+            DataModel.WetBlueIssueID = $('#WetBlueIssueID').val();
+            DataModel.IssueFor = $('#IssueFor').val();
+            DataModel.IssueCategory = $('#IssueCategory').val();
+            DataModel.IssueFrom = $('#IssueFrom').val();
+            DataModel.IssueTo = $('#IssueTo').val();
+            DataModel.WetBlueIssueDate = $('#WBIssueDate').val();
+            DataModel.RequisitionDateID = $('#RequisitionDateID').val();
+
+            var i = 0;
+            if ($('#IssueCategory').val() == 'PROD') {
+                for (i = 0; i < refData.length ; i++) {
+
+                    //if (refData[i].dirty) {
+
+                    RefModel.WetBlueIssueRefID = refData[i].WetBlueIssueRefID;
+                    RefModel.WetBlueIssueID = $('#WetBlueIssueID').val();
+                    RefModel.BuyerID = refData[i].BuyerID;
+                    RefModel.BuyerOrderID = refData[i].BuyerOrderID;
+                    RefModel.ArticleID = refData[i].ArticleID;
+                    RefModel.ArticleChallanID = refData[i].ArticleChallanID;
+                    RefModel.ArticleChallanNo = refData[i].ArticleChallanNo;
+                    RefModel.AvgSize = refData[i].AvgSize;
+                    RefModel.SideDescription = refData[i].SideDescription;
+                    RefModel.SelectionRange = refData[i].SelectionRange;
+                    RefModel.Thickness = refData[i].Thickness;
+                    RefModel.UnitID = refData[i].UnitID;
+                    RefModel.ThicknessAt = refData[i].ThicknessAt;
+
+                    DataModel.RefModels.push(RefModel);
+                    RefModel = { "WetBlueIssueRefID": "", "WetBlueIssueID": "", "WetBlueReqID": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleChallanID": "", "ArticleChallanNo": "", "AvgSize": "", "SideDescription": "", "SelectionRange": "", "Thickness": "", "UnitID": "", "ThicknessAt": "" };
+                    //}
+                }
+            }
+            //if (changeStatus == 1) {
+            //    SetRefFirstRowValue();
+            //}
+
+            for (i = 0; i < itemData.length; i++) {
+
+                if (itemData[i].dirty) {
+                    ItemModel.WBSIssueItemID = itemData[i].WBSIssueItemID;
+                    if (refData.length > 0) {
+                        if ($('#IssueCategory').val() == 'PROD') {
+                            ItemModel.WetBlueIssueRefID = refData[0].WetBlueIssueRefID;
+                        } else {
+                            ItemModel.WetBlueIssueRefID = null;
+                        }
+                    } else {
+                        ItemModel.WetBlueIssueRefID = null;
+                    }
+                    //ItemModel.WetBlueIssueRefID = $('#IssueCategory').val() == 'PROD' ? refData[0].WetBlueIssueRefID:null;//refData[0].WetBlueIssueRefID tempWetBlueIssueRefID;
+                    ItemModel.WetBlueIssueID = itemData[i].WetBlueIssueID;
+                    ItemModel.SupplierID = itemData[i].SupplierID;
+                    ItemModel.PurchaseID = itemData[i].PurchaseID;
+                    ItemModel.LotNo = itemData[i].LotNo;
+                    ItemModel.ItemTypeID = itemData[i].ItemTypeID;
+                    ItemModel.LeatherStatusID = itemData[i].LeatherStatusID;
+                    ItemModel.GradeID = itemData[i].GradeID;
+                    ItemModel.SizeQtyRef = itemData[i].SizeQtyRef;
+                    ItemModel.IssuePcs = itemData[i].IssuePcs;
+                    ItemModel.PcsToSide = itemData[i].PcsToSide;
+                    ItemModel.IssueSide = itemData[i].IssueSide;
+                    ItemModel.IssueArea = itemData[i].IssueArea;
+                    DataModel.ItemModels.push(ItemModel);
+                    ItemModel = { "WBSIssueItemID": "", "WetBlueIssueRefID": "", "WetBlueIssueID": "", "SupplierID": "", "PurchaseID": "", "LotNo": "", "ItemTypeID": "", "LeatherStatusID": "", "GradeID": "", "SizeQtyRef": "", "IssuePcs": "", "PcsToSide": "", "IssueSide": "", "IssueArea": "" };
+                }
+            }
+
+            $("#divLoading").show();
+            if (changeStatus == 1) {
+                if (checkGridData == 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("WetBlueIssue", "WetBlueIssue")',
+                        data: JSON.stringify(DataModel),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (respnse) {
+                            $("#divLoading").hide();
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#WetBlueIssueID").val(respnse.msg.ReturnId);
+                                $("#WetBlueIssueNo").val(respnse.msg.ReturnCode);
+                                changeStatus = 0;
+
+                                GetAllWbIssueInfoData();
+                            } else if (respnse.msg.Type == 3) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#WetBlueIssueID").val(respnse.msg.ReturnId);
+                                $("#WetBlueIssueNo").val(respnse.msg.ReturnCode);
+                                changeStatus = 0;
+                                ItemGridchangeStatus = 0;
+                                GetAllWbIssueInfoData();
+                            }
+                            else {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    DataModel = { "WetBlueIssueID": "", "RequisitionDateID": "", "IssueFor": "", "IssueCategory": "", "IssueFrom": "", "IssueTo": "", "WetBlueIssueDate": "", "RefModels": [], "ItemModels": [] };
+                }
+                    // Wrong Grid Data
+                else {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    checkGridData = 1;
+                }
+            }
+                // No Changes Exiting Data
+            else {
+                $("#divLoading").hide();
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+        else {
+            if (saveStatus == 0)
+            {
+                $("#divLoading").hide();
+            $("#MessageText").html("Issue Quantity must be less than Stock Quantity.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                saveStatus = 1;
+            }
+            else if (checkGridData == 0) {
+                $("#divLoading").hide();
+                $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                checkGridData = 1;
+
+            }
+
+        }
+    }
+
+
+    //Check and confirm form
+    function checkNconfirm(state) {
+        $("#divLoading").show();
+        var wetBlueIssueId = $("#WetBlueIssueID").val();
+        if (state == "chk") {
+
+            var chkComment = $("#checkComment").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckData", "WetBlueIssue")',
+                dataType: 'JSON',
+                data: JSON.stringify({ wetBlueIssueId: wetBlueIssueId, chkComment: chkComment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 1;
+                        CheckRecordStatusForButton("CHK");
+                        $("#divLoading").hide();
+                        //ClearAllData();
+                    }
+                    else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        if (state == "cnf") {
+            var cnfComment = $("#confirmComment").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ConfirmData", "WetBlueIssue")',
+                dataType: 'JSON',
+                data: JSON.stringify({ wetBlueIssueId: wetBlueIssueId, cnfComment: cnfComment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 1;
+                        CheckRecordStatusForButton("CNF");
+                        $("#divLoading").hide();
+                        recordStatus = "Confirmed";
+                        GetAllWbIssueInfoData();
+                    }
+                    else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+    function GetAllWbIssueInfoData() {
+        $.ajax({
+            url: '@Url.Action("GetWetBlueIssueAllInfo", "WetBlueIssue")',
+            type: 'GET',
+            data: { wetBlueIssueId: $("#WetBlueIssueID").val(), issueCategory: $('#IssueCategory').val(), "storeId": $('#IssueFrom').val() },
+            success: function (datasc) {
+                $("#PageRefGrid").data("kendoGrid").dataSource.data(datasc.RefModels);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(datasc.ItemModels);
+
+            }
+        });
+    }
+    //Check and confrim form end
+    //Check and confrim form acivation
+    $("#btnCheck").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#WetBlueIssueID").val() != "") {
+                checkNconfirm("chk");
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+    });
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            if ($("#WetBlueIssueID").val() != "") {
+                    checkNconfirm("cnf");
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+    });//Check and confirm form acivation end
+
+
+
+    //-------------------------------------End Start CRUD Opreation--------------------------------------------------
+
+    //------------------------------------Start of Button Event----------------------------------------
+
+    function ClearAllData() {
+
+        // ClearOperationalMessage();
+        ResetOnlyParentData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageRefGrid").data("kendoGrid").dataSource.data([]);
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+    }
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        changeStatus = 0;
+        recordStatus = "";
+        saveStatus = 1;
+        $('#WetBlueIssueID').val("");
+        $('#RequisitionDateID').val("");
+        $('#WBIssueDate').val("");
+
+        // When Changes Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Changes Data
+        //else {
+        CheckRecordStatusForButton("NCF");
+        ClearOperationalMessage();
+        ResetOnlyMasterPageData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageRefGrid").data("kendoGrid").dataSource.data([]);
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        //}
+    });
+
+    // For Search button work
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Changes Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Changes Data
+        //else {
+        ClearOperationalMessage();
+        $("#MessageText").html("");
+        $(".RequiredTextBox").css("border-color", "");
+        LoadSearchGrid();
+        SelectedItemOfListOfValue('SearchWindowGrid');
+        SearchWindow.open();
+        //}
+    });
+
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "WetBlueIssueID",
+                fields: {
+                    WetBlueIssueID: { editable: false },
+                    WetBlueIssueNo: { editable: false },
+                    RequisitionDateID: { editable: false },
+                    RequisitionNo: { editable: false },
+                    WetBlueIssueDate: { editable: false },
+                    IssueCategory: { editable: false },
+                    IssueFor: { editable: false },
+                    IssueFrom: { editable: false },
+                    IssueFromName: { editable: false },
+                    IssueTo: { editable: false },
+                    IssueToName: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "WetBlueIssueID", hidden: true, title: "Issue ID", width: "30px" },
+            { field: "WetBlueIssueNo", title: "Issue No", width: "60px" },
+            { field: "WetBlueIssueDate", title: "Issue Date", width: "60px" },
+            { field: "IssueCategory", hidden: true, title: "Issue Category", width: "60px" },
+            { field: "IssueFor", hidden: true, title: "Issue For", width: "80px" },
+            { field: "IssueFrom", hidden: true },
+            { field: "IssueFromName", title: "From Store", width: "80px" },
+            { field: "IssueTo", hidden: true },
+            { field: "IssueToName", title: "To Store", width: "80px" },
+            { field: "RequisitionDateID", hidden: true, title: "Requisition ID", width: "30px" },
+            { field: "RequisitionNo", title: "Requisition No", width: "100px" },
+            { field: "RecordStatus", title: "Record Status", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Wet Blue Issue Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+
+
+    function LoadSearchGrid() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetAllWetBlueIssueList", "WetBlueIssue")',
+            type: 'GET',
+            data: { pageMode: "ENT" },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+
+        $("#WetBlueIssueID").val(selectedItem.WetBlueIssueID);
+        $("#RequisitionDateID").val(selectedItem.RequisitionDateID);
+        $("#RequisitionNo").val(selectedItem.RequisitionNo);
+        $("#WetBlueIssueNo").val(selectedItem.WetBlueIssueNo);
+        $("#WBIssueDate").val(selectedItem.WetBlueIssueDate);
+        $("#IssueCategory").val(selectedItem.IssueCategory);
+        if ($("#IssueCategory").val() == "SRTF") {
+            $("#divPageRefGrid").hide();
+        } else {
+            $("#divPageRefGrid").show();
+        }
+        $("#IssueFor").val(selectedItem.IssueFor);
+
+        $("#IssueFrom").val(selectedItem.IssueFrom);
+        $.ajax({
+            url: '@Url.Action("GetAllActiveProductionNCrustStore", "WetBlueIssue")',
+            type: 'GET',
+            data: { issueCategory: selectedItem.IssueCategory },
+            success: function (data33) {
+                SetDropdownValue(data33, "IssueTo", selectedItem.IssueTo);
+            }
+        });
+        $("#IssueTo").val(selectedItem.IssueTo);
+        recordStatus = selectedItem.RecordStatus;
+        CheckRecordStatusForButton(recordStatus);
+
+        GetAllWbIssueInfoData();
+    }
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //------------------------------------End of Button Event----------------------------------------
+
+
+</script>

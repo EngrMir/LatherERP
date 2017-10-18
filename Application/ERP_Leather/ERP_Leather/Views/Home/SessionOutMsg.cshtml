@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Session Out!";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bengal Leather Complex </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href=@Url.Content("~/Content/CSS/cssLogin.css") rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+</head>
+    <body>
+        <div id="body">
+            <div id="baner">
+                Bengal Leather Complex Management Information System
+            </div>
+            <div id="ContentBodyLeftMidRight">
+                <div id="ContentBodyLeft">
+                </div>
+                <div id="ContentBodyMid">
+                    @using (Html.BeginForm("SessionOutMsg", "Home"))
+                    {
+                        <h2  style="color:#a0522d;">You have not logged in yet or your session time has expired.</h2>
+                        <br />
+                    <a   href="@Url.Action("Login","Home")" target="_parent" title="Click Here for Login!">Click Here for Login!</a>
+                     <br />
+                    }
+                </div>
+            </div>
+            <div id="footer">
+                <div style="text-align: center;">Powered By: <font face="Century Gothic" color="navy" size="2">Square InformatiX Limited</font></div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+
+

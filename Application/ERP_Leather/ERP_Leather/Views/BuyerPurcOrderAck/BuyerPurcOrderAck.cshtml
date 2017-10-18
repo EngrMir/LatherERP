@@ -1,0 +1,1514 @@
+﻿@{
+    ViewBag.Title = "BuyerPurcOrderAck";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row FormHeader" style="padding: 5px 0 5px 0;">
+
+    <div id="FormTitlePannel" class="col-lg-4">
+        <div id="FormTitle" style="font-size:larger; font-weight:bold;">Buyer Purchase Order Acknowledgement</div>
+    </div>
+    <div id="MessageText" class="col-lg-5">
+    </div>
+    <div id="" class="col-lg-3" style="padding: 0 0 0 0;">
+        @*<button type="button" id="btnSave" title="Save" onclick="" class="" style="margin-left: 10px; width: 58px; font-size: 12px;">Save</button>
+        <button type="button" id="btnSearch" onclick="" value="Search" class="" style="width: 58px; font-size: 12px;">Search</button>
+        <button type="button" id="btnReset" onclick="" value="Reset" class="" style="margin-left: 10px; width: 58px; font-size: 12px; ">Reset</button>
+        <button type="button" id="btnDelete" onclick="" value="Delete" class="" style="width: 58px; font-size: 12px;" disabled>Delete</button>*@
+        <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" disabled />
+        <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 0 0 0 0;">
+    <div class="row" style="margin-top: 3px;">
+        <div class="col-lg-4">
+            <label>Buyer</label>
+            <input type="text" id="txtBOABuyerId" class="txtField" style="display: none;" />
+            <input type="text" id="txtBOABuyerName" class="txtField" style="margin-left: 47px; width: 160px;" placeholder="" readonly />
+
+        </div>
+        <div class="col-lg-4" style="">
+            <label style="margin-left: 65px;">Expected Shipment Date</label>
+            <input type="text" id="txtBOAExpectedShipmentDate" class="txtField" style="margin-left: 4px;" readonly />
+        </div>
+        @*<div class="col-lg-4" style="">
+            <label style="margin-left: 152px;">Revision</label>
+            <input type="text" id="txtBOARevisionNo" class="txtField" style="width: 149px; margin-left: 29px;" />
+        </div>*@
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Address</label>
+            <input type="text" id="txtBOABuyerAddressId" class="txtField" style="display: none;" />
+            <input type="text" id="txtBOABuyerAddress" class="txtField" style=" width: 220px; margin-left: 32px;" readonly />
+
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-left: 65px;">Proposed Shipment Date</label>
+            <input type="text" id="txtBOAProposedShipmentDate" class="datePicker txtField" />
+        </div>
+        @*<div class="col-lg-4">
+            <label style="margin-left: 152px;">Revision Date</label>
+            <input type="text" id="txtBOARevisionDate" class="datePicker txtField" />
+        </div>*@
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Local Agent</label>
+            <input type="text" id="txtBOALocalAgentId" class="txtField" style="display: none;" />
+            <input type="text" id="txtBOALocalAgentName" class="txtField" style="margin-left: 13px; width: 160px;" placeholder="" readonly />
+
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-right: 25px; margin-left: 65px;">Last Date of Delivery</label>
+            <input type="text" id="txtBOALastDateOfDelivery" class="datePicker txtField" />
+        </div>
+        @*<div class="col-lg-4">
+            <button id="btnNewRevision" style="margin-left: 289px;">New Revision</button>
+        </div>*@
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Foreign Agent</label>
+            <input type="text" id="txtBOAForeignAgentId" class="txtField" style="display: none;" />
+            <input type="text" id="txtBOAForeignAgentName" class="txtField" style="width: 160px;" placeholder="" readonly />
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-right: 6px; margin-left: 65px;">Production Should Start</label>
+            <input type="text" id="txtBOAProdShouldStart" class="datePicker txtField" />
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Reference</label>
+            <input type="text" id="txtBOAReference" class="txtField" style="margin-left: 20px; width: 160px;" readonly />
+        </div>
+        <div class="col-lg-8">
+            <label style="margin-right: 6px; margin-left: 65px;">Acknowledgement Note</label>
+            <input type="text" id="txtBOAAckNote" class="txtField" style="width: 300px;" />
+        </div>
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 0 0 0 0;">
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Buyer Order No.</label>
+            <input type="text" id="txtBOAOrderId" class="txtField" style="display: none;" />
+            <input type="text" id="txtBOABuyerOrderNo" class="txtField" style="margin-left: 10px;" placeholder="" readonly />
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-left: 65px;">Order Category</label>
+            <input type="text" id="txtBOAOrderCategory" class="txtField" style="" readonly />
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-left: 82px;">Acknowledgement Status</label>
+            <select id="ddlBOAAckStatus" class="txtField" style="width: 124px;">
+                <option value="">-- Select --</option>
+                <option value="FLA">Fully Acknowledged</option>
+                <option value="DTD">Date Differ</option>
+                <option value="PAR">Partial</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label>Buyer Order Date</label>
+            <input type="text" id="txtBOABuyerOrderDate" class="txtField" readonly />
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-left: 65px;">Order Status</label>
+            <input type="text" id="txtBOAOrderStatus" class="txtField" style="margin-left: 16px;" readonly />
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-left: 82px; margin-right: 13px;">Acknowledgement Date</label>
+            <input type="text" id="txtBOAAckDate" class="datePicker txtField" style="" />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label style="">Order No.</label>
+            <input type="text" id="txtBOAOrderNo" class="txtField" style="margin-left: 45px;" readonly />
+        </div>
+        <div class="col-lg-4">
+
+        </div>
+        <div class="col-lg-4">
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 0 15px 0 15px;">
+    <div id="BuyerOrderItemGrid" class="row"></div>
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-lg-6">
+            <div id="BuyerOrderItemColorGrid" class="row"></div>
+        </div>
+        <div class="col-lg-6">
+
+            <div class="row">
+                <div class="row">
+                    <label style="margin-left: 40px;">Confirm Note</label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <textarea id="txtBOAConfirmNote" class="txtArea" style="margin-left: 30px; height: 50px; width: 350px;"></textarea>
+                    </div>
+                    @*<input type="text" id="txtBPOConfirmNote" class="" placeholder="45 days from the date of issuarane" />*@
+                    <button id="btnConfirm" style="">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="BuyerWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Buyer Name</label>
+        <input type="text" id="txtBuyerName" style="width: 250px;" /><input type="button" id="btnBuyerGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="BuyerWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="LocalAgentWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Local Agent Name</label>
+        <input type="text" id="txtLocalAgentName" style="width: 250px;" /><input type="button" id="btnLocalAgentGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="LocalAgentWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnLocalAgentWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnLocalAgentWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ForeignAgentWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Foreign Agent Name</label>
+        <input type="text" id="txtForeignAgentName" style="width: 250px;" /><input type="button" id="btnForeignAgentGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ForeignAgentWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnForeignAgentWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnForeignAgentWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Article Name</label>
+        <input type="text" id="txtArticleName" style="width: 250px;" /><input type="button" id="btnArticleGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ArticleWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ColorsWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Color Name</label>
+        <input type="text" id="txtColorsName" style="width: 250px;" /><input type="button" id="btnColorsGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ColorsWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnColorsWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnColorsWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="BuyerOrderWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Buyer Name</label>
+        <input type="text" id="txtBuyerName" style="width: 250px;" /><input type="button" id="btnBuyerOrderGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="BuyerOrderWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="OrderWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Order No</label>
+        <input type="text" id="txtOrderNo" style="width: 250px;" /><input type="button" id="btnOrderGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="OrderWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnOrderWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnOrderWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to delete?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnDeleteConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnDeleteConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+<div id="ConfirmWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to confirm?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+<div id="divLoading" style="margin: 0; padding: 0; position: fixed; right: 0;
+    top: 0; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 45%; left: 45%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy"
+        });
+        $(".datePicker").attr("readonly", true);
+    });
+
+    // ######################################## Grid And Window Declaration ######################################## //
+
+    // ************ Buyer Order Item Grid Declaration ************ //
+
+    var BuyerOrderItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderItemID", fields: {
+                    SlNo: { editable: true },
+                    BuyerOrderItemID: { editable: true },
+                    BuyerOrderID: { editable: true },
+                    commodity: { editable: true },
+                    HSCode: { editable: true },
+                    ArticleID: { editable: true },
+                    ArticleNo: { editable: true },
+                    ArticleName: { editable: true, defaultValue: "Press (F9)" },
+                    ArticleChallanNo: { editable: true },
+                    AvgSize: { eidtable: true },
+                    AvgSizeUnit: { editable: true },
+                    AvgSizeUnitName: { editable: true, defaultValue: "SFT" },
+                    SideDescription: { editable: true },
+                    SelectionRange: { editable: true },
+                    Thickness: { editable: true },
+                    ThicknessUnit: { editable: true },
+                    ThicknessUnitName: { editable: true, defaultValue: "MM" },
+                    ThicknessAt: { editable: true },
+                    ThicknessAtName: { editable: true },
+                    ItemTypeID: { editable: true },
+                    ItemTypeName: { editable: true },
+                    LeatherTypeID: { editable: true },
+                    LeatherTypeName: { editable: true },
+                    LeatherStatusID: { editable: true },
+                    LeatherStatusName: { editable: true },
+                    ArticleFootQty: { editable: true, type: "number", validation: { min: 0 } },
+                    AirFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    AirFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    ArticleMeterQty: { editable: true, type: "number", validation: { min: 0 } },
+                    AirMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    AirMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    $("#BuyerOrderItemGrid").kendoGrid({
+        dataSource: BuyerOrderItemGridDataSource,
+        pageable: true,
+        edit: function (e) {},
+        save: function (e) {},
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        scrollable: true,
+        sortable: true,
+        height: 290,
+        columns: [
+            { field: "SlNo", title: "Sl No", width: 69, filterable: false, hidden: true },
+            { field: "commodity", title: "Commodity", width: 150, filterable: false },
+            { field: "HSCode", title: "Hs Code", width: 150, filterable: false },
+            { field: "ArticleName", title: "Article", width: 150 },
+            { field: "ItemTypeName", title: "Item Type", width: 150 },
+            { field: "LeatherStatusName", title: "Leather Status", width: 150, filterable: false },
+            { field: "LeatherTypeName", title: "Leather Type", width: 150, filterable: false },
+            { field: "AvgSize", title: "Size", width: 150, filterable: false },
+            { field: "AvgSizeUnitName", title: "Size Unit", width: 150, filterable: false },
+            { field: "SideDescription", title: "Side/Pcs", width: 150, filterable: false },
+            { field: "SelectionRange", title: "Selection Range", width: 150, filterable: false },
+            { field: "Thickness", title: "Thickness", width: 150, filterable: false },
+            { field: "ThicknessUnitName", title: "Thickness Unit", width: 150, filterable: false },
+            { field: "ArticleFootQty", title: "Quantity (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaFootUnitPrice", title: "Unit Price by Sea (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaFootTotalPrice", title: "Total Price by Sea (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirFootUnitPrice", title: "Unit Price by Air (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirFootTotalPrice", title: "Total Price by Air (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadFootUnitPrice", title: "Unit Price by Road (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadFootTotalPrice", title: "Total Price by Road (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "ArticleMeterQty", title: "Quantity (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaMeterUnitPrice", title: "Unit Price by Sea (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaMeterTotalPrice", title: "Total Price by Sea (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirMeterUnitPrice", title: "Unit Price by Air (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirMeterTotalPrice", title: "Total Price by Air (SMT)", width: 150, filterable: false, format: '{0:0.00}' }
+            //{ field: "RoadMeterUnitPrice", title: "Unit Price by Road (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadMeterTotalPrice", title: "Total Price by Road (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "ThicknessAt", title: "Thickness At", editor: ThicknessAtDropDownEditor, width: 100, filterable: false },
+            
+        ]
+    });
+
+    // ************ Buyer Order Item Grid Declaration End ************ //
+
+    // ************ Buyer Order Item Color Grid Declaration ************ //
+
+    var BuyerOrderItemColorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrdItemColorID",
+                fields: {
+                    SlNo: { editable: false },
+                    BuyerOrdItemColorID: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderItemID: { editable: false },
+                    ColorID: { editable: false },
+                    ColorName: { editable: false },
+                    ColorQty: { editable: false },
+                    ColorUnit: { editable: false },
+                    ColorUnitName: { editable: false },
+                    UnitPrice: { editable: false },
+                    TotalPrice: { editable: false },
+                    commodity: { editable: false },
+                    ArticleID: { editable: false }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    $("#BuyerOrderItemColorGrid").kendoGrid({
+        dataSource: BuyerOrderItemColorGridDataSource,
+        pageable: true,
+        edit: function (e) {
+
+        },
+        save: function (e) {
+
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 160,
+        columns: [
+            { field: "SlNo", title: "Sl No", width: 69, hidden: true },
+            { field: "ColorName", title: "Color" },
+            { field: "ColorQty", title: "Quantity", filterable: false },
+            { field: "ColorUnitName", title: "Unit", filterable: false },
+            { field: "UnitPrice", title: "Unit Price", filterable: false },
+            { field: "TotalPrice", title: "Total Price", filterable: false }
+
+        ]
+    });// ************ Buyer Order Item Color Grid Declaration End ************ //
+
+    // ************ Buyer Window & Grid Declaration ************ //
+
+    var BuyerWindow = $('#BuyerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Buyers", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var BuyerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerCode: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerAddressID: { editable: false },
+                    BuyerType: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetBuyer", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var BuyerGrid = $("#BuyerWindowGrid").kendoGrid({
+        dataSource: BuyerGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BuyerCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "BuyerName", title: "Name", width: "60px", filterable: false, sortable: false },
+            { field: "Address", title: "Address", width: "60px" },
+            { field: "BuyerType", title: "Type", width: "60px" }
+        ]
+    });
+
+    $('#txtBOABuyerName').keyup(function (e) {
+        if (e.keyCode == 120) {
+            //BuyerWindow.open();
+            //BuyerWindow.center();
+        }
+    });
+
+    // ************ Buyer Window & Grid Declaration End ************ //
+
+    // ************ Local Agent Window & Grid Declaration ************ //
+
+    var LocalAgentWindow = $('#LocalAgentWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Local Agents", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var LocalAgentGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerAgentID",
+                fields: {
+                    BuyerAgentID: { editable: false },
+                    AgentID: { editable: false },
+                    BuyerID: { editable: false },
+                    AgentCode: { editable: false },
+                    AgentName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LocalAgentGrid = $("#LocalAgentWindowGrid").kendoGrid({
+        dataSource: LocalAgentGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "AgentCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "AgentName", title: "Name", width: "60px", filterable: false, sortable: false }]
+    });
+
+    $('#txtBOALocalAgentName').keyup(function (e) {
+        if (e.keyCode == 120) {
+            //GetLocalAgent();
+        }
+    });
+
+    // ************ Local Agent Window & Grid Declaration End ************ //
+
+    // ************ Foreign Agent Window & Grid Declaration ************ //
+
+    var ForeignAgentWindow = $('#ForeignAgentWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Foreign Agents", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var ForeignAgentGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerAgentID",
+                fields: {
+                    BuyerAgentID: { editable: false },
+                    AgentID: { editable: false },
+                    BuyerID: { editable: false },
+                    AgentCode: { editable: false },
+                    AgentName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetForeignAgent", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var ForeignAgentGrid = $("#ForeignAgentWindowGrid").kendoGrid({
+        dataSource: ForeignAgentGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "AgentCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "AgentName", title: "Name", width: "60px", filterable: false, sortable: false }]
+    });
+
+    $('#txtBOAForeignAgentName').keyup(function (e) {
+        if (e.keyCode == 120) {
+            //ForeignAgentWindow.open();
+            //ForeignAgentWindow.center();
+        }
+    });
+
+    // ************ Foreign Agent Window & Grid Declaration End ************ //
+
+    // ************ Buyer order Window & Grid Declaration ************ //
+
+    var BuyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Buyer's Order", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var BuyerOrderGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    BuyerOrderDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BuyerOrderGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+        dataSource: BuyerOrderGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BuyerOrderNo", title: "Order No.", width: "60px", filterable: false, sortable: false },
+            { field: "BuyerOrderDate", title: "Date", width: "60px", filterable: false, sortable: false },
+            { field: "RecordStatus", title: "Status", width: "60px", filterable: false, sortable: false }
+        ]
+    });
+
+    // ************ Buyer order Window & Grid Declaration End ************ //
+
+    // ************ Buyer order Window & Grid Declaration ************ //
+
+    var OrderWindow = $('#OrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Orders", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var OrderGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    BuyerOrderDate: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetBuyerOrder", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var OrderGrid = $("#OrderWindowGrid").kendoGrid({
+        dataSource: OrderGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BuyerOrderNo", title: "Order No.", width: "60px", filterable: false, sortable: false },
+            { field: "BuyerOrderDate", title: "Date", width: "60px", filterable: false, sortable: false },
+            { field: "BuyerName", title: "Name", width: "60px", filterable: false, sortable: false },
+            { field: "RecordStatus", title: "Status", width: "60px", filterable: false, sortable: false }
+        ]
+    });
+
+    $('#btnSearch').click(function () {
+        if (changeStatus == 1) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            OrderWindow.open();
+            OrderWindow.center();
+        }
+    });
+
+    // ************ Buyer order Window & Grid Declaration End ************ //
+
+    // ************ Confirm Window Declaration ************ //
+
+    var ConfirmWindow = $('#ConfirmWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "300px", height: "auto",
+        title: "Confirm", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    // ************ Confirm Window Declaration End ************ //
+
+    // ************ Save Change Window Declaration ************ //
+
+    var SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Confirmation!",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Save Change Window Declaration End ************ //
+
+    // ######################################## Grid And Window Declaration End ######################################## //
+
+    // ######################################## Pop-up Window Events ######################################## //
+
+    // ************ Buyer pop-up window event ************ //
+
+    function SetBuyer() {
+        var gridBuyerSearch = $("#BuyerWindowGrid").data("kendoGrid");
+        var selectedBuyerGrid = (gridBuyerSearch.dataItem(gridBuyerSearch.select())); //Selected Row
+        $("#txtBOABuyerId").val(selectedBuyerGrid.BuyerID);
+        $("#txtBOABuyerName").val(selectedBuyerGrid.BuyerName);
+        $("#txtBOABuyerAddressId").val(selectedBuyerGrid.BuyerAddressID);
+        $("#txtBOABuyerAddress").val(selectedBuyerGrid.Address);
+        $.ajax({
+            url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+            type: 'GET',
+            data: ({ BuyerId: selectedBuyerGrid.BuyerID }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    var count = data.length;
+                    for (var i = 0; i < count; i++) {
+                        if (data[i].AgentType == "Local Agent") {
+                            $("#txtBOALocalAgentId").val(data[i].BuyerAgentID);
+                            $("#txtBOALocalAgentName").val(data[i].AgentName);
+                        }
+                        if (data[i].AgentType == "Foreign Agent") {
+                            $("#txtBOAForeignAgentId").val(data[i].BuyerAgentID);
+                            $("#txtBOAForeignAgentName").val(data[i].AgentName);
+                        }
+                    }
+                } else {
+                    $('#MessageText').html("This buyer has no agents.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            }
+        });
+        changeStatus = 1;
+    }
+
+    $("#btnBuyerWindowOK").click(function () {
+        SetBuyer();
+        BuyerWindow.close();
+    });
+    $("#BuyerWindowGrid").dblclick(function () {
+        SetBuyer();
+        BuyerWindow.close();
+    });
+    $("#BuyerWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetBuyer();
+            BuyerWindow.close();
+        }
+    });
+    $("#btnBuyerWindowCancel").click(function () { BuyerWindow.close(); });
+
+    // ************ Buyer pop-up window event End ************ //
+
+    // ************ Local Agent pop-up window event ************
+
+    function GetLocalAgent() {
+        var buyerId = $("#txtBOABuyerId").val();
+        if ($("#txtBOABuyerId").val() != "") {
+            $.ajax({
+                url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+                type: 'GET',
+                data: ({ BuyerId: buyerId }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        if (data.AgentType == "Local Agent") {
+                            LocalAgentGridDataSource.data(data);
+                            LocalAgentWindow.open();
+                            LocalAgentWindow.center();
+                        } else {
+                            $('#MessageText').html("This buyer has no local agent.");
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: '@Url.Action("GetLocalAgent", "BuyerPurcOrder")',
+                type: 'GET',
+                //data: ({ BuyerId: $("#txtBPOBuyerId").val() }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        LocalAgentGridDataSource.data(data);
+                        LocalAgentWindow.open();
+                        LocalAgentWindow.center();
+                    } else {
+                        $('#MessageText').html("There are no local agents.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            });
+        }
+    }
+
+
+    function SetLocalAgent() {
+        var gridLocalAgentSearch = $("#LocalAgentWindowGrid").data("kendoGrid");
+        var selectedLocalAgentGrid = (gridLocalAgentSearch.dataItem(gridLocalAgentSearch.select())); //Selected Row
+        //$("#txtBPOLocalAgentId").val(selectedLocalAgentGrid.AgentID);
+        //$("#txtBPOLocalAgentName").val(selectedLocalAgentGrid.AgentName);
+        if ($("#txtBOABuyerId").val() == "") {
+            $.ajax({
+                url: '@Url.Action("GetBuyerById", "BuyerPurcOrder")',
+                type: 'GET',
+                data: ({ BuyerId: selectedLocalAgentGrid.BuyerID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        $("#txtBOABuyerId").val(data.BuyerID);
+                        $("#txtBOABuyerName").val(data.BuyerName);
+                        $("#txtBOABuyerAddressId").val(data.BuyerAddressID);
+                        $("#txtBOASBuyerAddress").val(data.Address);
+                    }
+                }
+            });
+        }
+        $.ajax({
+            url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+            type: 'GET',
+            data: ({ BuyerId: selectedLocalAgentGrid.BuyerID }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    var count = data.length;
+                    for (var i = 0; i < count; i++) {
+                        if (data[i].AgentType == "Local Agent") {
+                            $("#txtBOALocalAgentId").val(data[i].BuyerAgentID);
+                            $("#txtBOALocalAgentName").val(data[i].AgentName);
+                        }
+                        if (data[i].AgentType == "Foreign Agent") {
+                            $("#txtBOAForeignAgentId").val(data[i].BuyerAgentID);
+                            $("#txtBOAForeignAgentName").val(data[i].AgentName);
+                        }
+                    }
+                }
+            }
+        });
+        changeStatus = 1;
+    }
+    $("#btnLocalAgentWindowOK").click(function () { SetLocalAgent(); LocalAgentWindow.close(); });
+    $("#LocalAgentWindowGrid").dblclick(function () { SetLocalAgent(); LocalAgentWindow.close(); });
+    $("#LocalAgentWindowGrid").keyup(function (e) { if (e.keyCode == 13) { SetLocalAgent(); LocalAgentWindow.close(); } });
+    $("#btnLocalAgentWindowCancel").click(function () { LocalAgentWindow.close(); });
+
+    // ************ Local Agent pop-up window event End ************ //
+
+    // ************ Foreign Agent pop-up window event ************ //
+
+    function GetForeignAgent() {
+
+    }
+
+    function SetForeignAgent() {
+        var gridForeignAgentSearch = $("#ForeignAgentWindowGrid").data("kendoGrid");
+        var selectedForeignAgentGrid = (gridForeignAgentSearch.dataItem(gridForeignAgentSearch.select())); //Selected Row
+        //$("#txtBPOForeignAgentId").val(selectedForeignAgentGrid.AgentID);
+        //$("#txtBPOForeignAgentName").val(selectedForeignAgentGrid.AgentName);
+        $.ajax({
+            url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+            type: 'GET',
+            data: ({ BuyerId: selectedForeignAgentGrid.BuyerID }),
+            contentType: 'application/json;', dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    var count = data.length;
+                    for (var i = 0; i < count; i++) {
+                        if (data[i].AgentType == "Local Agent") {
+                            $("#txtBPOLocalAgentId").val(data[i].BuyerAgentID);
+                            $("#txtBPOLocalAgentName").val(data[i].AgentName);
+                        }
+                        if (data[i].AgentType == "Foreign Agent") {
+                            $("#txtBPOForeignAgentId").val(data[i].BuyerAgentID);
+                            $("#txtBPOForeignAgentName").val(data[i].AgentName);
+                        }
+                    }
+                }
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("GetBuyerById", "BuyerPurcOrder")',
+            type: 'GET',
+            data: ({ BuyerId: selectedForeignAgentGrid.BuyerID }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $("#txtBPOBuyerId").val(data.BuyerID);
+                    $("#txtBPOBuyerName").val(data.BuyerName);
+                    $("#txtBPOBuyerAddressId").val(data.BuyerAddressID);
+                    $("#txtBPOBuyerAddress").val(data.Address);
+                }
+            }
+        });
+        changeStatus = 1;
+    }
+
+    $("#btnForeignAgentWindowOK").click(function () {
+        SetForeignAgent();
+        ForeignAgentWindow.close();
+    });
+    $("#ForeignAgentWindowGrid").dblclick(function () {
+        SetForeignAgent();
+        ForeignAgentWindow.close();
+    });
+    $("#LocalAgentWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetForeignAgent();
+            ForeignAgentWindow.close();
+        }
+    });
+    $("#btnForeignAgentWindowCancel").click(function () { ForeignAgentWindow.close(); });
+
+    // ************ Local Agent pop-up window event End ************ //
+
+    // ************ Buyer Order pop-up window event ************ //
+
+    function GetBuyerOrders() {
+        if ($('#txtBOABuyerId').val() != "") {
+            $.ajax({
+                url: '@Url.Action("GetBuyerOrder", "BuyerPurcOrderAck")',
+                type: 'GET',
+                data: ({ buyerId: $('#txtBOABuyerId').val() }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.length > 0) {
+                        BuyerOrderGridDataSource.data(data);
+                        BuyerOrderWindow.open();
+                        BuyerOrderWindow.center();
+                    } else {
+                        $('#MessageText').html("This buyer has no order.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("Please select a buyer first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }
+
+    $('#txtBOABuyerOrderNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            //GetBuyerOrders();
+        }
+    });
+
+    function SetBuyerOrder(orderId) {
+        var items = []; var colors = [];
+        itemColors = [];
+        $.ajax({
+            url: '@Url.Action("GetBuyerOrderById", "BuyerPurcOrder")',
+            type: 'GET',
+            data: ({ "orderId": orderId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $('#txtBOAOrderId').val(data.BuyerOrderID);
+                    $('#txtBOABuyerOrderNo').val(data.BuyerOrderNo);
+                    $('#txtBOAOrderNo').val(data.OrderNo);
+                    $('#txtBOABuyerOrderDate').val(data.BuyerOrderDate);
+                    $('#txtBOAOrderCategory').val(data.BuyerOrderCategory);
+                    $('#txtBOAOrderStatus').val(data.BuyerOrderStatus);
+                    $('#txtBOAReference').val(data.BuyerRef);
+                    $('#txtBOAExpectedShipmentDate').val(data.ExpectedShipmentDate);
+                    $('#txtBOAProposedShipmentDate').val(data.ProposedShipmentDate);
+                    $('#txtBOALastDateOfDelivery').val(data.DeliveryLastDate);
+                    $('#txtBOAProdShouldStart').val(data.ExpectedProdStartDate);
+                    $('#txtBOAAckNote').val(data.AcknowledgeNote);
+                    $('#ddlBOAAckStatus').val(data.AcknowledgementStatus);
+                    $('#txtBOAAckDate').val(data.AckDate);
+                    $('#txtBOARevisionNo').val(data.RevisionNo);
+                    $('#txtBPORevisionDate').val(data.RevisionDate);
+                    recordStatus = data.RecordStatus;
+                    btnLock(recordStatus);
+                    var count = data.OrderItems.length;
+                    if (data.OrderItems != null) {
+                        for (var i = 0; i < count; i++) {
+                            orderItem.SlNo = i + 1;
+                            orderItem.BuyerOrderItemID = data.OrderItems[i].BuyerOrderItemID;
+                            orderItem.BuyerOrderID = data.OrderItems[i].BuyerOrderID;
+                            orderItem.commodity = data.OrderItems[i].commodity;
+                            orderItem.HSCode = data.OrderItems[i].HSCode;
+                            orderItem.ArticleID = data.OrderItems[i].ArticleID;
+                            orderItem.ArticleName = data.OrderItems[i].ArticleName;
+                            orderItem.ArticleNo = data.OrderItems[i].ArticleNo;
+                            orderItem.AvgSize = data.OrderItems[i].AvgSize;
+                            orderItem.AvgSizeUnit = data.OrderItems[i].AvgSizeUnit;
+                            orderItem.AvgSizeUnitName = data.OrderItems[i].AvgSizeUnitName;
+                            orderItem.SideDescription = data.OrderItems[i].SideDescription;
+                            orderItem.SelectionRange = data.OrderItems[i].SelectionRange;
+                            orderItem.Thickness = data.OrderItems[i].Thickness;
+                            orderItem.ThicknessUnit = data.OrderItems[i].ThicknessUnit;
+                            orderItem.ThicknessUnitName = data.OrderItems[i].ThicknessUnitName;
+                            orderItem.ThicknessAt = data.OrderItems[i].ThicknessAt;
+                            orderItem.ItemTypeID = data.OrderItems[i].ItemTypeID;
+                            orderItem.ItemTypeName = data.OrderItems[i].ItemTypeName;
+                            orderItem.LeatherTypeID = data.OrderItems[i].LeatherTypeID;
+                            orderItem.LeatherTypeName = data.OrderItems[i].LeatherTypeName;
+                            orderItem.LeatherStatusID = data.OrderItems[i].LeatherStatusID;
+                            orderItem.LeatherStatusName = data.OrderItems[i].LeatherStatusName;
+                            if (data.OrderItems[i].ItemColors != null) {
+                                var count2 = data.OrderItems[i].ItemColors.length;
+                                for (var j = 0; j < count2; j++) {
+                                    itemColor.SlNo = orderItem.SlNo;
+                                    itemColor.BuyerOrdItemColorID = data.OrderItems[i].ItemColors[j].BuyerOrdItemColorID;
+                                    itemColor.BuyerOrderItemID = data.OrderItems[i].ItemColors[j].BuyerOrderItemID;
+                                    itemColor.BuyerOrderID = data.OrderItems[i].ItemColors[j].BuyerOrderID;
+                                    itemColor.ColorID = data.OrderItems[i].ItemColors[j].ColorID;
+                                    itemColor.ColorName = data.OrderItems[i].ItemColors[j].ColorName;
+                                    itemColor.ColorQty = data.OrderItems[i].ItemColors[j].ColorQty;
+                                    itemColor.ColorUnit = data.OrderItems[i].ItemColors[j].ColorUnit;
+                                    itemColor.ColorUnitName = data.OrderItems[i].ItemColors[j].ColorUnitName;
+                                    itemColor.UnitPrice = data.OrderItems[i].ItemColors[j].UnitPrice;
+                                    itemColor.TotalPrice = data.OrderItems[i].ItemColors[j].TotalPrice;
+                                    itemColors.push(itemColor);
+                                    ClearItemColor();
+                                }
+                            }
+                            items.push(orderItem);
+                            ClearOrderItem();
+                        }
+                        BuyerOrderItemGridDataSource.data(items);
+                        //BuyerOrderItemColorGridDataSource.data(colors);
+                    }
+                }
+            }
+        });
+    }
+
+    function GetOrderId() {
+        var gridBuyerOrderSearch = $("#BuyerOrderWindowGrid").data("kendoGrid");
+        var selectedBuyerOrderGridRow = (gridBuyerOrderSearch.dataItem(gridBuyerOrderSearch.select()));
+        SetBuyerOrder(selectedBuyerOrderGridRow.BuyerOrderID);
+    }
+
+    $('#btnBuyerOrderWindowOK').click(function () {
+        ClearOrder();
+        ClearOrderItem();
+        ClearItemColor();
+        GetOrderId();
+        BuyerOrderWindow.close();
+    });
+
+    $('#BuyerOrderWindowGrid').dblclick(function () {
+        ClearOrder();
+        ClearOrderItem();
+        ClearItemColor();
+        GetOrderId();
+        BuyerOrderWindow.close();
+    });
+    $('#BuyerOrderWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            ClearOrder();
+            ClearOrderItem();
+            ClearItemColor();
+            GetOrderId();
+            BuyerOrderWindow.close();
+        }
+    });
+
+    $("btnBuyerOrderWindowCancel").click(function () {
+        BuyerOrderWindow.close();
+    });
+    // ************ Buyer Order pop-up window event End ************ //
+
+    // ************ Order pop-up window event ************ //
+
+    function SetOrder(orderId) {
+        var items = []; var colors = [];
+        itemColors = [];
+        $.ajax({
+            url: '@Url.Action("GetBuyerOrderById", "BuyerPurcOrderAck")',
+            type: 'GET',
+            data: ({ "orderId": orderId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $('#txtBOABuyerId').val(data.BuyerID);
+                    $('#txtBOABuyerName').val(data.BuyerName);
+                    $('#txtBOABuyerAddressId').val(data.BuyerAddressID);
+                    $('#txtBOABuyerAddress').val(data.BuyerAddress);
+                    $('#txtBOALocalAgentId').val(data.BuyerLocalAgentID);
+                    $('#txtBOALocalAgentName').val(data.LocalAgentName);
+                    $('#txtBOAForeignAgentId').val(data.BuyerForeignAgentID);
+                    $('#txtBOAForeignAgentName').val(data.ForeignAgentName);
+                    $('#txtBOAReference').val(data.BuyerRef);
+                    $('#txtBOAOrderId').val(data.BuyerOrderID);
+                    $('#txtBOABuyerOrderNo').val(data.BuyerOrderNo);
+                    $('#txtBOAOrderNo').val(data.OrderNo);
+                    $('#txtBOABuyerOrderDate').val(data.BuyerOrderDate);
+                    $('#txtBOAOrderCategory').val(data.BuyerOrderCategory);
+                    $('#txtBOAOrderStatus').val(data.BuyerOrderStatus);
+                    $('#txtBOAReference').val(data.BuyerRef);
+                    $('#txtBOAProposedShipmentDate').val(data.ProposedShipmentDate);
+                    $('#txtBOAExpectedShipmentDate').val(data.ExpectedShipmentDate);
+                    $('#txtBOALastDateOfDelivery').val(data.DeliveryLastDate);
+                    $('#txtBOAProdShouldStart').val(data.ExpectedProdStartDate);
+                    $('#txtBOAAckNote').val(data.AcknowledgeNote);
+                    $('#ddlBOAAckStatus').val(data.AcknowledgementStatus);
+                    $('#txtBOAAckDate').val(data.AckDate);
+                    $('#txtBOAOrderStatus').val(data.BuyerOrderStatus);
+                    $('#txtBOARevisionNo').val(data.RevisionNo);
+                    $('#txtBPORevisionDate').val(data.RevisionDate);
+                    recordStatus = data.RecordStatus;
+                    btnLock(recordStatus);
+                    var count = data.OrderItems.length;
+                    if (data.OrderItems != null) {
+                        for (var i = 0; i < count; i++) {
+                            orderItem.SlNo = i + 1;
+                            orderItem.BuyerOrderItemID = data.OrderItems[i].BuyerOrderItemID;
+                            orderItem.BuyerOrderID = data.OrderItems[i].BuyerOrderID;
+                            orderItem.commodity = data.OrderItems[i].commodity;
+                            orderItem.HSCode = data.OrderItems[i].HSCode;
+                            orderItem.ArticleID = data.OrderItems[i].ArticleID;
+                            orderItem.ArticleName = data.OrderItems[i].ArticleName;
+                            orderItem.ArticleNo = data.OrderItems[i].ArticleNo;
+                            orderItem.AvgSize = data.OrderItems[i].AvgSize;
+                            orderItem.AvgSizeUnit = data.OrderItems[i].AvgSizeUnit;
+                            orderItem.AvgSizeUnitName = data.OrderItems[i].AvgSizeUnitName;
+                            orderItem.SideDescription = data.OrderItems[i].SideDescription;
+                            orderItem.SelectionRange = data.OrderItems[i].SelectionRange;
+                            orderItem.Thickness = data.OrderItems[i].Thickness;
+                            orderItem.ThicknessUnit = data.OrderItems[i].ThicknessUnit;
+                            orderItem.ThicknessUnitName = data.OrderItems[i].ThicknessUnitName;
+                            orderItem.ThicknessAt = data.OrderItems[i].ThicknessAt;
+                            orderItem.ItemTypeID = data.OrderItems[i].ItemTypeID;
+                            orderItem.ItemTypeName = data.OrderItems[i].ItemTypeName;
+                            orderItem.LeatherTypeID = data.OrderItems[i].LeatherTypeID;
+                            orderItem.LeatherTypeName = data.OrderItems[i].LeatherTypeName;
+                            orderItem.LeatherStatusID = data.OrderItems[i].LeatherStatusID;
+                            orderItem.LeatherStatusName = data.OrderItems[i].LeatherStatusName;
+                            if (data.OrderItems[i].ItemColors != null) {
+                                var count2 = data.OrderItems[i].ItemColors.length;
+                                for (var j = 0; j < count2; j++) {
+                                    itemColor.SlNo = orderItem.SlNo;
+                                    itemColor.BuyerOrdItemColorID = data.OrderItems[i].ItemColors[j].BuyerOrdItemColorID;
+                                    itemColor.BuyerOrderItemID = data.OrderItems[i].ItemColors[j].BuyerOrderItemID;
+                                    itemColor.BuyerOrderID = data.OrderItems[i].ItemColors[j].BuyerOrderID;
+                                    itemColor.ColorID = data.OrderItems[i].ItemColors[j].ColorID;
+                                    itemColor.ColorName = data.OrderItems[i].ItemColors[j].ColorName;
+                                    itemColor.ColorQty = data.OrderItems[i].ItemColors[j].ColorQty;
+                                    itemColor.ColorUnit = data.OrderItems[i].ItemColors[j].ColorUnit;
+                                    itemColor.ColorUnitName = data.OrderItems[i].ItemColors[j].ColorUnitName;
+                                    itemColor.UnitPrice = data.OrderItems[i].ItemColors[j].UnitPrice;
+                                    itemColor.TotalPrice = data.OrderItems[i].ItemColors[j].TotalPrice;
+                                    itemColors.push(itemColor);
+                                    ClearItemColor();
+                                }
+                            }
+                            items.push(orderItem);
+                            ClearOrderItem();
+                        }
+                        BuyerOrderItemGridDataSource.data(items);
+                        BuyerOrderItemColorGridDataSource.data(colors);
+                    }
+                    OrderWindow.close();
+                }
+            }
+        });
+    }
+
+    function GetId() {
+        var gridBuyerOrderSearch = $("#OrderWindowGrid").data("kendoGrid");
+        var selectedBuyerOrderGridRow = (gridBuyerOrderSearch.dataItem(gridBuyerOrderSearch.select()));
+        SetOrder(selectedBuyerOrderGridRow.BuyerOrderID);
+    }
+
+    $('#btnOrderWindowOK').click(function () {
+        GetId();
+    });
+
+    $('#OrderWindowGrid').dblclick(function () {
+        GetId();
+    });
+
+    $('#OrderWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            GetId();
+        }
+    });
+
+    $('#btnOrderWindowCancel').click(function () {
+        OrderWindow.close();
+    });
+
+    // ************ Order pop-up window event End ************ //
+
+    // ######################################## Pop-up Window Events End ######################################## //
+
+    // ######################################## Buyer Order Item Grid Events ######################################## //
+
+    function gridDataSave() {
+
+        var gridItemSearch = $("#BuyerOrderItemGrid").data("kendoGrid");
+        var selectedItem = (gridItemSearch.dataItem(gridItemSearch.select()));
+
+        var showColor = [];
+        if (itemColors.length > 0) {
+            for (var k = 0; k < itemColors.length; k++) {
+                if (selectedItem.SlNo == itemColors[k].SlNo) {
+                    itemColor.SlNo = selectedItem.SlNo;
+                    itemColor.SlNo2 = itemColors[k].SlNo2;
+                    itemColor.BuyerOrdItemColorID = itemColors[k].BuyerOrdItemColorID;
+                    itemColor.BuyerOrderID = itemColors[k].BuyerOrderID;
+                    itemColor.BuyerOrderItemID = itemColors[k].BuyerOrderItemID;
+                    itemColor.ColorID = itemColors[k].ColorID;
+                    itemColor.ColorName = itemColors[k].ColorName;
+                    itemColor.ColorQty = itemColors[k].ColorQty;
+                    itemColor.ColorUnit = itemColors[k].ColorUnit;
+                    itemColor.ColorUnitName = itemColors[k].ColorUnitName;
+                    itemColor.UnitPrice = itemColors[k].UnitPrice;
+                    itemColor.TotalPrice = itemColors[k].TotalPrice;
+                    showColor.push(itemColor);
+                    ClearItemColor();
+                }
+            }
+        }
+        if (showColor.length > 0) {
+            $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data(showColor);
+        }
+    }
+
+    $("#BuyerOrderItemGrid").on('click', 'tr', function () {
+        gridDataSave();
+    });
+
+    // ######################################## Buyer Order Item Grid Events End ######################################## //
+
+
+    // ######################################## Save Events ######################################## //
+
+    function Save() {
+        ClearOrder();
+        ClearOrderItem();
+        ClearItemColor();
+        order.BuyerOrderID = $('#txtBOAOrderId').val();
+        order.ProposedShipmentDate = $('#txtBOAProposedShipmentDate').val();
+        order.DeliveryLastDate = $('#txtBOALastDateOfDelivery').val();
+        order.ExpectedProdStartDate = $('#txtBOAProdShouldStart').val();
+        order.AcknowledgeNote = $('#txtBOAAckNote').val();
+        order.AcknowledgementStatus = $('#ddlBOAAckStatus').val();
+        order.AckDate = $('#txtBOAAckDate').val();
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "BuyerPurcOrderAck")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: order }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                    SetOrder(data.ReturnId);
+                } else if (data.Type == 3) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    SetOrder(data.ReturnId);
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+
+    }
+
+    $('#btnSave').click(function () {
+        if (changeStatus == 0) {
+            $('#MessageText').html("No changes to save.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Save();
+        }
+    });
+
+    // ######################################## Save Events End ######################################## //
+
+    // ######################################## Confirm Events ######################################## //
+
+    function confirm(id) {
+        var comment = $('#txtBOAAckNote').val();
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Confirm", "BuyerPurcOrderAck")',
+            dataType: 'JSON',
+            data: JSON.stringify({ "id": id, "comment": comment }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                    CheckRecordStatusForButton("ACK");
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnConfirm').click(function () {
+        if (changeStatus == 1) {
+            $('#MessageText').html("Please save the changes first to proceed.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            return false;
+        } 
+
+            ConfirmWindow.open();
+            ConfirmWindow.center();
+        
+
+    });
+
+    $('#btnConfirmationOK').click(function () {
+        var id = $('#txtBOAOrderId').val();
+        confirm(id);
+        ConfirmWindow.close();
+    });
+
+    // ######################################## Confirm Events End ######################################## //
+
+    // ######################################## Variables ######################################## //
+
+    var rowAdd = 0; var msgShow = 0; var changeStatus = 0; var saveStatus = 0; var del = ""; var dataItem; var recordStatus = "";
+
+    var order = {
+        "BuyerOrderID": "", "BuyerOrderNo": "", "BuyerOrderDate": "", "BuyerOrderCategory": "", "BuyerOrderStatus": "",
+        "AcknowledgementStatus": "", "BuyerID": "", "BuyerName": "", "BuyerAddressID": "", "BuyerAddress": "",
+        "BuyerLocalAgentID": "", "LocalAgentName": "", "BuyerForeignAgentID": "", "ForeignAgentName": "", "BuyerRef": "",
+        "ExpectedShipmentDate": "", "ProposedShipmentDate": "", "DeliveryLastDate": "", "ExpectedProdStartDate": "",
+        "RevisionNo": "", "RevisionDate": "", "RecordStatus": "", "CheckNote": "", "ApprovalNote": "", "OrderFrom": "",
+        "OrderNo": "", "AcknowledgeNote": "", "OrderItems": []
+    };
+    function ClearOrder() {
+        order = {
+            "BuyerOrderID": "", "BuyerOrderNo": "", "BuyerOrderDate": "", "BuyerOrderCategory": "", "BuyerOrderStatus": "",
+            "AcknowledgementStatus": "", "BuyerID": "", "BuyerName": "", "BuyerAddressID": "", "BuyerAddress": "",
+            "BuyerLocalAgentID": "", "LocalAgentName": "", "BuyerForeignAgentID": "", "ForeignAgentName": "", "BuyerRef": "",
+            "ExpectedShipmentDate": "", "ProposedShipmentDate": "", "DeliveryLastDate": "", "ExpectedProdStartDate": "",
+            "RevisionNo": "", "RevisionDate": "", "RecordStatus": "", "CheckNote": "", "ApprovalNote": "", "OrderFrom": "",
+            "OrderNo": "", "AcknowledgeNote": "", "OrderItems": []
+        };
+    }
+
+    var orderItem = {
+        "SlNo": "", "BuyerOrderItemID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleName": "", "ArticleNo": "",
+        "ArticleChallanNo": "", "AvgSize": "", "AvgSizeUnit": "", "AvgSizeUnitName": "", "SideDescription": "",
+        "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessUnitName": "", "ThicknessAt": "", "commodity": "",
+        "HSCode": "", "ItemTypeID": "", "ItemTypeName": "", "LeatherTypeID": "", "LeatherTypeName": "", "LeatherStatusID": "",
+        "LeatherStatusName": "", "ItemColors": []
+    };
+
+    function ClearOrderItem() {
+        orderItem = {
+            "SlNo": "", "BuyerOrderItemID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleName": "", "ArticleNo": "",
+            "ArticleChallanNo": "", "AvgSize": "", "AvgSizeUnit": "", "AvgSizeUnitName": "", "SideDescription": "",
+            "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessUnitName": "", "ThicknessAt": "", "commodity": "",
+            "HSCode": "", "ItemTypeID": "", "ItemTypeName": "", "LeatherTypeID": "", "LeatherTypeName": "", "LeatherStatusID": "",
+            "LeatherStatusName": "", "ItemColors": []
+        };
+    }
+
+    var itemColors = [];
+
+    var itemColor = {
+        "SlNo": "", "BuyerOrdItemColorID": "", "BuyerOrderID": "", "BuyerOrderItemID": "", "ColorID": "", "ColorName": "",
+        "ColorQty": "", "ColorUnit": "", "ColorUnitName": "", "UnitPrice": "", "TotalPrice": ""
+    };
+
+    function ClearItemColor() {
+        itemColor = {
+            "SlNo": "", "BuyerOrdItemColorID": "", "BuyerOrderID": "", "BuyerOrderItemID": "", "ColorID": "", "ColorName": "",
+            "ColorQty": "", "ColorUnit": "", "ColorUnitName": "", "UnitPrice": "", "TotalPrice": ""
+        };
+    }
+
+    // ######################################## Variables End ######################################## //
+
+    // ######################################## Reset Event ######################################## //
+
+    $('#btnSaveChangeWindowOk').click(function() {
+        SaveChangeWindow.close();
+        reset();
+    });
+
+    function reset() {
+        ClearOrder();
+        ClearOrderItem();
+        ClearItemColor();
+        $(".txtField").val("");
+        $(".txtArea").val("");
+        $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data([]);
+        $("#BuyerOrderItemGrid").data('kendoGrid').dataSource.data([]); changeStatus = 0; saveStatus = 0;
+        rowAdd = 0;
+        recordStatus = "";
+        CheckRecordStatusForButton("NCF");
+    }
+
+    $('#btnReset').click(function () {
+        if (changeStatus == 1) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            reset();
+        }
+    });
+
+    // ######################################## Reset Event End ######################################## //
+
+    // ######################################## Detect Changes ######################################## //
+
+    $('.txtField').change(function () {
+        changeStatus = 1;
+    });
+
+    function btnLock(val) {
+        if (val == "ACK") {
+            $("#btnCheck").attr("disabled", "disabled");
+            $("#btnConfirm").attr("disabled", "disabled");
+            $("#btnSave").attr("disabled", "disabled");
+            $("#btnDelete").attr("disabled", "disabled");
+            $("#btnApprove").removeAttr("disabled");
+        }
+    }
+
+
+    //CheckRecordStatusForButton(recordStatus);
+    ClearOperationalMessage();
+
+    // ######################################## Detect Changes End ######################################## //
+</script>

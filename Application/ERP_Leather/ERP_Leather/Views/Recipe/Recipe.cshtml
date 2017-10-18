@@ -1,0 +1,1189 @@
+﻿
+@{
+    ViewBag.Title = "Recipe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save"  onclick="SaveData()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Recipe Name</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" id="RecipeName" class="txtBox" name="RecipeName" maxlength="100" />
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Recipe For</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("RecipeFor", new SelectList(ViewBag.ProductionProcess, "ProcessID", "ProcessName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 175px; margin-left: 2px;" })
+                </div>
+                <div class="col-lg-2">
+                    <label>Recipe No</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="RecipeNo" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" />
+                    <input type="hidden" id="RecipeID" class="txtBox">
+                </div>
+                <div class="col-lg-2">
+                    <label>Calculation Base</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="CalculationBase">
+                        <option value="WT">Weight</option>
+                        <option value="AR">Area</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Article No</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="ArticleNo" class="txtBox RequiredTextBox" maxlength="20" name="ArticleNo" readonly="readonly" placeholder="Press F9" />
+                    <input type="hidden" id="ArticleID" class="txtBox " name="ArticleID" />
+
+                </div>
+                <div class="col-lg-2">
+                    <label>Article Name</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="ArticleName" class="txtBox RequiredTextBox" maxlength="60" name="" tabindex="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Base Quantity</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="number" id="BaseQuantity" class="txtBox" min="0" max="999999999999" name="" tabindex="" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Article Challan No</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="ArticleChallanNo" class="txtBox RequiredTextBox" maxlength="20" name="" tabindex="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Color</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("ArticleColor", new SelectList(ViewBag.Color, "ColorID", "ColorName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 175px; margin-left: 2px;" })
+                </div>
+                <div class="col-lg-2">
+                    <label>Base Unit </label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("BaseUnit", new SelectList(ViewBag.Unit, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 175px; margin-left: 2px;" })
+                </div>
+            </div>
+        </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Revision No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RevisionNo" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Revision Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RevisionDate" class="datePicker ReadOnlyTextbox" name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-1">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="Remarks" class="txtBox"  name="" tabindex="" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-10">
+                <div id="ChemicalItemGrid"></div>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" tabindex="" id="btnRevision" value="Create New Revision"  style="position: absolute; font-size: 12px;" />
+            </div>
+        </div>
+        </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-1" style=" padding-right:0;">
+                <label style="">Check Note</label>
+            </div>
+            <div class="col-lg-4" style="padding-left:0; padding-right:0;">
+                <textarea id="confirmComment" tabindex="" style="float:left; width:410px;height:60px; "></textarea>
+            </div>
+            <div class="col-lg-1">
+                <input type="button" tabindex="" id="btnCheck" value="Check"  style="position: absolute;  font-size: 12px;" />
+            </div>
+            <div class="col-lg-1" style=" padding-right:0;">
+                <label style="">Approval Note</label>
+            </div>
+            <div class="col-lg-4" style="padding-left:0; padding-right:0;">
+                <textarea id="approveComment" tabindex="" style="float: left; width:410px; height: 60px;"></textarea>
+            </div>
+            <div class="col-lg-1">
+                <input type="button" tabindex="" id="btnApprove" value="Approved"  style="position: absolute; font-size: 12px; " />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ChemicalWindow" style="display: none;">
+    <div id="ChemicalWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+<script type="text/javascript">
+
+    // To Declare Global Variable
+    var recordStatus = "";
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var dataitem = {};
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $(document).ready(function () {
+
+        //--------------------------------------Start of defining Datagrid--------------------------------------------------------
+        var chemicalItemGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemID",
+                    fields: {
+                        ItemID: { editable: true },
+                        ItemName: { editable: true, defaultValue: 'Press F9' },
+                        SafetyStock: { editable: true },
+                        RequiredQty: { editable: true, type: "number", validation: { required: true, min: 0, max: 999999999999 }, defaultValue: '' },
+                        UnitID: { editable: true },
+                        UnitName: { editable: true }
+                    }
+                }
+            },
+            pageSize: 80
+        });
+
+        var chemicalItemGrid = $("#ChemicalItemGrid").kendoGrid({
+            dataSource: chemicalItemGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+              },
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            //height: 350,
+            toolbar: [{
+                text: "Add Chemical Item",
+                className: "btnChemicalItemGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                  { field: "ItemID", hidden: true },
+                  { field: "ItemName", title: "Chemical Name", width: "60px", attributes: { "class": "ItemName", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "SafetyStock", hidden: true, title: "Chemical Stock", width: "60px", attributes: { "class": "SafetyStock" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "RequiredQty", title: "Required Qty<span style='color:red'>*</span>", width: "60px", attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+                  { field: "UnitID", hidden: true },
+                  { field: "UnitName", title: "Unit", width: "50px", editor: ddlUnit, filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteItem }], title: "Action", width: 50, attributes:{style: "text-align:center" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px; text-align:center" } }
+            ]
+        }).data('kendoGrid');
+
+
+        $(".btnChemicalItemGrid").click(function () {
+            var grid = $("#ChemicalItemGrid").data("kendoGrid");
+            $("#ChemicalItemGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+        });
+
+        $("#ChemicalItemGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#ChemicalItemGrid").data("kendoGrid");
+                $("#ChemicalItemGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+            }
+        });
+
+        //--------------------------------------End of defining Datagrid--------------------------------------------------------
+
+      
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+
+
+
+        $(document).on('keyup', '.ItemName', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('ChemicalWindowGrid');
+                chemicalWindow.open(); //Open Popup
+            }
+
+        });
+
+        $(document.body).keypress(function (e) {
+            if ($("#ArticleNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('ArticleWindowGrid');
+                    articleWindow.open();
+                }
+            }
+        });
+     
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //Handling button click for Supplier window grid
+        $('#btnChemicalWindowOK').click(function () {
+            listOfValueGridEvent();
+            chemicalWindow.close();
+        });
+
+        $('#btnChemicalWindowCancel').click(function () {
+            chemicalWindow.close();
+        });
+
+        $("#ChemicalWindowGrid").dblclick(function () {
+            listOfValueGridEvent();
+            chemicalWindow.close();
+        });
+
+        $("#ChemicalWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                listOfValueGridEvent();
+                chemicalWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                chemicalWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //To Bring Data from List of Value Grid to Main Page
+        function listOfValueGridEvent() {
+            var windowGrid = $("#ChemicalWindowGrid").data("kendoGrid");
+            var windowGridRow = windowGrid.select();
+            var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+            var pageGrid = $("#ChemicalItemGrid").data("kendoGrid");
+            var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+            pageGridItem.set("ItemID", windowGridItem.ItemID);
+            pageGridItem.set("ItemName", windowGridItem.ItemName);
+            pageGridItem.set("SafetyStock", windowGridItem.SafetyStock);
+
+            pageGridItem.set("UnitID", windowGridItem.UnitID);
+            pageGridItem.set("UnitName", windowGridItem.UnitName);
+
+            $("#ChemicalItemGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+
+        }
+        //--------------------------------------Start of Defining Datasource & Dropdown--------------------------------------------
+
+        var chemicalGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemID",
+                    fields: {
+                        ItemID: { editable: false },
+                        ItemName: { editable: false },
+                        HSCode: { editable: false },
+                        SafetyStock: { editable: false },
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveChemicalItem", "CommonChemical")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var chemicalGrid = $("#ChemicalWindowGrid").kendoGrid({
+            dataSource: chemicalGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            //filterable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains:"Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ItemID", hidden: true, title: "Chemical ID", width: "60px", filterable: false, sortable: false },
+                  { field: "ItemName", title: "Chemical Name", width: "80px", filterable: { ui: chemicalFilter } },
+                  { field: "HSCode", title: "HSCode", width: "80px" },
+                  { field: "SafetyStock", title: "Chemical Stock", width: "60px" },
+                  { field: "UnitID", hidden: true, width: "60px", filterable: false, sortable: false },
+                  { field: "UnitName", title: "Unit", width: "60px", filterable: false, sortable: false }
+            ]
+
+        });
+
+        function chemicalFilter(element) {
+        element.kendoAutoComplete({
+            dataSource: chemicalSearchDataSource,
+            placeholder: "Search Chemical...",
+        });
+        }
+        var chemicalSearchDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetChemicalListForSearch", "ChemicalItem")',
+                    type: "GET"
+                }
+            }
+        });
+        var articleGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleID",
+                    fields: {
+                        ArticleID: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        ArticleColor: { editable: false },
+                        ColorName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveArticleItem", "CommonChemical")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var articleGrid = $("#ArticleWindowGrid").kendoGrid({
+            dataSource: articleGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ArticleID", hidden: true, title: "Article ID", width: "60px", filterable: false, sortable: false },
+                  { field: "ArticleName", title: "Article Name", width: "120px" },
+                  { field: "ArticleNo", title: "Article No", width: "80px" },
+                  { field: "ArticleChallanNo", title: "Article Challan No", width: "100px" },
+                  { field: "ArticleColor", hidden: true, width: "60px", filterable: false, sortable: false },
+                  { field: "ColorName", title: "Color Name", width: "60px", filterable: false, sortable: false }
+            ]
+
+        });
+
+        //Handling button click for Supplier window grid
+        $('#btnArticleWindowOK').click(function () {
+            setListOfValue();
+            articleWindow.close();
+        });
+
+        $('#btnArticleWindowCancel').click(function () {
+            articleWindow.close();
+        });
+
+        $("#ArticleWindowGrid").dblclick(function () {
+            setListOfValue();
+            articleWindow.close();
+        });
+
+        $("#ArticleWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                setListOfValue();
+                articleWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                articleWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //To Bring Data from List of Value Grid to Main Page
+        function setListOfValue() {
+            var windowGrid = $("#ArticleWindowGrid").data("kendoGrid");
+            var windowGridRow = windowGrid.select();
+            var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+            $('#ArticleID').val(windowGridItem.ArticleID);
+            $('#ArticleNo').val(windowGridItem.ArticleNo);
+            $('#ArticleName').val(windowGridItem.ArticleName);
+           // $('input[name = "ArticleNo"]').attr("readonly", true);
+            $('#ArticleChallanNo').val(windowGridItem.ArticleChallanNo);
+            $('#ArticleColor').val(windowGridItem.ArticleColor);
+        }
+        // Data Source of ddlUnit
+        var ddlUnitDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemical", "CommonChemical")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+        function ddlUnit(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "UnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    dataSource: ddlUnitDataSource,
+                    change: function (e) {
+                        changeStatus = 1;
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("UnitName", dataItem.UnitName);
+                        options.model.set("UnitID", dataItem.UnitID);
+                    },
+                });
+        }
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For  All dataset
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Changes Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Changes Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteItem() {
+            deleteStatus = 2;//For grid data
+            var grid1 = $("#ChemicalItemGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; 
+                OpenSaveChangesDialog();
+            }
+        };
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#RecipeID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedRecipe", "Recipe")',
+                        type: 'POST',
+                        data: JSON.stringify({ "recipeID": $("#RecipeID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                //ClearOperationalMessage();
+                                 ResetOnlyParentData();
+                                $(".txtCommandBox").val("");
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#ChemicalItemGrid").data("kendoGrid").dataSource.data([]);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.RecipeItemID!=undefined) {
+                    $.ajax({
+                        url: '@Url.Action("DeletedRecipeItem", "Recipe")',
+                        type: 'POST',
+                        data: JSON.stringify({ "recipeItemId": dataitem.RecipeItemID, "recordStatus": recordStatus }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                $(".txtCommandBox").val("");
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#ChemicalItemGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                $(".txtCommandBox").val("");
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#ChemicalItemGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                LoadSearchGrid();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#RecipeID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedRecipe", "Recipe")',
+                            type: 'POST',
+                            data: JSON.stringify({ "recipeId": $("#RecipeID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".txtCommandBox").val("");
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#ChemicalItemGrid").data("kendoGrid").dataSource.data([]);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.RecipeItemID != undefined) {
+                        $.ajax({
+                            url: '@Url.Action("DeletedRecipeItem", "Recipe")',
+                            type: 'POST',
+                            data: JSON.stringify({ "recipeItemId": dataitem.RecipeItemID, "recordStatus": recordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function(respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function() {
+            CloseSaveChangesDialog();
+        });
+
+        CheckUnSavedOnlyMasterData();
+
+        ClearAllData();
+        CheckRecordStatusForButton("NCF");
+
+
+    }); //End of Document.Ready()
+
+
+    //--------------------------------------End of Defining Datasource & Dropdown--------------------------------------------
+
+    //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+
+    var chemicalWindow = $('#ChemicalWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Chemical",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var articleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Article",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+    //-------------------------------------------------Common Function--------------------------------------------------------
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function listOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function(e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $("#ChemicalItemGrid").on('input', function() {
+        changeStatus = 1;
+    });
+
+    //------------------------------------------------- End Common Function--------------------------------------------------------
+
+
+    //-------------------------------------Start CRUD Opreation--------------------------------------------------
+
+    // Declare Object
+    var RecipeItemModel = { "RecipeItemID": "", "RecipeID": "", "ItemID": "", "RequiredQty": "", "UnitID": "" };
+    var RecipeModel = { "RecipeID": "", "RecipeNo": "", "RecipeName":"", "ArticleID": "", "ArticleNo": "", "ArticleName": "", "ArticleColor": "", "ArticleChallanNo": "", "RecipeFor": "", "CalculationBase": "", "BaseQuantity": "", "BaseUnit": "", "RecipeItems": [], "isNewRevision": false };
+    var saveStatus = 1;
+
+    function SaveData() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('RecipeFor', 25);
+        CheckRequiredTextBoxMaxLength('CalculationBase', 30);
+        CheckRequiredTextBoxMaxLength('BaseQuantity', 50);
+        CheckRequiredTextBoxMaxLength('BaseUnit', 20);
+        CheckRequiredTextBoxMaxLength('RecipeName', 100);
+        if (saveStatus == 1) {
+            RecipeModel.RecipeID = $('#RecipeID').val();
+            RecipeModel.RecipeName = $('#RecipeName').val();
+            RecipeModel.RecipeNo = $('#ReceiveNo').val();
+            RecipeModel.ArticleID=$('#ArticleID').val();
+            RecipeModel.ArticleNo = $('#ArticleNo').val();
+            RecipeModel.ArticleName = $('#ArticleName').val();
+            RecipeModel.ArticleColor = $('#ArticleColor').val();
+            RecipeModel.ArticleChallanNo = $('#ArticleChallanNo').val();
+            RecipeModel.RecipeFor = $('#RecipeFor').val();
+            RecipeModel.CalculationBase = $('#CalculationBase').val();
+            RecipeModel.BaseQuantity = $('#BaseQuantity').val();
+            RecipeModel.BaseUnit = $('#BaseUnit').val();
+
+            var dataSource = $("#ChemicalItemGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            RecipeModel.RecipeItems = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+
+                    if (data[i].dirty) {
+                        if ((data[i].ItemName == "") || (data[i].RequiredQty == 0)) {
+                            checkGridData = 0;
+                            break;
+                        }
+                        RecipeItemModel.RecipeItemID = data[i].RecipeItemID;
+                        RecipeItemModel.ItemID = data[i].ItemID;
+                        RecipeItemModel.RequiredQty = data[i].RequiredQty;
+                        RecipeItemModel.UnitID = data[i].UnitID;
+
+                        RecipeModel.RecipeItems.push(RecipeItemModel);
+                        RecipeItemModel = { "RecipeItemID": "", "RecipeID": "", "ItemID": "", "RequiredQty": "", "UnitID": "" };
+                    }
+                }
+            }
+            $("#divLoading").show();
+            if (changeStatus == 1) {
+                if (checkGridData == 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Recipe", "Recipe")',
+                        data: JSON.stringify(RecipeModel),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (respnse) {
+                            $("#divLoading").hide();
+                            if (respnse.msg.Type == "2") {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#RecipeID").val(respnse.msg.ReturnId);
+                                $("#RecipeNo").val(respnse.msg.ReturnCode);
+                                changeStatus = 0;
+                                $.ajax({
+                                    url: '@Url.Action("GetRecipeItemList", "Recipe")',
+                                    type: 'GET',
+                                    data: { recipeId: $("#RecipeID").val() },
+                                    success: function(datasc) {
+                                        $("#ChemicalItemGrid").data("kendoGrid").dataSource.data(datasc);
+                                    }
+                                });
+                            } else if (respnse.msg.Type == 3) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                changeStatus = 0;
+                                $.ajax({
+                                    url: '@Url.Action("GetRecipeItemList", "Recipe")',
+                                    type: 'GET',
+                                    data: { recipeId: $("#RecipeID").val() },
+                                    success: function (datasc) {
+                                        $("#ChemicalItemGrid").data("kendoGrid").dataSource.data(datasc);
+                                    }
+                                });
+                            }
+                            else {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    RecipeModel = { "RecipeID": "", "RecipeNo": "", "RecipeName": "", "ArticleID": "", "ArticleNo": "", "ArticleName": "", "ArticleColor": "", "ArticleChallanNo": "", "RecipeFor": "", "CalculationBase": "", "BaseQuantity": "", "BaseUnit": "", "RecipeItems": [], "isNewRevision": false };
+                }
+                    // Wrong Grid Data
+                else {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    checkGridData = 1;
+                }
+            }
+                // No Changes Exiting Data
+            else {
+                $("#divLoading").hide();
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    }
+
+
+
+
+    //-------------------------------------End Start CRUD Opreation--------------------------------------------------
+
+    //------------------------------------Start of Button Event----------------------------------------
+
+    // For Create New Rivision
+    $("#btnRevision").click(function () {
+        if(changeStatus==1){
+        RecipeModel.isNewRevision = true;
+        SaveData();
+    } 
+    });
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Changes Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Changes Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            CheckRecordStatusForButton("NCF");
+            $(".txtCommandBox").val("");
+            $(".RequiredTextBox").css("border-color", "");
+            $("#ChemicalItemGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+
+
+    // For Search button work
+
+
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Changes Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Changes Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            LoadSearchGrid();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RecipeID",
+                fields: {
+                    RecipeID: { editable: false },
+                    RecipeName:{editable:false},
+                    RecipeNo: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleColor: { editable: false },
+                    ArticleColorName: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    RecipeFor: { editable: false },
+                    RecipeProcessName: { editable: false },
+                    CalculationBase: { editable: false },
+                    BaseQuantity: { editable: false },
+                    BaseUnit: { editable: false },
+                    UnitName: { editable: false },
+                    RecordStatus: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 30
+        
+
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "RecipeID", hidden:true },
+            { field: "RecipeNo", title: "Recipe No", width: "60px" },
+            { field: "RecipeName", title: "Recipe Name", width: "80px" },
+            { field: "ArticleNo", title: "Article No", width: "60px" },
+            { field: "ArticleName", title: "Article Name", width: "60px" },
+            { field: "ArticleColor", hidden: true },
+            { field: "ArticleColorName", hidden: true },
+            { field: "ArticleChallanNo", title: "Article Challan No", width: "60px" },
+            { field: "RecipeFor", hidden: true },
+            { field: "RecipeProcessName", hidden: true },
+            { field: "CalculationBase", hidden: true },
+            { field: "BaseQuantity", title: "Base Quantity", width: "60px" },
+             { field: "RecordStatus", title: "Record Status", width: "60px" },
+            { field: "BaseUnit", hidden: true },
+            { field: "UnitName", hidden: true }
+           
+            
+
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Recipe Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function LoadSearchGrid() {
+        $.ajax({
+            url: '@Url.Action("GetAllNcfRecipeList", "Recipe")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#RecipeID").val(selectedItem.RecipeID);
+        $("#RecipeName").val(selectedItem.RecipeName);
+        $("#RecipeNo").val(selectedItem.RecipeNo);
+        $("#ArticleNo").val(selectedItem.ArticleNo);
+        $("#ArticleName").val(selectedItem.ArticleName);
+        $("#ArticleColor").val(selectedItem.ArticleColor);
+        $("#ArticleChallanNo").val(selectedItem.ArticleChallanNo);
+        $("#RecipeFor").val(selectedItem.RecipeFor);
+        $("#CalculationBase").val(selectedItem.CalculationBase);
+        
+        $("#BaseQuantity").val(selectedItem.BaseQuantity);
+
+        $("#BaseUnit").val(selectedItem.BaseUnit);
+        recordStatus = selectedItem.RecordStatus;
+        CheckRecordStatusForButton(recordStatus);
+        $.ajax({
+            url: '@Url.Action("GetRecipeItemList", "Recipe")',
+            type: 'GET',
+            data: { recipeId: $("#RecipeID").val() },
+            success: function (datasc) {
+                $("#ChemicalItemGrid").data("kendoGrid").dataSource.data(datasc);
+            }
+        });
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+       
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+        
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //------------------------------------End of Button Event----------------------------------------
+
+    function ClearAllData() {
+
+        // ClearOperationalMessage();
+        ResetOnlyParentData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#ChemicalItemGrid").data("kendoGrid").dataSource.data([]);
+    }
+    //confrim and approve form
+    function confirmNapproved(state) {
+        var recipeId = $("#RecipeID").val();
+        if (state == "chk") {
+
+            var cnfComment = $("#confirmComment").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ConfirmData", "Recipe")',
+                dataType: 'JSON',
+                data: JSON.stringify({ recipeId: recipeId, cnfComment: cnfComment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 1;
+                        CheckRecordStatusForButton("CHK");
+                        //ClearAllData();
+                    }
+                    else {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        if (state == "apv") {
+            var avpComment = $("#approveComment").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ApprovedData", "Recipe")',
+                dataType: 'JSON',
+                data: JSON.stringify({ recipeId: recipeId, avpComment: avpComment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        saveStatus = 1;
+                        //ClearAllData();
+                        CheckRecordStatusForButton("APV");
+                    }
+                    else {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    }//Check and confrim form end
+    //Check and confrim form acivation
+    $("#btnCheck").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        } else {
+            if ($("#RecipeID").val() != "") {
+                confirmNapproved("chk");
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    });
+    $("#btnApprove").click(function () {
+        if (changeStatus == 1 && saveStatus != 1) {
+            $('#MessageText').html("Please save the changes you have made.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        } else {
+            if ($("#RecipeID").val() != "") {
+                confirmNapproved("apv");
+            } else {
+                $('#MessageText').html("Please save first.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    });//Check and confrim form acivation end
+
+</script>

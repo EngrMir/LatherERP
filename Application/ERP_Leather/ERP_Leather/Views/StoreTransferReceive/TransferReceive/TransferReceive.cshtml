@@ -1,0 +1,953 @@
+﻿@{
+    ViewBag.Title = "Store Transfer Receive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+@*<input type="hidden" id="IssueID" />*@
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Issue No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="IssueID" readonly="readonly" placeholder="Press F9" style="background-color: Silver; border: none; color: red;" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Issue For</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="IssueFor" readonly="readonly" style="background-color: Silver; border: none; color: red;" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Issue From</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="IssueFrom" readonly="readonly" style="background-color: Silver; border: none; color: red;" class="txtBox" name="" tabindex="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Issue Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="IssueDate" readonly="readonly" class="txtBox" style="background-color: Silver; border: none; color: red;" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Job Order No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="JobOrderNo" readonly="readonly" class="txtBox" style="background-color: Silver; border: none; color: red;" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Issue To</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="IssueTo" readonly="readonly" class="txtBox" style="background-color: Silver; border: none; color: red;" name="" tabindex="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Receive No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ReceiveID" readonly="readonly" style="background-color: Silver; border: none; color: red;" class="txtBox SetFocus" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Receive Date<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ReceiveDate" class="txtBox datePicker" name="" tabindex="2" />
+            </div>
+            <div class="col-lg-2">
+                <label>Receive At<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ReceiveLocation", new SelectList(ViewBag.ddlIssueFromToList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox txtBox" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Year<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PurchaseYear" class="txtBox" name="" tabindex="4" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="grdKendo"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Confirmed By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-lg-2">
+                    <label>Checked Status</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="ddlChecked" class="txtCommandBox">
+                        <option value="CHK">Checked</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label>Approved Status</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="ddlApproved" class="txtCommandBox">
+                        <option value="APV">Approved</option>
+                        <option value="NAP">Not Approved</option>
+                        <option value="APP">Pending</option>
+                    </select>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Confirmed" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ChallanWindow" style="display: none;">
+    <div id="ChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+
+    $(document).ready(function () {
+        $(".SetFocus").focus();
+        OnlyNumericValue('PurchaseYear');
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date() // sets max date to Current
+        });
+        $("#ReceiveDate").attr("readonly", true);
+        //To clear operational/error message
+        ClearOperationalMessage();
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        var gridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemReceiveID",
+                    fields: {
+                        ItemReceiveID: { editable: false },
+                        ItemIssueID: { editable: false },
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false },
+                        ChallanID: { editable: false },
+                        ChallanNo: { editable: false },
+                        PurchaseID: { editable: false },
+                        PurchaseNo: { editable: false },
+                        ItemType: { editable: false },
+                        ItemTypeName: { editable: false },
+                        LeatherType: { editable: false },
+                        LeatherTypeName: { editable: false },
+                        LeatherStatus: { editable: false },
+                        LeatherStatusName: { editable: false },
+                        IssueQty: { editable: false },
+                        IssueSide: { type: "number", editable: false },
+                        ReceiveQty: { type: "number", editable: true },
+                        ReceiveSide: { editable: true },
+                        UnitID: { editable: false },
+                        UnitName: { editable: false },
+                        Remarks: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+        var grid = $("#PageDetailGrid").kendoGrid({
+            dataSource: gridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            //height: 250,
+            columns: [
+                { field: "ItemReceiveID", width: "30px", hidden: true },
+                { field: "ItemIssueID", width: "30px", hidden: true },
+                { field: "SupplierID", hidden: true, editable: true },
+                { field: "SupplierName", title: "Supplier", editable: true, filterable: true, width: "80px", attributes: { "class": "Supplier" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ChallanID", hidden: true, editable: true },
+                { field: "ChallanNo", hidden: true, title: "ChallanNo", editable: true, filterable: true, width: "80px", attributes: { "class": "Challan" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PurchaseID", hidden: true, editable: true },
+                { field: "PurchaseNo", title: "PurchaseNo", editable: true, filterable: true, width: "100px", attributes: { "class": "Challan" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ItemType", hidden: true, editable: true },
+                { field: "ItemTypeName", width: "60px", title: "ItemType", filterable: true, sortable: false, attributes: { "class": "leatherInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LeatherType", hidden: true, editable: true },
+                { field: "LeatherTypeName", title: "LeatherType", editable: true, filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LeatherStatus", hidden: true, editable: true },
+                { field: "LeatherStatusName", title: "LeatherStatusName", editable: true, filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IssueQty", title: "IssueQty", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IssueSide", title: "IssueSide", editable: true, filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ReceiveQty", title: "ReceiveQty", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ReceiveSide", title: "ReceiveSide", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "UnitID", hidden: true, editable: true },
+                { field: "UnitName", width: "60px", title: "Unit", filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Remarks", title: "Remarks", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteReceiveItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteReceiveItem() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#ReceiveID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedReceive", "TransferReceive")',
+                        type: 'POST',
+                        data: JSON.stringify({ "receiveId": $("#ReceiveID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                changeStatus = 0;
+                                CheckRecordStatusForButton("NCF");
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.ItemIssueID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedReceiveItem", "TransferReceive")',
+                        type: 'POST',
+                        data: JSON.stringify({ "itemReceiveID": dataitem.ItemReceiveID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                CheckRecordStatusForButton("NCF");
+                $(".txtCommandBox").val("");
+                ResetOnlyMasterPageData();
+                $(".txtBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                $(".txtCommandBox").val("");
+                ResetOnlyMasterPageData();
+                $(".txtBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#ReceiveID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedReceive", "TransferReceive")',
+                            type: 'POST',
+                            data: JSON.stringify({ "receiveId": $("#ReceiveID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    changeStatus = 0;
+                                    CheckRecordStatusForButton("NCF");
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.ItemIssueID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedReceiveItem", "TransferReceive")',
+                            type: 'POST',
+                            data: JSON.stringify({ "itemReceiveId": dataitem.ItemReceiveID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+    }); //End of Document.Ready()
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            ClearOperationalMessage();
+            $(".txtCommandBox").val("");
+            ResetOnlyMasterPageData();
+            $(".txtBox").css("border-color", "");
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".txtBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ReceiveID",
+                fields: {
+                    ReceiveID: { editable: false },
+                    IssueID: { editable: false },
+                    ReceiveDate: { editable: false },
+                    ReceiveLocation: { editable: false },
+                    ReceiveLocationName: { editable: false },
+                    RecordStatus: { editable: false },
+                    PurchaseYear: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "RecordStatus", hidden: true },
+            { field: "ReceiveID", title: "Receive No.", width: "60px" },
+            { field: "IssueID", title: "Issue No.", width: "60px" },
+            { field: "ReceiveDate", title: "ReceiveDate", width: "60px" },
+            { field: "ReceiveLocation", hidden: true },
+            { field: "ReceiveLocationName", title: "ReceiveLocation", width: "60px" },
+            { field: "PurchaseYear", title: "PurchaseYear", width: "60px" }
+        ]
+    });
+
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Purchase Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetTransferReceiveList", "TransferReceive")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+        $("#ReceiveID").val(selectedItem.ReceiveID);
+        $("#IssueID").val(selectedItem.IssueID);
+        $("#ReceiveDate").val(selectedItem.ReceiveDate);
+        $("#ReceiveLocation").val(selectedItem.ReceiveLocation);
+        $("#PurchaseYear").val(selectedItem.PurchaseYear);
+        $.ajax({
+            url: '@Url.Action("GetIssueforReceiveList", "TransferReceive")',
+            type: 'GET',
+            data: { "issueId": selectedItem.IssueID },
+            success: function (data) {
+                $("#IssueID").val(data.IssueID);
+                $("#IssueDate").val(data.IssueDate);
+                $("#IssueFor").val(data.IssueFor);
+                //$("#IssueID").val(data.IssueID);
+                $("#IssueFrom").val(data.IssueFromName);
+                $("#IssueTo").val(data.IssueToName);
+                $("#JobOrderNo").val(data.JobOrderNo);
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("GetTransferReceiveItemList", "TransferReceive")',
+            //url: "/TransferReceive/GetTransferReceiveItemList",
+            type: 'GET',
+            data: { "receiveID": selectedItem.ReceiveID },
+            success: function (data) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    // Declare Object
+    var LeatherTransferReceiveItemModel = { "ItemReceiveID": "", "ItemIssueID": "", "ReceiveID": "", "SupplierID": "", "ChallanID": "", "ItemType": "", "LeatherType": "", "LeatherStatus": "", "IssueQty": "", "ReceiveQty": "", "UnitID": "", "IssueSide": "", "ReceiveSide": "", "Remarks": "" };
+    var LeatherTransferRecieveModel = { "ReceiveID": "", "IssueID": "", "ReceiveDate": "", "ReceiveLocation": "", "PurchaseYear": "", "LeatherTransferReceiveItemList": [] };
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+        //Check Empty or Maximum Length in ReceiveLocation
+        CheckRequiredTextBoxMaxLength('ReceiveLocation', 10);
+        //Check Maximum Length in ReceiveDate
+        CheckRequiredTextBoxMaxLength('ReceiveDate', 10);
+        //Check Maximum Length in ReceiveDate
+        CheckRequiredTextBoxMaxLength('PurchaseYear', 4);
+        //Check SysDate And IssueDate
+        CheckDiffSysDateAndOneInpDates((new Date).getDate() + "/" + ((new Date).getMonth() + 1) + "/" + (new Date).getFullYear(), 'ReceiveDate');
+
+        if (saveStatus == 1) {
+            LeatherTransferRecieveModel.ReceiveID = $('#ReceiveID').val();
+            LeatherTransferRecieveModel.IssueID = $('#IssueID').val();
+            LeatherTransferRecieveModel.ReceiveDate = $('#ReceiveDate').val();
+            LeatherTransferRecieveModel.ReceiveLocation = $('#ReceiveLocation').val();
+            LeatherTransferRecieveModel.PurchaseYear = $('#PurchaseYear').val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            LeatherTransferRecieveModel.LeatherTransferReceiveItemList = [];
+            //if (dataSource.hasChanges) {
+            for (var i = 0; i <= data.length - 1; i++) {
+                ////if (!CheckRequiredNumericLength(data[i].Level, 10) || !CheckNumericLength(data[i].Sl, 10) || ((data[i].InternalMailAdress != null) && (data[i].IntermailAddressStatus == "")) || ((data[i].InternalMailAdress == null) && (data[i].IntermailAddressStatus != "")) || ((data[i].ExternalMailAdress != null) && (data[i].ExternalMailAdressStatus == "")) || ((data[i].ExternalMailAdress == null) && (data[i].ExternalMailAdressStatus != ""))) {
+                //if (!CheckRequiredNumericLength(data[i].Level, 10) || !CheckNumericLength(data[i].Sl, 10) || !checkEmail(data[i].InternalMailAdress) || !checkEmail(data[i].ExternalMailAdress) || ((data[i].InternalMailAdress != null) && (data[i].IntermailAddressStatus == "")) || ((data[i].InternalMailAdress == null) && (data[i].IntermailAddressStatus != "")) || ((data[i].ExternalMailAdress != null) && (data[i].ExternalMailAdressStatus == "")) || ((data[i].ExternalMailAdress == null) && (data[i].ExternalMailAdressStatus != ""))) {
+                //    CheckStatusGridData = 0; // Wrong Data
+                //    break;
+                //}
+                //if (data[i].dirty) { // because without changes then confirmed/saved...all field populate auto
+                LeatherTransferReceiveItemModel.ItemIssueID = data[i].ItemIssueID;
+                LeatherTransferReceiveItemModel.ItemReceiveID = data[i].ItemReceiveID;
+                LeatherTransferReceiveItemModel.ReceiveID = data[i].ReceiveID;
+                LeatherTransferReceiveItemModel.SupplierID = data[i].SupplierID;
+                LeatherTransferReceiveItemModel.ChallanID = data[i].ChallanID;
+                LeatherTransferReceiveItemModel.PurchaseID = data[i].PurchaseID;
+                LeatherTransferReceiveItemModel.ItemType = data[i].ItemType;
+                LeatherTransferReceiveItemModel.LeatherType = data[i].LeatherType;
+                LeatherTransferReceiveItemModel.LeatherStatus = data[i].LeatherStatus;
+                LeatherTransferReceiveItemModel.IssueQty = data[i].IssueQty;
+                LeatherTransferReceiveItemModel.ReceiveQty = data[i].ReceiveQty;
+                LeatherTransferReceiveItemModel.UnitID = data[i].UnitID;
+                LeatherTransferReceiveItemModel.IssueSide = data[i].IssueSide;
+                LeatherTransferReceiveItemModel.ReceiveSide = data[i].ReceiveSide;
+                LeatherTransferReceiveItemModel.Remarks = data[i].Remarks;
+
+                LeatherTransferRecieveModel.LeatherTransferReceiveItemList.push(LeatherTransferReceiveItemModel);
+                LeatherTransferReceiveItemModel = { "ItemReceiveID": "", "ReceiveID": "", "SupplierID": "", "ChallanID": "", "ItemType": "", "LeatherType": "", "LeatherStatus": "", "IssueQty": "", "ReceiveQty": "", "UnitID": "", "IssueSide": "", "ReceiveSide": "", "Remarks": "" };
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("TransferReceive", "TransferReceive")',
+                    data: JSON.stringify(LeatherTransferRecieveModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == "2") {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#ReceiveID").val(respnse.ReceiveID);
+                            $.ajax({
+                                url: '@Url.Action("GetTransferReceiveItemList", "TransferReceive")',
+                                //url: "/TransferReceive/GetTransferReceiveItemList",
+                                type: 'GET',
+                                data: { receiveID: $("#ReceiveID").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                            changeStatus = 0;
+                        }
+                        else if (respnse.msg.Type == 3) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#CrudStatus").val("2");
+                            changeStatus = 0;
+                        }
+                        else {
+                            $('#MessageText').html(respnse.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    }
+
+    var ChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "IssueID",
+                fields: {
+                    IssueID: { editable: false },
+                    IssueDate: { editable: false },
+                    IssueRef: { editable: false },
+                    IssueFor: { editable: false },
+                    IssueForName: { editable: false },
+                    IssueFrom: { editable: false },
+                    IssueTo: { editable: false },
+                    IssueFromName: { editable: false },
+                    IssueToName: { editable: false },
+                    JobOrderNo: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetIssueList", "TransferReceive")',
+                //url: "/TransferReceive/GetIssueList",
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+        dataSource: ChallanGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "IssueID", title: "Issue No", width: "60px", filterable: false, sortable: false },
+            { field: "IssueRef", title: "Issue Ref", width: "60px", filterable: false, sortable: false },
+            { field: "IssueDate", title: "Issue Date", width: "60px", filterable: false, sortable: false },
+            { field: "IssueFor", hidden: true },
+            { field: "IssueForName", title: "Issue For", width: "60px", filterable: false, sortable: false },
+            { field: "IssueFrom", hidden: true },
+            { field: "IssueTo", hidden: true },
+            { field: "IssueFromName", title: "Issue From", width: "60px", filterable: false, sortable: false },
+            { field: "IssueToName", title: "Issue To", width: "60px", filterable: false, sortable: false },
+            { field: "JobOrderNo", title: "JobOrderNo", width: "60px" }
+        ]
+    });
+
+    var ChallanWindow = $('#ChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List Of Issue",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for Challan window grid
+    function ChallanWindowEvent() {
+        var WindowGrid = $("#ChallanWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#IssueID").val(WindowGridItem.IssueID);
+        $("#IssueDate").val(WindowGridItem.IssueDate);
+        //$("#IssueRef").val(WindowGridItem.IssueRef);
+        $("#IssueFor").val(WindowGridItem.IssueForName);
+        $("#IssueFrom").val(WindowGridItem.IssueFromName);
+        $("#IssueTo").val(WindowGridItem.IssueToName);
+        $("#JobOrderNo").val(WindowGridItem.JobOrderNo);
+        $("#ReceiveLocation").val(WindowGridItem.IssueTo);
+        $.ajax({
+            url: '@Url.Action("GetTransferReceiveItemFromIssueList", "TransferReceive")',
+            type: 'GET',
+            data: { "issueid": WindowGridItem.IssueID },
+            success: function (data) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnChallanWindowOK').click(function () {
+        ChallanWindowEvent();
+        ChallanWindow.close();
+    });
+
+    $('#btnChallanWindowCancel').click(function () {
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").dblclick(function () {
+        ChallanWindowEvent();
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ChallanWindowEvent();
+            ChallanWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChallanWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#IssueID").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ChallanWindowGrid');
+                ChallanWindow.open();
+            }
+        }
+    });
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("TransferReceiveChecked", "TransferReceive")',
+                data: JSON.stringify({ receiveId: $("#ReceiveID").val(), checkComment: $("#CheckComment").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        changeStatus = 0;
+                        $.ajax({
+                            url: '@Url.Action("GetTransferReceiveItemList", "TransferReceive")',
+                            type: 'GET',
+                            data: { receiveID: $("#ReceiveID").val() },
+                            success: function (data33) {
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("At First Saved Then Checked.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            //alert("At First Saved Then Confirmed.");
+        }
+    });
+
+
+    // Declare Object
+    var transferReceiveItemModel = { "ItemReceiveID": "", "ItemIssueID": "", "ReceiveID": "", "SupplierID": "", "ChallanID": "", "ItemType": "", "LeatherType": "", "LeatherStatus": "", "IssueQty": "", "ReceiveQty": "", "UnitID": "", "IssueSide": "", "ReceiveSide": "", "Remarks": "" };
+    var transferRecieveModel = { "ReceiveID": "", "IssueID": "", "ReceiveDate": "", "ReceiveLocation": "", "PurchaseYear": "", "LeatherTransferReceiveItemList": [] };
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            transferRecieveModel.ReceiveID = $('#ReceiveID').val();
+            transferRecieveModel.IssueID = $('#IssueID').val();
+            transferRecieveModel.ReceiveDate = $('#ReceiveDate').val();
+            transferRecieveModel.ReceiveLocation = $('#ReceiveLocation').val();
+
+            transferRecieveModel.ApproveComment = $('#ApproveComment').val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            transferRecieveModel.LeatherTransferReceiveItemList = [];
+            for (var i = 0; i <= data.length - 1; i++) {
+                ////if (!CheckRequiredNumericLength(data[i].Level, 10) || !CheckNumericLength(data[i].Sl, 10) || ((data[i].InternalMailAdress != null) && (data[i].IntermailAddressStatus == "")) || ((data[i].InternalMailAdress == null) && (data[i].IntermailAddressStatus != "")) || ((data[i].ExternalMailAdress != null) && (data[i].ExternalMailAdressStatus == "")) || ((data[i].ExternalMailAdress == null) && (data[i].ExternalMailAdressStatus != ""))) {
+                //if (!CheckRequiredNumericLength(data[i].Level, 10) || !CheckNumericLength(data[i].Sl, 10) || !checkEmail(data[i].InternalMailAdress) || !checkEmail(data[i].ExternalMailAdress) || ((data[i].InternalMailAdress != null) && (data[i].IntermailAddressStatus == "")) || ((data[i].InternalMailAdress == null) && (data[i].IntermailAddressStatus != "")) || ((data[i].ExternalMailAdress != null) && (data[i].ExternalMailAdressStatus == "")) || ((data[i].ExternalMailAdress == null) && (data[i].ExternalMailAdressStatus != ""))) {
+                //    CheckStatusGridData = 0; // Wrong Data
+                //    break;
+                //}
+                transferReceiveItemModel.ItemIssueID = data[i].ItemIssueID;
+                transferReceiveItemModel.ItemReceiveID = data[i].ItemReceiveID;
+                transferReceiveItemModel.ReceiveID = data[i].ReceiveID;
+                transferReceiveItemModel.SupplierID = data[i].SupplierID;
+                transferReceiveItemModel.ChallanID = data[i].ChallanID;
+                transferReceiveItemModel.PurchaseID = data[i].PurchaseID;
+                transferReceiveItemModel.ItemType = data[i].ItemType;
+                transferReceiveItemModel.LeatherType = data[i].LeatherType;
+                transferReceiveItemModel.LeatherStatus = data[i].LeatherStatus;
+                transferReceiveItemModel.IssueQty = data[i].IssueQty;
+                transferReceiveItemModel.ReceiveQty = data[i].ReceiveQty;
+                transferReceiveItemModel.UnitID = data[i].UnitID;
+                transferReceiveItemModel.IssueSide = data[i].IssueSide;
+                transferReceiveItemModel.ReceiveSide = data[i].ReceiveSide;
+                transferReceiveItemModel.Remarks = data[i].Remarks;
+
+                transferRecieveModel.LeatherTransferReceiveItemList.push(transferReceiveItemModel);
+                transferReceiveItemModel = { "ItemReceiveID": "", "ReceiveID": "", "SupplierID": "", "ChallanID": "", "ItemType": "", "LeatherType": "", "LeatherStatus": "", "IssueQty": "", "ReceiveQty": "", "UnitID": "", "IssueSide": "", "ReceiveSide": "", "Remarks": "" };
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("StoreTransferReceiveConfirmed", "TransferReceive")',
+                data: JSON.stringify(transferRecieveModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+        } else {
+            $('#MessageText').html("At First Saved Then Confirmed.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            //alert("At First Saved Then Confirmed.");
+        }
+    });
+
+
+</script>

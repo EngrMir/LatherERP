@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "Export Commercial Invoice Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .select {
+        min-width: 240px;
+    }
+
+    label {
+        padding-left: 10px;
+    }
+</style>
+
+@using (Html.BeginForm("EXPCIReports", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            @ViewBag.Message
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">Export Commercial Invoice Report</div>
+                </div>
+                <div class="col-lg-3">
+                    <label id="MessageText"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 7%; float: right;" tabindex="3" checked="checked" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> PDF</label>
+                    <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 7%; float: right;" tabindex="4" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> Excel</label>
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="ClearAll();" />
+                    <input type="submit" id="btnSubmit" class="Button" value="Show Report" onclick="return CheckValue();" style="position: absolute; right: 100px;" />
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="FormBody">
+            <br />
+
+            <div class="row" style="display:none">
+                <div class="col-lg-2">
+                    <label>Date Range:</label>
+                </div>
+                <div class="col-lg-3">
+                    <table class="table-condensed">
+                        <tr>
+                            <td><strong> From Date:</strong> </td>
+                            <td><input type="text" id="dateFrom" class="datePicker" name="dateFrom" tabindex="" /></td>
+                        </tr>
+                        <tr>
+                            <td><strong>To Date:</strong></td>
+                            <td><input type="text" id="dateTo" class="datePicker" name="dateTo" tabindex="" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Commercial Invoice No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" value="" id="CIID" name="CIID" />
+                    <input type="text" value="" id="CINo" name="CINo" placeholder="Press F9" style="width:60%" />
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+}
+
+<div id="CIWindow" style="display: none;">
+    <div id="CIWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnCIWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCIWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    var rptSelectionList = { "SupllierId": "", "DateFrom": "", "DateTo": "" };
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+    $('#dateFrom').change(function () {
+        var start = $('#dateFrom').val();
+        var end = $('#dateTo').val();
+
+        if ($.datepicker.parseDate('dd/mm/yy', start) > $.datepicker.parseDate('dd/mm/yy', end)) {
+            $("#MessageText").html("From Date should be less than To Date.");
+            $("#MessageText").css("color", "red");
+            $('#dateFrom').val(end);
+        }
+        else {
+            $("#MessageText").html("");
+        }
+
+    });
+
+    //############### CI Popup ################
+    var blGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetExpCIList", "Utility")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var blGrid = $("#CIWindowGrid").kendoGrid({
+        dataSource: blGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "CIID", title: "CIID",hidden:true},
+              { field: "CINo", title: "CI No" },
+              { field: "CIDate", title: "CI Date" },
+              { field: "RecordStatus", title: "Status" }
+        ]
+    });
+
+
+    var CIWindow = $('#CIWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Commercial Invoice",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#CINo").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('CIWindowGrid');
+                CIWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for PL window grid
+    $('#btnCIWindowOK').click(function () {
+        ListOfValueGridEvent('CIWindowGrid');
+        CIWindow.close();
+    });
+    $('#btnCIWindowCancel').click(function () {
+        CIWindow.close();
+    });
+    $("#CIWindow").dblclick(function () {
+        ListOfValueGridEvent('CIWindowGrid');
+        CIWindow.close();
+    });
+    $("#CIWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('CIWindowGrid');
+            CIWindow.close();
+
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            CIWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //################################################
+
+</script>

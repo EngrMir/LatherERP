@@ -1,0 +1,3526 @@
+﻿@{
+    ViewBag.Title = "Buyer Purchase Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row FormHeader" style="padding: 5px 0 5px 0;">
+
+    <div id="FormTitlePannel" class="col-lg-4">
+        <div id="FormTitle" style="font-size:larger; font-weight:bold;">Buyer Purchase Order</div>
+    </div>
+    <div id="MessageText" class="col-lg-5">
+    </div>
+    <div id="" class="col-lg-3" style="padding: 0 0 0 0;">
+
+        @*<button type="button" id="btnSave" title="Save" onclick="" class="" style="margin-left: 10px; width: 58px; font-size: 12px;">Save</button>
+
+            <button type="button" id="btnSearch" onclick="" value="Search" class="" style=" margin-right: -100px; width: 58px; font-size: 12px;">Search</button>
+
+            <button type="button" id="btnDelete" onclick="" value="Delete" class="" style=" width: 58px; font-size: 12px;">Delete</button>*@
+
+        <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+    </div>
+
+</div>
+
+<div class="row FormBody">
+
+    <div class="col-md-4">
+        <span id="IsExistMessage"> </span>
+        <div class="row">
+            <div class="col-sm-3" style="padding: 0 0 0 0;">
+                <label style="">Buyer Order No.</label>
+            </div>
+            <div class="col-sm-9">
+                <input type="text" id="txtBPOOrderNo" class="txtField" style="width: 80%"  />
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-3" style="padding: 0 0 0 0;">
+                <label>Buyer Order Date</label>
+
+            </div>
+            <div class="col-sm-9">
+                <input type="text" id="txtBPOBuyerOrderDate" class="datePicker txtField" style="width: 80%" />
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-sm-3" style="padding: 0 0 0 0;">
+                <label style="">Order Category</label>
+            </div>
+            <div class="col-sm-9">
+                <select id="ddlBPOOrderCategory" class="txtField" style="width: 80%">
+                    <option value="">-- Select --</option>
+                    <option value="LCL">Local</option>
+                    <option value="FRN" selected="selected">Foreign</option>
+                    <option value="SLF">Self</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3" style="padding: 0 0 0 0;">
+                <label>Order No.</label>
+            </div>
+            <div class="col-sm-9">
+                <input type="text" id="txtBPOOrderId" class="txtField" style="display: none;" />
+                <input type="text" id="txtBPOBuyerOrderNo" class="txtField" style=" width: 80%" placeholder="(Auto)" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            @*<div class="col-sm-3" style="padding: 0 0 0 0;">
+                    <label style="">Order From</label>
+                </div>
+                <div class="col-sm-9">
+                    <select id="ddlBPOOrderFrom" class="txtField" style="width: 80%;">
+                        <option value="">-- Select --</option>
+                        <option value="BR">Buyer</option>
+                        <option value="LA">Local Agent</option>
+                        <option value="FA">Foreign Agent</option>
+                    </select>
+                </div>*@
+        </div>
+        <div class="row">
+            @*<div class="col-sm-3" style="padding: 0 0 0 0;">
+                    <label style="">Order Status</label>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" id="txtBPOOrderStatus" class="txtField" style="width: 80%;" readonly="readonly" />
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 0 0 0 0;">
+    <div class="row" style="margin-top: 3px;">
+        <div class="col-lg-4" style="padding: 0 0 0 25px;">
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label>Buyer</label>
+                    <input type="text" id="txtBPOBuyerId" class="txtField" style="display: none;" />
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" id="txtBPOBuyerName" class="txtField" style=" width: 220px; height: 23.15px;" placeholder="Press (F9)" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label>Address</label>
+                    <input type="text" id="txtBPOBuyerAddressId" class="txtField" style="display: none;" />
+                </div>
+                <div class="col-sm-8">
+                    @*<textarea id="txtBPOBuyerAddress" class="txtField" style="height: 40px; width: 220px;" readonly="readonly"></textarea>*@
+                    <input type="text" id="txtBPOBuyerAddress" class="txtField" style=" width: 220px; height: 23.15px;" readonly="readonly" />
+                </div>
+                @*<input type="text" id="txtBPOBuyerAddress" class="txtField" style=" width: 220px; height: 23.15px;" readonly="readonly" />*@
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="">Local Agent</label>
+                    <input type="text" id="txtBPOLocalAgentId" class="txtField" style="display: none; width: 220px;" />
+                </div>
+                <div class="col-sm-8">
+
+                    <input type="text" id="txtBPOLocalAgentName" class="txtField" style=" width: 220px; height: 23.15px;" placeholder="Press (F9)" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="">Foreign Agent</label>
+                </div>
+                <div class="col-sm-8">
+
+                    <input type="text" id="txtBPOForeignAgentId" class="txtField" style="display: none;" />
+                    <input type="text" id="txtBPOForeignAgentName" class="txtField" style="width: 220px; height: 23.15px;" placeholder="Press (F9)" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="margin-right: 29px;">Total SFT Qty</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" id="txtBPOTtlFtQty" class="txtField" style="width: 220px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="margin-right: 29px;">Total SMT Qty</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" id="txtBPOTtlMtrQty" class="txtField" style="width: 220px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="">Order Currency</label>
+                </div>
+                <div class="col-sm-8">
+                    @Html.DropDownList("ddlBPOCurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "text-box dDown", @style = "width: 220px; height: 23.15px;" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="">Price Level</label>
+                </div>
+                <div class="col-sm-8">
+                    <select id="ddlBPOPriceLevel" class="txtField" style="width: 220px;">
+                        <option value="" style="display: none;">-- Select --</option>
+                        <option value="ARTA ">Article Average</option>
+                        <option value="ARTL">Article Level</option>
+                        <option value="COLL">Color Level</option>
+                        <option value="COLA">Color Average</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" style="padding: 0 0 0 15px;">
+                    <label style="margin-right: 29px;">Reference</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" id="txtBPOReference" class="txtField" style="width: 220px;" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div id="BuyerOrderDeliveryGrid" class="row" style="padding: 0 0 0 0; margin-right: 2px; "></div>
+            @*<div id="BuyerOrderPriceGrid" class="row" style="padding: 0 0 0 0; margin-right: 2px;"></div>*@
+        </div>
+
+        @*<div class="col-lg-4" style="padding: 0 0 0 0;">
+                    <label>Expected Shipment Date</label>
+                    <input type="text" id="txtBPOExpectedShipmentDate" class="datePicker txtField" />
+            </div>*@
+        @*<div class="col-lg-3" style="">
+                    <label style="margin-left: 76px;">Revision</label>
+                    <input type="text" id="txtBPORevisionNo" class="txtField" style="width: 149px" />
+            </div>*@
+    </div>
+    <div class="row">
+
+        @*<div class="col-lg-4">
+                <label style="margin-left: 152px;">Revision Date</label>
+                <input type="text" id="txtBPORevisionDate" class="datePicker txtField" />
+            </div>*@
+    </div>
+    <div class="row">
+
+        @*<div class="col-lg-4">
+                <button id="btnNewRevision" style="margin-left: 289px;">New Revision</button>
+            </div>*@
+    </div>
+
+</div>
+
+<div class="row FormBody" style="padding: 0 15px 0 15px;">
+    <div id="BuyerOrderItemGrid" class="row"></div>
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-lg-12">
+            <div id="BuyerOrderItemColorGrid" class="row"></div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="row" style="">
+                    <label style="margin-left: 40px;">Check Note</label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <textarea id="txtBPOCheckNote" class="txtArea" style="margin-left: 30px; height: 50px; width: 350px;"></textarea>
+                    </div>
+                    @*<input type="text" id="txtBPOCheckNote" class="" placeholder="45 days from the date of issuarane" />*@
+                    <button id="btnCheck" style="">Check</button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <label style="margin-left: 40px;">Confirm Note</label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <textarea id="txtBPOConfirmNote" class="txtArea" style="margin-left: 30px; height: 50px; width: 350px;"></textarea>
+                    </div>
+                    @*<input type="text" id="txtBPOConfirmNote" class="" placeholder="45 days from the date of issuarane" />*@
+                    <button id="btnConfirm" style="">Confirm</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="BuyerWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Buyer Name</label>
+        <input type="text" id="txtBuyerName" style="width: 250px;" /><input type="button" id="btnBuyerGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px; ">
+        <div id="BuyerWindowGrid" class="PopUpGrid" style="margin-left: 20px;height: 300px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;margin-top: 20px;">
+        <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="LocalAgentWindow" style="display: none;">
+    @*<div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Local Agent Name</label>
+        <input type="text" id="txtLocalAgentName" style="width: 250px;" /><input type="button" id="btnLocalAgentGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>*@
+    <div class="row" style="width: 796px;">
+        <div id="LocalAgentWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnLocalAgentWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnLocalAgentWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ForeignAgentWindow" style="display: none;">
+    @*<div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Foreign Agent Name</label>
+        <input type="text" id="txtForeignAgentName" style="width: 250px;" /><input type="button" id="btnForeignAgentGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>*@
+    <div class="row" style="width: 796px;">
+        <div id="ForeignAgentWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnForeignAgentWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnForeignAgentWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Article Name</label>
+        <input type="text" id="txtArticleName" style="width: 250px;" /><input type="button" id="btnArticleGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ArticleWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="ColorsWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Color Name</label>
+        <input type="text" id="txtColorsName" style="width: 250px;" /><input type="button" id="btnColorsGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ColorsWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnColorsWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnColorsWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="BuyerOrderWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Buyer Order No.</label>
+        <input type="text" id="txtOrderNo" style="width: 250px;" /><input type="button" id="btnBuyerOrderGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="BuyerOrderWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to delete?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnDeleteConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnDeleteConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+
+<div id="divLoading" style="margin: 0; padding: 0; position: fixed; right: 0;
+    top: 0; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 45%; left: 45%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#txtBPOBuyerOrderDate").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date()
+        });
+        $("#txtBPOExpectedShipmentDate").kendoDatePicker({
+            format: "dd/MM/yyyy"
+        });
+        $("#txtBPORevisionDate").kendoDatePicker({
+            format: "dd/MM/yyyy"
+        });
+        $(".datePicker").attr("readonly", true);
+
+        function createItemRow() {
+
+            var grid = $("#BuyerOrderItemGrid").data("kendoGrid");
+            $("#BuyerOrderItemGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            var gridItem = $("#BuyerOrderItemGrid").data("kendoGrid");
+            var ds = BuyerOrderItemGridDataSource.data();
+            rowAdd = ds.length;
+            var selectedRefGrid = (gridItem.dataItem(gridItem.select()));
+            selectedRefGrid.SlNo = rowAdd;
+            if (currSlNo == 0) {
+                currSlNo = selectedRefGrid.SlNo;
+            }
+            var cell = $('#BuyerOrderItemGrid').find('tr.k-state-selected td:eq(0)');
+            $('#BuyerOrderItemGrid').data('kendoGrid').closeCell(cell);
+            cell = $('#BuyerOrderItemGrid').find('tr.k-state-selected td:eq(1)');
+            $('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+            gridDataSave();
+        }
+
+
+        $(".btnAddItem").click(function (e) {
+            e.preventDefault();
+            createItemRow();
+        });
+        $("#BuyerOrderItemGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                createItemRow();
+            }
+
+        });
+
+        function createItemColorRow() {
+            var gridItem = $("#BuyerOrderItemGrid").data("kendoGrid");
+            var selectedItemGrid = (gridItem.dataItem(gridItem.select()));
+            if (selectedItemGrid != null) {
+                var gridColor = $("#BuyerOrderItemColorGrid").data("kendoGrid");
+                $("#BuyerOrderItemColorGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                gridColor.addRow();
+                var ds = BuyerOrderItemColorGridDataSource.data();
+                rowAdd2 = ds.length;
+                var selectedcolorGrid = (gridColor.dataItem(gridColor.select()));
+                selectedcolorGrid.SlNo = selectedItemGrid.SlNo;
+                selectedcolorGrid.SlNo2 = rowAdd2;
+                var cell = $('#BuyerOrderItemColorGrid').find('tr.k-state-selected td:eq(0)');
+                $('#BuyerOrderItemColorGrid').data('kendoGrid').closeCell(cell);
+                cell = $('#BuyerOrderItemColorGrid').find('tr.k-state-selected td:eq(1)');
+                $('#BuyerOrderItemColorGrid').data('kendoGrid').editCell(cell);
+            } else {
+                msgShow = 1;
+                $('#MessageText').html("Please select a row in the item grid first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+
+        $(".btnAddItemColor ").click(function (e) {
+            e.preventDefault();
+            createItemColorRow();
+        });
+
+        $("#BuyerOrderItemColorGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                createItemColorRow();
+            }
+
+        });
+
+        function createOrderDeliveryRow() {
+            var grid = $("#BuyerOrderDeliveryGrid").data("kendoGrid");
+            $("#BuyerOrderDeliveryGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+
+            var cell = $('#BuyerOrderDeliveryGrid').find('tr.k-state-selected td:eq(0)');
+            $('#BuyerOrderDeliveryGrid').data('kendoGrid').editCell(cell);
+            //cell = $('#BuyerOrderDeliveryGrid').find('tr.k-state-selected td:eq(1)');
+            //$('#BuyerOrderDeliveryGrid').data('kendoGrid').editCell(cell);
+        }
+
+        $(".btnAddDelivery ").click(function (e) {
+            //e.preventDefault();
+            createOrderDeliveryRow();
+        });
+
+        $("#BuyerOrderDeliveryGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                createOrderDeliveryRow();
+            }
+
+        });
+
+        //function createOrderPriceRow() {
+        //    var grid = $("#BuyerOrderPriceGrid").data("kendoGrid");
+        //    $("#BuyerOrderPriceGrid").data().kendoGrid.bind('dataBound', function () {
+        //        this.element.find('tbody tr:first').addClass('k-state-selected');
+        //    });
+        //    grid.addRow();
+
+        //    var cell = $('#BuyerOrderPriceGrid').find('tr.k-state-selected td:eq(0)');
+        //    $('#BuyerOrderPriceGrid').data('kendoGrid').editCell(cell);
+        //    //cell = $('#BuyerOrderDeliveryGrid').find('tr.k-state-selected td:eq(1)');
+        //    //$('#BuyerOrderDeliveryGrid').data('kendoGrid').editCell(cell);
+        //}
+
+        //$(".btnAddPrice").click(function (e) {
+        //    e.preventDefault();
+        //    createOrderPriceRow();
+        //});
+
+    });
+
+    //$('#txtBPOBuyerOrderNo').focusout(function () {
+    //    if ($(this).val() == "") {
+    //        $('#MessageText').html("Please input an Order No.");
+    //        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+    //        $('#txtBPOBuyerOrderNo').val("");
+    //        $('#txtBPOBuyerOrderNo').css({ 'box-shadow': '1px 1px 1px red' });
+    //        setTimeout(function () {
+    //            $('#txtBPOBuyerOrderNo').focus();
+    //        }, 1);
+    //    } else {
+    //        $('#txtBPOBuyerOrderNo').css({ 'box-shadow': 'none' });
+    //    }
+    //});
+
+    // ######################################## Grid And Window Declaration ######################################## //
+
+    // ************ Buyer Order Item Grid Declaration ************ //
+
+    var BuyerOrderItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderItemID", fields: {
+                    SlNo: { editable: true },
+                    BuyerOrderItemID: { editable: true },
+                    BuyerOrderID: { editable: true },
+                    commodity: { editable: true },
+                    HSCode: { editable: true },
+                    ArticleID: { editable: true },
+                    ArticleNo: { editable: true },
+                    ArticleName: { editable: true, defaultValue: "Press (F9)" },
+                    ArticleChallanNo: { editable: true },
+                    AvgSize: { eidtable: true },
+                    AvgSizeUnit: { editable: true },
+                    AvgSizeUnitName: { editable: true, defaultValue: "SFT" },
+                    SideDescription: { editable: true },
+                    SelectionRange: { editable: true },
+                    Thickness: { editable: true },
+                    ThicknessUnit: { editable: true },
+                    ThicknessUnitName: { editable: true, defaultValue: "MM" },
+                    ThicknessAt: { editable: true },
+                    ThicknessAtName: { editable: true },
+                    ItemTypeID: { editable: true },
+                    ItemTypeName: { editable: true },
+                    LeatherTypeID: { editable: true },
+                    LeatherTypeName: { editable: true },
+                    LeatherStatusID: { editable: true },
+                    LeatherStatusName: { editable: true },
+                    ArticleFootQty: { editable: true, type: "number", validation: { min: 0 } },
+                    AirFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    AirFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    ArticleMeterQty: { editable: true, type: "number", validation: { min: 0 } },
+                    AirMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    AirMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    $("#BuyerOrderItemGrid").kendoGrid({
+        dataSource: BuyerOrderItemGridDataSource,
+        pageable: true,
+        edit: function (e) {
+            if (e.container.find(".k-input").val() == 0 || e.container.find(".k-input").val() == "Press (F9)") {
+                e.container.find(".k-input").val("");
+            }
+            $('input[name = "SlNo"]').attr("readonly", true);
+            $("[name='ArticleName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    art = "itmGrd";
+                    ArticleWindow.open();
+                    ArticleWindow.center();
+
+                }
+            });
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+        },
+        save: function (e) {
+            if (e.values.ArticleFootQty) {
+                var meter = FootToMeterConversion(e.values.ArticleFootQty);
+                e.model.set("ArticleMeterQty", meter);
+                e.model.set("ArticleFootQty", e.values.ArticleFootQty);
+            }
+            if (e.values.SeaFootUnitPrice) {
+                var sMtrPrice = UnitPriceConversionToMeter(e.values.SeaFootUnitPrice);
+                e.model.set("SeaMeterUnitPrice", sMtrPrice);
+                if (e.model.ArticleFootQty != "") {
+                    var sTtlFt = parseFloat(e.model.ArticleFootQty) * parseFloat(e.values.SeaFootUnitPrice);
+                    e.model.set("SeaFootTotalPrice", sTtlFt);
+                    e.model.set("SeaMeterTotalPrice", sTtlFt);
+                }
+            }
+            if (e.values.AirFootUnitPrice) {
+                var aMtrPrice = UnitPriceConversionToMeter(e.values.AirFootUnitPrice);
+                e.model.set("AirMeterUnitPrice", aMtrPrice);
+                if (e.model.ArticleFootQty != "") {
+                    var aTtlFt = parseFloat(e.model.ArticleFootQty) * parseFloat(e.values.AirFootUnitPrice);
+                    e.model.set("AirFootTotalPrice", aTtlFt);
+                    e.model.set("AirMeterTotalPrice", aTtlFt);
+                }
+            }
+            if (e.values.ArticleMeterQty) {
+                var foot = MeterToFootConversion(e.values.ArticleMeterQty);
+                e.model.set("ArticleFootQty", foot);
+            }
+            if (e.values.SeaMeterUnitPrice) {
+                var sFtPrice = UnitPriceConversionToFoot(e.values.SeaMeterUnitPrice);
+                e.model.set("SeaFootUnitPrice", sFtPrice);
+                if (e.model.ArticleMeterQty != "") {
+                    var sTtlMtr = parseFloat(e.model.ArticleMeterQty) * parseFloat(e.values.SeaMeterUnitPrice);
+                    e.model.set("SeaFootTotalPrice", sTtlMtr);
+                    e.model.set("SeaMeterTotalPrice", sTtlMtr);
+                }
+            }
+            if (e.values.AirMeterUnitPrice) {
+                var aFtPrice = UnitPriceConversionToFoot(e.values.AirMeterUnitPrice);
+                e.model.set("AirFootUnitPrice", aFtPrice);
+                if (e.model.ArticleMeterQty != "") {
+                    var aTtlMtr = parseFloat(e.model.ArticleMeterQty) * parseFloat(e.values.AirMeterUnitPrice);
+                    e.model.set("AirFootTotalPrice", aTtlMtr);
+                    e.model.set("AirMeterTotalPrice", aTtlMtr);
+                }
+            }
+        },
+
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        scrollable: true,
+        sortable: true,
+        height: 290,
+        toolbar: [{
+            text: "Add Item",
+            className: "btnAddItem",
+            imageClass: "k-icon k-add"
+        }],
+        columns: [
+            { field: "SlNo", title: "Sl No", width: 69, filterable: false, hidden: true },
+            { field: "commodity", title: "Commodity", width: 150, filterable: false, editor: ddlCommodity },
+            { field: "HSCode", title: "Hs Code", width: 150, filterable: false },
+            { field: "ArticleName", title: "Article", width: 150 },
+            //{ field: "ItemTypeName", title: "Item Type", width: 150, editor: ItemTypeDropDownEditor },
+            //{ field: "LeatherStatusName", title: "Leather Status", editor: LeatherStatusDropDownEditor, width: 150, filterable: false },
+            //{ field: "LeatherTypeName", title: "Leather Type", editor: LeatherTypeDropDownEditor, width: 150, filterable: false },
+            { field: "AvgSize", title: "Size", width: 150, filterable: false },
+            { field: "AvgSizeUnitName", title: "Size Unit", editor: AvgSizeUnitDropDownEditor, width: 150, filterable: false },
+            { field: "SideDescription", title: "Side/Pcs", width: 150, filterable: false, editor: DeliverySidePriceDropDownEditor },
+            { field: "SelectionRange", title: "Selection", width: 150, filterable: false },
+            { field: "Thickness", title: "Thickness", width: 150, filterable: false },
+            { field: "ThicknessUnitName", title: "Thickness Unit", editor: ThicknessUnitDropDownEditor, width: 150, filterable: false },
+            { field: "ArticleFootQty", title: "Quantity (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaFootUnitPrice", title: "Unit Price by Sea (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaFootTotalPrice", title: "Total Price by Sea (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirFootUnitPrice", title: "Unit Price by Air (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirFootTotalPrice", title: "Total Price by Air (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadFootUnitPrice", title: "Unit Price by Road (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadFootTotalPrice", title: "Total Price by Road (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "ArticleMeterQty", title: "Quantity (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaMeterUnitPrice", title: "Unit Price by Sea (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaMeterTotalPrice", title: "Total Price by Sea (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirMeterUnitPrice", title: "Unit Price by Air (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirMeterTotalPrice", title: "Total Price by Air (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadMeterUnitPrice", title: "Unit Price by Road (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadMeterTotalPrice", title: "Total Price by Road (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "ThicknessAt", title: "Thickness At", editor: ThicknessAtDropDownEditor, width: 100, filterable: false },
+            { command: [{ name: "DeletedRow", text: "Delete", click: DeleteItem }], title: "Delete", width: 75 }
+        ]
+    });
+
+    // ************ Buyer Order Item Grid Declaration End ************ //
+
+    // ************ Buyer Order Item Color Grid Declaration ************ //
+
+    var BuyerOrderItemColorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "OrdItemColorId",
+                fields: {
+                    SlNo: { editable: true },
+                    SlNo2: { editable: true },
+                    BuyerOrdItemColorID: { editable: true },
+                    BuyerOrderID: { editable: true },
+                    BuyerOrderItemID: { editable: true },
+                    ColorID: { editable: true },
+                    ColorName: { editable: true, defaultValue: "Press (F9)" },
+                    ColorFootQty: { editable: true, type: "number", validation: { min: 0 } },
+                    AirFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    AirFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaFootUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaFootTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    ColorMeterQty: { editable: true, type: "number", validation: { min: 0 } },
+                    AirMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    AirMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    RoadMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaMeterUnitPrice: { editable: true, type: "number", validation: { min: 0 } },
+                    SeaMeterTotalPrice: { editable: true, type: "number", validation: { min: 0 } }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    function colorChange(row) {
+        //var grid = $("#BuyerOrderItemColorGrid").data("kendoGrid");
+        //var row = grid.dataItem(grid.select());
+
+
+        console.log(row);
+    }
+
+    var colorGrid = $("#BuyerOrderItemColorGrid").kendoGrid({
+        dataSource: BuyerOrderItemColorGridDataSource,
+        pageable: true,
+        edit: function (e) {
+            if (e.container.find(".k-input").val() == 0 || e.container.find(".k-input").val() == "Press (F9)") {
+                e.container.find(".k-input").val("");
+            }
+            $('input[name = "TotalPrice"]').attr("readonly", true);
+
+            $("[name='ColorName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    col = "clrGrd";
+                    ColorsWindow.open();
+                    ColorsWindow.center();
+                }
+            });
+
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+        },
+        save: function (e) {
+            //var grid = $("#BuyerOrderItemColorGrid").data("kendoGrid");
+            //var fieldName = grid.columns[e.container.index()].field;
+            //$("[name='" + fieldName + "']", e.container).focusout(function (event) {
+
+            //var row = $(this).closest("tr");
+            //var slno = grid.dataItem(row).SlNo;
+            //var slno2 = grid.dataItem(row).SlNo2;
+            if (e.model.dirty) {
+                var slno = e.model.SlNo;
+                var slno2 = e.model.SlNo2;
+
+                if (itemColors.length > 0) {
+                    for (var i = 0; i < itemColors.length; i++) {
+                        var flag = false;
+                        if (itemColors[i].SlNo == slno && itemColors[i].SlNo2 == slno2) {
+                            flag = true;
+                        }
+                        if (flag == true) {
+                            itemColors[i].SlNo = e.model.SlNo;
+                            itemColors[i].SlNo2 = e.model.SlNo2;
+                            itemColors[i].BuyerOrdItemColorID = e.model.BuyerOrdItemColorID;
+                            itemColors[i].BuyerOrderID = e.model.BuyerOrderID;
+                            itemColors[i].BuyerOrderItemID = e.model.BuyerOrderItemID;
+                            itemColors[i].ColorID = e.model.ColorID;
+                            itemColors[i].ColorName = e.model.ColorName;
+                            itemColors[i].ColorFootQty = e.model.ColorFootQty;
+                            itemColors[i].AirFootUnitPrice = e.model.AirFootUnitPrice;
+                            itemColors[i].AirFootTotalPrice = e.model.AirFootTotalPrice;
+                            itemColors[i].RoadFootUnitPrice = e.model.RoadFootUnitPrice;
+                            itemColors[i].RoadFootTotalPrice = e.model.RoadFootTotalPrice;
+                            itemColors[i].SeaFootUnitPrice = e.model.SeaFootUnitPrice;
+                            itemColors[i].SeaFootTotalPrice = e.model.SeaFootTotalPrice;
+                            itemColors[i].ColorMeterQty = e.model.ColorMeterQty;
+                            itemColors[i].AirMeterUnitPrice = e.model.AirMeterUnitPrice;
+                            itemColors[i].AirMeterTotalPrice = e.model.AirMeterTotalPrice;
+                            itemColors[i].RoadMeterUnitPrice = e.model.RoadMeterUnitPrice;
+                            itemColors[i].RoadMeterTotalPrice = e.model.RoadMeterTotalPrice;
+                            itemColors[i].SeaMeterUnitPrice = e.model.SeaMeterUnitPrice;
+                            itemColors[i].SeaMeterTotalPrice = e.model.SeaMeterTotalPrice;
+                            itemColors[i].UnitPrice = e.model.UnitPrice;
+                        }
+                    }
+                }
+            }
+
+            //});
+            if (e.values.ColorFootQty) {
+                var meter = FootToMeterConversion(e.values.ColorFootQty);
+                e.model.set("ColorMeterQty", meter);
+                if (e.model.SeaFootUnitPrice != "") {
+                    var ttlSeaSqFt = parseFloat(e.model.ColorFootQty) * parseFloat(e.model.SeaFootUnitPrice);
+                    e.model.set("SeaFootTotalPrice", ttlSeaSqFt);
+                    e.model.set("SeaMeterTotalPrice", ttlSeaSqFt);
+                }
+                if (e.model.AirFootUnitPrice != "") {
+                    var ttlAirSqFt = parseFloat(e.model.ColorFootQty) * parseFloat(e.model.AirFootUnitPrice);
+                    e.model.set("AirFootTotalPrice", ttlAirSqFt);
+                    e.model.set("AirMeterTotalPrice", ttlAirSqFt);
+                }
+            }
+
+            if (e.values.SeaFootUnitPrice) {
+                var sMtrPrice = UnitPriceConversionToMeter(e.values.SeaFootUnitPrice);
+                e.model.set("SeaMeterUnitPrice", sMtrPrice);
+                if (e.model.ColorFootQty != "") {
+                    var sTtlFt = parseFloat(e.model.ColorFootQty) * parseFloat(e.values.SeaFootUnitPrice);
+                    e.model.set("SeaFootTotalPrice", sTtlFt);
+                    e.model.set("SeaMeterTotalPrice", sTtlFt);
+                }
+            }
+            if (e.values.AirFootUnitPrice) {
+                var aMtrPrice = UnitPriceConversionToMeter(e.values.AirFootUnitPrice);
+                e.model.set("AirMeterUnitPrice", aMtrPrice);
+                if (e.model.ColorFootQty != "") {
+                    var aTtlFt = parseFloat(e.model.ColorFootQty) * parseFloat(e.values.AirFootUnitPrice);
+                    e.model.set("AirFootTotalPrice", aTtlFt);
+                    e.model.set("AirMeterTotalPrice", aTtlFt);
+                }
+            }
+            if (e.values.ColorMeterQty) {
+                var foot = MeterToFootConversion(e.values.ColorMeterQty);
+                e.model.set("ColorFootQty", foot);
+                if (e.model.AirMeterUnitPrice !== "") {
+                    var ttlSeaSqMtr = parseFloat(e.model.ColorFootQty) * parseFloat(e.model.AirMeterUnitPrice);
+                    e.model.set("AirFootTotalPrice", ttlSeaSqMtr);
+                    e.model.set("AirMeterTotalPrice", ttlSeaSqMtr);
+                }
+                if (e.model.SeaMeterUnitPrice !== "") {
+                    var ttlAirSqMtr = parseFloat(e.model.ColorFootQty) * parseFloat(e.model.SeaMeterUnitPrice);
+                    e.model.set("SeaFootTotalPrice", ttlAirSqMtr);
+                    e.model.set("SeaMeterTotalPrice", ttlAirSqMtr);
+                }
+            }
+            if (e.values.AirMeterUnitPrice) {
+                var aFtPrice = UnitPriceConversionToFoot(e.values.AirMeterUnitPrice);
+                e.model.set("AirFootUnitPrice", aFtPrice);
+                if (e.model.ColorMeterQty !== "") {
+                    var aTtlMtrt = parseFloat(e.model.ColorFootQty) * parseFloat(e.values.AirMeterUnitPrice);
+                    e.model.set("AirFootTotalPrice", aTtlMtrt);
+                    e.model.set("AirMeterTotalPrice", aTtlMtrt);
+                }
+            }
+            if (e.values.SeaMeterUnitPrice) {
+                var sFtPrice = UnitPriceConversionToFoot(e.values.SeaMeterUnitPrice);
+                e.model.set("SeaFootUnitPrice", sFtPrice);
+                if (e.model.ColorMeterQty !== "") {
+                    var sTtlMtr = parseFloat(e.model.ColorMeterQty) * parseFloat(e.values.SeaMeterUnitPrice);
+                    e.model.set("SeaFootTotalPrice", sTtlMtr);
+                    e.model.set("SeaMeterTotalPrice", sTtlMtr);
+                }
+            }
+
+
+        },
+        change: function (e) {
+
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 290,
+        toolbar: [
+            { text: "Add Item Color", className: "btnAddItemColor", imageClass: "k-icon k-add" }
+        ],
+        columns: [
+            { field: "SlNo", title: "Sl No", width: 69, filterable: false, hidden: true },
+            { field: "ColorName", title: "Color", width: 150 },
+            { field: "ColorFootQty", title: "Quantity (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaFootUnitPrice", title: "Unit Price by Sea (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaFootTotalPrice", title: "Total Price by Sea (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirFootUnitPrice", title: "Unit Price by Air (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirFootTotalPrice", title: "Total Price by Air (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadFootUnitPrice", title: "Unit Price by Road (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadFootTotalPrice", title: "Total Price by Road (SFT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "ColorMeterQty", title: "Quantity (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaMeterUnitPrice", title: "Unit Price by Sea (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "SeaMeterTotalPrice", title: "Total Price by Sea (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirMeterUnitPrice", title: "Unit Price by Air (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            { field: "AirMeterTotalPrice", title: "Total Price by Air (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadMeterUnitPrice", title: "Unit Price by Road (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+            //{ field: "RoadMeterTotalPrice", title: "Total Price by Road (SMT)", width: 150, filterable: false, format: '{0:0.00}' },
+
+            { command: [{ name: "DeletedRow", text: "Delete", click: DeleteColor }], title: "Delete", width: 80 }
+        ]
+    });// ************ Buyer Order Item Color Grid Declaration End ************ //
+
+    // ************ Order Delivery Grid Declaration ************ //
+
+    var BuyerOrderDeliveryGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderDeliveryID",
+                fields: {
+                    BuyerOrderDeliveryID: { editable: true },
+                    BuyerOrderID: { editable: true },
+                    OrdDeliverySL: { editable: true },
+                    OrdDeliveryDate: { editable: true },
+                    OrdDateFootQty: { editable: true, type: "number", validation: { min: 0 } },
+                    OrdDateMeterQty: { editable: true, type: "number", validation: { min: 0 } },
+                    PIDeliverySL: { editable: true },
+                    PIDeliveryDate: { editable: true },
+                    PIDateFootQty: { editable: true },
+                    PIDateMeterQty: { editable: true },
+                    ArticleID: { editable: true },
+                    ArticleName: { editable: true, defaultValue: "Press (F9)" },
+                    ArticleFootQty: { editable: true },
+                    ArticleMeterQty: { editable: true },
+                    ColorID: { editable: true },
+                    ColorName: { editable: true, defaultValue: "Press (F9)" },
+                    ColorFootQty: { editable: true },
+                    ColorMeterQty: { editable: true },
+                    Remarks: { editable: true }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    var deliveryGrid = $("#BuyerOrderDeliveryGrid").kendoGrid({
+        dataSource: BuyerOrderDeliveryGridDataSource,
+        pageable: true,
+        edit: function (e) {
+
+            //$('input[name = "TotalPrice"]').attr("readonly", true);
+            if (e.container.find(".k-input").val() == 0 || e.container.find(".k-input").val() == "Press (F9)") {
+                e.container.find(".k-input").val("");
+            }
+            e.container.find(".k-input").val();
+            $("[name='ColorName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    col = "dlvGrd";
+                    ColorsWindow.open();
+                    ColorsWindow.center();
+
+                }
+            });
+            $("[name='ArticleName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    art = "dlvGrd";
+                    ArticleWindow.open();
+                    ArticleWindow.center();
+                }
+            });
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                if (recordStatus == "CNF") {
+                    ddl.readonly();
+                } else {
+                    ddl.open();
+                }
+            }
+        },
+        save: function (e) {
+            if (e.values.OrdDateFootQty) {
+                var mtr = FootToMeterConversion(e.values.OrdDateFootQty);
+                e.model.set("OrdDateMeterQty", mtr);
+            }
+            if (e.values.OrdDateMeterQty) {
+                var ft = MeterToFootConversion(e.values.OrdDateMeterQty);
+                e.model.set("OrdDateFootQty", ft);
+            }
+        },
+        change: function (e) {
+            //var x = 2;
+            //x = 4;
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 250,
+        toolbar: [
+            { text: "Delivery Date", className: "btnAddDelivery", imageClass: "k-icon k-add" }
+        ],
+        columns: [
+        //{ field: "OrdDeliverySL", title: "Sl No", filterable: false, width:70 },
+        { field: "OrdDeliveryDate", title: "Date", editor: dateTimeEditor, format: "{0:dd/MM/yyyy}", width: 110 },
+        { field: "ArticleName", title: "Article", filterable: false, width: 110 },
+        { field: "ColorName", title: "Color", filterable: false, width: 110 },
+        { field: "OrdDateFootQty", title: "Quantity (SFT)", filterable: false, format: "{0: 0.00}", width: 110 },
+        { field: "OrdDateMeterQty", title: "Quantity (SMT)", format: "{0: 0.00}", width: 110 },
+        { command: [{ name: "DeletedRow", text: "Delete", click: DeleteDelivery }], title: "Delete", width: 70 }
+        ]
+    });
+
+    function dateTimeEditor(container, options) {
+        $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+            .appendTo(container)
+            .kendoDatePicker({
+                format: "dd/MM/yyyy",
+                change: function () {
+                    changeStatus = 1;
+                }
+            });
+    }
+    // ************ Order Delivery Grid Declaration End ************ //
+
+    // ************ Buyer Window & Grid Declaration ************ //
+
+    var BuyerWindow = $('#BuyerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "500px",
+        title: "List Of Buyers",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BuyerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCode: { editable: false },
+                    BuyerAddressID: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 200
+    });
+
+    var BuyerGrid = $("#BuyerWindowGrid").kendoGrid({
+        dataSource: BuyerGridDataSource,
+        //pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        scrollable: true,
+        sortable: true,
+        width: 795,
+        heigth: 400,
+        columns: [
+            { field: "BuyerName", title: "Name", width: "60px" },
+            { field: "BuyerCode", title: "Code", width: "60px" },
+            { field: "Address", title: "Address", width: "60px" }]
+    });
+
+    function getBuyer() {
+        $("#divLoading").show();
+        if($('#ddlBPOOrderCategory').val() !== "")
+        {
+            $.ajax({
+                url: '@Url.Action("GetLocalBuyer", "BuyerPurcOrder")',
+                type: 'GET',
+                data: ({ buyerType: buyerType($('#ddlBPOOrderCategory').val()).toString() }),
+                contentType: 'application/json;', dataType: 'json',
+                success: function (data) {
+                    if (data.length > 0) {
+                        $("#divLoading").hide();
+                        BuyerGridDataSource.data(data);
+                        BuyerWindow.open();
+                        BuyerWindow.center();
+                    } else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html("There are no " + buyerType($('#ddlBPOOrderCategory').val()).toString() + " buyers.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            });
+        } else {
+            $("#divLoading").hide();
+            $('#MessageText').html("Please select an Order category.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }
+
+    $('#txtBPOBuyerName').keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtBuyerName").val("");
+            getBuyer();
+        }
+    });
+
+    // ************ Buyer Window & Grid Declaration End ************ //
+
+    // ************ Local Agent Window & Grid Declaration ************ //
+
+    var LocalAgentWindow = $('#LocalAgentWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        //height: "600px",
+        title: "List Of Local Agents", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var LocalAgentGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCode: { editable: false },
+                    BuyerAddressID: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 200
+    });
+
+    var LocalAgentGrid = $("#LocalAgentWindowGrid").kendoGrid({
+        dataSource: LocalAgentGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BuyerCode", title: "Code", width: "60px" },
+            { field: "BuyerName", title: "Name", width: "60px" },
+            { field: "Address", title: "Address", width: "60px" }
+        ]
+    });
+
+    function getLocalAgent() {
+        //if ($('#ddlBPOOrderFrom').val() == "LA") {
+        $("#divLoading").show();
+        //var buyerId = $('#txtBPOBuyerId').val();
+        $.ajax({
+            url: '@Url.Action("GetLocalAgent", "BuyerPurcOrder")',
+            type: 'GET',
+            //data: ({ buyerId: buyerId }),
+            contentType: 'application/json;', dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#divLoading").hide();
+                    LocalAgentGridDataSource.data(data);
+                    LocalAgentWindow.open();
+                    LocalAgentWindow.center();
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html("There are no local agents.");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                }
+            }
+        });
+    }
+    //else {
+    //        var bof = $('#ddlBPOOrderFrom').val();
+
+    //        if (bof == "FA") {
+    //            bof = "Foreign agent";
+    //        } else if (bof == "LA") {
+    //            bof = "Local agent";
+    //        } else if (bof == "BR") {
+    //            bof = "Buyer";
+    //        } else {
+    //            bof = "none";
+    //        }
+
+
+    //        $('#MessageText').html("The order from is set to " + bof);
+    //        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+    //    }
+    //}
+
+    $('#txtBPOLocalAgentName').keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtLocalAgentName").val("");
+            getLocalAgent();
+        }
+    });
+
+    // ************ Local Agent Window & Grid Declaration End ************ //
+
+    // ************ Foreign Agent Window & Grid Declaration ************ //
+
+    var ForeignAgentWindow = $('#ForeignAgentWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Foreign Agents", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var ForeignAgentGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCode: { editable: false },
+                    BuyerAddressID: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 200
+    });
+
+    var ForeignAgentGrid = $("#ForeignAgentWindowGrid").kendoGrid({
+        dataSource: ForeignAgentGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BuyerCode", title: "Code", width: "60px" },
+            { field: "BuyerName", title: "Name", width: "60px" },
+            { field: "Address", title: "Address", width: "60px" }
+        ]
+    });
+
+    function getForeignAgent() {
+        //if ($('#ddlBPOOrderFrom').val() == "FA") {
+        $("#divLoading").show();
+        //var buyerId = $('#txtBPOBuyerId').val();
+        $.ajax({
+            url: '@Url.Action("GetForeignAgent", "BuyerPurcOrder")',
+            type: 'GET',
+            //data: ({ buyerId: buyerId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#divLoading").hide();
+                    ForeignAgentGridDataSource.data(data);
+                    ForeignAgentWindow.open();
+                    ForeignAgentWindow.center();
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html("There are no foreign agents.");
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' }
+                    );
+
+                }
+            }
+        });
+    }
+    //    else {
+    //        var bof = $('#ddlBPOOrderFrom').val();
+
+    //        if (bof == "FA") {
+    //            bof = "Foreign agent";
+    //        } else if (bof == "LA") {
+    //            bof = "Local agent";
+    //        } else if (bof == "BR") {
+    //            bof = "Buyer";
+    //        } else {
+    //            bof = "none";
+    //        }
+
+    //        $('#MessageText').html("The order from is set to " + bof);
+    //        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+    //    }
+    //}
+
+    $('#txtBPOForeignAgentName').keyup(function (e) {
+        if (e.keyCode == 120) {
+            getForeignAgent();
+        }
+    });
+
+    // ************ Foreign Agent Window & Grid Declaration End ************ //
+
+    // ************ Article Window & Grid Declaration ************ //
+
+    var ArticleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "auto",
+        title: "List Of Articles",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ArticleGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleID",
+                fields: {
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetArticles", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        },
+        pageSize: 10
+    });
+
+    var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+        dataSource: ArticleGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "ArticleNo", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "ArticleName", title: "Name", width: "60px", filterable: false, sortable: false }]
+    });
+
+    // ************ Article Window & Grid Declaration End ************ //
+
+    // ************ Colors Window & Grid Declaration ************ //
+
+    var ColorsWindow = $('#ColorsWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Colors", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var ColorsGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ColorID",
+                fields: {
+                    ColorID: { editable: false },
+                    ColorCode: { editable: false },
+                    ColorName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetColors", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        }, pageSize: 10
+    });
+
+    var ColorsGrid = $("#ColorsWindowGrid").kendoGrid({
+        dataSource: ColorsGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "ColorCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "ColorName", title: "Name", width: "60px", filterable: false, sortable: false }]
+    });
+
+    // ************ Colors Window & Grid Declaration End ************ //
+
+    // ************ Buyer order Window & Grid Declaration ************ //
+
+    var BuyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Buyer Orders", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+
+    var BuyerOrderGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    BuyerOrderDate: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    OrderNo: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetBuyerOrder", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        }
+    });
+
+    var BuyerOrderGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+        dataSource: BuyerOrderGridDataSource,
+        //pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        height: 400,
+        columns: [
+            { field: "BuyerOrderNo", title: "Order No.", width: "60px" },
+            { field: "BuyerOrderDate", title: "Date", width: "60px" },
+            { field: "OrderNo", title: "Buyer Order No.", width: "60px" },
+            { field: "BuyerName", title: "Name", width: "60px" },
+            { field: "RecordStatus", title: "Status", width: "60px" }
+        ]
+    });
+
+    // ************ Buyer order Window & Grid Declaration End ************ //
+
+    // ######################################## Grid And Window Declaration End ######################################## //
+
+    // ######################################## Drop Down Declaration ######################################## //
+
+    // ************ Leather Unit Drop Down List ************ //
+    var ddlLeatherUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllLeatherUnit", "Common")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        }, pageSize: 8
+    });
+    function AvgSizeUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlLeatherUnitDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("AvgSizeUnitName", dataItem.UnitName);
+                    options.model.set("AvgSizeUnit", dataItem.UnitID);
+                    //var cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(8)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(9)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+
+    var ddlThicknessUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetThicknessUnit", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        }, pageSize: 8
+    });
+
+    function ThicknessUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlThicknessUnitDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("ThicknessUnitName", dataItem.UnitName);
+                    options.model.set("ThicknessUnit", dataItem.UnitID);
+                    //var cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(12)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(13)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+                },
+                requestStart: function (e) {
+                    $("#divLoading").show();
+                },
+                requestEnd: function (e) {
+                    $("#divLoading").hide();
+                }
+            });
+    }
+
+    function ColorUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlLeatherUnitDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("ColorUnitName", dataItem.UnitName);
+                    options.model.set("ColorUnit", dataItem.UnitID);
+                    //var cell = $('#BuyerOrderItemColorGrid').find('.k-state-selected td:eq(3)');
+                    //$('#BuyerOrderItemColorGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderItemColorGrid').find('.k-state-selected td:eq(4)');
+                    //$('#BuyerOrderItemColorGrid').data('kendoGrid').editCell(cell);
+                },
+                requestStart: function (e) {
+                    $("#divLoading").show();
+                },
+                requestEnd: function (e) {
+                    $("#divLoading").hide();
+                }
+            });
+    }
+    // ************ Chemical Unit Drop Down List End ************ //
+
+    // ************ Thickness At Drop Down List ************ //
+    var thicknessDataSource = [
+        { text: "After Shaving", value: "After Shaving" },
+        { text: "After Finishing", value: "After Finishing" } /*, { text: "After", value: "After" }*/];
+
+    function ThicknessAtDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: thicknessDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("ThicknessAtName", dataItem.text);
+                    options.model.set("ThicknessAt", dataItem.value);
+                    //var cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(6)');
+                    //$('#ChemLocalPurcBillItemGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(7)');
+                    //$('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell);
+                },
+                requestStart: function (e) {
+                    $("#divLoading").show();
+                },
+                requestEnd: function (e) {
+                    $("#divLoading").hide();
+                }
+            });
+    }
+    // ************ Thickness At Drop Down List End ************ //
+
+    // ************ Item type Drop Down List ************ //
+
+    var ddlItemTypeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemTypeID",
+                fields: {
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetItemTypes", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        },
+        pageSize: 8
+    });
+
+    function ItemTypeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "ItemTypeName",
+                dataValueField: "ItemTypeID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlItemTypeDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("ItemTypeName", dataItem.ItemTypeName);
+                    options.model.set("ItemTypeID", dataItem.ItemTypeID);
+                    //var cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(4)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(5)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+                },
+                requestStart: function (e) {
+                    $("#divLoading").show();
+                },
+                requestEnd: function (e) {
+                    $("#divLoading").hide();
+                }
+            });
+    }
+
+    // ************ Item type Drop Down List End ************ //
+
+    // ************ Leather Status Drop Down List ************ //
+
+    var ddlLeatherStatusDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LeatherStatusID",
+                fields: {
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLeatherStatus", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        },
+        pageSize: 8
+    });
+
+    function LeatherStatusDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "LeatherStatusName",
+                dataValueField: "LeatherStatusID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlLeatherStatusDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("LeatherStatusName", dataItem.LeatherStatusName);
+                    options.model.set("LeatherStatusID", dataItem.LeatherStatusID);
+                    //var cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(5)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(6)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+                },
+                requestStart: function (e) {
+                    $("#divLoading").show();
+                },
+                requestEnd: function (e) {
+                    $("#divLoading").hide();
+                }
+            });
+    }
+
+    // ************ Leather Status Drop Down List End ************ //
+
+    // ************ Leather Type Drop Down List ************ //
+
+    var ddlLeatherTypeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LeatherTypeID",
+                fields: {
+                    LeatherTypeID: { editable: false },
+                    LeatherTypeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLeatherType", "BuyerPurcOrder")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        },
+        pageSize: 8
+    });
+
+    function LeatherTypeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "LeatherTypeName",
+                dataValueField: "LeatherTypeID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlLeatherTypeDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("LeatherTypeName", dataItem.LeatherTypeName);
+                    options.model.set("LeatherTypeID", dataItem.LeatherTypeID);
+                    //var cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(6)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(7)');
+                    //$('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+
+    // ************ Leather Type Drop Down List End ************ //
+
+    // ************ Delivery Mode Drop Down List ************ //
+    var deliveryModeDataSource = [
+        { text: "By Air", value: "BA" },
+        { text: "By Sea", value: "BS" },
+        { text: "By Road", value: "BR" }];
+
+    function DeliveryModeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: deliveryModeDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("OrdDeliveryModeName", dataItem.text);
+                    options.model.set("OrdDeliveryMode", dataItem.value);
+                    //var cell = $('#BuyerOrderPriceGrid').find('.k-state-selected td:eq(1)');
+                    //$('#BuyerOrderPriceGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderPriceGrid').find('.k-state-selected td:eq(2)');
+                    //$('#BuyerOrderPriceGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+    // ************ Delivery Mode Drop Down List End ************ //
+
+    // ************ Commodity Down List ************ //
+
+    var ddlCommodityDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SizeID",
+                fields: {
+                    SizeID: { editable: false },
+                    SizeName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllComodityData", "Comodity")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        requestStart: function (e) {
+            $("#divLoading").show();
+        },
+        requestEnd: function (e) {
+            $("#divLoading").hide();
+        }
+    });
+
+    function ddlCommodity(container, options) {
+        $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "ComodityName",
+                    dataValueField: "ComodityName",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        //ItemGridchangeStatus = 1;
+                        changeStatus = 1;
+                        //checkUnsavedData = 1;
+                    },
+                    dataSource: ddlCommodityDataSource
+                });
+    };
+
+    // ************ Commodity Drop Down List End ************ //
+
+    // ************ Delivery Mode Drop Down List ************ //
+    var deliverySidePriceDataSource = [
+        { text: "Side", value: "Side" },
+        { text: "Piece", value: "Piece" },
+        { text: "Both", value: "Both" }];
+
+    function DeliverySidePriceDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: deliverySidePriceDataSource,
+                change: function (e) {
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("SideDescription", dataItem.text);
+                    options.model.set("SideDescription", dataItem.value);
+                    //var cell = $('#BuyerOrderPriceGrid').find('.k-state-selected td:eq(1)');
+                    //$('#BuyerOrderPriceGrid').data('kendoGrid').closeCell(cell);
+                    //cell = $('#BuyerOrderPriceGrid').find('.k-state-selected td:eq(2)');
+                    //$('#BuyerOrderPriceGrid').data('kendoGrid').editCell(cell);
+                }
+            });
+    }
+    // ************ Delivery Mode Drop Down List End ************ //
+
+    // ######################################## Drop Down Declaration End ######################################## //
+
+    // ######################################## Pop-up Window Events ######################################## //
+
+    // ************ Buyer pop-up window event ************ //
+
+    function SetBuyer() {
+        var gridBuyerSearch = $("#BuyerWindowGrid").data("kendoGrid");
+        var selectedBuyerGrid = (gridBuyerSearch.dataItem(gridBuyerSearch.select())); //Selected Row
+        $("#txtBPOBuyerId").val(selectedBuyerGrid.BuyerID);
+        $("#txtBPOBuyerName").val(selectedBuyerGrid.BuyerName);
+        $("#txtBPOBuyerAddressId").val(selectedBuyerGrid.BuyerAddressID);
+        $("#txtBPOBuyerAddress").val(selectedBuyerGrid.Address);
+        //$.ajax({
+            //url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+        //    type: 'GET',
+        //    data: ({ buyerId: selectedBuyerGrid.BuyerID }),
+        //    contentType: 'application/json;', dataType: 'json',
+        //    success: function (data) {
+        //        if (data != null) {
+        //            var count = data.length;
+        //            for (var i = 0; i < count; i++) {
+        //                if (data[i].AgentType == "Local Agent") {
+        //                    $("#txtBPOLocalAgentId").val(data[i].AgentID);
+        //                    $("#txtBPOLocalAgentName").val(data[i].AgentName);
+        //                }
+        //                if (data[i].AgentType == "Foreign Agent") {
+        //                    $("#txtBPOForeignAgentId").val(data[i].AgentID);
+        //                    $("#txtBPOForeignAgentName").val(data[i].AgentName);
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
+        changeStatus = 1;
+    }
+    $("#btnBuyerWindowOK").click(function () { SetBuyer(); BuyerWindow.close(); });
+    $("#BuyerWindowGrid").dblclick(function () { SetBuyer(); BuyerWindow.close(); });
+    $("#BuyerWindowGrid").keyup(function (e) { if (e.keyCode == 13) { SetBuyer(); BuyerWindow.close(); } });
+    $("#btnBuyerWindowCancel").click(function () { BuyerWindow.close(); });
+
+    // ************ Buyer pop-up window event End ************ //
+
+    // ************ Local Agent pop-up window event ************ //
+
+    function SetLocalAgent() {
+        var gridLocalAgentSearch = $("#LocalAgentWindowGrid").data("kendoGrid");
+        var selectedLocalAgentGrid = (gridLocalAgentSearch.dataItem(gridLocalAgentSearch.select())); //Selected Row
+        $("#txtBPOLocalAgentId").val(selectedLocalAgentGrid.BuyerID);
+        $("#txtBPOLocalAgentName").val(selectedLocalAgentGrid.BuyerName);
+        //$.ajax({
+        //    url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+        //    type: 'GET',
+        //    data: ({ buyerId: selectedLocalAgentGrid.BuyerID }),
+        //    contentType: 'application/json;', dataType: 'json',
+        //    success: function (data) {
+        //        if (data != null) {
+        //            var count = data.length;
+        //            for (var i = 0; i < count; i++) {
+        //                if (data[i].AgentType == "Local Agent") {
+        //                    $("#txtBPOLocalAgentId").val(data[i].AgentID);
+        //                    $("#txtBPOLocalAgentName").val(data[i].AgentName);
+        //                }
+        //                if (data[i].AgentType == "Foreign Agent") {
+        //                    $("#txtBPOForeignAgentId").val(data[i].AgentID);
+        //                    $("#txtBPOForeignAgentName").val(data[i].AgentName);
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
+
+        changeStatus = 1;
+    }
+    $("#btnLocalAgentWindowOK").click(function () { SetLocalAgent(); LocalAgentWindow.close(); });
+    $("#LocalAgentWindowGrid").dblclick(function () { SetLocalAgent(); LocalAgentWindow.close(); });
+    $("#LocalAgentWindowGrid").keyup(function (e) { if (e.keyCode == 13) { SetLocalAgent(); LocalAgentWindow.close(); } });
+    $("#btnLocalAgentWindowCancel").click(function () { LocalAgentWindow.close(); });
+
+    // ************ Local Agent pop-up window event End ************ //
+
+    // ************ Foreign Agent pop-up window event ************ //
+
+    function SetForeignAgent() {
+        var gridForeignAgentSearch = $("#ForeignAgentWindowGrid").data("kendoGrid");
+        var selectedForeignAgentGrid = (gridForeignAgentSearch.dataItem(gridForeignAgentSearch.select())); //Selected Row
+        $("#txtBPOForeignAgentId").val(selectedForeignAgentGrid.BuyerID);
+        $("#txtBPOForeignAgentName").val(selectedForeignAgentGrid.BuyerName);
+        //$.ajax({
+        //    url: '@Url.Action("GetBuyerAgents", "BuyerPurcOrder")',
+        //    type: 'GET',
+        //    data: ({ buyerId: selectedForeignAgentGrid.BuyerID }),
+        //    contentType: 'application/json;', dataType: 'json',
+        //    success: function (data) {
+        //        if (data != null) {
+        //            var count = data.length;
+        //            for (var i = 0; i < count; i++) {
+        //                if (data[i].AgentType == "Local Agent") {
+        //                    $("#txtBPOLocalAgentId").val(data[i].AgentID);
+        //                    $("#txtBPOLocalAgentName").val(data[i].AgentName);
+        //                }
+        //                if (data[i].AgentType == "Foreign Agent") {
+        //                    $("#txtBPOForeignAgentId").val(data[i].AgentID);
+        //                    $("#txtBPOForeignAgentName").val(data[i].AgentName);
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
+
+        changeStatus = 1;
+    }
+
+    $("#btnForeignAgentWindowOK").click(function () {
+        SetForeignAgent();
+        ForeignAgentWindow.close();
+    });
+    $("#ForeignAgentWindowGrid").dblclick(function () {
+        SetForeignAgent();
+        ForeignAgentWindow.close();
+    });
+    $("#LocalAgentWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetForeignAgent();
+            ForeignAgentWindow.close();
+        }
+    });
+    $("#btnForeignAgentWindowCancel").click(function () { ForeignAgentWindow.close(); });
+
+    // ************ Local Agent pop-up window event End ************ //
+
+    // ************ Article pop-up window event ************ //
+
+    function SetArticle() {
+        var gridArticleSearch = $("#ArticleWindowGrid").data("kendoGrid");
+        var selectedArticleGrid = (gridArticleSearch.dataItem(gridArticleSearch.select())); //Selected Row
+        var gridItem;
+        var selectedRow;
+        if (art == "itmGrd") {
+            gridItem = $("#BuyerOrderItemGrid").data("kendoGrid");
+            selectedRow = (gridItem.dataItem(gridItem.select()));
+        }
+        if (art == "dlvGrd") {
+            gridItem = $("#BuyerOrderDeliveryGrid").data("kendoGrid");
+            selectedRow = (gridItem.dataItem(gridItem.select()));
+        }
+        if (art == "prGrd") {
+            gridItem = $("#BuyerOrderPriceGrid").data("kendoGrid");
+            selectedRow = (gridItem.dataItem(gridItem.select()));
+        }
+        selectedRow.set("ArticleID", selectedArticleGrid.ArticleID);
+        selectedRow.set("ArticleNo", selectedArticleGrid.ArticleNo);
+        selectedRow.set("ArticleName", selectedArticleGrid.ArticleName);
+        var cell = $('#BuyerOrderItemGrid').find('.k-state-selected td:eq(3)');
+        $('#BuyerOrderItemGrid').data('kendoGrid').editCell(cell);
+        changeStatus = 1;
+    }
+
+    $("#btnArticleWindowOK").click(function () {
+        SetArticle();
+        ArticleWindow.close();
+    });
+    $("#ArticleWindowGrid").dblclick(function () {
+        SetArticle();
+        ArticleWindow.close();
+    });
+    $("#ArticleWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetArticle();
+            ArticleWindow.close();
+        }
+    });
+    $("#btnArticleWindowCancel").click(function () { ArticleWindow.close(); });
+
+    // ************ Article pop-up window event End ************ //
+
+    // ************ Colors pop-up window event ************ //
+
+    function SetColors() {
+        var gridColorsSearch = $("#ColorsWindowGrid").data("kendoGrid");
+        var selectedColorsGrid = (gridColorsSearch.dataItem(gridColorsSearch.select())); //Selected Row
+        var gridColors;
+        var selectedRow;
+        if (col == "clrGrd") {
+            gridColors = $("#BuyerOrderItemColorGrid").data("kendoGrid");
+            selectedRow = (gridColors.dataItem(gridColors.select()));
+        }
+        if (col == "dlvGrd") {
+            gridColors = $("#BuyerOrderDeliveryGrid").data("kendoGrid");
+            selectedRow = (gridColors.dataItem(gridColors.select()));
+        }
+        //if (col == "prGrd") {
+        //    gridColors = $("#BuyerOrderPriceGrid").data("kendoGrid");
+        //    selectedRow = (gridColors.dataItem(gridColors.select()));
+        //}
+        selectedRow.set("ColorID", selectedColorsGrid.ColorID);
+        selectedRow.set("ColorName", selectedColorsGrid.ColorName);
+        if (col == "clrGrd") {
+            //$('#BuyerOrderItemColorGrid').find("td:eq(2) input").focus();
+            var ccell = $('#BuyerOrderItemColorGrid').find('.k-state-selected td:eq(2)');
+            $('#BuyerOrderItemColorGrid').data('kendoGrid').editCell(ccell);
+        }
+        if (col == "dlvGrd") {
+            //$('#BuyerOrderDeliveryGrid').find("td:eq(2) input").focus();
+            var dcell = $('#BuyerOrderDeliveryGrid').find('.k-state-selected td:eq(3)');
+            $('#BuyerOrderDeliveryGrid').data('kendoGrid').editCell(dcell);
+        }
+
+
+        changeStatus = 1;
+    }
+
+    $("#btnColorsWindowOK").click(function () {
+        SetColors();
+        ColorsWindow.close();
+    });
+    $("#ColorsWindowGrid").dblclick(function () {
+        SetColors();
+        ColorsWindow.close();
+    });
+    $("#ColorsWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetColors();
+            ColorsWindow.close();
+        }
+    });
+    $("#btnColorsWindowCancel").click(function () { ColorsWindow.close(); });
+
+    // ************ Colors pop-up window event End ************ //
+
+
+    // ######################################## Pop-up Window Events End ######################################## //
+
+    // ######################################## Buyer Order Item Grid Events ######################################## //
+
+
+    function insColor(color) {
+        var vri = new Object();
+        vri.SlNo = prevSlNo;
+        vri.SlNo2 = color.SlNo2;
+        vri.BuyerOrdItemColorID = color.BuyerOrdItemColorID;
+        vri.BuyerOrderID = color.BuyerOrderID;
+        vri.BuyerOrderItemID = color.BuyerOrderItemID;
+        vri.ColorID = color.ColorID;
+        vri.ColorName = color.ColorName;
+        vri.ColorFootQty = color.ColorFootQty;
+        vri.AirFootUnitPrice = color.AirFootUnitPrice;
+        vri.AirFootTotalPrice = color.AirFootTotalPrice;
+        vri.RoadFootUnitPrice = color.RoadFootUnitPrice;
+        vri.RoadFootTotalPrice = color.RoadFootTotalPrice;
+        vri.SeaFootUnitPrice = color.SeaFootUnitPrice;
+        vri.SeaFootTotalPrice = color.SeaFootTotalPrice;
+        vri.ColorMeterQty = color.ColorMeterQty;
+        vri.AirMeterUnitPrice = color.AirMeterUnitPrice;
+        vri.AirMeterTotalPrice = color.AirMeterTotalPrice;
+        vri.RoadMeterUnitPrice = color.RoadMeterUnitPrice;
+        vri.RoadMeterTotalPrice = color.RoadMeterTotalPrice;
+        vri.SeaMeterUnitPrice = color.SeaMeterUnitPrice;
+        vri.SeaMeterTotalPrice = color.SeaMeterTotalPrice;
+        itemColors.push(vri);
+        //ClearItemColor();
+    }
+
+    function gridDataSave() {
+        var itms = [];
+        if (currSlNo != 0) {
+            slNoCount++;
+        }
+        var gridItemSearch = $("#BuyerOrderItemGrid").data("kendoGrid");
+        var selectedItem = (gridItemSearch.dataItem(gridItemSearch.select()));
+
+        if (selectedItem != null) {
+
+            if (slNoCount > 1 || itemColors.length > 0) {
+                prevSlNo = currSlNo;
+                currSlNo = selectedItem.SlNo;
+            }
+            if (prevSlNo != currSlNo) {
+                var colorGrid = BuyerOrderItemColorGridDataSource.data();
+
+                if (colorGrid.length > 0) {
+                    if (itemColors.length > 0) {
+                        for (var j = 0; j < itemColors.length; j++) {
+                            if (itemColors[j].SlNo != prevSlNo /* && itemColors[j].SlNo2 == colorGrid[i].SlNo2 */) {
+                                itms.push(itemColors[j]);
+                            } 
+                        }
+                        if (itms.length > 0) {
+                            itemColors = [];
+                            itemColors = itms;
+                            for (var y = 0; y < colorGrid.length; y++) {
+                                insColor(colorGrid[y]);
+                            }
+                        }
+                       
+                    } else {
+                        for (var x = 0; x < colorGrid.length; x++) {
+                            insColor(colorGrid[x]);
+                        }
+                    }
+                }
+            }
+            $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data([]);
+            var showColor = [];
+            if (itemColors.length > 0) {
+                for (var k = 0; k < itemColors.length; k++) {
+                    if (currSlNo == itemColors[k].SlNo) {
+                        showColor.push(itemColors[k]);
+                    }
+                }
+            }
+            if (showColor.length > 0) {
+                $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data(showColor);
+            }
+        }
+    }
+
+    $("#BuyerOrderItemGrid").on('click', 'tr', function (e) {
+
+        gridDataSave();
+
+    });
+
+    //colorGrid.bind('change', grid_change);
+
+    //function grid_change(e) {
+    //    var gridItemSearch = $("#BuyerOrderItemColorGrid").data("kendoGrid");
+    //    var selectedItem = (gridItemSearch.dataItem(gridItemSearch.select()));
+    //    //var idx = selected.index();
+    //    //var col = $("th", this.thead).eq(idx).data("field");
+    //    console.log(e.sender);
+    //    //for(var i = 0; i<)
+    //}
+
+    //$("#BuyerOrderItemColorGrid").on('change', 'tr', function(e) {
+    //    console.log(this.select().closest("tr"));
+    //});
+
+    // ######################################## Buyer Order Item Grid Events End ######################################## //
+
+    // ######################################## Save & Update Events ######################################## //
+
+    function save() {
+        var itms = [];
+        ClearOrder();
+        ClearOrderItem();
+        ClearItemColor();
+
+        var colorData = BuyerOrderItemColorGridDataSource.data();
+        if (colorData.length > 0) {
+            for (var l = 0; l < itemColors.length; l++) {
+                if (itemColors[l].SlNo != colorData[0].SlNo  /*&& colorData[k].SlNo2 == itemColors[l].SlNo2*/) {
+                    itms.push(itemColors[l]);
+                }
+            }
+        }
+        if (itms.length > 0) {
+            itemColors = [];
+            itemColors = itms;
+        }
+
+        for (var m = 0; m < colorData.length; m++) {
+            itemColor.SlNo = colorData[m].SlNo;
+            itemColor.SlNo2 = colorData[m].SlNo2;
+            itemColor.BuyerOrdItemColorID = colorData[m].BuyerOrdItemColorID;
+            itemColor.BuyerOrderID = colorData[m].BuyerOrderID;
+            itemColor.BuyerOrderItemID = colorData[m].BuyerOrderItemID;
+            itemColor.ColorID = colorData[m].ColorID;
+            itemColor.ColorName = colorData[m].ColorName;
+            itemColor.ColorFootQty = colorData[m].ColorFootQty;
+            itemColor.AirFootUnitPrice = colorData[m].AirFootUnitPrice;
+            itemColor.AirFootTotalPrice = colorData[m].AirFootTotalPrice;
+            itemColor.RoadFootUnitPrice = colorData[m].RoadFootUnitPrice;
+            itemColor.RoadFootTotalPrice = colorData[m].RoadFootTotalPrice;
+            itemColor.SeaFootUnitPrice = colorData[m].SeaFootUnitPrice;
+            itemColor.SeaFootTotalPrice = colorData[m].SeaFootTotalPrice;
+            itemColor.ColorMeterQty = colorData[m].ColorMeterQty;
+            itemColor.AirMeterUnitPrice = colorData[m].AirMeterUnitPrice;
+            itemColor.AirMeterTotalPrice = colorData[m].AirMeterTotalPrice;
+            itemColor.RoadMeterUnitPrice = colorData[m].RoadMeterUnitPrice;
+            itemColor.RoadMeterTotalPrice = colorData[m].RoadMeterTotalPrice;
+            itemColor.SeaMeterUnitPrice = colorData[m].SeaMeterUnitPrice;
+            itemColor.SeaMeterTotalPrice = colorData[m].SeaMeterTotalPrice;
+            itemColors.push(itemColor);
+            ClearItemColor();
+        }
+        $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data([]);
+
+        order.BuyerOrderID = $('#txtBPOOrderId').val();
+        order.BuyerOrderNo = $('#txtBPOBuyerOrderNo').val();
+        order.BuyerOrderDate = $('#txtBPOBuyerOrderDate').val();
+        order.OrderFrom = $('#ddlBPOOrderFrom').val();
+        //txtBPOOrderNo
+        order.OrderNo = $('#txtBPOOrderNo').val();
+        order.OrderCurrency = $('#ddlBPOCurrency').val();
+        order.BuyerOrderCategory = $('#ddlBPOOrderCategory').val();
+        order.BuyerOrderStatus = $('#txtBPOOrderStatus').val();
+        order.BuyerID = $('#txtBPOBuyerId').val();
+        order.BuyerAddressID = $('#txtBPOBuyerAddressId').val();
+        order.BuyerLocalAgentID = $('#txtBPOLocalAgentId').val();
+        order.BuyerForeignAgentID = $('#txtBPOForeignAgentId').val();
+        order.BuyerRef = $('#txtBPOReference').val();
+        order.ExpectedShipmentDate = $('#txtBPOExpectedShipmentDate').val();
+        order.RevisionNo = $('#txtBPORevisionNo').val();
+        order.RevisionDate = $('#txtBPORevisionDate').val();
+        order.CheckNote = $('#txtBPOCheckNote').val();
+        order.ApprovalNote = $('#txtBPOConfirmNote').val();
+        order.TotalFootQty = $('#txtBPOTtlFtQty').val();
+        order.TotalMeterQty = $('#txtBPOTtlMtrQty').val();
+        order.OrderCurrency = $('#ddlBPOCurrency').val();
+        order.PriceLevel = $('#ddlBPOPriceLevel').val();
+        var itemGridData = BuyerOrderItemGridDataSource.data();
+        if (itemGridData.length > 0) {
+            for (var i = 0; i < itemGridData.length; i++) {
+                orderItem.BuyerOrderItemID = itemGridData[i].BuyerOrderItemID;
+                orderItem.BuyerOrderID = $('#txtBPOOrderId').val();
+                orderItem.commodity = itemGridData[i].commodity;
+                orderItem.HSCode = itemGridData[i].HSCode;
+                orderItem.ArticleID = itemGridData[i].ArticleID;
+                orderItem.ArticleNo = itemGridData[i].ArticleNo;
+                orderItem.ArticleChallanNo = itemGridData[i].ArticleChallanNo;
+                orderItem.AvgSize = itemGridData[i].AvgSize;
+                orderItem.AvgSizeUnit = itemGridData[i].AvgSizeUnit;
+                orderItem.AvgSizeUnitName = itemGridData[i].AvgSizeUnitName;
+                orderItem.SideDescription = itemGridData[i].SideDescription;
+                orderItem.SelectionRange = itemGridData[i].SelectionRange;
+                orderItem.Thickness = itemGridData[i].Thickness;
+                orderItem.ThicknessUnit = itemGridData[i].ThicknessUnit;
+                orderItem.ThicknessUnitName = itemGridData[i].ThicknessUnitName;
+                orderItem.ThicknessAt = itemGridData[i].ThicknessAt;
+                orderItem.ItemTypeID = itemGridData[i].ItemTypeID;
+                orderItem.LeatherTypeID = itemGridData[i].LeatherTypeID;
+                orderItem.LeatherStatusID = itemGridData[i].LeatherStatusID;
+                orderItem.ArticleFootQty = itemGridData[i].ArticleFootQty;
+                orderItem.AirFootUnitPrice = itemGridData[i].AirFootUnitPrice;
+                orderItem.AirFootTotalPrice = itemGridData[i].AirFootTotalPrice;
+                orderItem.RoadFootUnitPrice = itemGridData[i].RoadFootUnitPrice;
+                orderItem.RoadFootTotalPrice = itemGridData[i].RoadFootTotalPrice;
+                orderItem.SeaFootUnitPrice = itemGridData[i].SeaFootUnitPrice;
+                orderItem.SeaFootTotalPrice = itemGridData[i].SeaFootTotalPrice;
+                orderItem.ArticleMeterQty = itemGridData[i].ArticleMeterQty;
+                orderItem.AirMeterUnitPrice = itemGridData[i].AirMeterUnitPrice;
+                orderItem.AirMeterTotalPrice = itemGridData[i].AirMeterTotalPrice;
+                orderItem.RoadMeterUnitPrice = itemGridData[i].RoadMeterUnitPrice;
+                orderItem.RoadMeterTotalPrice = itemGridData[i].RoadMeterTotalPrice;
+                orderItem.SeaMeterUnitPrice = itemGridData[i].SeaMeterUnitPrice;
+                orderItem.SeaMeterTotalPrice = itemGridData[i].SeaMeterTotalPrice;
+
+
+                //console.log(itemColors);
+                if (itemColors.length > 0) {
+                    for (var j = 0; j < itemColors.length; j++) {
+                        if (itemGridData[i].SlNo == itemColors[j].SlNo) {
+                            itemColor.BuyerOrdItemColorID = itemColors[j].BuyerOrdItemColorID;
+                            itemColor.BuyerOrderID = itemColors[j].BuyerOrderID;
+                            itemColor.BuyerOrderItemID = itemColors[j].BuyerOrderItemID;
+                            itemColor.ColorID = itemColors[j].ColorID;
+                            itemColor.ColorFootQty = itemColors[j].ColorFootQty;
+                            itemColor.AirFootUnitPrice = itemColors[j].AirFootUnitPrice;
+                            itemColor.AirFootTotalPrice = itemColors[j].AirFootTotalPrice;
+                            itemColor.SeaFootUnitPrice = itemColors[j].SeaFootUnitPrice;
+                            itemColor.SeaFootTotalPrice = itemColors[j].SeaFootTotalPrice;
+                            itemColor.ColorMeterQty = itemColors[j].ColorMeterQty;
+                            itemColor.AirMeterUnitPrice = itemColors[j].AirMeterUnitPrice;
+                            itemColor.AirMeterTotalPrice = itemColors[j].AirMeterTotalPrice;
+                            itemColor.SeaMeterUnitPrice = itemColors[j].SeaMeterUnitPrice;
+                            itemColor.SeaMeterTotalPrice = itemColors[j].SeaMeterTotalPrice;
+                            orderItem.ItemColors.push(itemColor);
+                            ClearItemColor();
+                        }
+                    }
+                }
+
+                order.OrderItems.push(orderItem);
+                //ClearOrder();
+                ClearOrderItem();
+                //ClearItemColor();
+                slNoCount = 0;
+                prevSlNo = 0;
+                currSlNo = 0;
+                //itemColors = [];
+            }
+        }
+        var dlvryGrid = BuyerOrderDeliveryGridDataSource.data();
+        if (dlvryGrid != null) {
+            for (var o = 0; o < dlvryGrid.length; o++) {
+                ClearOrderDelivery();
+                orderDelivery.BuyerOrderDeliveryID = dlvryGrid[o].BuyerOrderDeliveryID;
+                orderDelivery.BuyerOrderID = $('#txtBPOOrderId').val();
+                orderDelivery.OrdDeliverySL = dlvryGrid[o].OrdDeliverySL;
+                orderDelivery.ArticleID = dlvryGrid[o].ArticleID;
+                orderDelivery.ColorID = dlvryGrid[o].ColorID;
+                orderDelivery.OrdDeliveryDate = dlvryGrid[o].OrdDeliveryDate;
+                orderDelivery.OrdDateFootQty = dlvryGrid[o].OrdDateFootQty;
+                orderDelivery.OrdDateMeterQty = dlvryGrid[o].OrdDateMeterQty;
+                order.OrderDelivery.push(orderDelivery);
+            }
+        }
+
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "BuyerPurcOrder")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: order }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    //$("#txtBPOOrderId").val(data.ReturnId);
+                    //$("#txtBPOOrderNo").val(data.ReturnCode);
+                    //getItems();
+                    SetBuyerOrder(data.ReturnId);
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                    ClearOrder();
+                } else if (data.Type == 3) {
+                    SetBuyerOrder(data.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                    ClearOrder();
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Failed to save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+
+    }
+
+    $('#btnSave').click(function () {
+
+        //if ($('#txtBPOBuyerOrderNo').val() != "") {
+            var check = doesDataSourceHaveChanges(BuyerOrderItemGridDataSource);
+            if (check == true) {
+                changeStatus = 1;
+            }
+            check = doesDataSourceHaveChanges(BuyerOrderItemColorGridDataSource);
+            if (check == true) {
+                changeStatus = 1;
+            }
+            if (changeStatus == 1) {
+                save();
+            } else {
+                $('#MessageText').html("No changes to save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        //} else {
+        //    $('#MessageText').html("Please input Buyer Order No.");
+        //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        //    $('#txtBPOBuyerOrderNo').css({ 'box-shadow': '1px 1px 1px red' });
+        //    setTimeout(function () {
+        //        $('#txtBPOBuyerOrderNo').focus();
+        //    }, 1);
+        //}
+    });
+
+    // ######################################## Save & Update Events End ######################################## //
+
+    // ######################################## Check Events ######################################## //
+
+    function Check() {
+        if ($('#txtBPOOrderId').val() != "") {
+            $("#divLoading").show();
+            var orderId = $('#txtBPOOrderId').val();
+            var comment = $('#txtBPOCheckNote').val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Check", "BuyerPurcOrder")',
+                dataType: 'JSON',
+                data: JSON.stringify({ orderId: orderId, comment: comment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Type == 2) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        changeStatus = 0;
+                    } else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 0;
+                    }
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $('#MessageText').html("Unknown error occured please try again later.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        } else {
+            $('#MessageText').html("Please save the order first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }
+
+    $('#btnCheck').click(function () {
+        if (changeStatus == 1) {
+            $('#MessageText').html("Please save changes you have made, to check the order.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Check();
+        }
+    });
+
+    // ######################################## Check Events End ######################################## //
+
+    // ######################################## Approve Events ######################################## //
+
+    function Confirm() {
+        if ($('#txtBPOOrderId').val() != "") {
+            $("#divLoading").show();
+            var orderId = $('#txtBPOOrderId').val();
+            var comment = $('#txtBPOCheckNote').val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Confirm", "BuyerPurcOrder")',
+                dataType: 'JSON',
+                data: JSON.stringify({ orderId: orderId, comment: comment }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Type == 2) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        saveStatus = 1;
+                        changeStatus = 0;
+                        CheckRecordStatusForButton("CNF");
+                        recordStatus = "CNF";
+                    } else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 0;
+                    }
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $('#MessageText').html("Unknown error occured please try again later.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        } else {
+            $('#MessageText').html("Please save the order first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }
+
+    $('#btnConfirm').click(function () {
+        if (changeStatus == 1) {
+            $('#MessageText').html("Please save changes you have made, to confirm the order.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Confirm();
+        }
+    });
+
+    // ######################################## Approve Events End ######################################## //
+
+    // ######################################## Delete Events ######################################## //
+
+    var DeleteWindow = $('#DeleteConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Delete Confirmation",
+        visible: false,
+        modal: true,
+        draggable: true,
+        position: { top: 300, left: 550 }
+    }).data('kendoWindow');
+
+    function Delete(id) {
+        var itms = [];
+        $("#divLoading").show();
+        var dsColor = BuyerOrderItemColorGridDataSource.data();
+        var deleteColor;
+        if (id != "") {
+            $.ajax({
+                url: '@Url.Action("Delete", "BuyerPurcOrder")',
+                type: 'GET',
+                data: ({ "orderId": id, "del": del }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 4) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 1;
+
+                        if (del == "all") {
+                            Reset();
+                        }
+                        if (del == "color") {
+                            $("#BuyerOrderItemColorGrid").data("kendoGrid").dataSource.remove(dataItem);
+                            //if (itemColors.length > 0) {
+                            //    for (var l = 0; l < itemColors.length; l++) {
+                            //        if (itemColors[l].SlNo == dataItem.SlNo && itemColors[l].SlNo2 == dataItem.SlNo2) {
+                            //            itemColors.pop(itemColors[l]);
+                            //        }
+                            //    }
+                            //}
+                            for (var l = 0; l < itemColors.length; l++) {
+                                if (itemColors[l].SlNo == dataItem.SlNo && itemColors[l].SlNo2 == dataItem.SlNo2) {
+
+                                } else {
+                                    itms.push(itemColors[l]);
+                                }
+                            }
+                            if (itms.length > 0) {
+                                itemColors = [];
+                                itemColors = itms;
+                            }
+                        }
+                        if (del == "item") {
+                            $("#BuyerOrderItemGrid").data("kendoGrid").dataSource.remove(dataItem);
+
+                            //if (dsColor.length > 0) {
+                            //    for (var i = 0; i < dsColor.length + 1; i++) {
+                            //        if (dsColor[i].SlNo == dataItem.SlNo) {
+                            //            deleteColor = dsColor[i];
+                            //            $("#BuyerOrderItemColorGrid").data("kendoGrid").dataSource.remove(deleteColor);
+                            //            deleteColor = "";
+                            //        }
+                            //    }
+                            //}
+                            $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data([]);
+                            if (itemColors.length > 0) {
+                                for (var k = 0; k < itemColors.length; k++) {
+                                    if (itemColors[k].SlNo != dataItem.SlNo) {
+                                        //itemColors.pop(itemColors[k]);
+                                        itms.push(itemColors[k]);
+                                    }
+                                }
+                                if (itms.length > 0) {
+                                    itemColors = [];
+                                    itemColors = itms;
+                                }
+                            }
+                        }
+                        if (del == "dlvry") {
+                            $("#BuyerOrderDeliveryGrid").data("kendoGrid").dataSource.remove(dataItem);
+                        }
+                        if (del == "price") {
+                            $("#BuyerOrderPriceGrid").data("kendoGrid").dataSource.remove(dataItem);
+                        }
+                    } else {
+                        $("#divLoading").hide();
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        del = "";
+                    }
+                    del = "";
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Unknown error occured please try again.");
+                    $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        } else {
+            if (del == "all") {
+                Reset();
+            }
+            if (del == "color") {
+                $("#BuyerOrderItemColorGrid").data("kendoGrid").dataSource.remove(dataItem);
+                if (itemColors.length > 0) {
+                    for (var n = 0; n < itemColors.length; n++) {
+                        var slno = itemColors[n].SlNo;
+                        var slno2 = itemColors[n].SlNo2;
+                        if (itemColors[n].SlNo == dataItem.SlNo && itemColors[n].SlNo2 == dataItem.SlNo2) {
+
+                        } else {
+                            itms.push(itemColors[n]);
+                        }
+                    }
+                    if (itms.length > 0) {
+                        itemColors = [];
+                        itemColors = itms;
+                    }
+                }
+            }
+            if (del == "item") {
+                $("#BuyerOrderItemGrid").data("kendoGrid").dataSource.remove(dataItem);
+                //if (dsColor.length > 0) {
+                //    for (var j = 0; j < dsColor.length + 1; j++) {
+                //        if (dsColor[j].SlNo == dataItem.SlNo) {
+                //            deleteColor = dsColor[j];
+                //            $("#BuyerOrderItemColorGrid").data("kendoGrid").dataSource.remove(deleteColor);
+                //            deleteColor = "";
+                //        }
+                //    }
+                //}
+                $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data([]);
+                if (itemColors.length > 0) {
+                    for (var m = 0; m < itemColors.length; m++) {
+                        if (itemColors[m].SlNo != dataItem.SlNo) {
+                            //itemColors.pop(itemColors[m]);
+                            itms.push(itemColors[m]);
+                        }
+                    }
+                    if (itms.length > 0) {
+                        itemColors = [];
+                        itemColors = itms;
+                    }
+                }
+            }
+            if (del == "dlvry") {
+                $("#BuyerOrderDeliveryGrid").data("kendoGrid").dataSource.remove(dataItem);
+            }
+            if (del == "price") {
+                $("#BuyerOrderPriceGrid").data("kendoGrid").dataSource.remove(dataItem);
+            }
+        }
+        $("#divLoading").hide();
+    }
+    function DeleteItem() {
+        if (recordStatus == "CNF" || recordStatus == "ACK") {
+
+        } else {
+            del = "item";
+            DeleteWindow.open();
+
+            var grid = $("#BuyerOrderItemGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select()));
+        }
+    };
+    function DeleteColor() {
+        if (recordStatus == "CNF" || recordStatus == "ACK") {
+
+        } else {
+            del = "color";
+            DeleteWindow.open();
+            DeleteWindow.center();
+            var grid = $("#BuyerOrderItemColorGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select()));
+        }
+
+    };
+
+    function DeleteDelivery() {
+        if (recordStatus == "CNF" || recordStatus == "ACK") {
+
+        } else {
+            del = "dlvry";
+            DeleteWindow.open();
+            DeleteWindow.center();
+            var grid = $("#BuyerOrderDeliveryGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select()));
+        }
+    }
+
+    function DeletePrice() {
+        if (recordStatus == "CNF" || recordStatus == "ACK") {
+
+        } else {
+            del = "price";
+            DeleteWindow.open();
+            DeleteWindow.center();
+            var grid = $("#BuyerOrderPriceGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select()));
+        }
+    }
+
+    $('#btnDelete').click(function () {
+        if (recordStatus != "CNF" || recordStatus != "ACK") {
+            if ($('#txtBPOOrderId').val() != "") {
+                del = "all";
+                DeleteWindow.open();
+                DeleteWindow.center();
+            }
+        }
+    });
+
+    $('#btnDeleteConfirmationOK').click(function () {
+        var id;
+        if (del == 'item') {
+            id = dataItem.BuyerOrderItemID;
+        }
+        if (del == 'color') {
+            id = dataItem.BuyerOrdItemColorID;
+        }
+        if (del == "all") {
+            id = $('#txtBPOOrderId').val();
+        }
+        if (del == "dlvry") {
+            id = dataItem.BuyerOrderDeliveryID;
+        }
+        if (del == "price") {
+            id = $('#txtBPOOrderId').val();
+        }
+        Delete(id);
+        DeleteWindow.close();
+    });
+
+    $('#btnDeleteConfirmationCancel').click(function () {
+        DeleteWindow.close();
+    });
+
+    // ######################################## Delete Events End ######################################## //
+
+    // ######################################## Search Events ######################################## //
+    function SetBuyerOrder(orderId) {
+        ClearOrder();
+        ClearOrderItem();
+        ClearOrderDelivery();
+        ClearOrderPrice();
+        ClearItemColor();
+        var items = []; var colors = [];
+        $.ajax({
+            url: '@Url.Action("GetBuyerOrderById", "BuyerPurcOrder")',
+            type: 'GET',
+            data: ({ "orderId": orderId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $('#txtBPOOrderId').val(data.BuyerOrderID);
+                    $('#txtBPOBuyerOrderNo').val(data.BuyerOrderNo);
+                    $('#txtBPOOrderNo').val(data.OrderNo);
+                    $('#txtBPOBuyerOrderDate').val(data.BuyerOrderDate);
+                    $('#ddlBPOOrderFrom').val(data.OrderFrom);
+                    $('#ddlBPOCurrency').val(data.OrderCurrency);
+                    $('#ddlBPOOrderCategory').val(data.BuyerOrderCategory);
+                    $('#txtBPOOrderStatus').val(data.BuyerOrderStatus);
+                    $('#txtBPOBuyerId').val(data.BuyerID);
+                    $('#txtBPOBuyerName').val(data.BuyerName);
+                    $('#txtBPOBuyerAddressId').val(data.BuyerAddressID);
+                    $('#txtBPOBuyerAddress').val(data.BuyerAddress);
+                    $('#txtBPOLocalAgentId').val(data.BuyerLocalAgentID);
+                    $('#txtBPOLocalAgentName').val(data.LocalAgentName);
+                    $('#txtBPOForeignAgentId').val(data.BuyerForeignAgentID);
+                    $('#txtBPOForeignAgentName').val(data.ForeignAgentName);
+                    $('#txtBPOReference').val(data.BuyerRef);
+                    $('#txtBPOExpectedShipmentDate').val(data.ExpectedShipmentDate);
+                    $('#txtBPORevisionNo').val(data.RevisionNo);
+                    $('#txtBPORevisionDate').val(data.RevisionDate);
+                    $('#txtBPOCheckNote').val(data.CheckNote);
+                    $('#txtBPOConfirmNote').val(data.ApprovalNote);
+                    $('#txtBPOTtlFtQty').val(data.TotalFootQty);
+                    $('#txtBPOTtlMtrQty').val(data.TotalMeterQty);
+                    $('#ddlBPOPriceLevel').val(data.PriceLevel);
+                    recordStatus = data.RecordStatus;
+                    CheckRecordStatusForButton(recordStatus);
+                    BuyerOrderDeliveryGridDataSource.data(data.OrderDelivery);
+                    //BuyerOrderPriceGridDataSource.data(data.OrderPrices);
+                    itemColors = [];
+                    var count = data.OrderItems.length;
+                    if (data.OrderItems != null) {
+                        for (var i = 0; i < count; i++) {
+                            ClearOrderItem();
+                            orderItem.SlNo = i + 1;
+                            orderItem.BuyerOrderItemID = data.OrderItems[i].BuyerOrderItemID;
+                            orderItem.BuyerOrderID = data.OrderItems[i].BuyerOrderID;
+                            orderItem.commodity = data.OrderItems[i].commodity;
+                            orderItem.HSCode = data.OrderItems[i].HSCode;
+                            orderItem.ArticleID = data.OrderItems[i].ArticleID;
+                            orderItem.ArticleName = data.OrderItems[i].ArticleName;
+                            orderItem.ArticleNo = data.OrderItems[i].ArticleNo;
+                            orderItem.AvgSize = data.OrderItems[i].AvgSize;
+                            orderItem.AvgSizeUnit = data.OrderItems[i].AvgSizeUnit;
+                            orderItem.AvgSizeUnitName = data.OrderItems[i].AvgSizeUnitName;
+                            orderItem.SideDescription = data.OrderItems[i].SideDescription;
+                            orderItem.SelectionRange = data.OrderItems[i].SelectionRange;
+                            orderItem.Thickness = data.OrderItems[i].Thickness;
+                            orderItem.ThicknessUnit = data.OrderItems[i].ThicknessUnit;
+                            orderItem.ThicknessUnitName = data.OrderItems[i].ThicknessUnitName;
+                            orderItem.ThicknessAt = data.OrderItems[i].ThicknessAt;
+                            orderItem.ItemTypeID = data.OrderItems[i].ItemTypeID;
+                            orderItem.ItemTypeName = data.OrderItems[i].ItemTypeName;
+                            orderItem.LeatherTypeID = data.OrderItems[i].LeatherTypeID;
+                            orderItem.LeatherTypeName = data.OrderItems[i].LeatherTypeName;
+                            orderItem.LeatherStatusID = data.OrderItems[i].LeatherStatusID;
+                            orderItem.LeatherStatusName = data.OrderItems[i].LeatherStatusName;
+                            orderItem.ArticleFootQty = data.OrderItems[i].ArticleFootQty;
+                            orderItem.AirFootUnitPrice = data.OrderItems[i].AirFootUnitPrice;
+                            orderItem.AirFootTotalPrice = data.OrderItems[i].AirFootTotalPrice;
+                            orderItem.RoadFootUnitPrice = data.OrderItems[i].RoadFootUnitPrice;
+                            orderItem.RoadFootTotalPrice = data.OrderItems[i].RoadFootTotalPrice;
+                            orderItem.SeaFootUnitPrice = data.OrderItems[i].SeaFootUnitPrice;
+                            orderItem.SeaFootTotalPrice = data.OrderItems[i].SeaFootTotalPrice;
+                            orderItem.ArticleMeterQty = data.OrderItems[i].ArticleMeterQty;
+                            orderItem.AirMeterUnitPrice = data.OrderItems[i].AirMeterUnitPrice;
+                            orderItem.AirMeterTotalPrice = data.OrderItems[i].AirMeterTotalPrice;
+                            orderItem.RoadMeterUnitPrice = data.OrderItems[i].RoadMeterUnitPrice;
+                            orderItem.RoadMeterTotalPrice = data.OrderItems[i].RoadMeterTotalPrice;
+                            orderItem.SeaMeterUnitPrice = data.OrderItems[i].SeaMeterUnitPrice;
+                            orderItem.SeaMeterTotalPrice = data.OrderItems[i].SeaMeterTotalPrice;
+                            if (data.OrderItems[i].ItemColors != null) {
+                                var count2 = data.OrderItems[i].ItemColors.length;
+                                for (var j = 0; j < count2; j++) {
+                                    ClearItemColor();
+                                    itemColor.SlNo = orderItem.SlNo;
+                                    itemColor.SlNo2 = j + 1;
+                                    itemColor.BuyerOrdItemColorID = data.OrderItems[i].ItemColors[j].BuyerOrdItemColorID;
+                                    itemColor.BuyerOrderItemID = data.OrderItems[i].ItemColors[j].BuyerOrderItemID;
+                                    itemColor.BuyerOrderID = data.OrderItems[i].ItemColors[j].BuyerOrderID;
+                                    itemColor.ColorID = data.OrderItems[i].ItemColors[j].ColorID;
+                                    itemColor.ColorName = data.OrderItems[i].ItemColors[j].ColorName;
+                                    itemColor.ColorFootQty = data.OrderItems[i].ItemColors[j].ColorFootQty;
+                                    itemColor.AirFootUnitPrice = data.OrderItems[i].ItemColors[j].AirFootUnitPrice;
+                                    itemColor.AirFootTotalPrice = data.OrderItems[i].ItemColors[j].AirFootTotalPrice;
+                                    itemColor.RoadFootUnitPrice = data.OrderItems[i].ItemColors[j].RoadFootUnitPrice;
+                                    itemColor.RoadFootTotalPrice = data.OrderItems[i].ItemColors[j].RoadFootTotalPrice;
+                                    itemColor.SeaFootUnitPrice = data.OrderItems[i].ItemColors[j].SeaFootUnitPrice;
+                                    itemColor.SeaFootTotalPrice = data.OrderItems[i].ItemColors[j].SeaFootTotalPrice;
+                                    itemColor.ColorMeterQty = data.OrderItems[i].ItemColors[j].ColorMeterQty;
+                                    itemColor.AirMeterUnitPrice = data.OrderItems[i].ItemColors[j].AirMeterUnitPrice;
+                                    itemColor.AirMeterTotalPrice = data.OrderItems[i].ItemColors[j].AirMeterTotalPrice;
+                                    itemColor.RoadMeterUnitPrice = data.OrderItems[i].ItemColors[j].RoadMeterUnitPrice;
+                                    itemColor.RoadMeterTotalPrice = data.OrderItems[i].ItemColors[j].RoadMeterTotalPrice;
+                                    itemColor.SeaMeterUnitPrice = data.OrderItems[i].ItemColors[j].SeaMeterUnitPrice;
+                                    itemColor.SeaMeterTotalPrice = data.OrderItems[i].ItemColors[j].SeaMeterTotalPrice;
+                                    itemColors.push(itemColor);
+                                }
+                            }
+                            items.push(orderItem);
+                        }
+                        BuyerOrderItemGridDataSource.data(items);
+                    }
+                }
+            }
+        });
+    }
+
+    function GetOrderId() {
+        var gridBuyerOrderSearch = $("#BuyerOrderWindowGrid").data("kendoGrid");
+        var selectedBuyerOrderGridRow = (gridBuyerOrderSearch.dataItem(gridBuyerOrderSearch.select()));
+        SetBuyerOrder(selectedBuyerOrderGridRow.BuyerOrderID);
+    }
+
+    $('#btnSearch').click(function () {
+        $('#BuyerOrderWindowGrid').data('kendoGrid').dataSource.read();
+        $("#txtOrderNo").val("");
+        BuyerOrderWindow.open();
+        BuyerOrderWindow.center();
+    });
+
+    $('#btnBuyerOrderWindowOK').click(function () {
+        GetOrderId();
+        BuyerOrderWindow.close();
+    });
+
+    $('#BuyerOrderWindowGrid').dblclick(function () {
+        GetOrderId();
+        BuyerOrderWindow.close();
+    });
+
+    $('#BuyerOrderWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            GetOrderId();
+            BuyerOrderWindow.close();
+        }
+    });
+
+    $('#btnBuyerOrderWindowCancel').click(function () {
+        BuyerOrderWindow.close();
+    });
+
+    // ######################################## Search Events End ######################################## //
+
+
+    // ######################################## Variables ######################################## //
+
+    var rowAdd = 0; var msgShow = 0; var changeStatus = 0; var saveStatus = 0; var del = ""; var dataItem; var recordStatus = "";
+    var rowAdd2 = 0;
+    var prevSlNo = 0;
+    var currSlNo = 0;
+    var slNoCount = 0;
+    var foot = 0;
+    var meter = 0;
+    var art = "";
+    var col = "";
+    var order = {
+        "BuyerOrderID": "", "BuyerOrderNo": "", "BuyerOrderDate": "", "BuyerOrderCategory": "", "BuyerOrderStatus": "",
+        "AcknowledgementStatus": "", "BuyerID": "", "BuyerName": "", "BuyerAddressID": "", "BuyerAddress": "",
+        "BuyerLocalAgentID": "", "LocalAgentName": "", "BuyerForeignAgentID": "", "ForeignAgentName": "", "BuyerRef": "",
+        "ExpectedShipmentDate": "", "ProposedShipmentDate": "", "DeliveryLastDate": "", "ExpectedProdStartDate": "",
+        "RevisionNo": "", "RevisionDate": "", "RecordStatus": "", "OrderCurrency": "", "OrderNo": "", "TotalFootQty": "",
+        "TotalMeterQty": "", "PriceLevel": "", "OrderItems": [], "OrderDelivery": [], "OrderPrices": []
+    };
+
+    function ClearOrder() {
+        order = {
+            "BuyerOrderID": "", "BuyerOrderNo": "", "BuyerOrderDate": "", "BuyerOrderCategory": "", "BuyerOrderStatus": "",
+            "AcknowledgementStatus": "", "BuyerID": "", "BuyerName": "", "BuyerAddressID": "", "BuyerAddress": "",
+            "BuyerLocalAgentID": "", "LocalAgentName": "", "BuyerForeignAgentID": "", "ForeignAgentName": "", "BuyerRef": "",
+            "ExpectedShipmentDate": "", "ProposedShipmentDate": "", "DeliveryLastDate": "", "ExpectedProdStartDate": "",
+            "RevisionNo": "", "RevisionDate": "", "RecordStatus": "", "OrderCurrency": "", "OrderNo": "", "TotalFootQty": "",
+            "TotalMeterQty": "", "PriceLevel": "", "OrderItems": [], "OrderDelivery": [], "OrderPrices": []
+        };
+    }
+
+    var orderItem = {
+        "SlNo": "", "BuyerOrderItemID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleName": "", "ArticleNo": "",
+        "ArticleChallanNo": "", "AvgSize": "", "AvgSizeUnit": "", "AvgSizeUnitName": "", "SideDescription": "",
+        "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessUnitName": "", "ThicknessAt": "",
+        "commodity": "", "HSCode": "", "ItemTypeID": "", "ItemTypeName": "", "LeatherTypeID": "", "LeatherTypeName": "",
+        "LeatherStatusID": "", "LeatherStatusName": "", "ArticleFootQty": "", "AirFootUnitPrice": "", "AirFootTotalPrice": "",
+        "RoadFootUnitPrice": "", "RoadFootTotalPrice": "", "SeaFootUnitPrice": "", "SeaFootTotalPrice": "",
+        "ArticleMeterQty": "", "SeaMeterUnitPrice": "", "SeaMeterTotalPrice": "", "AirMeterUnitPrice": "",
+        "AirMeterTotalPrice": "", "RoadMeterUnitPrice": "", "RoadMeterTotalPrice": "", "ItemColors": []
+    };
+
+    function ClearOrderItem() {
+        orderItem = {
+            "SlNo": "", "BuyerOrderItemID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleName": "", "ArticleNo": "",
+            "ArticleChallanNo": "", "AvgSize": "", "AvgSizeUnit": "", "AvgSizeUnitName": "", "SideDescription": "",
+            "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessUnitName": "", "ThicknessAt": "",
+            "commodity": "", "HSCode": "", "ItemTypeID": "", "ItemTypeName": "", "LeatherTypeID": "", "LeatherTypeName": "",
+            "LeatherStatusID": "", "LeatherStatusName": "", "ArticleFootQty": "", "AirFootUnitPrice": "", "AirFootTotalPrice": "",
+            "RoadFootUnitPrice": "", "RoadFootTotalPrice": "", "SeaFootUnitPrice": "", "SeaFootTotalPrice": "",
+            "ArticleMeterQty": "", "SeaMeterUnitPrice": "", "SeaMeterTotalPrice": "", "AirMeterUnitPrice": "",
+            "AirMeterTotalPrice": "", "RoadMeterUnitPrice": "", "RoadMeterTotalPrice": "", "ItemColors": []
+        };
+    }
+
+    var itemColors = [];
+
+    var itemColor = {
+        "SlNo": "", "SlNo2": "", "BuyerOrdItemColorID": "", "BuyerOrderID": "", "BuyerOrderItemID": "", "ColorID": "",
+        "ColorName": "", "ColorFootQty": "", "AirFootUnitPrice": "", "AirFootTotalPrice": "", "RoadFootUnitPrice": "",
+        "RoadFootTotalPrice": "", "SeaFootUnitPrice": "", "SeaFootTotalPrice": "", "ColorFootTotalPrice": "",
+        "ColorMeterQty": "", "AirMeterUnitPrice": "", "AirMeterTotalPrice": "", "RoadMeterUnitPrice": "",
+        "RoadMeterTotalPrice": "", "SeaMeterUnitPrice": "", "SeaMeterTotalPrice": "", "ColorMeterTotalPrice": ""
+    };
+
+    function ClearItemColor() {
+        itemColor = {
+            "SlNo": "", "SlNo2": "", "BuyerOrdItemColorID": "", "BuyerOrderID": "", "BuyerOrderItemID": "", "ColorID": "",
+            "ColorName": "", "ColorFootQty": "", "AirFootUnitPrice": "", "AirFootTotalPrice": "", "RoadFootUnitPrice": "",
+            "RoadFootTotalPrice": "", "SeaFootUnitPrice": "", "SeaFootTotalPrice": "", "ColorFootTotalPrice": "",
+            "ColorMeterQty": "", "AirMeterUnitPrice": "", "AirMeterTotalPrice": "", "RoadMeterUnitPrice": "",
+            "RoadMeterTotalPrice": "", "SeaMeterUnitPrice": "", "SeaMeterTotalPrice": "", "ColorMeterTotalPrice": ""
+        };
+    }
+
+    var orderDelivery = [];
+
+    var orderDelivery = {
+        "BuyerOrderDeliveryID": "", "BuyerOrderID": "", "OrdDeliverySL": "", "OrdDeliveryDate": "", "OrdDateFootQty": "",
+        "OrdDateMeterQty": "", "PIDeliverySL": "", "PIDeliveryDate": "", "PIDateFootQty": "", "PIDateMeterQty": "",
+        "ArticleID": "", "ArticleFootQty": "", "ArticleMeterQty": "", "ColorID": "", "ColorFootQty": "", "ColorMeterQty": ""
+    };
+
+    function ClearOrderDelivery() {
+        orderDelivery = {
+            "BuyerOrderDeliveryID": "", "BuyerOrderID": "", "OrdDeliverySL": "", "OrdDeliveryDate": "", "OrdDateFootQty": "",
+            "OrdDateMeterQty": "", "PIDeliverySL": "", "PIDeliveryDate": "", "PIDateFootQty": "", "PIDateMeterQty": "",
+            "ArticleID": "", "ArticleFootQty": "", "ArticleMeterQty": "", "ColorID": "", "ColorFootQty": "", "ColorMeterQty": ""
+        };
+    }
+
+    var orderPrice = [];
+
+    var orderPrice = {
+        "BuyerOrderPriceID": "", "BuyerOrderID": "", "OrdDeliveryMode": "", "OrdRefDeliverySL": "",
+        "OrdAverageUnitPrice": "", "OrdDeliveryModeNote": "", "PIDeliveryMode": "", "PIRefDeliverySL": "",
+        "PIAverageUnitPrice": "", "PIDeliveryModeNote": "", "ArticleID": "", "ArticleName": "", "ArticleFootQty": "",
+        "ArticleFootUnitPrice": "", "ArticleFootTotalPrice": "", "ArticleMeterQty": "", "ArticleMeterUnitPrice": "",
+        "ArticleMeterTotalPrice": "", "ColorID": "", "ColorName": "", "ColorFootQty": "", "ColorFootUnitPrice": "",
+        "ColorFootTotalPrice": "", "ColorMeterQty": "", "ColorMeterUnitPrice": "", "ColorMeterTotalPrice": "", "Remarks": ""
+    };
+
+    function ClearOrderPrice() {
+        orderPrice = {
+            "BuyerOrderPriceID": "", "BuyerOrderID": "", "OrdDeliveryMode": "", "OrdRefDeliverySL": "",
+            "OrdAverageUnitPrice": "", "OrdDeliveryModeNote": "", "PIDeliveryMode": "", "PIRefDeliverySL": "",
+            "PIAverageUnitPrice": "", "PIDeliveryModeNote": "", "ArticleID": "", "ArticleName": "", "ArticleFootQty": "",
+            "ArticleFootUnitPrice": "", "ArticleFootTotalPrice": "", "ArticleMeterQty": "", "ArticleMeterUnitPrice": "",
+            "ArticleMeterTotalPrice": "", "ColorID": "", "ColorName": "", "ColorFootQty": "", "ColorFootUnitPrice": "",
+            "ColorFootTotalPrice": "", "ColorMeterQty": "", "ColorMeterUnitPrice": "", "ColorMeterTotalPrice": "", "Remarks": ""
+        };
+    }
+    //"":"",
+
+    // ######################################## Variables End ######################################## //
+
+    // ######################################## Reset ######################################## //
+
+    var SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Confirmation!",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function Reset() {
+
+        $(".txtField").val(""); $(".txtArea").val("");
+        $("#BuyerOrderItemColorGrid").data('kendoGrid').dataSource.data([]);
+        $("#BuyerOrderItemGrid").data('kendoGrid').dataSource.data([]);
+        $("#BuyerOrderDeliveryGrid").data('kendoGrid').dataSource.data([]);
+        //$("#BuyerOrderPriceGrid").data('kendoGrid').dataSource.data([]);
+        changeStatus = 0; saveStatus = 0;
+        $(".dDown").val(""); $('#txtBPOBuyerOrderNo').css({ 'box-shadow': 'none' });
+        $("#ddlBPOOrderCategory").val("FRN");
+        rowAdd = 0;
+        recordStatus = "";
+        slNoCount = 0;
+        prevSlNo = 0;
+        currSlNo = 0;
+        meter = 0;
+        foot = 0;
+        ftChng = 0;
+        mtChng = 0;
+        art = "";
+        col = "";
+        itemColors = [];
+        BuyerOrderGridDataSource.read();
+        CheckRecordStatusForButton(recordStatus);
+        ClearOrder();
+        ClearOrderItem();
+        ClearItemColor();
+        ClearOrderDelivery();
+        //ClearOrderPrice();
+    }
+
+    $('#btnReset').click(function () {
+        if (changeStatus == 1) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            Reset();
+        }
+    });
+
+    $('#btnSaveChangeWindowOk').click(function () {
+        Reset();
+        SaveChangeWindow.close();
+    });
+
+    $('#btnSaveChangeWindowCancel').click(function () {
+        SaveChangeWindow.close();
+    });
+
+    // ######################################## Reset End ######################################## //
+
+    // ######################################## Detect Changes ######################################## //
+
+    function doesDataSourceHaveChanges(ds) {
+        var dirty = false;
+        $.each(ds._data, function () {
+            if (this.dirty == true) { dirty = true; }
+        });
+        if (ds._destroyed.length > 0) dirty = true;
+        return dirty;
+    }
+
+    $('.txtField').change(function () {
+        changeStatus = 1;
+    });
+    $('.dDown').change(function () {
+        changeStatus = 1;
+    });
+    CheckRecordStatusForButton(recordStatus);
+    ClearOperationalMessage();
+    // ######################################## Detect Changes End ######################################## //
+
+    // ######################################## Pop Window Text box Search ######################################## //
+
+    // ************ Buyer pop-up window text-box search End ************ //
+
+    var dataSourceBuyer = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBuyerListForSearch", "BuyerPurcOrder")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtBuyerName").kendoAutoComplete({
+        dataSource: dataSourceBuyer,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search buyer..."
+    });
+
+    $("#btnBuyerGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetBuyerList", "BuyerPurcOrder")',
+            type: 'GET',
+            data: { buyer: $("#txtBuyerName").val() },
+            success: function (data) {
+                $("#BuyerWindowGrid").data("kendoGrid").dataSource.data(data.BuyerList);
+
+            }
+        });
+    });
+    $("#txtBuyerName").keyup(function (event) {
+        if ($("#txtBuyerName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetBuyerList", "BuyerPurcOrder")',
+                    type: 'GET',
+                    data: { buyer: $("#txtBuyerName").val() },
+                    success: function (data) {
+                        $("#BuyerWindowGrid").data("kendoGrid").dataSource.data(data.BuyerList);
+
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Buyer pop-up window text-box search End ************ //
+
+    // ************ Local Agent pop-up window text-box search End ************ //
+
+    var dataSourceLocAgnt = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLocalAgentListForSearch", "BuyerPurcOrder")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtLocalAgentName").kendoAutoComplete({
+        dataSource: dataSourceLocAgnt,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search agent..."
+    });
+
+    $("#btnLocalAgentGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetLocalAgentList", "BuyerPurcOrder")',
+            type: 'GET',
+            data: { lAgent: $("#txtLocalAgentName").val() },
+            success: function (data) {
+                $("#LocalAgentWindowGrid").data("kendoGrid").dataSource.data(data.AgentList);
+
+            }
+        });
+    });
+    $("#txtLocalAgentName").keyup(function (event) {
+        if ($("#txtLocalAgentName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetLocalAgentList", "BuyerPurcOrder")',
+                    type: 'GET',
+                    data: { lAgent: $("#txtLocalAgentName").val() },
+                    success: function (data) {
+                        $("#LocalAgentWindowGrid").data("kendoGrid").dataSource.data(data.AgentList);
+
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Local Agent pop-up window text-box search End ************ //
+
+    // ************ Foreign Agent pop-up window text-box search End ************ //
+
+    var dataSourceFrgnAgnt = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetForeignAgentListForSearch", "BuyerPurcOrder")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtForeignAgentName").kendoAutoComplete({
+        dataSource: dataSourceFrgnAgnt,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search agent..."
+    });
+
+    $("#btnForeignAgentGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetForeignAgentList", "BuyerPurcOrder")',
+            type: 'GET',
+            data: { lAgent: $("#txtForeignAgentName").val() },
+            success: function (data) {
+                $("#ForeignAgentWindowGrid").data("kendoGrid").dataSource.data(data);
+
+            }
+        });
+    });
+    $("#txtForeignAgentName").keyup(function (event) {
+        if ($("#txtForeignAgentName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetLocalAgentList", "BuyerPurcOrder")',
+                    type: 'GET',
+                    data: { lAgent: $("#txtForeignAgentName").val() },
+                    success: function (data) {
+                        $("#ForeignAgentWindowGrid").data("kendoGrid").dataSource.data(data);
+
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Foreign Agent pop-up window text-box search End ************ //
+
+    // ************ Article pop-up window text-box search ************ //
+
+    var dataSourceArticle = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetArticleForSearch", "BuyerPurcOrder")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtArticleName").kendoAutoComplete({
+        dataSource: dataSourceArticle,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search article..."
+    });
+
+    $("#btnArticleGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetArticleList", "BuyerPurcOrder")',
+            type: 'GET',
+            data: { article: $("#txtArticleName").val() },
+            success: function (data) {
+                $("#ArticleWindowGrid").data("kendoGrid").dataSource.data(data.ArticleList);
+
+            }
+        });
+    });
+    $("#txtArticleName").keyup(function (event) {
+        if ($("#txtArticleName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetArticleList", "BuyerPurcOrder")',
+                    type: 'GET',
+                    data: { article: $("#txtArticleName").val() },
+                    success: function (data) {
+                        $("#ArticleWindowGrid").data("kendoGrid").dataSource.data(data.ArticleList);
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Article pop-up window text-box search End ************ //
+
+    // ************ Color pop-up window text-box search ************ //
+
+    var dataSourceColor = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetColorForSearch", "BuyerPurcOrder")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtColorsName").kendoAutoComplete({
+        dataSource: dataSourceColor,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search color..."
+    });
+
+    $("#btnColorsGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetColorList", "BuyerPurcOrder")',
+            type: 'GET',
+            data: { color: $("#txtColorsName").val() },
+            success: function (data) {
+                $("#ColorsWindowGrid").data("kendoGrid").dataSource.data(data.ColorList);
+
+            }
+        });
+    });
+    $("#txtColorsName").keyup(function (event) {
+        if ($("#txtColorsName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetColorList", "BuyerPurcOrder")',
+                    type: 'GET',
+                    data: { color: $("#txtColorsName").val() },
+                    success: function (data) {
+                        $("#ColorsWindowGrid").data("kendoGrid").dataSource.data(data.ColorList);
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Article pop-up window text-box search End ************ //
+
+    // ######################################## Pop Window Text box Search End ######################################## //
+
+    // ######################################## Unit Conversion ######################################## //
+    var ftChng = 0;
+    var mtChng = 0;
+    $("#txtBPOTtlFtQty").change(function () {
+        ftChng = 1;
+    });
+
+    $("#txtBPOTtlMtrQty").change(function () {
+        mtChng = 1;
+    });
+
+
+    $("#txtBPOTtlFtQty").focusout(function () {
+        var ftQtyChk = numChk("txtBPOTtlFtQty");
+        if (ftQtyChk == 0) {
+            if (foot == 0 || ftChng == 1) {
+                foot = $("#txtBPOTtlFtQty").val();
+                meter = FootToMeterConversion(foot);
+            }
+            var showMeter = meter;
+            $("#txtBPOTtlMtrQty").val(showMeter.toFixed(2));
+            ftChng = 0;
+            mtChng = 0;
+        }
+    });
+
+
+    $("#txtBPOTtlMtrQty").focusout(function () {
+        var mtQtyChk = numChk("txtBPOTtlMtrQty");
+        if (mtQtyChk == 0) {
+            if (foot == 0 || mtChng == 1) {
+                meter = $("#txtBPOTtlMtrQty").val();
+                foot = MeterToFootConversion(meter);
+            }
+            var showFoot = foot;
+            $("#txtBPOTtlFtQty").val(showFoot.toFixed(2));
+            ftChng = 0;
+            mtChng = 0;
+        }
+    });
+
+    // ######################################## Unit Conversion End ######################################## //
+
+    // ######################################## Buyer Order No. Check ######################################## //
+    //$("#txtBPOBuyerOrderNo").focusout(function () {
+    //    var orderNo = $(this).val();
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: '@Url.Action("CheckUniqueOrderNo", "BuyerPurcOrder")',
+    //        data: { orderNo: orderNo },
+    //        cache: false,
+    //        async: false,
+    //        success: function (data) {
+    //            if (data == true) {
+    //                $("#MessageText").html("Login ID is not available.");
+    //                $("#MessageText").css({ 'color': "red" });
+                    //$("#isExistUser").val("1");
+    //            } else {
+    //                $("#MessageText").html("");
+    //                $("#MessageText").css({ 'color': "green" });
+                    //$("#isExistUser").val("0");
+    //            }
+    //        },
+    //        error: function () {
+                //showMessage('Connection error.', 'error', 'Error!');
+    //        }
+    //    });
+    //});
+    // ######################################## Buyer Order No. Check End ######################################## //
+
+    // ************ Buyer Order Search Window Auto Complete Event ************ //
+
+    var dataSource2 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetOrderListForSearch", "BuyerPurcOrder")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtOrderNo").kendoAutoComplete({
+        dataSource: dataSource2,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Buyer Order..."
+    });
+
+    function GetOrderForSearch() {
+        $.ajax({
+            url: '@Url.Action("GetOrderForSearch", "BuyerPurcOrder")',
+            type: 'GET',
+            data: { orderNo: $("#txtOrderNo").val() },
+            success: function (data) {
+                BuyerOrderGridDataSource.data(data);
+                
+            }
+        });
+    }
+
+    $('#btnBuyerOrderGridSearch').click(function () {
+        GetOrderForSearch();
+    });
+
+
+    $("#txtOrderNo").keyup(function (event) {
+        if ($("#txtOrderNo").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                GetOrderForSearch();
+            }
+        }
+    });
+
+    // ************ Buyer Order Search Window Auto Complete Event End ************ //
+
+</script>

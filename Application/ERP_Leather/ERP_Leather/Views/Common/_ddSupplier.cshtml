@@ -1,0 +1,157 @@
+﻿<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnSupplierGridSearch" value="Search" /></p>
+
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    $(document.body).keypress(function (e) {
+        if ($(".SupplierID").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        }
+    });
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100, left: 300 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierList", "Common")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+             
+              { field: "SupplierName", title: "Supplier Name", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnSupplierGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                console.log(data33.SupplierList);
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    //SearchWindowEvents();
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            //SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceSupplier = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "Supplier")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSourceSupplier,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+</script>

@@ -1,0 +1,1091 @@
+﻿@{
+    ViewBag.Title = "Chemical Local Purchase Bill Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row FormHeader" style="padding: 5px 0 5px 0;">
+
+    <div id="FormTitlePannel" class="col-lg-4">
+        <div id="FormTitle" style="font-size:larger; font-weight:bold;">Chemical Local Purchase Bill Payment</div>
+    </div>
+    <div id="MessageText" class="col-lg-5">
+    </div>
+    <div id="" class="col-lg-3" style="padding: 0 0 0 0;">
+
+        <button type="button" id="btnSave" title="Save" onclick="" class="" style="margin-left: 10px; width: 58px; font-size: 12px;">Save</button>
+
+        <button type="button" id="btnSearch" onclick="" value="Search" class="" style="width: 58px; font-size: 12px;">Search</button>
+
+        <button type="button" id="btnReset" onclick="" value="Reset" class="" style="margin-left: 10px; width: 58px; font-size: 12px; ">Reset</button>
+
+        <button type="button" id="btnDelete" onclick="" value="Delete" class="" style="width: 58px; font-size: 12px;">Delete</button>
+
+    </div>
+
+</div>
+
+<div class="row FormBody" style="padding: 0 0 0 0;">
+    <div class="col-lg-6" style="margin-top: 5px; margin-bottom: 5px; margin-left: 5px;">
+        <div class="row" style="">
+            <label>Supplier</label>
+            <input type="text" id="txtCLPBPSupId" class="txtField" style="display: none;" />
+            <input type="text" id="txtCLPBPSupNo" class="txtField" placeholder="Press (F9)" style="width: 65px; margin-left: 3px;" readonly />
+            <input type="text" id="txtCLPBPSupName" class="txtField" readonly style="width: 200px; margin-left: -4px;" />
+        </div>
+        <div class="row" style="">
+            <label>Address</label>
+            <input type="text" id="txtCLPBPSupAddressId" class="txtField" style="display: none;" />
+            <input type="text" id="txtCLPBPSupAddress" class="txtField" style="width: 266px; padding-right: 0;" readonly />
+
+        </div>
+
+    </div>
+    <div class="col-lg-6" style="margin-top: 5px; margin-bottom: 5px; margin-left:-5px; ">
+        <div class="row">
+            <input type="text" id="txtCLPBPPurcYear" class="txtField" maxlength="4" style="float: right; width: 25%; margin-right: 10px;" />
+            <label style="float: right; margin-right: 5px;margin-top: 4px;">Purchase Year</label>
+        </div>
+        <div class="row">
+            <select id="ddlCLPBPBillFor" class="txtField" style="float: right; width: 25%; margin-right: 10px;">
+                <option value="">-- Select --</option>
+                <option value="CHEM">Chemical</option>
+            </select>
+            <label style="float: right; margin-right: 5px;margin-top: 4px;">Bill For</label>
+        </div>
+
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 0 0 0 0;">
+    <div class="col-lg-4" style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px;">
+        <div class="row">
+            <label>Bill Payment No.</label>
+            <input type="text" id="txtCLPBPId" class="txtField" style="display: none;" />
+            <input type="text" id="txtCLPBPNo" class="txtField" placeholder="" style="padding-right: 0; margin-left: 17px; width: 149px;" />
+        </div>
+        <div class="row">
+            <label style="margin-right: 8px;">Bill Payment Date</label>
+            <input type="text" id="txtCLPBPDate" class="datePicker txtField" style="padding-right: 0; width: 149px;" />
+        </div>
+        <div class="row">
+            <label style="">Payment Type</label>
+            <select id="ddlCLPBPType" class="txtField" style="margin-left: 28px; width: 149px;">
+                <option value="">-- Select --</option>
+                <option value="ADV">Advanced</option>
+                <option value="AGB">Against Bill</option>
+                <option value="ABP">Partial payment</option>
+            </select>
+        </div>
+        <div class="row">
+            <label style="">Payment Method</label>
+            <select id="ddlCLPBPMethod" class="txtField" style="margin-left: 12px; width: 149px;">
+                <option value="">-- Select --</option>
+                <option value="CS">Cash</option>
+                <option value="TT">Telegraphic Transfer</option>
+                <option value="DD">Demand Draft</option>
+            </select>
+        </div>
+        <div class="row">
+            <label style="">Payment Currency</label>
+            @Html.DropDownList("ddlCLPBPCurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "text-box txtField", @style = "width: 149px;" })
+        </div>
+        <div class="row">
+            <label>Payment Doc</label>
+            <input type="text" id="txtCLPBPDoc" class="txtField" style="padding-right: 0; margin-left: 32px;width: 149px;" />
+        </div>
+    </div>
+    <div class="col-lg-3" style="margin-left: -5px; margin-top: 5px; margin-bottom: 5px;">
+        <div class="row">
+            <label>Bill Amount</label>
+            <input type="text" id="txtCLPBPBillAmount" class="txtField" style="padding-right: 0; margin-left: 35px;" />
+        </div>
+        <div class="row">
+            <label>Vat Amount</label>
+            <input type="text" id="txtCLPBPVatAmount" class="txtField" style="padding-right: 0; margin-left: 34px;" />
+        </div>
+        <div class="row">
+            <label>Deduct Amount</label>
+            <input type="text" id="txtCLPBPDeductAmount" class="txtField" style="padding-right: 0; margin-left: 12px;" />
+        </div>
+        <div class="row">
+            <label>Payment Amount</label>
+            <input type="text" id="txtCLPBPPaymentAmount" class="txtField" style="padding-right: 0;" />
+        </div>
+        <div class="row">
+            <button type="button" id="btnConfirm" style="margin-left: 150px;">Confirmed</button>
+        </div>
+    </div>
+    <div class="col-lg-5" style="padding: 0 0 0 0;">
+        <div id="billPaymentReferenceGrid" style="padding: 0 0 0 0;"></div>
+    </div>
+</div>
+<div class="row FormBody">
+    <div class="row" style="margin-right: 6px;">
+        <div class="col-lg-4 " style="border: 1px solid silver; margin-bottom: 5px; margin-top: 5px; margin-left: 10px;">
+            <label style=" margin-top: 5px;">Remarks</label>
+            <input type="text" id="txtCLPBPRemarks" class="txtField" style="margin-left: 14px; width: 80%; margin-bottom: 5px; margin-top: 5px;" />
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-lg-4" style="margin-left: 10px;">
+            <div class="row">
+                <label>Checked By</label>
+                <input type="text" id="txtCLPBPCheckedBy" class="txtOther" style="margin-left: 14px; width: 61%;" readonly />
+                <button type="button" id="btnCheck">Check</button>
+            </div>
+            <div class="row">
+                <div class="col-lg-2" style="padding: 0 0 0 0;">
+                    <label style="">Comments</label>
+                </div>
+                <div class="col-lg-10">
+                    <textarea id="txtCLPBPCheckComment" class="txtOther" style="width: 98%"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4" style="margin-left: -5px;">
+            <div class="row">
+                <label>Recommended By</label>
+                <input type="text" id="txtCLPBPRecommendedBy" class="txtOther" style="margin-left: 14px; width: 43%" readonly />
+                <button type="button" id="btnRecommend">Recommend</button>
+            </div>
+            <div class="row">
+                <div class="col-lg-2" style="padding: 0 0 0 0;">
+                    <label style="">Comments</label>
+                </div>
+                <div class="col-lg-10">
+                    <textarea id="txtCLPBPRecommendedComment" class="txtOther" style="margin-left: 36px; width: 87%;"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4" style="margin-left: -5px;">
+
+            <div class="row">
+                <label>Approved By</label>
+                <input type="text" id="txtCLPBPApprovedBy" class="txtOther" style="margin-left: 11px; width: 58%;" readonly />
+                <button type="button" id="btnApprove">Approve</button>
+            </div>
+            <div class="row">
+                <div class="col-lg-2" style="padding: 0 0 0 0;">
+                    <label style="">Comments</label>
+                </div>
+                <div class="col-lg-10">
+                    <textarea id="txtCLPBPApprovedComment" class="txtOther" style="width: 98%"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="SupplierWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Supplier</label>
+        <input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="SupplierWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="BillWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Purchase Bill No.</label>
+        <input type="text" id="txtBillNo" style="width: 250px;" /><input type="button" id="btnBillGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="BillWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnBillWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBillWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="BillPayWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Purchase Bill No.</label>
+        <input type="text" id="txtBillNo" style="width: 250px;" /><input type="button" id="btnBillPayGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="BillPayWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnBillPayWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBillPayWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="dataExist" style="display: none;">
+    <div class="row" style="width: 395px;">
+        <h5 style="margin-left: 30px;">The data you selected already exists in the reference grid.</h5>
+    </div>
+    <div class="row" style="width: 395px;">
+        <input type="button" class="ThreeButtonWindow" id="btnDataExistOk" value="OK" style="float: right;" />
+    </div>
+</div>
+<div id="DeleteConfirmWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to delete?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnDeleteConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnDeleteConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+<div id="divLoading" style="margin: 0; padding: 0; position: fixed; right: 0;
+    top: 0; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 45%; left: 45%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date()
+        });
+        $(".datePicker").attr("readonly", true);
+        $(".btnAddReference").click(function() {
+            if (recordStatus != "CNF") {
+
+                var grid = $("#billPaymentReferenceGrid").data("kendoGrid");
+                $("#billPaymentReferenceGrid").data().kendoGrid.bind('dataBound', function() {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                setTimeout(function() {
+                    $("#billPaymentReferenceGrid tbody tr:first td:eq(0)").focus();
+                }, 1);
+            }
+        });
+    }); // Document Ready end
+    numberCheck('txtCLPBPPurcYear');
+    numberCheck('txtCLPBPBillAmount');
+    numberCheck('txtCLPBPVatAmount');
+    numberCheck('txtCLPBPDeductAmount');
+    numberCheck('txtCLPBPPaymentAmount');
+    CheckRecordStatusForButton(recordStatus);
+    // ######################################### Grid and Datasource declecration ######################################### //
+    // ------------ Bill Payment Reference Grid Declaration ------------ //
+    var ChemLocalPurcBillRefGridDatasource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BillPaymtRefID",
+                fields: {
+                    BillPaymtRefID: { editable: true },
+                    PaymentID: { editable: true },
+                    BillID: { editable: true },
+                    BillNo: { editable: true },
+                    SupplierBillNo: { editable: true }
+                }
+            }
+        },
+        pageSize: 30
+    });
+    $("#billPaymentReferenceGrid").kendoGrid({
+        dataSource: ChemLocalPurcBillRefGridDatasource,
+        pageable: true,
+        edit: function(e) {
+            $("[name='BillNo']", e.container).keyup(function(event) {
+                if (event.keyCode == 120) {
+                    if ($('#txtCLPBPSupId').val() != "") {
+                        BillWindow.open();
+                        BillWindow.center();
+                        var supplierId = $('#txtCLPBPSupId').val();
+                        $.ajax({
+                            url: '@Url.Action("GetLocalPurchaseBillBySup", "CommonChemical")',
+                            type: 'GET',
+                            data: ({ "supplierId": supplierId }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function(data) {
+                                BillGridDataSource.data(data);
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Please select a supplier first.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                    
+                }
+            });
+        },
+        save: function (e) { },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 162,
+        toolbar: [{
+            text: "Add Reference",
+            className: "btnAddReference",
+            imageClass: "k-icon k-add"
+        }],
+        columns: [
+            { field: "BillNo", title: "Bill Reference" },
+            { field: "SupplierBillNo", title: "Supplier Bill" },
+            { command: [{ name: "DeletedRow", text: "Delete", click: DeleteRef }], title: "Delete" }
+        ]
+    });// ------------ Bill Payment Reference Grid Declaration End ------------ //
+    // ************ Supplier Grid & Window Declaration ************ //
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Supplier", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID", fields: {
+                    SupplierID: { editable: false }, SupplierCode: { editable: false }, SupplierName: { editable: false },
+                    Address: { editable: false }, ContactPerson: { editable: false }, ContactNumber: { editable: false },
+                    SupplierAddressID: { editable: false }
+                }
+            }
+        },
+        transport: { read: { url: '@Url.Action("GetSupplierList", "Common")', type: "GET", dataType: "JSON" } }, pageSize: 10
+    });
+    var ManufacturerGridDataSource = new kendo.data.DataSource({
+        schema: { model: { id: "SupplierID", fields: { SupplierID: { editable: false }, SupplierCode: { editable: false }, SupplierName: { editable: false } } } },
+        transport: { read: { url: '@Url.Action("GetManufacturer", "CommonChemical")', type: "GET", dataType: "JSON" } }, pageSize: 10
+    });
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource, pageable: true, editable: true, selectable: "row", navigatable: true,
+        filterable: true, sortable: true, width: 795, columns: [{ field: "SupplierCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierName", title: "Name", width: "60px" },
+            { field: "Address", title: "Address", width: "60px" },
+            { field: "ContactPerson", title: "Contact Person", width: "60px" },
+            { field: "ContactNumber", title: "Contact Number", width: "60px" }]
+    });// ************ Supplier Grid & Window Declaration End ************ //
+
+    // ************ Active Supplier Window ************ //
+    $("#txtCLPBPSupNo").keyup(function (e) { if (e.keyCode == 120) { SupplierWindow.open(); SupplierWindow.center(); } })
+    ;// ************ Active Supplier Window End ************ //
+
+    // ************ Bill Grid & Window ************ //
+    var BillWindow = $('#BillWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Bills", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+    var BillGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BillID", fields: {
+                    BillID: { editable: false }, BillNo: { editable: false }, BillDate: { editable: false },
+                    SupplierName: { editable: false }, SupplierBillNo: { editable: false }
+                }
+            }
+        }
+    });
+
+    var BillGrid = $("#BillWindowGrid").kendoGrid({
+        dataSource: BillGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "BillNo", title: "Bill No.", width: "60px", filterable: false, sortable: false },
+            { field: "BillDate", title: "Date", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierName", title: "Supplier Name", width: "60px" }, { field: "SupplierBillNo", title: "Supplier Bill No", width: "60px" }
+        ]
+    });
+
+    // ************ Bill Grid & Window End ************ //
+
+    // ************ BillPay Grid & Window ************ //
+    var BillPayWindow = $('#BillPayWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"], visible: false, width: "800px", height: "auto",
+        title: "List Of Bills", position: { top: 100, left: 300 }, modal: true, draggable: true
+    }).data('kendoWindow');
+    var BillPayGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PaymentID",
+                fields: {
+                    PaymentID: { editable: false },
+                    PaymentNo: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    PaymentDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        transport: { read: { url: '@Url.Action("GetBillPay", "ChemLocalPurcBillPay")', type: "GET", dataType: "JSON" } },
+        pageSize: 10
+    });
+
+    var BillPayGrid = $("#BillPayWindowGrid").kendoGrid({
+        dataSource: BillPayGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "PaymentID", title: "Supplier Name", width: "60px" },
+            { field: "PaymentNo", title: "Bill No.", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierCode", title: "Supplier Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierName", title: "Supplier Name", width: "60px" },
+            { field: "PaymentDate", title: "Date", width: "60px" },
+            { field: "RecordStatus", title: "Record Status", width: "60px" }
+        ]
+    });
+
+    $('#btnSearch').click(function () {
+        if (changeStatus == 1) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            BillPayWindow.open();
+            BillPayWindow.center();
+        }
+
+    });
+    // ************ BillPay Grid & Window End ************ //
+    // ######################################### Grid and Datasource declecration End ######################################### //
+    // ######################################## Pop-Up Window Events ######################################## //
+    // ************ Supplier Grid & Window Events ************ //
+    function SetSupplier() {
+        var gridISupplierSearch = $("#SupplierWindowGrid").data("kendoGrid");
+        var selectedSupGridItem = (gridISupplierSearch.dataItem(gridISupplierSearch.select())); //Selected Row
+        $("#txtCLPBPSupId").val(selectedSupGridItem.SupplierID);
+        $("#txtCLPBPSupNo").val(selectedSupGridItem.SupplierCode);
+        $("#txtCLPBPSupName").val(selectedSupGridItem.SupplierName);
+        $("#txtCLPBPSupAddressId").val(selectedSupGridItem.SupplierAddressID);
+        $("#txtCLPBPSupAddress").val(selectedSupGridItem.Address);
+        changeStatus = 1;
+    }
+
+    $("#btnSupplierWindowOK").click(function () {
+        SetSupplier();
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").dblclick(function () {
+        SetSupplier();
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetSupplier();
+            SupplierWindow.close();
+        }
+    });
+    $("#btnSupplierWindowCancel").click(function () { SupplierWindow.close(); }); // ************ Supplier Grid & Window Events End ************ //
+
+    // ************ Bill Grid & Window Events ************ //
+    var alertWindow = $('#dataExist').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "400px",
+        height: "auto",
+        title: "Duplicate challan id",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function CheckRefGrid(billId) {
+        var dtSource = ChemLocalPurcBillRefGridDatasource.data();
+        var count = dtSource.length;
+        for (var i = 0; i < count; i++) {
+            if (dtSource[i].BillId == billId) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    function SetBill() {
+        var gridBillSearch = $("#BillWindowGrid").data("kendoGrid");
+        var selectedBill = (gridBillSearch.dataItem(gridBillSearch.select())); //Selected Row
+        var gridBillRefSearch = $("#billPaymentReferenceGrid").data("kendoGrid");
+        var selectedBillRef = (gridBillRefSearch.dataItem(gridBillRefSearch.select())); //Selected Row
+        var check = CheckRefGrid(selectedBill.BillID);
+        if (check == 1) {
+            alertWindow.open();
+            alertWindow.center();
+            return false;
+        }
+        $.ajax({
+            url: '@Url.Action("GetBillById", "ChemLocalPurcBillPay")',
+            type: 'GET',
+            data: ({ "billId": selectedBill.BillID }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                selectedBillRef.set("BillID", data.BillID);
+                //selectedBillRef.BillId = data.BillID;
+                selectedBillRef.set("BillNo", data.BillNo);
+                //selectedBillRef.BillNo = data.BillNo;
+                //selectedBillRef.SupplierBillNo = data.SupplierBillNo;
+                selectedBillRef.set("SupplierBillNo", data.SupplierBillNo);
+                var billAmt = parseFloat($('#txtCLPBPBillAmount').val());
+                var vatAmt = parseFloat($('#txtCLPBPVatAmount').val());
+                var deductAmt = parseFloat($('#txtCLPBPDeductAmount').val());
+                var payAmt = parseFloat($('#txtCLPBPPaymentAmount').val());
+                if (!isNaN(billAmt)) {
+                    billAmt += data.BillAmt;
+                    $('#txtCLPBPBillAmount').val(billAmt);
+                } else {
+                    $('#txtCLPBPBillAmount').val(data.BillAmt);
+                }
+                if (!isNaN(vatAmt)) {
+                    vatAmt += data.VatAmt;
+                    $('#txtCLPBPVatAmount').val(vatAmt);
+                } else {
+                    $('#txtCLPBPVatAmount').val(data.VatAmt);
+                }
+                if (!isNaN(deductAmt)) {
+                    deductAmt += data.DiscountAmt;
+                    $('#txtCLPBPDeductAmount').val(deductAmt);
+                } else {
+                    $('#txtCLPBPDeductAmount').val(data.DiscountAmt);
+                }
+                if (!isNaN(payAmt)) {
+                    payAmt += data.PayableAmt;
+                    $('#txtCLPBPPaymentAmount').val(payAmt);
+                } else {
+                    $('#txtCLPBPPaymentAmount').val(data.PayableAmt);
+                }
+            }
+        });
+        return true;
+    }
+
+    $('#btnDataExistOk').click(function () {
+        alertWindow.close();
+        BillWindow.open();
+        BillWindow.center();
+    });
+
+    $("#btnBillWindowOK").click(function () {
+        SetBill();
+        BillWindow.close();
+    });
+    $("#BillWindowGrid").dblclick(function () {
+        SetBill();
+        BillWindow.close();
+    });
+    $("#BillWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetBill();
+            BillWindow.close();
+        }
+    });
+    $("#btnBillWindowCancel").click(function () { BillWindow.close(); });
+
+    // ************ Bill Grid & Window Events End ************ //
+    // ************ BillPay Grid & Window Events ************ //
+
+    function SetBillPay() {
+        var gridBillPaySearch = $("#BillPayWindowGrid").data("kendoGrid");
+        var selectedBillPay = (gridBillPaySearch.dataItem(gridBillPaySearch.select()));
+        $.ajax({
+            url: '@Url.Action("GetBillPayById", "ChemLocalPurcBillPay")',
+            type: 'GET',
+            data: ({ "paymentId": selectedBillPay.PaymentID }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                CheckRecordStatusForButton(data.RecordStatus);
+                $('#txtCLPBPId').val(data.PaymentId);
+                $('#txtCLPBPNo').val(data.PaymentNo);
+                $('#txtCLPBPDate').val(data.PaymentDate);
+                $('#txtCLPBPSupId').val(data.SupplierId);
+                $('#txtCLPBPSupNo').val(data.SupplierNo);
+                $('#txtCLPBPSupName').val(data.SupplierName);
+                $('#txtCLPBPSupAddressId').val(data.SupplierAddressId);
+                $('#txtCLPBPSupAddress').val(data.SupplierAddress);
+                $('#txtCLPBPPurcYear').val(data.PurchaseYear);
+                $('#ddlCLPBPType').val(data.PaymentType);
+                $('#ddlCLPBPMethod').val(data.PaymentMethod);
+                $('#ddlCLPBPCurrency').val(data.Currency);
+                $('#txtCLPBPDoc').val(data.PaymentDoc);
+                $('#txtCLPBPBillAmount').val(data.BillAmount);
+                $('#txtCLPBPVatAmount').val(data.VatAmount);
+                $('#txtCLPBPDeductAmount').val(data.DeductAmount);
+                $('#txtCLPBPPaymentAmount').val(data.PaymentAmount);
+                $('#txtCLPBPRemarks').val(data.Remarks);
+                $('#txtCLPBPCheckedBy').val(data.CheckedByName);
+                $('#txtCLPBPCheckComment').val(data.CheckComments);
+                $('#txtCLPBPApprovedBy').val(data.ApprovedByName);
+                $('#ApprovalAdvice').val(data.ApprovedByName);
+                if (data.References != null) {
+                    ChemLocalPurcBillRefGridDatasource.data(data.References);
+                }
+            }
+        });
+    }
+
+    $('#btnBillPayWindowOK').click(function () {
+        SetBillPay();
+        BillPayWindow.close();
+    });
+
+    $('#BillPayWindowGrid').dblclick(function() {
+        SetBillPay();
+        BillPayWindow.close();
+    });
+    $('#BillPayWindowGrid').keyup(function(e) {
+        if (e.keyCode == 13) {
+            SetBillPay();
+            BillPayWindow.close();
+        }
+    });
+    $('#btnBillPayWindowCancel').click(function() {
+        BillPayWindow.close();
+    });
+
+    // ************ BillPay Grid & Window Events End ************ //
+
+    // ######################################## Pop-Up Window Events End ######################################## //
+    // ######################################## Save Events ######################################## //
+
+    function Save() {
+        bill.PaymentId = $('#txtCLPBPId').val();
+        bill.PaymentNo = $('#txtCLPBPNo').val();
+        bill.PaymentDate = $('#txtCLPBPDate').val();
+        bill.SupplierId = $('#txtCLPBPSupId').val();
+        bill.SupplierAddressId = $('#txtCLPBPSupAddressId').val();
+        bill.PurchaseYear = $('#txtCLPBPPurcYear').val();
+        bill.PaymentType = $('#ddlCLPBPType').val();
+        bill.PaymentMethod = $('#ddlCLPBPMethod').val();
+        bill.Currency = $('#ddlCLPBPCurrency').val();
+        bill.PaymentDoc = $('#txtCLPBPDoc').val();
+        bill.BillAmount = $('#txtCLPBPBillAmount').val();
+        bill.VatAmount = $('#txtCLPBPVatAmount').val();
+        bill.DeductAmount = $('#txtCLPBPDeductAmount').val();
+        bill.PaymentAmount = $('#txtCLPBPPaymentAmount').val();
+        bill.Remarks = $('#txtCLPBPRemarks').val();
+        var refData = ChemLocalPurcBillRefGridDatasource.data();
+        if (refData.length > 0) {
+            var count = refData.length;
+            for (var i = 0; i < count; i++) {
+                reference.BillPaymtRefID = refData[i].BillPaymtRefID;
+                reference.PaymentID = refData[i].PaymentID;
+                reference.BillID = refData[i].BillID;
+                reference.SupplierBillNo = refData[i].SupplierBillNo;
+                bill.References.push(reference);
+            }
+        }
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "ChemLocalPurcBillPay")',
+            dataType: 'JSON', data: JSON.stringify({ model: bill }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $("#txtCLPBEId").val(data.ReturnId);
+                    $("#txtCLPBENo").val(data.ReturnCode);
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1; changeStatus = 0;
+                } else if (data.Type == 3) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnSave').click(function () {
+        var change = doesDataSourceHaveChanges(ChemLocalPurcBillRefGridDatasource);
+        if (change) {
+            changeStatus = 1;
+        }
+        if (changeStatus == 1 && saveStatus == 0) {
+            Save();
+        } else {
+            if (changeStatus == 0) {
+                $('#MessageText').html("No changes to save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+            if (saveStatus == 1) {
+                $('#MessageText').html("This record has been saved.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+    });
+
+    // ######################################## Save Events End ######################################## //
+    // ######################################## Check Events ######################################## //
+    function Check() {
+        var paymentId = $('#txtCLPBPId').val();
+        var comment = $('#txtCLPBPCheckComment').val();
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Check", "ChemLocalPurcBillPay")',
+            dataType: 'JSON', data: JSON.stringify({ paymentId: paymentId, comment: comment }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1; changeStatus = 0;
+                    $('#btnCheck').attr('disabled', disabled);
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnCheck').click(function () {
+        var change = doesDataSourceHaveChanges(ChemLocalPurcBillRefGridDatasource);
+        if (change) {
+            changeStatus = 1;
+        }
+        if (changeStatus == 1) {
+            $('#MessageText').html("Please save the changes to continue.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Check();
+        }
+    });
+
+    // ######################################## Check Events End ######################################## //
+    // ######################################## Confirm Events ######################################## //
+    function Confirm() {
+        var paymentId = $('#txtCLPBPId').val();
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Confirm", "ChemLocalPurcBillPay")',
+            dataType: 'JSON', data: JSON.stringify({ paymentId: paymentId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1; changeStatus = 0;
+                    $('#btnConfirm').attr('disabled', disabled);
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnConfirm').click(function () {
+        var change = doesDataSourceHaveChanges(ChemLocalPurcBillRefGridDatasource);
+        if (change) {
+            changeStatus = 1;
+        }
+        if (changeStatus == 1) {
+            $('#MessageText').html("Please save the changes to continue.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Confirm();
+        }
+    });
+    // ######################################## Confirm Events End ######################################## //
+    // ######################################## Approve Events ######################################## //
+
+    function Approve() {
+        var paymentId = $('#txtCLPBPId').val();
+        var comment = $('#txtCLPBPCheckComment').val();
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Approve", "ChemLocalPurcBillPay")',
+            dataType: 'JSON', data: JSON.stringify({ paymentId: paymentId, comment: comment }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1; changeStatus = 0;
+                    $('#btnCheck').attr('disabled', disabled);
+                    CheckRecordStatusForButton(data.RecordStatus);
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnApprove').click(function () {
+        var change = doesDataSourceHaveChanges(ChemLocalPurcBillRefGridDatasource);
+        if (change) {
+            changeStatus = 1;
+        }
+        if (changeStatus == 1) {
+            $('#MessageText').html("Please save the changes to continue.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Approve();
+        }
+    });
+
+    // ######################################## Approve Events End ######################################## //
+    // ######################################## Delete Events ######################################## //
+
+    var DeleteWindow = $('#DeleteConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Delete Confirmation",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    function DeleteRef() {
+        del = "grid";
+        var grid = $("#billPaymentReferenceGrid").data("kendoGrid");
+        dataItem = {};
+        dataItem = (grid.dataItem(grid.select()));
+        DeleteWindow.open();
+        DeleteWindow.center();
+    }
+
+    function ReverseCalc() {
+        $.ajax({
+            url: '@Url.Action("GetBillById", "ChemLocalPurcBillPay")',
+            type: 'GET',
+            data: ({ "billId": dataItem.BillId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                var billAmt = parseFloat($('#txtCLPBPBillAmount').val());
+                var vatAmt = parseFloat($('#txtCLPBPVatAmount').val());
+                var deductAmt = parseFloat($('#txtCLPBPDeductAmount').val());
+                var payAmt = parseFloat($('#txtCLPBPPaymentAmount').val());
+                if (!isNaN(billAmt)) {
+                    billAmt -= data.BillAmt;
+                    $('#txtCLPBPBillAmount').val(billAmt);
+                } else {
+                    $('#txtCLPBPBillAmount').val("");
+                }
+                if (!isNaN(vatAmt)) {
+                    vatAmt -= data.VatAmt;
+                    $('#txtCLPBPVatAmount').val(vatAmt);
+                } else {
+                    $('#txtCLPBPVatAmount').val("");
+                }
+                if (!isNaN(deductAmt)) {
+                    deductAmt -= data.DiscountAmt;
+                    $('#txtCLPBPDeductAmount').val(deductAmt);
+                } else {
+                    $('#txtCLPBPDeductAmount').val("");
+                }
+                if (!isNaN(payAmt)) {
+                    payAmt -= data.PayableAmt;
+                    $('#txtCLPBPPaymentAmount').val(payAmt);
+                } else {
+                    $('#txtCLPBPPaymentAmount').val("");
+                }
+            }
+        });
+    }
+
+    function Delete() {
+        if (del == "grid") {
+            $.ajax({
+                url: '@Url.Action("DeleteRef", "ChemLocalPurcBillPay")',
+                type: 'GET',
+                data: ({ "paymentId": dataItem.PaymentId }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 4) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 1;
+                    }
+                    else {
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            });
+            $("#billPaymentReferenceGrid").data("kendoGrid").dataSource.remove(dataItem);
+            ReverseCalc();
+            DeleteWindow.close();
+        }
+        if (del == "all") {
+            var paymentId = $("#txtCLPBPId").val();
+            $.ajax({
+                url: '@Url.Action("Delete", "ChemLocalPurcBillPay")',
+                type: 'GET',
+                data: ({ "paymentId": paymentId }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 4) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        changeStatus = 1;
+                    }
+                    else {
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                }
+            });
+            Reset();
+            DeleteWindow.close();
+        }
+    }
+
+    $('#btnDeleteConfirmationOK').click(function () {
+        Delete();
+    });
+
+    $('#btnDeleteConfirmationCancel').click(function () {
+        DeleteWindow.close();
+    });
+
+    $('#btnDelete').click(function () {
+        del = "all";
+        if ($("#txtCLPBPId").val() == "") {
+            $("#MessageText").html("This bill is not in database.");
+            $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Delete();
+        }
+    });
+
+    // ######################################## Delete Events End ######################################## //
+    // ######################################## Variables Declaration ######################################## //
+    var changeStatus = 0;
+    var saveStatus = 0;
+    var recordStatus = "";
+    var resetStatus = "";
+    var dataItem;
+    var del;
+    var bill = {
+        "PaymentId": "", "PaymentNo": "", "PaymentDate": "", "SupplierId": "", "SupplierAddressId": "", "PurchaseYear": "", "PaymentType": "",
+        "PaymentMethod": "", "Currency": "", "PaymentDoc": "", "BillAmount": "", "VatPercentage": "", "VatAmount": "", "DeductAmount": "",
+        "PaymentAmount": "", "PaymentStatus": "", "Remarks": "", "RecordStatus": "", "References": []
+    };
+
+    var reference = {
+        "BillPaymtRefID": "", "PaymentID": "", "BillID": "", "SupplierBillNo": "", "RecordStatus": ""
+    };
+    //"":"",
+    // ######################################## Variables Declaration End ######################################## //
+    // ######################################## Reset Event ######################################## //
+    function Reset() {
+        changeStatus = 0;
+        saveStatus = 0;
+        recordStatus = "";
+        $('.txtField').val("");
+        $('.txtOther').val("");
+        $("#billPaymentReferenceGrid").data('kendoGrid').dataSource.data([]);
+        CheckRecordStatusForButton(recordStatus);
+    }
+
+    var SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Confirmation!",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    $("#btnReset").click(function () {
+        resetStatus = "reset";
+        if (changeStatus == 1 && saveStatus == 0) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            Reset();
+        }
+    });
+
+    $("#btnSaveChangeWindowOk").click(function () {
+        if (resetStatus == "reset") {
+            Reset();
+            SaveChangeWindow.close();
+        } if (recordStatus == "search") {
+            Reset();
+            BillPayWindow.open();
+            BillPayWindow.center();
+            SaveChangeWindow.close();
+        }
+
+    });
+    $("#btnSaveChangeWindowCancel").click(function () {
+        SaveChangeWindow.close();
+    });
+    // ######################################## Reset Event End ######################################## //
+    // ######################################## Search Events ######################################## //
+
+    // ######################################## Search Event End ######################################## //
+    // ######################################## Detect Change Event ######################################## //
+    $('#.txtField').change(function () {
+        changeStatus = 1;
+    });
+    function doesDataSourceHaveChanges(ds) {
+        var dirty = false; $.each(ds._data, function () { if (this.dirty == true) { dirty = true; } });
+        if (ds._destroyed.length > 0) dirty = true; return dirty;
+    }
+    // ######################################## Detect Change Event End ######################################## //
+    
+</script>

@@ -1,0 +1,382 @@
+﻿@model ERP.EntitiesModel.AppSetupModel.SysPaymentType
+@{
+    ViewBag.Title = "Payment Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>@ViewBag.formTiltle</title>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position: absolute; right: 75px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Payment Type Code</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ID" readonly="readonly" class="txtBox ReadOnlyTextbox" name="ID" />
+            </div>
+            <div class="col-lg-2">
+                <label>Name</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Name" class="txtBox RequiredTextBox SetFocus" name="Name" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>Description</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Description" class="txtBox" name="Description" tabindex="2" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Is Active</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="IsActive" class="txtBox">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <div class="row" style=" width:245px;">
+        <p style="margin-left: 20px;">Are you sure you want to delete?</p>
+    </div>
+    <div class="row" style="width: 245px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 120px;" id="btnConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style=" width:245px;">
+        <p style="margin-left: 20px;">Data will be lost if you continue.</p>
+    </div>
+    <div class="row" style="width: 245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowNo"  value="OK" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel"  value="Cancel" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function() {
+        //To Define Data Source for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "ID",
+                    fields: {
+                        ID: { editable: false },
+                        Name: { editable: false },
+                        Description: { editable: false },
+                        IsActive: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetPaymentType", "PaymentType")', // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        $('#Name').focusout(function() {
+            nameCheck('Name');
+        });
+        //To Define Columns for Source Kendo Grid
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "ID", title: "ID", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Name", title: "Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Description", title: "Description", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Active Status", width: 110, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+
+        var confirmWindow = $('#DeleteConfirmWindow').kendoWindow({
+            width: "250px",
+            padding: "0px 0px 0px 0px",
+            title: "Confirmation!",
+            visible: false,
+            resizable: false,
+
+        }).data('kendoWindow');
+        var saveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "250px",
+            height: "auto",
+            title: "Confirmation!",
+            modal: true,
+        }).data('kendoWindow');
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                confirmWindow.open();
+                confirmWindow.center();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                saveChangeWindow.open();
+                saveChangeWindow.center();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("DeletePaymentType", "PaymentType")',
+                //url: '/BillPayment/DeletedBillRefGridData',
+                type: 'POST',
+                data: JSON.stringify({ "models": dataitem.ID }),
+                //data: { "periodItemId": dataitem.PeriodItemID },
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 3) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    else {
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "white");
+            confirmWindow.close();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            confirmWindow.close();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus Name textbox
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+       
+        // Edit Button in Grid
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                //ClearRequiredTextBoxRedColor();
+                $(".RequiredTextBox").css("border-color", "white");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                //$(".RequiredTextBox").css("border-color", "white");
+                //changeStatus = 0;
+            }
+        };
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowNo").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "white");
+                GridReload('PageDetailGrid');
+                $("#IsActive").val("Active");
+                changeStatus = 0;
+                saveChangeWindow.close();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                //$(".RequiredTextBox").css("border-color", "white");
+                $(".RequiredTextBox").css("border-color", "white");
+                SetMasterData(dataitem);
+                changeStatus = 0;
+                saveChangeWindow.close();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("DeletePaymentType", "PaymentType")',
+                    //url: '/BillPayment/DeletedBillRefGridData',
+                    type: 'POST',
+                    data: JSON.stringify({ "models": $("#ID").val() }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 2) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        }
+                        else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "white");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var modelSysSource = { "ID": "", "Name": "", "Description": "", "IsActive": "" };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        // Check Empty or Maximum Length in Name
+        CheckRequiredTextBoxMaxLength('Name', 100);
+
+        // Check Maximum Length in Description
+        CheckNormalTextBoxMaxLength('Description', 200);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            modelSysSource.ID = $("#ID").val();
+            modelSysSource.Name = $("#Name").val();
+            modelSysSource.Description = $("#Description").val();
+            modelSysSource.IsActive = $("#IsActive option:selected").val();
+            //modelSysSource.CrudStatus = $("#CrudStatus").val();
+            if (changeStatus == 1) {
+            $.ajax({
+                url: '@Url.Action("PaymentType", "PaymentType")',
+                data: JSON.stringify(modelSysSource),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        changeStatus = 0;
+                        $('#ID').val(response.ID);
+                        GridReload('PageDetailGrid');
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else if (response.msg.Type == 3) {
+                        changeStatus = 0;
+                        GridReload('PageDetailGrid');
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else if (response == "ORA-00001") {
+                        $("#MessageText").html("Duplicate Record.");
+                        $("#MessageText").css("color", "red");
+                        changeStatus = 0;
+                    }
+                    else {
+                        changeStatus = 0;
+                        $("#MessageText").html(response.Message);
+                        $("#MessageText").css("color", "red");
+                    }
+                }
+            });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#Name").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "white");
+            GridReload('PageDetailGrid');
+            $("#IsActive").val("Active");
+        }
+    });
+
+    function CheckUnSavedMasterData() {
+        $(".txtBox").change(function () {
+            changeStatus = 1;
+        });
+    }
+</script>
+
+

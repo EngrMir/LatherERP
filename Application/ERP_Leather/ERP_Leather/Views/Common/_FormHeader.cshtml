@@ -1,0 +1,232 @@
+﻿<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.Title</div>
+            </div>
+            <div class="col-lg-6">
+                <label id="MessageText"></label>
+            </div>
+            <div id="ButtonPanel" class="col-lg-2 right">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="Reset();" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;"  />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="return Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div> 
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <p>
+        @ViewBag.SearchTitle:<input type="text" id="txtSearch" style="width: 250px;" placeholder="Search PI.." />
+        <input type="button" id="btnSearchGridSearch" value="Search" />
+    </p>
+
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel"/>
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+   
+    function Reset() {
+        
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        $('.FormBody input[type=text]').css("border-color", "");
+        $('select').find('option:first').prop('selected', 'selected');
+    }
+
+
+    function SearchResult(action, controller,hideColumn)
+    {
+
+        if (controller != "" && action != "") {
+            var route = "/" + controller + "/" + action;
+            $('#MessageText').html('');
+            $("#divLoading").show();
+            $.ajax({
+                url: route,
+                type: "GET",
+                dataType: "JSON",
+                success: function (data33) {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+                    var grid = $('#SearchWindowGrid').data("kendoGrid");
+                    if (hideColumn != null)
+                    {
+                        var column = hideColumn.split(',');                  
+                        for (var i = 0; i < column.length; i++)
+                        {                      
+                            grid.hideColumn(column[i]);
+                        }
+                    }
+                    
+                    
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+      
+     //   SelectedItemOfListOfValue('SearchWindowGrid');
+        SearchWindow.open();
+    }
+
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+  
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+    var SearchWindowDataSource = new kendo.data.DataSource({
+        pageSize: 50
+    });
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "90%",
+        height: "auto",
+        title: "",
+       
+       // position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true,
+        actions: ["Minimize", "Maximize", "Close"]
+      
+    }).data('kendoWindow');
+
+    var SearchWindowGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchWindowDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        resizable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 400,
+        groupable: true,
+        pageable: {
+            refresh: true,
+            pageSizes: [10, 25, 50],
+            previousNext: true,
+            info: true
+        }
+       
+    });
+    
+
+   
+    $('#btnSearchWindowOK').click(function () {
+        ListOfValueSearchGridEvent('SearchWindowGrid');
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        ListOfValueSearchGridEvent('SearchWindowGrid');
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueSearchGridEvent('SearchWindowGrid');
+            SearchWindow.close();
+        }
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#SearchWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueSearchGridEvent('SearchWindowGrid');
+            SearchWindow.close();
+        }
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    function GetSearchResult(action, controller) {
+        var route = "/" + controller + "/" + action;
+        $.ajax({
+            url: route,
+            type: 'GET',
+            data: { search: $("#txtSearch").val() },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);  
+                if (data33.Count == 1) {
+                    ListOfValueSearchGridEvent('SearchWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    }
+
+    function AutoComplete(action, controller) {
+        var route = "/" + controller + "/" + action;
+        var autoCompleteDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url:route,
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtSearch").kendoAutoComplete({
+            dataSource: autoCompleteDataSource,
+            filter: "startswith",
+            placeholder: "Search ...",
+        });
+    }
+
+
+</script>

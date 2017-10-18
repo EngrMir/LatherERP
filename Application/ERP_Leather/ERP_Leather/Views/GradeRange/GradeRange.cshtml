@@ -1,0 +1,131 @@
+﻿@model ERP.EntitiesModel.AppSetupModel.SysGradeRange
+@{
+    ViewBag.Title = "Grade Range";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-3">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="messageText" class="col-lg-6">
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="GradeRangeGrid"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var gradeRangeGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "GradeRangeID",
+                    fields: {
+                        GradeRangeID: { type: "number", editable: false, validation: { required: true, min: 1 } },
+                        GradeRangeName: { type: "string", editable: true, validation: { required: true, min: 1 } },
+                        Description: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        IsActive: { type: "boolean", editable: true, validation: { required: false } },
+                        IsDelete: { type: "boolean", editable: true, validation: { required: false } }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: "@Url.Action("GetGradeRangeList", "GradeRange")",
+                    dataType: "JSON",
+                    method: "POST",
+                },
+                create: {
+                    url: "@Url.Action("Create", "GradeRange")",
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.message.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $("#GradeRangeGrid").data('kendoGrid').dataSource.read();
+                            $("#GradeRangeGrid").data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                update: {
+                    url: '@Url.Action("Update", "GradeRange")',
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.message.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $("#GradeRangeGrid").data('kendoGrid').dataSource.read();
+                            $("#GradeRangeGrid").data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                destroy: {
+                    url: "@Url.Action("Delete", "GradeRange")",
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $("#GradeRangeGrid").data('kendoGrid').dataSource.read();
+                            $("#GradeRangeGrid").data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                parameterMap: function (options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return { models: kendo.stringify(options.models) };
+                    }
+                    return { models: kendo.stringify(options.models) };
+                }
+            },
+            batch: true,
+            pageSize: 10
+
+        });
+
+        $("#GradeRangeGrid").kendoGrid({
+            dataSource: gradeRangeGridDataSource,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            height: 300,
+            toolbar: ["create"],
+            sortable: true,
+            resizable: true,
+            pageable: true,
+            columns: [
+                { field: "GradeRangeName", title: "Grade Name", width: "80px" },
+                { field: "Description", title: "Description", width: "200px" },
+                { field: "IsActive", title: "IsActive", width: "60px" },
+                { command: ["edit", "destroy"], title: "Action", width: "70px" }],
+            editable: "inline"
+        });
+
+        $("#GradeRangeGrid").keypress(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#GradeGrid").data("kendoGrid");
+                grid.addRow();
+            }
+        });
+    }); //End of Document.Ready()
+
+</script>

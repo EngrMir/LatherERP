@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "Commercial Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .select {
+        min-width: 240px;
+    }
+    label {
+        padding-left: 10px;
+    }
+</style>
+
+@using (Html.BeginForm("CommercialInvoice", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            @ViewBag.Message
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">Commercial Invoice</div>
+                </div>
+                <div class="col-lg-3">
+                    <label id="MessageText"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 7%; float: right;" tabindex="3" checked="checked" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> PDF</label>
+                    <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 7%; float: right;" tabindex="4" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> Excel</label>
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="ClearAll();" />
+                    <input type="submit" id="btnSubmit" class="Button" value="Show Report" onclick="return CheckValue();" style="position: absolute; right: 100px;" />
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="FormBody">
+            <br />
+
+            <div class="row" style="display:none">
+                <div class="col-lg-2">
+                    <label>Date Range:</label>
+                </div>
+                <div class="col-lg-3">
+                    <table class="table-condensed">
+                        <tr>
+                            <td><strong> From Date:</strong> </td>
+                            <td><input type="text" id="dateFrom" class="datePicker" name="dateFrom" tabindex="" /></td>
+                        </tr>
+                        <tr>
+                            <td><strong>To Date:</strong></td>
+                            <td><input type="text" id="dateTo" class="datePicker" name="dateTo" tabindex="" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1"><label>Invoice No.</label></div>
+                <div class="col-lg-11">
+                    <input type="hidden" id="CIID" name="CIID" class="textField" value="" />
+                    <input type="text" id="CINo" name="CINo" class="textField"  placeholder="Press (F9)" readonly />
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+}
+<div id="CommercialInvoiceSearchWindow" style="display: none;">
+
+    <div class="row" style="width: 596px;">
+        <div id="CommercialInvoiceSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnCommercialInvoiceWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnCommercialInvoiceWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    var rptSelectionList = { "SupllierId": "", "DateFrom": "", "DateTo": "" };
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+    $('#dateFrom').change(function () {
+        var start = $('#dateFrom').val();
+        var end = $('#dateTo').val();
+
+        if ($.datepicker.parseDate('dd/mm/yy', start) > $.datepicker.parseDate('dd/mm/yy', end)) {
+            $("#MessageText").html("From Date should be less than To Date.");
+            $("#MessageText").css("color", "red");
+            $('#dateFrom').val(end);
+        }
+        else {
+            $("#MessageText").html("");
+        }
+
+    });
+ $("#CommercialInvoiceSearchWindowGrid").kendoGrid({
+        dataSource: CommercialInvoiceWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "CINo", title: "CI No." },
+            { field: "LCNo", title: "LC No." },
+            { field: "CIDate", title: "Date" }
+        ]
+    });
+    var CommercialInvoiceWindow = $('#CommercialInvoiceSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "Commercial Invoice Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');// CommercialInvoice search window grid decleration end
+    // Activation of CommercialInvoiceSearchWindow
+    $("#CINo").keyup(function (e) {
+        if (e.keyCode == 120) {
+            changeStatus = 1;
+            getBasicCI();
+            $("#txtCommercialInvoice").val("");
+            CommercialInvoiceWindow.open();
+            CommercialInvoiceWindow.center();
+        }
+    });// Activation of CommercialInvoiceSearchWindow end
+    // CommercialInvoiceSearchWindow events
+    function CISearchEvents() {
+        var gridCommercialInvoiceSearch = $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid");
+        var selectedCommercialInvoice = (gridCommercialInvoiceSearch.dataItem(gridCommercialInvoiceSearch.select())); //Selected Row
+        $("#CIID").val(selectedCommercialInvoice.CIID);
+        $("#CINo").val(selectedCommercialInvoice.CINo);
+        
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCIItemByCIID", "PackingList")',
+            dataType: 'JSON',
+            data: JSON.stringify({ ciid: selectedCommercialInvoice.CIID }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $("#packingListItemGrid").data("kendoGrid").dataSource.data(response);
+                $('#CINo').css({ 'box-shadow': 'none' });
+            }
+        });
+    }
+    $("#btnCommercialInvoiceWindowOK").click(function () {
+        CISearchEvents();
+        CommercialInvoiceWindow.close();
+    });
+    $("#btnCommercialInvoiceWindowCancel").click(function () {
+        CommercialInvoiceWindow.close();
+    });
+    $("#CommercialInvoiceSearchWindowGrid").dblclick(function () {
+        CISearchEvents();
+        CommercialInvoiceWindow.close();
+    });
+    $("#CommercialInvoiceSearchWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            CISearchEvents();
+            CommercialInvoiceWindow.close();
+        }
+        if (e.keyCode == 27) {
+            CommercialInvoiceWindow.close();
+        }
+    });// CommercialInvoiceSearchWindow events end
+
+    // CommercialInvoice search window grid decleration
+    function getBasicCI() {
+        $.ajax({
+            url: '@Url.Action("GetAllInvoiceMin", "CommercialInvoice")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+   
+                $("#CommercialInvoiceSearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+    var CommercialInvoiceWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    LCDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    $("#CommercialInvoiceSearchWindowGrid").kendoGrid({
+        dataSource: CommercialInvoiceWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "CINo", title: "CI No." },
+            { field: "LCNo", title: "LC No." },
+            { field: "CIDate", title: "Date" }
+        ]
+    });
+    var CommercialInvoiceWindow = $('#CommercialInvoiceSearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "700px",
+        title: "Commercial Invoice Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');// CommercialInvoice search window grid decleration end
+    // Activation of CommercialInvoiceSearchWindow
+    $("#CINo").keyup(function (e) {
+        if (e.keyCode == 120) {
+            changeStatus = 1;
+            getBasicCI();
+           
+            CommercialInvoiceWindow.open();
+            CommercialInvoiceWindow.center();
+        }
+    });// Activation of CommercialInvoiceSearchWindow end
+    // CommercialInvoiceSearchWindow events
+  
+</script>

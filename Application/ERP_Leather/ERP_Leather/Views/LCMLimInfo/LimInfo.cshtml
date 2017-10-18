@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "LimInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bank</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimBankID" class="txtBox RequiredTextBox " name="" tabindex="" readonly="readonly" placeholder="Press F9" style="width: 80px;" />
+                <input type="text" id="BankName" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" style="width: 266px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>LC No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LCNo" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Branch</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimBranchID" class="txtBox RequiredTextBox " name="" tabindex="" readonly="readonly" placeholder="Press F9" style="width: 80px;" />
+                <input type="text" id="BranchName" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" style="width: 266px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Loan Status</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="Address" class="txtBox RequiredTextBox" readonly="readonly" tabindex="" />
+                <input type="hidden" id="SupplierAddressID" value="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LIM No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimNo" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" style="width:91%" />
+            </div>
+            <div class="col-lg-2">
+                <label>LIM Limit</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimLimit" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LIM Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimDate" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" style="width:91%" />
+            </div>
+            <div class="col-lg-2">
+                <label>LIM Balance</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimBalance" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" />
+            </div>
+        </div>
+    </div>
+</div>
+

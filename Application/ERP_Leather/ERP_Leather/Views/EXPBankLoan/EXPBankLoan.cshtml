@@ -1,0 +1,1612 @@
+﻿@{
+    ViewBag.Title = "Export Bank Loan";
+    ViewBag.SearchTitle = "Loan No.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+<div class="row">
+
+    <input id="BankID" type="hidden" class="txtBox" />
+    <input id="BranchID" type="hidden" class="txtBox" />
+    <input id="LoanHead" type="hidden" class="txtBox" />
+    <input id="HeadID" type="hidden" class="txtBox" />
+    <input id="BankLoanID" type="hidden" class="txtBox" />
+    <input id="CurrencyID" type="hidden" class="txtBox" />
+    <input id="CIID" type="hidden" class="txtBox" />
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-4">
+                            <label>Bank</label><label style="color:red">*</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="BankCode" name="BankCode" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" style="width: 20%;text-align:center" />
+                            <input type="text" id="BankName" name="BankName" class="txtBox RequiredTextBox" readonly="readonly" value="" style="width: 70%;text-align:center" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-4">
+                            <label>Branch</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="BanchCode" name="BanchCode" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Auto" style="width: 20%; text-align:center" />
+                            <input type="text" id="BranchName" name="BranchName" class="txtBox RequiredTextBox" readonly="readonly" value="" placeholder="Auto Generated" style="width: 70%;text-align:center" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="FormBody">
+                <div id="BankLoanDetailGrid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>Note</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <textarea id="ApprovalNote" name="ApprovalNote" style="width:98.5%;text-align:center"></textarea>
+                        <input id="btnConfirm" type="button" value="Confirm" style="margin:0 35% 0 35% " />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="BankIDWindow" style="display: none;">
+    @*<p>Bank:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>*@
+
+    <div id="BankIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBankIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBankIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="CIIDWindow" style="display: none;">
+    @*<p>CI No.:<input type="text" id="txtOpeningCI" style="width: 250px;" placeholder="Search CI Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>*@
+
+    <div id="CIIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnCIIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCIIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="HeadIDWindow" style="display: none;">
+    @*<p>Head:<input type="text" id="txtOpeningHead" style="width: 250px;" placeholder="Search Head Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>*@
+
+    <div id="HeadIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnHeadIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnHeadIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+<div id="ConfirmWindow" style="display: none;">
+    <p><h5 style="color: red;">At First Save this Record.</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationClose" value="Close" />
+</div>
+<div id="ExecuteConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnExecuteConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnExecuteConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="DeleteLimInfoListConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteLimInfoListOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteLimInfoListCancel" value="Cancel" />
+</div>
+
+
+<script>
+    $('#btnDelete').attr('disabled', true);
+    var saveUpdateStatus = 1;
+    var recordStatus = "";
+    var dataitem = {};
+    var changeStatus = 0;
+
+    NumericAndDecimalValue('LoanAmt');
+    NumericAndDecimalValue('LoanLimit');
+    NumericAndDecimalValue('InterestAmt');
+    NumericAndDecimalValue('AmountToReturn');
+    NumericAndDecimalValue('ReturnedAmt');
+    NumericAndDecimalValue('BalanceAmt');
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+
+
+
+    //*********************************************** BANK LOAN DETAIL POP UP *******************************************************//
+
+    var BnakLoanDetailDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BankLoanID",
+                fields: {
+
+                    BankLoanID: { editable: true },
+                    HeadID: { editable: true },
+                    HeadName: { editable: true, defaultValue: 'Press F9' },
+                    BankLoanID: { editable: true },
+                    CIID: { editable: true },
+                    CIRefNo: { editable: true, defaultValue: 'Press F9' },
+                    BankLoanID: { editable: true },
+                    BankLoanNo: { editable: true },
+                    LoanLimit: { editable: true, },
+                    LoanAmt: { editable: true,  },
+                    InterestPercent: { editable: true,  },
+                    LoanReceiveDate: { editable: true },
+                    ReturnedAmt: { editable: true,  },
+                    BalanceAmt: { editable: true,  },
+                    RefACNo: { editable: true },
+                    RefACName: { editable: true },
+                    Remarks: { editable: true },
+                }
+            }
+        },
+
+        pageSize:50
+    });
+
+    var BankLoanDetailGrid = $("#BankLoanDetailGrid").kendoGrid({
+        dataSource: BnakLoanDetailDataSource,
+        pageable:false,
+        scrolable:false,
+        editable:true,
+        selectable:"row",
+        navigatable:true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 180,
+        toolbar: [{
+            text: "Add New Item",
+            className: "btnBankLoanGrid",
+            imageClass: "k-icon k-add"
+
+        },
+        {
+            text: "Display Loan on Selected Bank",
+            className: "btnSelectedBankLoanGrid",
+            imageClass: "k-icon k-add"
+
+        }],
+        edit: function (e) {
+            if (recordStatus == "CNF") {
+                $('input[name = "LoanAmt"]').attr("disabled", true);
+                $('input[name = "LoanLimit"]').attr("disabled", true);
+                $('input[name = "BalanceAmt"]').attr("disabled", true);
+                $('input[name = "ReturnedAmt"]').attr("disabled", true);
+            }
+            $('input[name = "BalanceAmt"]').attr("readonly", true);
+            $("[name='BalanceAmt']", e.container).blur(function () {
+                var balanceAmount = 0;
+                var grid = $("#BankLoanDetailGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                if (grid.dataItem(row).LoanAmt != 0 && grid.dataItem(row).LoanLimit != 0) {
+                    balanceAmount = ((parseFloat(grid.dataItem(row).LoanLimit) - parseFloat(grid.dataItem(row).LoanAmt)) + parseFloat(grid.dataItem(row).ReturnedAmt));
+                    grid.dataItem(row).BalanceAmt = balanceAmount.toFixed(2);
+                }
+                else {
+                    balanceAmount = parseFloat(grid.dataItem(row).LoanAmt);
+                    grid.dataItem(row).BalanceAmt = balanceAmount.toFixed(2);
+                }
+            });
+        },
+        columns: [
+            { field: "BankLoanID", title: "BankLoanID", hidden: true, width: "20px", },
+            { field: "BankID", title: "BankID", hidden: true, width: "20px", },
+            { field: "BranchID", title: "BranchID", hidden: true, width: "20px", },
+            { field: "HeadID", title: "HeadID", hidden: true, width: "40px", },
+            { field: "CIID", title: "CIID", hidden: true, width: "40px", },
+            { field: "HeadName", title: "Loan Name", filterable: true, width: "70px", attributes: { "class": "HeadName", "placeholder": "PressF9" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "BankLoanNo", title: "Ref Loan", filterable: true, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "CIRefNo", title: "Ref CI", filterable: true, width: "60px", attributes: { "class": "CIRefNo", "placeholder": "PressF9" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "LoanLimit", title: "Loan Lmt(TK.)", filterable: false, width: "60px",  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "LoanAmt", title: "Loan Amt(TK)", filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "InterestPercent", title: "Ineterest %", filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "LoanReceiveDate", title: "Receive Date", format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "ReturnedAmt", title: "Return Amt(TK.)", filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "BalanceAmt", title: "Balance Amt(TK.)", filterable: false, width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "RefACNo", title: "Ref Acc No", filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "RefACName", title: "Ref Acc Name", filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { field: "Remarks", title: "Remarks", filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { command: [{ name: "CloseRow", text: "Close", click: CloseLoanGridData }], title: "Loan Status", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } },
+            { command: [{ name: "DeltedRow", text: "Delete", click: DeleteChildGridItem }], title: "Action", width: 55, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 10px;" } }
+        ]
+
+    }).data('kendoGrid');
+
+
+    // Display Date into kendo Grid Row
+    function dateTimeEditor(container, options) {
+        $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                .appendTo(container)
+                .kendoDatePicker({
+                    value: new Date(),
+                    change: function () {
+                        changeStatus = 1;
+                    }
+                    //max: new Date()
+
+                });
+    }
+
+    $(".btnBankLoanGrid").click(function (e) {
+
+        var grid = $("#BankLoanDetailGrid").data("kendoGrid");
+        $("#BankLoanDetailGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+        grid.addRow();
+        e.preventDefault();
+    });
+
+    $(".btnSelectedBankLoanGrid").click(function (e) {
+        var bank = $("#BankID").val();
+        var branch = $("#BranchID").val();
+        if (bank != 0 && branch != 0) {
+        var grid = $("#BankLoanDetailGrid").data("kendoGrid");
+        $("#BankLoanDetailGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("GetBankLoanOnSelectedBank", "EXPBankLoan")',
+                type: "GET",
+                dataType: "JSON",
+                data: ({ "BankID": $("#BankID").val(), "BranchID": $("#BranchID").val() }),
+                success: function (data) {
+                    $("#divLoading").hide();
+                    $("#BankLoanDetailGrid").data("kendoGrid").dataSource.data(data);
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        changeStatus = 1;
+        grid.addRow();
+        e.preventDefault();
+
+        }
+        else {
+            $('#MessageText').html("Select Bank and Branch First");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    });
+
+
+
+
+    var ExecuteConfirmWindow = $('#ExecuteConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Close This Loan?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+
+    var CloseLoan = 0;
+    function CloseLoanGridData(event) {
+        if (changeStatus == 1) {
+            CloseLoan = 1;
+            dataitem = BankLoanDetailGrid.dataItem($(event.currentTarget).closest("tr"));
+            ExecuteConfirmWindow.open();
+            ExecuteConfirmWindow.center();
+        }
+        else {
+            dataitem = BankLoanDetailGrid.dataItem($(event.currentTarget).closest("tr"));
+            OpenSaveChangesDialog();
+        }
+    };
+
+
+    $('#btnExecuteConfirmationOK').click(function () {
+        if (CloseLoan == 1) // PIItem Delete
+        {
+                if (dataitem.BankLoanID == 0) {
+                    $('#MessageText').html("Data Save First");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("CloseLoanData", "EXPBankLoan")',
+                        type: 'GET',
+                        data: { "BankLoanID": dataitem.BankLoanID },
+                        success: function (response) {
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Bank Loan Colsed Successfuly");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+
+                            }
+                            else if (response.Msg == "Error") {
+                                $('#MessageText').html("Data can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+        ExecuteConfirmWindow.close();
+    });
+
+        //Handling No button click for grid row deletion
+        $('#btnExecuteConfirmationCancel').click(function () {
+            dataitem = {};
+            ExecuteConfirmWindow.close();
+        });
+
+
+        var DeleteFrom = 0;
+        function DeleteChildGridItem(event) {
+            if (changeStatus == 1) {
+                DeleteFrom = 1;
+                dataitem = BankLoanDetailGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = BankLoanDetailGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 1) {
+                DeleteFrom = 0;
+                OpenConfirmationDialog();
+            }
+            else {
+                //resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // PIItem Delete
+            {
+                if (dataitem.BankLoanID == 0) {
+                    $("#BankLoanDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteBankLoanDetailData", "EXPBankLoan")',
+                        type: 'GET',
+                        data: { "BankLoanID": dataitem.BankLoanID },
+                        success: function (response) {
+                            if (response.Msg == "Success") {
+                                $("#BankLoanDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                $('#MessageText').html("Data Deleted Successfuly");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+
+                            }
+                            else if (response.Msg == "Error") {
+                                $('#MessageText').html("Data can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+
+
+
+
+        //*********************************************** END OF BANK LOAN DETAIL POP UP *******************************************************//
+
+
+        //*********************   BANK POP UP WINDOW ******************************
+
+        // ### Bank Window ###//
+
+        var BankIDWindow = $('#BankIDWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "1352px",
+            height: "auto",
+            title: "List Of LC Opening Bank",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        // ### Bank GRID ###//
+
+        var BankIDDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BankID",
+                    fields: {
+                        BankID: { editable: false, hidden: true },
+                        BankCode: { editable: false },
+                        BankName: { editable: false },
+                        BranchID: { editable: false, hidden: true },
+                        BanchCode: { editable: false },
+                        BranchName: { editable: false },
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var BankIDGrid = $("#BankIDGrid").kendoGrid({
+            dataSource: BankIDDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 350,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "BankID", title: "BankID", width: "80px", filterable: true, sortable: false, hidden: true },
+                      { field: "BankCode", title: "Bank Code", filterable: true },
+                      { field: "BankName", title: "Bank Name", filterable: true },
+                      { field: "BranchID", title: "BranchID", width: "80px", filterable: true, sortable: false, hidden: true },
+                      { field: "BanchCode", title: "Branch Code", filterable: true },
+                      { field: "BranchName", title: "Branch Name", filterable: true }
+            ]
+        });
+
+
+
+
+        //Open PopUp by pressing F9 key
+        $(document.body).keypress(function (e) {
+            if ($("#BankCode").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#divLoading").show();
+                    $.ajax({
+                        url: '@Url.Action("GetBankList", "EXPBankLoan")',
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data) {
+                            $("#divLoading").hide();
+                            $("#BankIDGrid").data("kendoGrid").dataSource.data(data);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('BankIDGrid');
+                    BankIDWindow.open();
+                    BankIDWindow.center();
+                }
+            }
+        });
+
+
+
+        //Press Ok button after Select Data From PopUp
+        $('#btnBankIDWindowOK').click(function () {
+            ListOfValueOpeningBankGridEvent('BankIDGrid');
+            BankIDWindow.close();
+        });
+
+
+        //Press Cancel button after Select Data From PopUp
+        $('#btnBankIDWindowCancel').click(function () {
+            BankIDWindow.close();
+        });
+
+
+        // Select Data through double Click From PopUp
+        $("#BankIDWindow").dblclick(function () {
+            ListOfValueOpeningBankGridEvent('BankIDGrid');
+            BankIDWindow.close();
+        });
+
+
+        // Select Data through keypress From PopUp
+        $("#BankIDWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueOpeningBankGridEvent('BankIDGrid');
+                BankIDWindow.close();
+            }
+            else if (keycode == '27') {
+                BankIDWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $("#btnOpeningGridSearch").click(function () {
+            $.ajax({
+                url: '@Url.Action("BtnSearchBankByBankName", "EXPBankLoan")',
+                type: 'GET',
+                data: { search: $("#txtOpeningBank").val() },
+                success: function (data) {
+                    $("#BankIDGrid").data("kendoGrid").dataSource.data(data);
+                    if (data.Count == 1) {
+                        ListOfValueOpeningBankGridEvent('BankIDGrid');
+                        SearchWindow.close();
+                    }
+                }
+            });
+        });
+
+
+        var dataSource1 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetBankList", "EXPBankLoan")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtOpeningBank").kendoAutoComplete({
+            dataSource: dataSource1,
+            filter: "startswith",
+            placeholder: "Search ...",
+        });
+
+        $("#txtOpeningBank").keyup(function (event) {
+            if ($("#txtOpeningBank").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchBankbyBankName", "EXPBankLoan")',
+                        type: 'GET',
+                        data: { search: $("#txtOpeningBank").val() },
+                        success: function (data) {
+                            $("#BankIDGrid").data("kendoGrid").dataSource.data(data);
+                            if (data.Count == 1) {
+                                ListOfValueOpeningBankGridEvent('BankIDGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueOpeningBankGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+            $("#BankID").val(selectedItem.BankID);
+            $("#BranchID").val(selectedItem.BranchID);
+        }
+        //function ListOfValueOpeningBankGridEvent(gridName) {
+        //    var WindowGrid = $("#BankIDGrid").data("kendoGrid");
+        //    var WindowGridRow = WindowGrid.select();
+        //    var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+        //    $.each(WindowGridItem, function (key, value) {
+        //        if (value != null && value != 0)
+        //            $('#' + key).val(value);
+        //    });
+
+        //    $("#BankLoanDetailGrid").data("kendoGrid").dataSource.data(WindowGridItem);
+        //    console.log(WindowGridItem);
+
+        //    changeStatus = 1;
+        //}
+
+        //Select Data from Pop up Grid
+        function SelectedItemOfListOfValue(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            grid.dataSource.read();
+            $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+            $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+
+
+        //*********************   CI  POP UP WINDOW ******************************
+
+        // ### CI Window ###//
+
+        var CIIDWindow = $('#CIIDWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "1352px",
+            height: "auto",
+            title: "List Of CI",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        // ### CI GRID ###//
+
+        var CIIDDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CIID",
+                    fields: {
+                        CIID: { editable: false, hidden: true },
+                        CIRefNo: { editable: false },
+                        CIDate: { editable: false }
+
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var CIIDGrid = $("#CIIDGrid").kendoGrid({
+            dataSource: CIIDDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 350,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "CIID", title: "CIID", width: "80px", filterable: true, sortable: false, hidden: true },
+                      //{ field: "CIRefNo", title: "CI No", filterable: true },
+                      { field: "CIRefNo", title: "CI Ref No", filterable: true },
+                      { field: "CIDate", title: "CI Date", filterable: true }
+
+            ]
+        });
+
+
+
+
+        //Open PopUp by pressing F9 key
+
+        $(document).on('keyup', '.CIRefNo', function (e) {
+            if (e.which == 120) {
+
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetCIList", "EXPBankLoan")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data33) {
+                        console.log(data33);
+                        $("#CIIDGrid").data("kendoGrid").dataSource.data(data33);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+
+                SelectedItemOfListOfValue('CIIDGrid');
+                CIIDWindow.open();
+                CIIDWindow.center();
+            }
+
+        });
+
+
+        //Press Ok button after Select Data From PopUp
+        $('#btnCIIDWindowOK').click(function () {
+            ListOfValueOpeningCIGridEvent('CIIDGrid');
+            CIIDWindow.close();
+        });
+
+
+        //Press Cancel button after Select Data From PopUp
+        $('#btnCIIDWindowCancel').click(function () {
+            CIIDWindow.close();
+        });
+
+
+        // Select Data through double Click From PopUp
+        $("#CIIDWindow").dblclick(function () {
+            ListOfValueOpeningCIGridEvent('CIIDGrid');
+            CIIDWindow.close();
+        });
+
+
+        // Select Data through keypress From PopUp
+        $("#CIIDWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueOpeningCIGridEvent('CIIDGrid');
+                CIIDWindow.close();
+            }
+            else if (keycode == '27') {
+                CIIDWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $("#btnOpeningGridSearch").click(function () {
+            $.ajax({
+                url: '@Url.Action("BtnSearchCIByCIRefNo", "EXPBankLoan")',
+                type: 'GET',
+                data: { search: $("#txtOpeningCI").val() },
+                success: function (data33) {
+                    $("#CIIDGrid").data("kendoGrid").dataSource.data(data);
+                    if (data.Count == 1) {
+                        ListOfValueOpeningCIGridEvent('CIIDGrid');
+                        SearchWindow.close();
+                    }
+                }
+            });
+        });
+
+
+        var dataSource1 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetCIList", "EXPBankLoan")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtOpeningCI").kendoAutoComplete({
+            dataSource: dataSource1,
+            filter: "startswith",
+            placeholder: "Search ...",
+        });
+
+
+        var dataSource1 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAutoCompleteCIPopupData", "LCOpening")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtOpeningCI").keyup(function (event) {
+            if ($("#txtOpeningCI").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchCIbyCIRefNo", "EXPBankLoan")',
+                        type: 'GET',
+                        data: { search: $("#txtOpeningCI").val() },
+                        success: function (data) {
+                            $("#CIIDGrid").data("kendoGrid").dataSource.data(data);
+                            if (data.Count == 1) {
+                                ListOfValueOpeningCIGridEvent('CIIDGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+
+        function ListOfValueOpeningCIGridEvent() {
+            var WindowGrid = $("#CIIDGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#BankLoanDetailGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("CIID", WindowGridItem.CIID);
+            PageGridItem.set("CIRefNo", WindowGridItem.CIRefNo);
+            PageGridItem.set("CIDate", WindowGridItem.CIDate);
+
+
+            PageGrid.editCell($("#BankLoanDetailGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+            changeStatus = 1;
+
+            $("#BankLoanDetailGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //alert(rowIndex);
+            if (rowIndex > 0)
+                $("#BankLoanDetailGrid tr:eq(1)").removeClass('k-state-selected');
+        };
+
+
+
+
+
+        //********************** LOAN HEAD POP UP *****************************
+
+
+        // ##################### Opening Head
+
+        var HeadIDWindow = $('#HeadIDWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "1352px",
+            height: "auto",
+            title: "List Of Head",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+        var HeadIDDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "HeadID",
+                    fields: {
+                        HeadID: { editable: false, filterable: true },
+                        HeadCode: { editable: false, filterable: true },
+                        HeadName: { editable: false, filterable: true },
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var HeadIDGrid = $("#HeadIDGrid").kendoGrid({
+            dataSource: HeadIDDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 350,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "HeadID", title: "BranchID", width: "80px", filterable: true, sortable: false, hidden: true },
+                      { field: "HeadCode", title: "Head Code", filterable: true },
+                      { field: "HeadName", title: "Head Name", filterable: true }
+            ]
+        });
+
+
+
+
+        //Open PopUp by pressing F9 key
+
+
+        $(document).on('keyup', '.HeadName', function (e) {
+            if (e.which == 120) {
+
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetHeadList", "EXPBankLoan")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        console.log(data);
+                        $("#HeadIDGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+
+                SelectedItemOfListOfValue('HeadIDGrid');
+                HeadIDWindow.open();
+                HeadIDWindow.center();
+            }
+
+        });
+
+
+
+        //Press Ok button after Select Data From PopUp
+        $('#btnHeadIDWindowOK').click(function () {
+            ListOfValueOpeningHeadGridEvent('HeadIDGrid');
+            HeadIDWindow.close();
+        });
+
+
+        //Press Cancel button after Select Data From PopUp
+        $('#btnHeadIDWindowCancel').click(function () {
+            HeadIDWindow.close();
+        });
+
+
+        // Select Data through double Click From PopUp
+        $("#HeadIDWindow").dblclick(function () {
+            ListOfValueOpeningHeadGridEvent('HeadIDGrid');
+            HeadIDWindow.close();
+        });
+
+
+        // Select Data through keypress From PopUp
+        $("#HeadIDWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueOpeningHeadGridEvent('HeadIDGrid');
+                HeadIDWindow.close();
+            }
+            else if (keycode == '27') {
+                HeadIDWindow.close();
+            }
+            event.stopPropagation();
+        });
+        $("#txtSearchHead").keyup(function (event) {
+            if ($("#txtSearchHead").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchHeadbyHeadName", "EXPBankLoan")',
+                        type: 'GET',
+                        data: { search: $("#txtSearchHead").val() },
+                        success: function (data) {
+                            $("#HeadIDGrid").data("kendoGrid").dataSource.data(data);
+                            if (data.Count == 1) {
+                                ListOfValueOpeningHeadGridEvent('HeadIDGrid');
+                                HeadIDWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+        $("#btnOpeningGridSearch").click(function () {
+            $.ajax({
+                url: '@Url.Action("BtnSearchHeadByHeadName", "EXPBankLoan")',
+                type: 'GET',
+                data: { search: $("#txtOpeningHead").val() },
+                success: function (data) {
+                    $("#HeadIDGrid").data("kendoGrid").dataSource.data(data);
+                    if (data.Count == 1) {
+                        ListOfValueOpeningHeadGridEvent('HeadIDGrid');
+                        SearchWindow.close();
+                    }
+                }
+            });
+        });
+
+
+        var dataSource1 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetHeadList", "EXPBankLoan")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtOpeningCI").kendoAutoComplete({
+            dataSource: dataSource1,
+            filter: "startswith",
+            placeholder: "Search ...",
+        });
+
+
+        var dataSource1 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAutoCompleteHeadPopupData", "LCOpening")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtOpeningHead").keyup(function (event) {
+            if ($("#txtOpeningHead").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchHeadbyHeadName", "EXPBankLoan")',
+                        type: 'GET',
+                        data: { search: $("#txtOpeningHead").val() },
+                        success: function (data) {
+                            $("#HeadIDGrid").data("kendoGrid").dataSource.data(data);
+                            if (data.Count == 1) {
+                                ListOfValueOpeningHeadGridEvent('HeadIDGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //To Bring Data from List of Value Grid to Main Page
+        //function ListOfValueOpeningHeadGridEvent(gridName) {
+        //    var grid = $('#' + gridName).data("kendoGrid");
+        //    var selectedItem = (grid.dataItem(grid.select()));
+        //    $.each(selectedItem, function (key, value) {
+        //        if (value != null && value != 0)
+        //            $('#' + key).val(value);
+        //    });
+
+        //    $("#LoanHead").val(selectedItem.HeadID);
+        //    $("#HeadCode").val(selectedItem.HeadCode);
+        //    $("#HeadName").val(selectedItem.HeadName);
+        //    //$("#LimID").val("");
+        //    //$("#LimNo").val(selectedItem.LimNo);
+        //    // $("#LimitCurrency").val(selectedItem.CurrencyName);
+        //}
+
+        function ListOfValueOpeningHeadGridEvent() {
+            var WindowGrid = $("#HeadIDGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#BankLoanDetailGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("LoanHead", WindowGridItem.HeadID);
+            PageGridItem.set("HeadCode", WindowGridItem.HeadCode);
+            PageGridItem.set("HeadName", WindowGridItem.HeadName);
+
+
+
+            PageGrid.editCell($("#BankLoanDetailGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+            changeStatus = 1;
+
+            $("#BankLoanDetailGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //alert(rowIndex);
+            if (rowIndex > 0)
+                $("#BankLoanDetailGrid tr:eq(1)").removeClass('k-state-selected');
+        };
+
+
+        //**********************END OF LOAN HEAD POP UP ***********************
+
+
+        //****************** CALCULATION IN JS **************************
+
+
+        //function InterestAmountCalculation() {
+        //    if ($("#LoanAmt").val() != "" && $("#InterestPercent").val() != "") {
+        //        $("#InterestAmt").val(((($("#InterestPercent").val() - 0) * ($("#LoanAmt").val() - 0)) / 100).toFixed(2));
+        //        $("#AmountToReturn").val((($("#InterestAmt").val() - 0) + ($("#LoanAmt").val() - 0)).toFixed(2));
+        //        TotalAmountCalcultaion()
+        //    }
+        //    else {
+        //        $("#InterestPercent").val("");
+        //        $("#InterestAmt").val("");//AmountToReturn
+        //        $("#AmountToReturn").val("");
+        //        $("#BalanceAmt").val("");
+
+
+        //    }
+        //}
+
+
+
+        //function InterestRateCalcultaion() {//InterestAmt
+
+        //    if ($("#LoanAmt").val() != "" && $("#InterestAmt").val() != "" && $("#ExchangeValue").val() != "") {
+        //        $("#InterestPercent").val((((($("#ExchangeValue").val() - 0) * 100)) / $("#InterestAmt").val()).toFixed(2));
+        //       // $("#AmountToReturn").val((($("#InterestAmt").val() - 0) + ($("#ExchangeValue").val() - 0)).toFixed(2));
+        //        //TotalAmountCalcultaion();
+        //    }
+        //    else {
+
+        //        $("#AmountToReturn").val("");
+        //        $("#InterestPercent").val("");
+        //        $("#TotalAmountToBePaid").val("");
+        //        $("#OtherCharges").val("");
+        //        $("#AcceptanceCommission").val("");
+        //        $("#HandlingCharge").val("");
+
+        //    }
+        //}
+
+
+
+
+
+
+
+
+        //****************** END OF CALCULATION IN JS *******************
+
+
+
+
+
+        //*************************** SAVE ******************************
+
+
+        var expBankLoanViewModel =
+            {
+                "BankID": "", "BranchID": "", "ApprovalNote": "", "expBankLoanList": []
+
+            };
+        var expBankLoanDetailViewModel =
+        {
+            "BankLoanID": "", "BankLoanNo": "", "LoanHead": "", "LoanLimit": "", "RefACNo": "", "RefACName": "",
+            "LoanReceiveDate": "", "LoanAmt": "", "InterestPercent": "", "ReturnedAmt": "", "BalanceAmt": "", "CIID": "", "Remarks": "",
+            "RecordStatus": "", "RunningStatus": ""
+        };
+
+
+        function Save() {
+            saveUpdateStatus = 1;
+            if (saveUpdateStatus == 1) {
+                expBankLoanViewModel.BankID = $("#BankID").val();
+                expBankLoanViewModel.BranchID = $("#BranchID").val();
+                expBankLoanViewModel.ApprovalNote = $("#ApprovalNote").val();
+                var parentGrid = $("#BankLoanDetailGrid").data("kendoGrid").dataSource;
+                var parentGridItem = parentGrid.data(); // Get Detail Grid Data
+                //expBankLoanViewModel.expBankLoanList = [];
+                for (var i = 0; i <= parentGridItem.length - 1; i++) {
+
+                    expBankLoanDetailViewModel.BankLoanID = parentGridItem[i].BankLoanID;
+                    expBankLoanDetailViewModel.BankLoanNo = parentGridItem[i].BankLoanNo;
+                    expBankLoanDetailViewModel.LoanHead = parentGridItem[i].LoanHead;
+                    expBankLoanDetailViewModel.LoanLimit = parentGridItem[i].LoanLimit;
+                    expBankLoanDetailViewModel.RefACNo = parentGridItem[i].RefACNo;
+                    expBankLoanDetailViewModel.RefACName = parentGridItem[i].RefACName;
+                    expBankLoanDetailViewModel.LoanReceiveDate = parentGridItem[i].LoanReceiveDate;
+                    expBankLoanDetailViewModel.LoanAmt = parentGridItem[i].LoanAmt;
+                    expBankLoanDetailViewModel.InterestPercent = parentGridItem[i].InterestPercent;
+                    expBankLoanDetailViewModel.ReturnedAmt = parentGridItem[i].ReturnedAmt;
+                    expBankLoanDetailViewModel.BalanceAmt = parentGridItem[i].BalanceAmt;
+                    expBankLoanDetailViewModel.Remarks = parentGridItem[i].Remarks;
+                    expBankLoanDetailViewModel.RunningStatus = parentGridItem[i].RunningStatus;
+                    expBankLoanDetailViewModel.CIID = parentGridItem[i].CIID;
+
+                    expBankLoanViewModel.expBankLoanList.push(expBankLoanDetailViewModel);
+                    expBankLoanDetailViewModel =
+                                   {
+                                       "BankLoanNo": "", "LoanHead": "", "LoanLimit": "", "RunningStatus": "", "RefACNo": "",
+                                       "BankLoanID": "", "RefACName": "", "LoanReceiveDate": "", "LoanAmt": "", "InterestPercent": "",
+                                       "ReturnedAmt": "", "BalanceAmt": "", "CIID": "", "Remarks": "", "RecordStatus": ""
+                                   };
+                }
+
+
+                $("#divLoading").show();
+                if (changeStatus == 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SaveAndUpdate", "EXPBankLoan")',
+                        data: JSON.stringify(expBankLoanViewModel),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (response) {
+                            $("#divLoading").hide();
+                            if (response.msg.Type == 2) {
+                                $("#divLoading").hide();
+
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+                                changeStatus = 0;
+
+                            } else if (response.msg.Type == 3) {
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                changeStatus = 0;
+
+                            } else {
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        },
+                        error: function (response) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    expBankLoanViewModel = { "BankID": "", "BranchID": "", "ApprovalNote": "", "expBankLoanList": [] };
+                }
+
+                else {
+                    $("#MessageText").html("Please Enter the Proper Data.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+
+            }
+        }
+
+        $("#btnSave").click(function () {
+            Save();
+            changeStatus = 0;
+        });
+
+
+        //*************************** END SAVE **************************
+
+
+        function Reset() {
+            $("#BankLoanDetailGrid").data("kendoGrid").dataSource.data('');
+            $('.Dropdown').val('');
+            $('.FormBody input[type=text]').val('');
+            $('.FormBody input[type=text]').val('');
+            $('.txtBox').val('');//
+            $("#BankLoanID").val("");
+            $("#Remarks").val("");
+            $('.FormBody input[type=hidden]').val('');
+            $('.FormBody input[type=number]').val('');
+            $('.FormBody input[type=button]').attr('disabled', false);
+            $('#MessageText').html('');
+            $('.FormBody .datePicker').val(getISODateTime(new Date()));
+            $('#btnSubmit').attr('disabled', false);
+            $("#Remarks").val("");
+            $("#ApprovalNote").val("");
+            $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+
+        }
+
+
+        //********************************** Start Search Data  *******************************
+
+
+        $("#btnSearch").click(function () {
+            SearchResult("GetCnFBillInfo", "EXPBankLoan", "BankLoanID,LoanHead,BankID,BranchID,BankCode,BanchCode,ApprovalNote,RunningStatus,HeadID");
+        });
+
+        $("#btnSearchGridSearch").click(function () {
+            GetSearchResult("SearchLcmCnFBillInfoByLCNo", "EXPBankLoan");
+        });
+
+        AutoComplete("GetAutoCompleteData", "EXPBankLoan");
+
+
+        function ListOfValueSearchGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+
+            $("#BankLoanID").val(selectedItem.BankLoanID);
+            $("#BankID").val(selectedItem.BankID);
+            $("#BankCode").val(selectedItem.BankCode);
+            $("#BankName").val(selectedItem.BankName);
+            $("#BanchCode").val(selectedItem.BanchCode);
+            $("#BranchID").val(selectedItem.BranchID);
+            $("#BranchName").val(selectedItem.BranchName);
+            $("#RecordStatus").val(selectedItem.RecordStatus);
+            $("#RunningStatus").val(selectedItem.RunningStatus);
+            $("#ApprovalNote").val(selectedItem.ApprovalNote);
+
+
+
+
+            $.ajax({
+                url: '@Url.Action("GetBankLoanByBankLoanID", "EXPBankLoan")',
+                type: 'GET',
+                //data: { BankID: selectedItem.BankID, BranchID: selectedItem.BranchID },
+                success: function (response) {
+                    $("#divLoading").show();
+                    $("#BankLoanDetailGrid").data("kendoGrid").dataSource.data(response);
+                    $("#RecordStatus").val(response.RecordStatus);
+                    changeStatus = 1;
+                    if (selectedItem.RecordStatus == "Not Confirmed") {
+                        $("#btnConfirm").removeAttr('disabled');
+                        $("#btnCheck").removeAttr('disabled');
+                        $("#btnSubmit").removeAttr('disabled');
+                    }
+                    else if (selectedItem.RecordStatus == "Checked") {
+                        $("#btnCheck").attr('disabled', 'disabled');
+
+                    }
+                        //else {
+                        //    $("#btnCheck").removeAttr('disabled');
+                        //}
+
+                    else if (selectedItem.RecordStatus == "Confirmed") {
+                        $("#btnConfirm").attr('disabled', 'disabled');
+                        $("#btnCheck").attr('disabled', 'disabled');
+                        $("#btnSubmit").attr('disabled', 'disabled');
+                        $('#btnDelete').attr('disabled', true);
+
+                    }
+                    else {
+                        $("#btnConfirm").removeAttr('disabled');
+                        $("#btnCheck").removeAttr('disabled');
+                        $("#btnSubmit").removeAttr('disabled');
+                        $('#btnDelete').removeAttr('disabled');
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+
+            });
+        }
+
+        //********************************** END Search Data  *******************************
+
+
+
+
+        //###############  CnfBill WINDOW ###############################
+        @*$('#btnDelete').click(function () {
+        if ($("#BankLoanID").val() != "") {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("DeleteBankLoanList", "EXPBankLoan")',
+                type: 'GET',
+                data: ({ "bankLoanID": $("#BankLoanID").val() }),
+                success: function (data) {
+
+                    $("#divLoading").hide();
+                    if (response.Type == 4) {
+                        $('.FormBody input[type=text]').val('');
+                        $('.Dropdown').val('');
+                        $('.FormBody input[type=hidden]').val('');
+                        $('.FormBody input[type=number]').val('');
+                        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                        $('#MessageText').html(data.Msg);
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    } else {
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error occured !!!");
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+    });*@
+
+
+        //###################### DELETE #################
+        // Delete CnF Bill ID with data from Database.
+
+        var LimInfoDeleteWindow = $('#DeleteLimInfoListConfirmWindow').kendoWindow({
+            width: "300px",
+            padding: "0px 0px 0px 100px",
+            title: "Do You Want To Delete This Record?",
+            visible: false,
+            modal: true,
+            draggable: true
+            //position: { top: 300, left: 400 }
+        }).data('kendoWindow');
+
+        $("#btnDelete").click(function () {
+            if ($("#BankLoanID").val() != "") {
+                gridToDelete = "all";
+                LimInfoDeleteWindow.open();
+                LimInfoDeleteWindow.center();
+            } else if ($("#BankLoanID").val() == "" && changeStatus == 1) {
+                $('#MessageText').html("The record you are trying to delete is not in the database.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            } else {
+
+            }
+        });
+
+
+        $('#btnDeleteLimInfoListOK').click(function () {
+            if (gridToDelete == "all") {
+                if ($("#BankLoanID").val() != "") {
+                    //var _bankLoanID = $("#BankLoanID").val();
+                    $.ajax({
+                        url: '@Url.Action("DeleteBankLoanList", "EXPBankLoan")',
+                        type: 'GET',
+                        data: ({ "bankLoanID": $("#BankLoanID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.Type == 4) {
+                                $('#MessageText').html(response.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            } else {
+                                $("#MessageText").html(response.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                            LimInfoDeleteWindow.close();
+                        }
+                    });
+                }
+                gridToDelete = "";
+                LimInfoDeleteWindow.close();
+            }
+        });
+        $("#btnDeleteLimInfoListCancel").click(function () {
+            LimInfoDeleteWindow.close();
+        });
+
+
+        //############################################################### CONFIRM Bank Loan ###################################################
+
+        $("#btnConfirm").click(function () {
+            expBankLoanViewModel.BankID = $("#BankID").val();
+            expBankLoanViewModel.BranchID = $("#BranchID").val();
+            expBankLoanViewModel.ApprovalNote = $("#ApprovalNote").val();
+            var parentGrid = $("#BankLoanDetailGrid").data("kendoGrid").dataSource;
+            var parentGridItem = parentGrid.data(); // Get Detail Grid Data
+            //expBankLoanViewModel.expBankLoanList = [];
+            for (var i = 0; i <= parentGridItem.length - 1; i++) {
+                if (parentGridItem[i].dirty)
+                {
+                expBankLoanDetailViewModel.BankLoanID = parentGridItem[i].BankLoanID;
+                expBankLoanDetailViewModel.BankLoanNo = parentGridItem[i].BankLoanNo;
+                expBankLoanDetailViewModel.LoanHead = parentGridItem[i].LoanHead;
+                expBankLoanDetailViewModel.LoanLimit = parentGridItem[i].LoanLimit;
+                expBankLoanDetailViewModel.RefACNo = parentGridItem[i].RefACNo;
+                expBankLoanDetailViewModel.RefACName = parentGridItem[i].RefACName;
+                expBankLoanDetailViewModel.LoanReceiveDate = parentGridItem[i].LoanReceiveDate;
+                expBankLoanDetailViewModel.LoanAmt = parentGridItem[i].LoanAmt;
+                expBankLoanDetailViewModel.InterestPercent = parentGridItem[i].InterestPercent;
+                expBankLoanDetailViewModel.ReturnedAmt = parentGridItem[i].ReturnedAmt;
+                expBankLoanDetailViewModel.BalanceAmt = parentGridItem[i].BalanceAmt;
+                expBankLoanDetailViewModel.Remarks = parentGridItem[i].Remarks;
+                expBankLoanDetailViewModel.RunningStatus = parentGridItem[i].RunningStatus;
+                expBankLoanDetailViewModel.CIID = parentGridItem[i].CIID;
+
+                expBankLoanViewModel.expBankLoanList.push(expBankLoanDetailViewModel);
+                expBankLoanDetailViewModel =
+                   {
+                       "BankLoanID": "", "BankLoanNo": "", "LoanHead": "", "LoanLimit": "", "RunningStatus": "", "RefACNo": "",
+                       "RefACName": "", "LoanReceiveDate": "", "LoanAmt": "", "InterestPercent": "",
+                       "ReturnedAmt": "", "BalanceAmt": "", "CIID": "", "Remarks": "", "RecordStatus": ""
+                   };
+                }
+            }
+
+
+            $("#divLoading").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmRecordStatus", "EXPBankLoan")',
+                data: { bankLoanID: $("#BankLoanID").val() },
+                ///data: JSON.stringify(expBankLoanViewModel, { bankLoanID: $("#BankLoanID").val() } ),
+                //data:JSON.stringify({expBankLoanViewModel;"bankLoanID": $("#BankLoanID").val() }),
+                success: function (data) {
+                    console.log(data);
+                    $("#divLoading").hide();
+                    if (data.msg.Type == 2) {
+                        $('#MessageText').html(data.msg.Msg);
+                        $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        $("#btnConfirm").attr('disabled', 'disabled');
+                        $("#btnChecked").attr('disabled', 'disabled');
+                        $('#btnDelete').attr('disabled', true);
+                        $("#btnSubmit").attr('disabled', 'disabled');
+                    }
+                    else {
+                        $("#MessageText").html(data.msg.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                },
+                error: function (respnse) {
+                    // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    $("#divLoading").hide();
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        });
+
+        //############################################################### END OF CONFIRMED Bank Loan ###################################################
+
+
+
+</script>
+
+

@@ -1,0 +1,191 @@
+﻿/*------------------Sticky Footer Css begin-------------------*/
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    margin: 0 0 100px;
+    bottom: 100px;
+    background: rgb(252, 252, 252);
+    background: white;
+    overflow: auto;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+header {
+    margin-bottom: 30px;
+    /*height: 20px;
+    width: 100%;
+    background: #222;
+    color: white;*/
+}
+
+.middle {
+    width: 100%;
+    color: #666666;
+}
+
+footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    background: transparent;
+    clear: both;
+    
+}
+/*-------------Sticky Footer Css end----------------*/
+
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+/*--------------- Menu Begin ----------------*/
+#menubar {
+    background-color: #2f4f4f;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 20px;
+    top: 25px;
+    border-radius:0;
+}
+ 
+#homebtn {
+    height: 49px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+ }
+/*------------------- Menu End ---------------------*/
+
+p, h5, em, span {
+    padding: 0px;
+    margin: 0px;
+}
+
+.btn-link-delete {
+    cursor: pointer;
+}
+
+
+
+/*-----------------SignIn/SignUp-------------------*/
+#signInLink:hover {
+    background-color: #62327C;    
+}
+
+#signOutLink:hover {
+    background-color: #62327C;    
+}
+#signInLink:focus {
+    background-color: #62327C;    
+}
+
+#signOutLink:focus {
+    background-color: #62327C;
+}
+
+
+/*---------------SignIn/SignUp End-----------------*/
+
+
+/* --------------------grid style----------------*/
+.t-grid {
+    position: static;
+    overflow: hidden;
+}
+
+.t-grid-content {
+    overflow-x: hidden;
+    position: static;
+    width: 100%;
+}
+
+.t-grid-header-wrap {
+    position: static;
+}
+
+.t-grid-content {
+    overflow-x: hidden;
+}
+
+DIV.t-grid-header {
+    padding-right: 0px;
+}
+
+.t-grid .t-group-col {
+    width: 0;
+}
+
+.t-grid .t-grid-header .t-header .t-link {
+    height: auto;
+    margin: 0;
+    padding: 3px 5px 3px 5px;
+}
+
+.t-grid .t-grid-header .t-header, .t-grid .t-grid-header .t-last-header {
+    white-space: normal;
+    margin: 0; /*padding: 0.3em 1.4em 0.3em 0.6em;*/
+    padding: 3px 0px 3px 0px;
+    text-align: center;
+}
+
+.t-grid-header .t-header .t-link {
+    margin: 0;
+    padding: 3px 5px 3px 5px;
+}
+
+.t-widget, .t-widget button, .t-widget input, .t-widget select, .t-button, .t-formatted-value {
+    font-family: "Segoe UI",Arial,sans-serif;
+    font-size: 12px;
+}
+
+.t-grid-footer-wrap {
+    position: static;
+}
+
+.t-filter-options {
+    width: 155px !important;
+}  
+
+/* --------------------gird style end----------------*/

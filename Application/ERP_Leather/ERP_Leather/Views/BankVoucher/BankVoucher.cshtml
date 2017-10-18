@@ -1,0 +1,1393 @@
+﻿@{
+    ViewBag.Title = "Bank Voucher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Bank Reference No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RefBVNo"  class="txtBox" style="width:150px;" />
+                <input type="hidden" id="BVID" class="txtBox" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Bank</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BankID" class="txtBox" />
+                <input type="text" id="BankName" placeholder="Press F9" readonly="readonly" class="txtBox" style="width: 150px; margin-left: 2px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Account Name</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ACName" class="txtBox" style="width: 150px; margin-left: 2px;" />
+            </div>
+
+            
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Voucher Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BVDate" class="txtBox datePicker" style="width: 150px;" />
+            </div>
+
+            
+
+            <div class="col-lg-2">
+                <label>Branch</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BranchID" class="txtBox" />
+                <input type="text" id="BranchName" placeholder="Press F9" readonly="readonly" class="txtBox" style="width: 150px; margin-left: 2px;" />
+            </div>
+
+
+            <div class="col-lg-2">
+                <label>Account No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ACNo" class="txtBox" style="width: 150px; margin-left: 2px;" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-2">
+                @*<textarea id="Remarks" class="txtBox" style="width: 150px; margin-left: 2px;" />*@
+                <textarea id="Remarks" class="txtArea" rows="3" cols="60"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div id="VoucherGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Check Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="CheckComment" class="txtBox" name="" tabindex=""></textarea>
+                @*<input type="button" id="btnCheck" value="Check" />*@
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="BankWindow" style="display: none;">
+
+    <div id="BankWindowGrid" class="PopUpGrid"></div>
+    
+    <input type="button" id="btnBankWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBankWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="BranchWindow" style="display: none;">
+
+    <div id="BranchWindowGrid" class="PopUpGrid"></div>
+    
+    <input type="button" id="btnBranchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBranchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="CIWindow" style="display: none;">
+
+    <div id="CIWindowGrid" class="PopUpGrid"></div>
+
+    <input type="button" id="btnCIWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCIWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="TransHeadWindow" style="display: none;">
+
+    <div id="TransHeadWindowGrid" class="PopUpGrid"></div>
+
+    <input type="button" id="btnTransHeadWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTransHeadWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    //var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+    
+
+    $(document).ready(function () {
+
+        
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+        
+        var ddlCurrencyDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CurrencyID",
+                    fields: {
+                        CurrencyID: { editable: false },
+                        CurrencyName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveCurrency", "Currency")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlCurrency(container, options) {
+            $('<input name="CurrencyID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "CurrencyName",
+                        dataValueField: "CurrencyName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlCurrencyDataSource
+                    });
+        };
+
+        //--------------------------------------End of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var VoucherGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BVDTLID",
+                    fields: {
+                        BVDTLID: { editable: true },
+                        TransSL: { editable: true },
+                        Narration: { editable: true },
+                        HeadID: { editable: true },
+                        HeadName: { editable: true, defaultValue: "Press F9" },
+                        CurrencyName: { editable: true },
+                        BVCRAmt: { editable: true, type: "number", validation: { min: 0, max: 999999999999 }, defaultValue: "" },
+                        BVDRAmt: { editable: true, type: "number", validation: { min: 0, max: 999999999999 }, defaultValue: "" },
+                        ExchangeCurrencyName: { editable: true },
+                        ExchangeRate: { editable: true, type: "number", validation: { min: 0, max: 999999999999 }, defaultValue: "" },
+                        ExchangeAmount: { editable: true, type: "number", validation: { min: 0, max: 999999999999 }, defaultValue: "" },
+                        CIID: { editable: true },
+                        CIRefNo: { editable: true, defaultValue: "Press F9" }
+
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var VoucherGrid = $("#VoucherGrid").kendoGrid({
+            dataSource: VoucherGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+
+                $("[name='BVCRAmt']", e.container).blur(function () {
+                    
+                    if ($("[name='BVCRAmt']").val() > 0)
+                    {
+                        var grid = $("#VoucherGrid").data("kendoGrid");
+                        var row = $(this).closest("tr");
+                        e.model.set("BVDRAmt", 0);
+                    }
+                    
+                });
+
+                $("[name='BVDRAmt']", e.container).blur(function () {
+
+                    if ($("[name='BVDRAmt']").val() > 0) {
+                        var grid = $("#VoucherGrid").data("kendoGrid");
+                        var row = $(this).closest("tr");
+                        e.model.set("BVCRAmt", 0);
+                    }
+
+                });
+
+                //$("[name='ExchangeAmount']", e.container).blur(function () {
+                //    var grid = $("#VoucherGrid").data("kendoGrid");
+                //    var row = $(this).closest("tr");
+                //    e.model.set("Amount", (grid.dataItem(row).ExchangeRate * grid.dataItem(row).ExchangeAmount).toFixed(4));
+                //});
+
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            toolbar: [{
+                text: "Add New Item",
+                className: "btnVoucherGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                    { field: "TransSL", title: "SL", width: "60px" },
+                    { field: "Narration", title: "Narration", filterable: false, width: "80px" },
+                    { field: "HeadName", title: "Trans Head", width: "75px", attributes: { "class": "TransHead" } },
+                    { field: "ExchangeRate", format: "{0:n2}", title: "Exchange Rate", width: "70px", filterable: false },
+                    { field: "ExchangeCurrencyName", title: "Exchange Currency", width: "75px", editor: ddlCurrency },
+                    { field: "ExchangeAmount", format: "{0:n2}", title: "Exchange Amount", filterable: false, width: "70px" },
+                    { field: "BVCRAmt", format: "{0:n2}", title: "Credit Amount (BDT)", filterable: false, width: "70px" },
+                    { field: "BVDRAmt", format: "{0:n2}", title: "Debit Amount (BDT)", filterable: false, width: "70px" },
+                    { field: "CIRefNo", title: "CI Ref No", width: "70px", filterable: false, attributes: { "class": "CIRefNo" } },
+                    
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 70 }
+            ]
+        }).data('kendoGrid');
+
+        
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BVID",
+                    fields: {
+                        BVID: { },
+                        RefBVNo: {},
+                        BVDate: {},
+                        BVType: {},
+                        BankID: {},
+                        BankName: {},
+                        BranchID: {},
+                        BranchName: {},
+                        ACNo: {},
+                        ACName: {},
+                        Remarks: {}
+
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetTransactionInfoForSearch", "BankVoucher")',
+                    type: "GET",
+                    dataType: "JSON",
+                }
+            }
+        });
+
+        var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            columns: [
+                  { field: "RefBVNo", title: "Voucher No", width: "60px" },
+                  { field: "BVDate", title: "Voucher Date", width: "60px" },
+                  { field: "BVType", title: "Voucher Type", width: "60px" },
+                  { field: "BankName", title: "Bank", width: "80px" },
+                  { field: "BranchName", title: "Branch", width: "60px" },
+                  { field: "ACNo", title: "Account No.", width: "80px" },
+                  { field: "ACName", title: "Account Name", width: "60px" },
+                  { field: "Remarks", title: "Remarks", width: "60px" },
+                  { field: "RecordStatus", title: "Record Status", width: "60px" }
+            ]
+        });
+
+        var BankWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BankID",
+                    fields: {
+                        BankID: {},
+                        BankName: {},
+                        BankCode: {}
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetLocalBankList", "BankVoucher")',
+                    type: "GET",
+                    dataType: "JSON",
+                }
+            }
+        });
+
+        var BankWindowGrid = $("#BankWindowGrid").kendoGrid({
+            dataSource: BankWindowGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 320,
+            columns: [
+                  
+                  { field: "BankName", title: "Bank Name", width: "80px" },
+                  { field: "BankCode", title: "Bank Code", width: "60px" }
+                  
+            ]
+        });
+
+
+        var BranchWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BranchID",
+                    fields: {
+                        BranchID: {},
+                        BranchName: {},
+                        BranchCode: {}
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var BranchWindowGrid = $("#BranchWindowGrid").kendoGrid({
+            dataSource: BranchWindowGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 320,
+            columns: [
+
+                  { field: "BranchName", title: "Branch", width: "80px" },
+                  { field: "BranchCode", title: "Branch", width: "60px" }
+
+            ]
+        });
+
+
+        var CIWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CIID",
+                    fields: {
+                        CIID: {},
+                        CIRefNo: {},
+                        CIDate: {}
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetCIList", "BankVoucher")',
+                    type: "GET",
+                    dataType: "JSON",
+                }
+            }
+        });
+
+        var CIWindowGrid = $("#CIWindowGrid").kendoGrid({
+            dataSource: CIWindowGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 320,
+            columns: [
+
+                  { field: "CIRefNo", title: "CI Ref No.", width: "80px" },
+                  { field: "CIDate", title: "CI Date", width: "60px" }
+
+            ]
+        });
+
+
+        var TransHeadWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "HeadID",
+                    fields: {
+                        HeadID: {},
+                        HeadName: {},
+                        HeadCode: {},
+                        HeadCategory: {},
+                        HeadType: {}
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveHead", "TransHead")',
+                    type: "GET",
+                    dataType: "JSON",
+                }
+            }
+        });
+
+        var TransHeadWindowGrid = $("#TransHeadWindowGrid").kendoGrid({
+            dataSource: TransHeadWindowGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 320,
+            columns: [
+
+                  { field: "HeadName", title: "Head Name", width: "80px" },
+                  { field: "HeadCode", title: "Head Code", width: "60px" },
+                  { field: "HeadCategory", title: "Head Category", width: "80px" },
+                  { field: "HeadType", title: "Head Type", width: "60px" }
+
+            ]
+        });
+
+        
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+      
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+        function GetBranchListForSpecificBank() {
+            $.ajax({
+                url: '@Url.Action("GetBranchListForSpecificBank", "BankVoucher")',
+                type: 'GET',
+                data: { "_BankID": $("#BankID").val() },
+                success: function (response) {
+
+                    $("#BranchWindowGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+
+        $(document.body).keyup(function (e) {
+            //if (PopUpWindowOPen == 1) {
+
+            if ($("#BankName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('BankWindowGrid');
+                    BankWindow.open();
+                    BankWindow.center();
+                }
+            }
+
+            else if ($("#BranchName").is(":focus")) {
+
+                if ($("#BankName").val() != "Press F9") {
+                    if (e.keyCode == 120) {
+                        GetBranchListForSpecificBank();
+                        SelectedItemOfListOfValue('BranchWindowGrid');
+                        BranchWindow.open();
+                        BranchWindow.center();
+                    }
+                }
+                else {
+                    $('#MessageText').html("Please Select the Bank First");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+
+            }
+
+            //else if ($("#CIRefNo").is(":focus")) {
+            //    if (e.keyCode == 120) {
+            //        SelectedItemOfListOfValue('CIWindowGrid');
+            //        CIWindow.open();
+            //        CIWindow.center();
+            //    }
+            //}
+
+
+
+
+        });
+
+        $(document).on('keyup', '.TransHead', function (e) {
+            if (e.which == 120) {
+                //GetCategoryWiseTransHead();
+                SelectedItemOfListOfValue('TransHeadWindowGrid');
+                TransHeadWindow.open(); //Open Popup
+                TransHeadWindow.center();
+                //MakeVoucherGridEditable();
+            }
+        });
+
+        $(document).on('keyup', '.CIRefNo', function (e) {
+            if (e.which == 120) {
+                //GetCategoryWiseTransHead();
+                SelectedItemOfListOfValue('CIWindowGrid');
+                CIWindow.open(); //Open Popup
+                CIWindow.center();
+                //MakeVoucherGridEditable();
+            }
+        });
+        
+
+        
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var SearchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Bank Voucher",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BankWindow = $('#BankWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List of Bank",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BranchWindow = $('#BranchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List of Branch",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var CIWindow = $('#CIWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "500",
+            height: "auto",
+            title: "List of CI",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var TransHeadWindow = $('#TransHeadWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List of Head",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date()
+                        //change: function () {
+                        //    alert("test");
+                        //}
+                    });
+        }
+
+        $("#VoucherGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $("#BVID").val(selectedItem.BVID);
+            $("#RefBVNo").val(selectedItem.RefBVNo);
+            $("#BankID").val(selectedItem.BankID);
+            $("#BankName").val(selectedItem.BankName);
+            $("#BranchID").val(selectedItem.BranchID);
+            $("#BranchName").val(selectedItem.BranchName);
+            $("#BVDate").val(selectedItem.BVDate);
+            $("#ACNo").val(selectedItem.ACNo);
+            $("#ACName").val(selectedItem.ACName);
+            $("#Remarks").val(selectedItem.Remarks);
+
+            PageStatus = selectedItem.RecordStatus;
+            CheckRecordStatusForButton(PageStatus);
+
+            $.ajax({
+                url: '@Url.Action("GetTransactionDetailsAfterSearch", "BankVoucher")',
+                data: ({ "_BVID": selectedItem.BVID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#divLoading").show();
+                },
+                complete: function () {
+                    $("#divLoading").hide();
+                },
+                success: function (response) {
+                    
+                    $("#VoucherGrid").data("kendoGrid").dataSource.data(response);
+
+                    
+                }
+            });
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            SearchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                SearchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                SearchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        function BankWindowEvent() {
+            var WindowGrid = $("#BankWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $("#BankID").val(WindowGridItem.BankID);
+            $("#BankName").val(WindowGridItem.BankName);
+
+            changeStatus = 1;
+            //checkUnsavedData = 1;
+        };
+        $('#btnBankWindowOK').click(function () {
+            BankWindowEvent();
+            BankWindow.close();
+        });
+        $('#btnBankWindowCancel').click(function () {
+            BankWindow.close();
+        });
+        $("#BankWindowGrid").dblclick(function () {
+            BankWindowEvent();
+            BankWindow.close();
+        });
+        $("#BankWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                BankWindowEvent();
+                BankWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BankWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function BranchWindowEvent() {
+            var WindowGrid = $("#BranchWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $("#BranchID").val(WindowGridItem.BranchID);
+            $("#BranchName").val(WindowGridItem.BranchName);
+
+            changeStatus = 1;
+            //checkUnsavedData = 1;
+        };
+        $('#btnBranchWindowOK').click(function () {
+            BranchWindowEvent();
+            BranchWindow.close();
+        });
+        $('#btnBranchWindowCancel').click(function () {
+            BranchWindow.close();
+        });
+        $("#BranchWindowGrid").dblclick(function () {
+            BranchWindowEvent();
+            BranchWindow.close();
+        });
+        $("#BranchWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                BranchWindowEvent();
+                BranchWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BranchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        function CIWindowEvent() {
+            var WindowGrid = $("#CIWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+
+            var PageGrid = $("#VoucherGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            PageGridItem.set("CIID", WindowGridItem.CIID);
+            PageGridItem.set("CIRefNo", WindowGridItem.CIRefNo);
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            //PageGrid.editCell($("#VoucherGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+
+            //$("#VoucherGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#VoucherGrid tr:eq(1)").removeClass('k-state-selected');
+
+            //MakeVoucherGridNonEditable();
+            changeStatus = 1;
+            checkUnsavedData = 1;
+        };
+        $('#btnCIWindowOK').click(function () {
+            CIWindowEvent();
+            CIWindow.close();
+        });
+        $('#btnCIWindowCancel').click(function () {
+            CIWindow.close();
+        });
+        $("#CIWindowGrid").dblclick(function () {
+            CIWindowEvent();
+            CIWindow.close();
+        });
+        $("#CIWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                CIWindowEvent();
+                CIWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                CIWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function TransHeadWindowEvent() {
+            var WindowGrid = $("#TransHeadWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#VoucherGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            
+            PageGridItem.set("HeadID", WindowGridItem.HeadID);
+            PageGridItem.set("HeadName", WindowGridItem.HeadName);
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGrid.editCell($("#VoucherGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+
+            $("#VoucherGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            if (rowIndex > 0)
+                $("#VoucherGrid tr:eq(1)").removeClass('k-state-selected');
+
+            //MakeVoucherGridNonEditable();
+            changeStatus = 1;
+            checkUnsavedData = 1;
+        };
+        $('#btnTransHeadWindowOK').click(function () {
+            TransHeadWindowEvent();
+            TransHeadWindow.close();
+        });
+        $('#btnTransHeadWindowCancel').click(function () {
+            TransHeadWindow.close();
+        });
+        $("#TransHeadWindow").dblclick(function () {
+            TransHeadWindowEvent();
+            TransHeadWindow.close();
+        });
+        $("#TransHeadWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                TransHeadWindowEvent();
+                TransHeadWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                TransHeadWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                $("#VoucherGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog(); // Probelm opening window!
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                ResetOnlyMasterPageData();
+                $("#VoucherGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 3) // For Requisition Item Delete from Grid
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Requisition Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmVoucher", "BankVoucher")',
+                type: 'GET',
+                data: { "_BVID": $("#BVID").val(), "_CheckComment": $("#CheckComment").val() },
+                beforeSend: function () {
+                    $("#divLoading").show();
+                },
+                complete: function () {
+                    $("#divLoading").hide();
+                },
+                success: function (response) {
+
+                    if (response== true) {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+                        changeStatus = 0;
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+                    } else if (response == false) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        $("#VoucherGrid").keyup(function (e) {
+
+            if (e.keyCode == 13) {
+                var grid = $("#VoucherGrid").data("kendoGrid");
+                $("#VoucherGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+            }
+        });
+
+        $(".btnVoucherGrid").click(function (e) {
+
+            var grid = $("#VoucherGrid").data("kendoGrid");
+            $("#VoucherGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            e.preventDefault();
+
+        });
+
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+
+        var DeleteFrom = 0;
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                dataitem = VoucherGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = VoucherGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // VoucherItem Delete
+            {
+                if (dataitem.BVDTLID == 0) {
+                    $("#VoucherGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteVoucherItem", "BankVoucher")',
+                        type: 'GET',
+                        data: { "_BVDTLID": dataitem.BVDTLID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#VoucherGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+            else if (DeleteFrom == 3) //PI Delete
+            {
+                var GridDataSource = $("#VoucherGrid").data("kendoGrid").dataSource;
+                var GridData = GridDataSource.data();
+                if (GridData.length > 0) {
+                    $('#MessageText').html("Issue Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteVoucher", "BankVoucher")',
+                        type: 'GET',
+                        data: { "_BVID": $("#BVID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+
+    var EXPBankVoucherDtl = {
+        "BVDTLID": "", "TransSL": "", "Narration": "", "TransHead": "", "BVCRAmt": "", "BVDRAmt": "", "CurrencyName": "", "ExchangeRate": "",
+        "ExchangeCurrencyName": "", "ExchangeAmount": "", "CIID": ""
+    };
+
+    var FinalObject = {
+        "BVID": "", "RefBVNo": "", "BVDate": "", "BVType": "", "BankID": "", "BranchID": "", "ACNo": "", "ACName": "", "CIID": "", "Remarks": "",
+        "EXPBankVoucherDtl": []
+    };
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('RefBVNo', 50);
+        CheckRequiredTextBoxMaxLength('BankName', 100);
+        CheckRequiredTextBoxMaxLength('BranchName', 100);
+        //CheckRequiredTextBoxMaxLength('ACNo', 100);
+
+        var VoucherGridDataSource = $("#VoucherGrid").data("kendoGrid").dataSource;
+        var VoucherGridData = VoucherGridDataSource.data();
+        
+        if (saveStatus == 1) {
+            FinalObject.BVID = $("#BVID").val();
+            FinalObject.RefBVNo = $("#RefBVNo").val();
+            FinalObject.BVDate = $("#BVDate").val();
+            FinalObject.BVType = $("#BVType").val();
+            FinalObject.BankID = $("#BankID").val();
+            FinalObject.BranchID = $("#BranchID").val();
+            FinalObject.ACNo = $("#ACNo").val();
+            FinalObject.ACName = $("#ACName").val();
+            FinalObject.Remarks = $("#Remarks").val();
+
+            for (var i = VoucherGridData.length - 1; i >= 0; i--) {
+                
+                EXPBankVoucherDtl.BVDTLID = VoucherGridData[i].BVDTLID;
+                EXPBankVoucherDtl.TransSL = VoucherGridData[i].TransSL;
+                EXPBankVoucherDtl.Narration = VoucherGridData[i].Narration;
+                EXPBankVoucherDtl.TransHead = VoucherGridData[i].HeadID;
+
+                EXPBankVoucherDtl.BVCRAmt = VoucherGridData[i].BVCRAmt;
+                EXPBankVoucherDtl.BVDRAmt = VoucherGridData[i].BVDRAmt;
+                EXPBankVoucherDtl.CurrencyName = VoucherGridData[i].CurrencyName;
+                EXPBankVoucherDtl.ExchangeRate = VoucherGridData[i].ExchangeRate;
+
+                EXPBankVoucherDtl.ExchangeCurrencyName = VoucherGridData[i].ExchangeCurrencyName;
+                EXPBankVoucherDtl.ExchangeAmount = VoucherGridData[i].ExchangeAmount;
+                EXPBankVoucherDtl.CIID = VoucherGridData[i].CIID;
+                
+
+
+                FinalObject.EXPBankVoucherDtl.push(EXPBankVoucherDtl);
+                EXPBankVoucherDtl = {
+                    "BVDTLID": "", "TransSL": "", "Narration": "", "TransHead": "", "BVCRAmt": "", "BVDRAmt": "", "CurrencyName": "", "ExchangeRate": "",
+                    "ExchangeCurrencyName": "", "ExchangeAmount": "", "CIID": ""
+                };
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("BankVoucher", "BankVoucher")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        //ItemGridchangeStatus = 0;
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#BVID").val(response.BVID);
+                            //$("#TransactionNo").val(response.TransactionNo);
+
+                            $("#VoucherGrid").data('kendoGrid').dataSource.data(response.VouchertemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                            
+
+                        }
+                        else if (response.Msg.Type == 3) {
+                            //ItemGridchangeStatus = 0;
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#VoucherGrid").data('kendoGrid').dataSource.data(response.VouchertemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "BVID": "", "RefBVNo": "", "BVDate": "", "BVType": "", "BankID": "", "BranchID": "", "ACNo": "", "ACName": "", "CIID": "", "Remarks": "",
+            "EXPBankVoucherDtl": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>
+

@@ -1,0 +1,432 @@
+USE [BLC_DEV]
+GO
+/****** Object:  StoredProcedure [dbo].[UspConfirmCrustLeatherTransferTreatment]    Script Date: 29-09-15 ??????? 12.11.11 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Mir Shakawat Ali Jibon
+-- Create date: 27 September 2015
+-- Description:	Crust Leather Transfer Treatment
+-- =============================================
+ALTER PROCEDURE [dbo].[UspConfirmCrustLeatherTransferTreatment] 
+	-- Add the parameters for the stored procedure here
+	@CLTransferID bigint, 
+	@UserID int
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	SET NOCOUNT ON;
+
+	DECLARE @TransectionID bigint;
+	DECLARE @Index INT
+    DECLARE @RecordCnt INT
+	DECLARE @IsUpdateStock bit=0;
+
+	-- Crust QC Stock Parameter data
+
+	DECLARE @OpeningStockPcs decimal(18,2)=0;
+	DECLARE @OpeningStockSide decimal(18,2)=0;
+	DECLARE @OpeningStockArea decimal(18,2)=0;
+
+	
+	DECLARE @IssueStockPcs decimal(18,2)=0;
+	DECLARE @IssueStockSide decimal(18,2)=0;
+	DECLARE @IssueStockArea decimal(18,2)=0;
+
+	DECLARE @ReceiveStockPcs decimal(18,2)=0;
+	DECLARE @ReceiveStockSide decimal(18,2)=0;
+	DECLARE @ReceiveStockArea decimal(18,2)=0;
+
+	DECLARE @TClosingStockPcs decimal(18,2)=0;
+	DECLARE @TClosingStockSide decimal(18,2)=0;
+	DECLARE @TClosingStockArea decimal(18,2)=0;
+
+	-- Others Data 
+	DECLARE @CLTransferCategory nvarchar(8);
+	DECLARE @TranrsferType nvarchar(8);
+
+	-- GROUP DATA for Selecting specific data from Crust QC Stock
+
+    DECLARE @StoreIdFrom int;
+	DECLARE @StoreIdTo int;
+	
+	DECLARE @BuyerID int=0;
+	DECLARE @BuyerOrderID bigint=0;
+	DECLARE @ArticleID int=0;
+	DECLARE @LeatherStatusID int=0;
+	DECLARE @ItemTypeID int=0;
+	DECLARE @ArticleChallanID int=0;
+	DECLARE @ArticleChallanNo nvarchar(30);
+	DECLARE @LeatherTypeID int=0;
+	DECLARE	@ColorID int=0;
+	DECLARE @ArticleColorNo int=0;
+	DECLARE @GradeRange nvarchar(30)=null;
+	DECLARE @CrustQCLabel nvarchar(30)=null;
+
+	DECLARE @ToStockPcs decimal(18,2);
+	DECLARE @ToStockSide decimal(18,2);
+	DECLARE @ToStockArea decimal(18,2);
+	DECLARE @AreaUnit int;
+
+	DECLARE @CurrentDateTime datetime;
+	DECLARE @CurrentDate date;
+	
+	SET @CurrentDateTime=(SELECT  GETDATE())
+	SET @CurrentDate=(SELECT  CAST(GETDATE() AS DATE))
+
+
+	-- Create Temporary Table for Crust QC Stock
+	DECLARE @CrustQCStockTable TABLE  --@WetBlueStockTable
+								(
+									 iSNo INT IDENTITY(1,1)
+									,iStoreIdFrom int
+									,iStoreIdTo int
+									,iBuyerID int
+									,iBuyerOrderID bigint
+									,iArticleID int
+									,iArticleChallanID int
+									,iArticleChallanNo nvarchar(30)
+									,iItemTypeID int
+									,iLeatherStatusID int
+									,iLeatherTypeID int
+									,iColorID int
+									,iArticleColorNo int
+									,iGradeRange nvarchar(30)
+									,iCrustQCLabel nvarchar(30)
+									,iToStockPcs decimal(18,2)
+									,iToStockSide decimal(18,2)
+									,iToStockArea decimal(18,2)
+									,iAreaUnit tinyint
+								)
+	-- Insert Data Into Temporary Table 
+	INSERT INTO @CrustQCStockTable (iStoreIdFrom,
+									iStoreIdTo,
+									iBuyerID,
+									iBuyerOrderID,
+									iArticleID,
+									iArticleChallanID,
+									iArticleChallanNo,
+									iItemTypeID,
+									iLeatherStatusID,
+									iLeatherTypeID,
+									iColorID,
+									iArticleColorNo,
+									iGradeRange,
+									iCrustQCLabel,
+									iToStockPcs,
+									iToStockSide,
+									iToStockArea,
+									iAreaUnit)
+
+	SELECT							WBI.TransactionStore,
+									WBI.IssueStore,
+									IG.BuyerID,
+									IG.BuyerOrderID,
+									IG.ArticleID,
+									IG.ArticleChallanID,
+									IG.ArticleChallanNo,
+									IG.ItemTypeID,
+									IG.LeatherStatusID,
+									(SELECT LeatherTypeID FROM Sys_LeatherType WHERE LeatherTypeName='Wet Blue')LeatherTypeID,
+									IG.ColorID,
+									IG.ArticleColorNo,
+									IG.GradeRange,
+									IG.CrustQCLabel,
+									ISNULL(IG.ToStockPcs,0)ToStockPcs,
+									ISNULL(IG.ToStockSide,0)ToStockSide,
+									ISNULL(IG.ToStockArea,0)ToStockArea,
+									IG.AreaUnit
+   
+	FROM							INV_CLTransfer WBI 
+	INNER JOIN						INV_CLTransferFrom R		ON R.CLTransferID =WBI.CLTransferID
+	INNER JOIN						INV_CLTransferTo IG			ON IG.CLTransferFromID=R.CLTransferFromID
+	WHERE							WBI.CLTransferID=@CLTransferID
+
+
+	SELECT @Index = 1   
+    SELECT @RecordCnt = COUNT(iSNo) FROM @CrustQCStockTable
+
+	BEGIN TRAN
+		BEGIN TRY
+			WHILE (@Index <= @RecordCnt)
+				BEGIN
+						SELECT	
+									@StoreIdFrom=iStoreIdFrom,
+									@StoreIdTo=iStoreIdTo,
+									@BuyerID=iBuyerID,
+									@BuyerOrderID=iBuyerOrderID,
+									@ArticleID=iArticleID,
+									@ArticleChallanID=iArticleChallanID,
+									@ArticleChallanNo=iArticleChallanNo,
+									@ItemTypeID=iItemTypeID,
+									@LeatherStatusID=iLeatherStatusID,
+									@LeatherTypeID=iLeatherTypeID,
+									@ColorID=iColorID,
+									@ArticleColorNo=iArticleColorNo,
+									@GradeRange=iGradeRange,
+									@CrustQCLabel=iCrustQCLabel,
+									@ToStockPcs=iToStockPcs, 
+									@ToStockSide=iToStockSide,
+									@ToStockArea=iToStockArea,
+									@AreaUnit=iAreaUnit
+
+						FROM		@CrustQCStockTable 
+						WHERE		iSNo=@Index
+
+						IF EXISTS ( SELECT 1	FROM 
+														INV_CrustQCStock 
+												WHERE	StoreID=@StoreIdFrom --23
+												AND		BuyerID=@BuyerID --102
+												AND		BuyerOrderID=@BuyerOrderID --180156
+												AND		ArticleID=@ArticleID --180156
+												AND		ArticleChallanID=@ArticleChallanID --180156
+												AND		ItemTypeID=@ItemTypeID  --1
+												AND		LeatherStatusID=@LeatherStatusID --12
+												AND		LeatherTypeID=@LeatherTypeID --12
+												AND		ColorID=@ColorID)
+
+							BEGIN
+
+								   SELECT TOP 1			@TClosingStockPcs=ClosingStockPcs,
+														@TClosingStockSide=ClosingStockSide, 
+														@TClosingStockArea=ClosingStockArea 
+								   FROM					INV_CrustQCStock 
+								   WHERE				
+														StoreID=@StoreIdFrom 
+													AND BuyerID=@BuyerID 
+													AND BuyerOrderID=@BuyerOrderID
+													AND ItemTypeID=@ItemTypeID 
+													AND LeatherStatusID=@LeatherStatusID 
+													AND LeatherTypeID=@LeatherTypeID 
+													AND ArticleID=@ArticleID 
+													AND ArticleChallanID=@ArticleChallanID 
+													AND ColorID=@ColorID
+								   ORDER BY			TransectionID DESC
+
+								   -- Check Stock has Data or not
+									IF(@TClosingStockPcs<@ToStockPcs OR @TClosingStockSide< @ToStockSide  OR @TClosingStockArea< @ToStockArea)
+										BEGIN
+											SET @IsUpdateStock=0; -- There has no data in Crust QC Stock to Transfer
+											break;
+										END
+									ELSE 
+										BEGIN
+											SET @IsUpdateStock=1;
+
+
+											--Start Reduce data From Crust QC Stock
+											--Also Insert the number of PCS,SIDE,AREA has reduced from QC STOCK
+											INSERT INTO INV_CrustQCStock
+																	(StoreID,BuyerID,BuyerOrderID,ArticleID,ArticleChallanID,ArticleChallanNo,ColorID,ArticleColorNo,
+																	ItemTypeID,LeatherTypeID,LeatherStatusID,GradeRange,CrustQCLabel,OpeningStockPcs,ReceiveStockPcs,
+																	IssueStockPcs,ClosingStockPcs,OpeningStockSide,ReceiveStockSide,IssueStockSide,ClosingStockSide,
+																	OpeningStockArea,ReceiveStockArea,IssueStockArea,ClosingStockArea,ClosingStockAreaUnit,SetBy,SetOn)
+
+											VALUES					(@StoreIdFrom,@BuyerID,@BuyerOrderID,@ArticleID,@ArticleChallanID,@ArticleChallanNo,@ColorID,@ArticleColorNo,
+																	@ItemTypeID,@LeatherTypeID,@LeatherStatusID,@GradeRange,@CrustQCLabel,@TClosingStockPcs,0,
+																	@ToStockPcs,(@TClosingStockPcs-@ToStockPcs),@TClosingStockSide,0,@ToStockSide,(@TClosingStockSide-@ToStockSide),
+																	@TClosingStockArea,0,@ToStockArea,(@TClosingStockArea-@ToStockArea),@AreaUnit,@UserID,@CurrentDateTime)
+	
+											--End of Reduce Data from Inv_Crust QC Stock
+
+
+											--Start INSERT/RECEIVE DATA in INV_CrustBuyerStock
+											-- INSERT/RECEIVE Data into INV_CrustBuyerStock 
+											IF EXISTS ( SELECT 1 FROM INV_CrustBuyerStock WHERE	StoreID=@StoreIdTo and  
+																								BuyerID=@BuyerID and 
+																								BuyerOrderID=@BuyerOrderID and
+																								ArticleID=@ArticleID and 
+																								ArticleChallanID=@ArticleChallanID and  
+																								ItemTypeID=@ItemTypeID and 
+																								LeatherStatusID=@LeatherStatusID and 
+																								LeatherTypeID=@LeatherTypeID and 
+																								ColorID=@ColorID)
+												BEGIN
+													--Select Top Record
+													SELECT TOP 1	@TClosingStockPcs=ClosingStockPcs,@TClosingStockSide=ClosingStockSide, @TClosingStockArea=ClosingStockArea
+													FROM			INV_CrustBuyerStock 
+													WHERE			
+																	StoreID=@StoreIdTo and  
+																	BuyerID=@BuyerID and 
+																	BuyerOrderID=@BuyerOrderID and
+																	ArticleID=@ArticleID and 
+																	ArticleChallanID=@ArticleChallanID and  
+																	ItemTypeID=@ItemTypeID and 
+																	LeatherStatusID=@LeatherStatusID and 
+																	LeatherTypeID=@LeatherTypeID and 
+																	ColorID=@ColorID
+													ORDER BY		TransectionID DESC
+													--Insert On Existing Record
+													INSERT INTO		INV_CrustBuyerStock			(StoreID,BuyerID,BuyerOrderID,ArticleID,ArticleChallanID,ArticleChallanNo,ColorID,ArticleColorNo,
+																								ItemTypeID,LeatherTypeID,LeatherStatusID,GradeRange,CrustQCLabel,OpeningStockPcs,ReceiveStockPcs,
+																								IssueStockPcs,ClosingStockPcs,OpeningStockSide,ReceiveStockSide,IssueStockSide,ClosingStockSide,	
+																								OpeningStockArea,ReceiveStockArea,IssueStockArea,ClosingStockArea,ClosingStockAreaUnit,SetBy,SetOn)
+							
+																									
+					
+													VALUES										(@StoreIdTo,@BuyerID,@BuyerOrderID,@ArticleID,@ArticleChallanID,@ArticleChallanNo,@ColorID,@ArticleColorNo,
+																								@ItemTypeID,@LeatherTypeID,@LeatherStatusID,@GradeRange,@CrustQCLabel,@TClosingStockPcs,@ToStockPcs,
+																								0,(@TClosingStockPcs+@ToStockPcs),@TClosingStockSide,@ToStockSide,0,(@TClosingStockSide+@ToStockSide),
+																								@TClosingStockArea,@ToStockArea,0,(@TClosingStockArea+@ToStockArea),@AreaUnit,@UserID,@CurrentDateTime)
+												END
+
+											ELSE 
+												--Insert New Record
+												BEGIN
+													INSERT INTO INV_CrustBuyerStock				(StoreID,BuyerID,BuyerOrderID,ArticleID,ArticleChallanID,ArticleChallanNo,ColorID,ArticleColorNo,
+																								ItemTypeID,LeatherTypeID,LeatherStatusID,GradeRange,CrustQCLabel,OpeningStockPcs,ReceiveStockPcs,
+																								IssueStockPcs,ClosingStockPcs,OpeningStockSide,ReceiveStockSide,IssueStockSide,ClosingStockSide,
+																								OpeningStockArea,ReceiveStockArea,IssueStockArea,ClosingStockArea,ClosingStockAreaUnit,SetBy,SetOn)
+							
+													VALUES										(@StoreIdTo,@BuyerID,@BuyerOrderID,@ArticleID,@ArticleChallanID,@ArticleChallanNo,@ColorID,@ArticleColorNo,
+																								@ItemTypeID,@LeatherTypeID,@LeatherStatusID,@GradeRange,@CrustQCLabel,0,@ToStockPcs,
+																								0,@ToStockPcs,0,@ToStockSide,0,@ToStockSide,
+																								0,@ToStockArea,0,@ToStockArea,@AreaUnit,@UserID,@CurrentDateTime)
+												END
+												--End of INV_CrustBuyerStock
+
+
+
+
+
+
+											--Start INSERT/RECEIVE DATA in INV_CrustStockItem
+											-- INSERT/RECEIVE Data into INV_CrustStockItem 
+											IF EXISTS ( SELECT 1 FROM INV_CrustStockItem WHERE	StoreID=@StoreIdTo and  
+																								ArticleID=@ArticleID and 
+																								ArticleChallanID=@ArticleChallanID and  
+																								ItemTypeID=@ItemTypeID and 
+																								LeatherStatusID=@LeatherStatusID and 
+																								LeatherTypeID=@LeatherTypeID and 
+																								ColorID=@ColorID)
+												BEGIN
+													--Select Top Record
+													SELECT TOP 1	@TClosingStockPcs=ClosingStockPcs,@TClosingStockSide=ClosingStockSide, @TClosingStockArea=ClosingStockArea--@TSizeQtyRef = SizeQtyRef
+													FROM			INV_CrustStockItem 
+													WHERE			StoreID=@StoreIdTo and  
+																	ArticleID=@ArticleID and 
+																	ArticleChallanID=@ArticleChallanID and  
+																	ItemTypeID=@ItemTypeID and 
+																	LeatherStatusID=@LeatherStatusID and 
+																	LeatherTypeID=@LeatherTypeID and 
+																	ColorID=@ColorID
+													ORDER BY		TransectionID DESC
+													--Insert On Existing Record
+													INSERT INTO		INV_CrustStockItem			(StoreID,ArticleID,ArticleChallanID,ArticleChallanNo,ColorID,ArticleColorNo,
+																								ItemTypeID,LeatherTypeID,LeatherStatusID,GradeRange,CrustQCLabel,OpeningStockPcs,ReceiveStockPcs,
+																								IssueStockPcs,ClosingStockPcs,OpeningStockSide,ReceiveStockSide,IssueStockSide,ClosingStockSide,
+																								OpeningStockArea,ReceiveStockArea,IssueStockArea,ClosingStockArea,ClosingStockAreaUnit,SetBy,SetOn)
+					
+													VALUES										(@StoreIdTo,@ArticleID,@ArticleChallanID,@ArticleChallanNo,@ColorID,@ArticleColorNo,
+																								@ItemTypeID,@LeatherTypeID,@LeatherStatusID,@GradeRange,@CrustQCLabel,@TClosingStockPcs,@ToStockPcs,
+																								0,(@TClosingStockPcs+@ToStockPcs),@TClosingStockSide,@ToStockSide,0,(@TClosingStockSide+@ToStockSide),
+																								@TClosingStockArea,@ToStockArea,0,(@TClosingStockArea+@ToStockArea),@AreaUnit,@UserID,@CurrentDateTime)
+												END
+
+											ELSE 
+												--Insert New Record
+												BEGIN
+													INSERT INTO INV_CrustStockItem				(StoreID,ArticleID,ArticleChallanID,ArticleChallanNo,ColorID,ArticleColorNo,
+																								ItemTypeID,LeatherTypeID,LeatherStatusID,GradeRange,CrustQCLabel,OpeningStockPcs,ReceiveStockPcs,
+																								IssueStockPcs,ClosingStockPcs,OpeningStockSide,ReceiveStockSide,IssueStockSide,ClosingStockSide,
+																								OpeningStockArea,ReceiveStockArea,IssueStockArea,ClosingStockArea,ClosingStockAreaUnit,SetBy,SetOn)
+							
+													VALUES										(@StoreIdTo,@ArticleID,@ArticleChallanID,@ArticleChallanNo,@ColorID,@ArticleColorNo,
+																								@ItemTypeID,@LeatherTypeID,@LeatherStatusID,@GradeRange,@CrustQCLabel,0,@ToStockPcs,
+																								0,@ToStockPcs,0,@ToStockSide,0,@ToStockSide,
+																								0,@ToStockArea,0,@ToStockArea,@AreaUnit,@UserID,@CurrentDateTime)
+												END
+												--End of INV_CrustStockItem
+
+
+
+
+											--Start INSERT/RECEIVE DATA in INV_CrustStockDaily AND UPDATE DATA in INV_CrustStockDaily if the DATE is SAME
+
+											IF EXISTS ( SELECT 1 FROM	INV_CrustStockDaily 
+														WHERE	
+																		StockDate= @CurrentDate and 
+																		StoreID=@StoreIdTo and
+																		ArticleID=@ArticleID and 
+																		ArticleChallanID=@ArticleChallanID and  
+																		ItemTypeID=@ItemTypeID and 
+																		LeatherStatusID=@LeatherStatusID and 
+																		LeatherTypeID=@LeatherTypeID and 
+																		ColorID=@ColorID)
+													BEGIN
+																		SELECT TOP 1	@TransectionID=TransectionID,		@ReceiveStockPcs=ReceiveStockPcs,		@ReceiveStockSide=ReceiveStockSide,
+																	@ReceiveStockArea=ReceiveStockArea,	@TClosingStockPcs=ClosingStockPcs,		@TClosingStockSide=ClosingStockSide, 
+																	@TClosingStockArea=ClosingStockArea 
+													FROM			INV_CrustStockDaily 
+													WHERE			
+																	StockDate= @CurrentDate and 
+																	StoreID=@StoreIdTo and
+																	ArticleID=@ArticleID and 
+																	ArticleChallanID=@ArticleChallanID and  
+																	ItemTypeID=@ItemTypeID and 
+																	LeatherStatusID=@LeatherStatusID and 
+																	LeatherTypeID=@LeatherTypeID and 
+																	ColorID=@ColorID
+													ORDER BY		TransectionID DESC
+																		UPDATE	INV_CrustStockDaily  SET	ReceiveStockPcs=@ReceiveStockPcs+@TClosingStockPcs,	ClosingStockPcs=@TClosingStockPcs+@TClosingStockPcs,
+																											ReceiveStockSide=@ReceiveStockSide+@ToStockSide,	ClosingStockSide=@TClosingStockSide+@ToStockSide,
+																											ReceiveStockArea=@ReceiveStockArea+@ToStockArea,	ClosingStockArea=@TClosingStockArea+@ToStockArea
+													WHERE			TransectionID=@TransectionID
+													END
+
+											ELSE --Insert New Record
+    
+													BEGIN
+														SELECT TOP 1	@TClosingStockPcs=ClosingStockPcs,@TClosingStockSide=ClosingStockSide,@TClosingStockArea=ClosingStockArea 
+														 FROM			INV_CrustStockDaily 
+														 WHERE			
+																		StoreID=@StoreIdTo and
+																		ArticleID=@ArticleID and 
+																		ArticleChallanID=@ArticleChallanID and  
+																		ItemTypeID=@ItemTypeID and 
+																		LeatherStatusID=@LeatherStatusID and 
+																		LeatherTypeID=@LeatherTypeID and 
+																		ColorID=@ColorID
+														ORDER BY		TransectionID DESC
+														INSERT INTO INV_CrustStockDaily		(StockDate,StoreID,ArticleID,ArticleChallanID,ArticleChallanNo,ColorID,ArticleColorNo,
+																							ItemTypeID,LeatherTypeID,LeatherStatusID,GradeRange,CrustQCLabel,OpeningStockPcs,ReceiveStockPcs,
+																							IssueStockPcs,ClosingStockPcs,OpeningStockSide,ReceiveStockSide,IssueStockSide,ClosingStockSide,
+																							OpeningStockArea,ReceiveStockArea,IssueStockArea,ClosingStockArea,ClosingStockAreaUnit)
+
+														VALUES								(@CurrentDate,@StoreIdTo,@ArticleID,@ArticleChallanID,@ArticleChallanNo,@ColorID,@ArticleColorNo,
+																							@ItemTypeID,@LeatherTypeID,@LeatherStatusID,@GradeRange,@CrustQCLabel,@TClosingStockPcs,@ToStockPcs,
+																							0,(@TClosingStockPcs + @ToStockPcs),@TClosingStockSide,@ToStockSide,0,(@TClosingStockSide + @ToStockSide),
+																							@TClosingStockArea,@ToStockArea,0,(@TClosingStockArea + @ToStockArea),@AreaUnit)
+													END
+										END
+							END
+				SET @Index = @Index + 1
+				END
+		END TRY
+		BEGIN CATCH
+				SET @IsUpdateStock=0;
+				ROLLBACK TRAN 
+		END CATCH 
+
+
+		IF(@IsUpdateStock=1)
+			BEGIN
+				UPDATE INV_CLTransfer SET RecordStatus='CNF', SetBy=@UserID,SetOn=@CurrentDateTime WHERE CLTransferID=@CLTransferID;
+				--if(@IsSelectionLock=1)
+				--BEGIN
+				--UPDATE PRD_WBSelection SET RecordStatus='ITS', SetBy=@UserID,SetOn=@CurrentDateTime WHERE WBSelectionID=@WbSelectionID;
+				--END
+				COMMIT TRAN 
+			END
+		ELSE
+			BEGIN
+				ROLLBACK TRAN 
+			END
+
+SELECT @IsUpdateStock AS IsStock
+END
+
+

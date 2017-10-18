@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Chemical Approved Requisition List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="headerForm">
+    @Html.Partial("~/Views/Common/_FormHeader.cshtml")
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <input type="hidden" id="WBSelectionID" class="" name="WBSelectionID" value="" placeholder="hidden WBSelectionID" readonly="readonly" />
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Category</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="RequisitionCategory">
+                    <option selected="selected" value="FP">Foreign</option>
+                    <option value="LP">Local</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Requisition Type</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox  RequiredTextBox Dropdown " id="RequisitionType">
+                    <option selected="selected" value="NR">Normal</option>
+                    <option value="UR">Urgent</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Approval Status</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox  RequiredTextBox Dropdown " id="RequisitionType">
+                    <option selected="selected" value="NR">Pending</option>
+                    <option value="UR">Approved</option>
+                </select>
+            </div>          
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="requisitionGrid">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+</script>

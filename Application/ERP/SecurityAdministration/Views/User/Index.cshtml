@@ -1,0 +1,570 @@
+﻿@using System.Web.Mvc.Html
+@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model UserVM
+@{
+    ViewBag.Title = "Index";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    User Information
+                    @Html.Hidden("hdnIsInsert", true)
+                    @Html.Hidden("isResetPassword", false)
+                    @Html.Hidden("isExistUser","0")
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">User Code</label>
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.User.UserID)
+                                    @Html.TextBoxFor(model => model.User.UserCode, new { @Value = ViewBag.UserCode, @class = "form-control input-sm", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Description</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.Description, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Title</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.User.Title, new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "--Select--", Value = "" },
+                                        new SelectListItem { Text = "Mr.", Value= "Mr."},
+                                        new SelectListItem { Text = "Mrs.", Value= "Mrs."},
+                                        new SelectListItem { Text = "Miss.", Value= "Miss."},
+                                        new SelectListItem { Text = "Dr.", Value= "Dr."},
+                                        new SelectListItem { Text = "Engr.", Value= "Engr."},
+                                        new SelectListItem { Text = "Prof.", Value= "Prof."},
+                                    }, new { @class = "form-control input-sm" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">First Name</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.FirstName, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Middle Name</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.MiddleName, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Last Name</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.LastName, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Designation ID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.User.DesignationID, Model.DesignationList, "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Email</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Phone</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.Phone, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Mobile</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.Mobile, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">SupervisorUserID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.User.SupervisorUserID, Model.SupervisorList, "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Is Active</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.User.IsActive)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label"> Login ID</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.User.LoginID, new { @class = "form-control input-sm" })
+                                    <span id="IsExistMessage">
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Password</label>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="input-group">
+                                            @Html.TextBoxFor(model => model.User.Password, new { @class = "form-control input-sm", @style = "width: 130px;" })
+                                            <span class="input-group-btn">
+                                                <input type="button" id="btnGenerate" value="Reset Password" class="btn btn-default btn-sm" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label"> Is Locked</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.User.IsLocked)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <input type="button" id="btnSave" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearUserData()" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Users
+            </div>
+            <div class="panel-body">
+                @(Html.Telerik().Grid<UserView>()
+                          .BindTo(ViewBag.UserList as List<UserView>)
+                          .Name("gvUserList")
+                          .Filterable()
+                          .DataKeys(keys => keys.Add(k => k.UserID))
+                          .Columns(column =>
+                          {
+                              column.Bound(s => s.UserID).Hidden();
+                              column.Bound(s => s.UserCode).Filterable(false);
+                              column.Bound(s => s.UserType).Hidden();
+                              column.Bound(s => s.FullName).Width(200).Filterable(true).Template(@<text><a href="javascript:void(0)" class="loadUserInformation">  @item.FullName </a></text>);
+                              column.Bound(s => s.Email).Width(150).Filterable(true);
+                              column.Bound(s => s.Mobile).Filterable(true);
+                              column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>).Filterable(true);
+                              column.Bound(s => s.Description).Filterable(false);
+                              column.Bound(s => s.LoginID).Filterable(true);
+                              column.Bound(s => s.UserID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>).Filterable(false);
+                          })
+                                              .Selectable()
+                                              .Pageable(pages => pages.PageSize(50))
+                                              .Scrollable(scroll => scroll.Height(300))
+                                              .Sortable()
+                                              .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="clear:both; margin-bottom: 70px;"></div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+        $('#isResetPassword').val(false);
+        $("#isExistUser").val("0");
+
+        generateUserCode();
+        if ($('#User_Password').val() == "") {
+            $('#User_Password').attr("disabled", false);
+            $('#User_LoginID').attr("readonly", false);
+        } else if ($('#User_Password').val()) {
+            $('#User_Password').attr("disabled", true);
+            $('#User_LoginID').attr("readonly", true);
+        }
+
+
+    });
+
+    $("#User_LoginID").keyup(function () {
+        var loginId = $(this).val();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckUniqueLoginId", "User")',
+            data: { loginId: loginId },
+            cache: false,
+            async: false,
+            success: function (data) {
+                if (data == true) {
+                    $("#IsExistMessage").html("Login ID is not available.");
+                    $("#IsExistMessage").css({ 'color': "red" });
+                    $("#isExistUser").val("1");
+                } else {
+                    $("#IsExistMessage").html("Login ID is available.");
+                    $("#IsExistMessage").css({ 'color': "green" });
+                    $("#isExistUser").val("0");
+                }
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    });
+
+    function validateUserData() {
+        //commonTextboxValidation('input-sm', 'User Code');
+        // return false;
+        var isExistUser = $("#isExistUser").val();
+
+        if ($('#User_UserCode').val() == "") {
+            showMessage('User Code is required. Please reload again for user code.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#User_UserCode').val() != "" && $('#User_UserCode').val() == "VAL_EXPIRE") {
+            showMessage('Software Validation Expire, now you contact to you Software Vendor.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#User_UserCode').val() != "" && $('#User_UserCode').val() == "CROSS_LIMIT") {
+            showMessage('User Code cross the limit. Please contact with system admin.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#User_UserType').val() == "") {
+            showMessage('User Type is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($("#User_FirstName").val() == "") {
+            showMessage('First Name is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#User_LastName').val() == "") {
+            showMessage('Last Name is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#User_Email').val() == "") {
+            showMessage('Email is required.', 'warning', 'Warning!');
+            return false;
+        } else if (checkEmail($('#User_Email').val()) != true) {
+            showMessage('Please provide valid email.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#User_Mobile').val() == "") {
+            showMessage('Mobile is required.', 'warning', 'Warning!');
+            return false;
+        } else if ($('#User_DesignationID').val() == "") {
+            showMessage('Designation is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#User_LoginID').val() == "") {
+            showMessage('Login ID is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#User_Password').val() == "") {
+            showMessage('Password is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if (isExistUser == "1") {
+            showMessage('Login ID is not available.', 'warning', 'Warning!');
+            return false;
+        }
+        
+        return true;
+    }
+
+    $('#btnGenerate').click(function () {
+        if (confirm("Are you sure to reset password?")) {
+            $('#User_Password').attr("disabled", false);
+            $('#User_Password').val("");
+            $('#isResetPassword').val(true);
+        }
+    });
+
+    function checkNullvalue(midleName) {
+        console.log(midleName);
+        if (midleName != null) {
+            return midleName;
+        } else {
+            return "";
+        }       
+    }
+
+    $('#btnSave').click(function () {
+
+        if (validateUserData()) {
+            var jsonObject = {
+                "UserID": $('#User_UserID').val(),
+                "UserCode": $('#User_UserCode').val(),
+                "UserType": $('#User_UserType').val(),
+                "Title": $('#User_Title').val(),
+                "FirstName": $("#User_FirstName").val(),
+                "MiddleName": $('#User_MiddleName').val(),
+                "LastName": $('#User_LastName').val(),
+                "DesignationID": $('#User_DesignationID').val(),
+                "Email": $('#User_Email').val(),
+                "Phone": $('#User_Phone').val(),
+                "Mobile": $('#User_Mobile').val(),
+                "IsActive": $('#User_IsActive').is(":checked"),
+                "SupervisorUserID": $('#User_SupervisorUserID').val(),
+                "Description": $('#User_Description').val(),
+                "LoginID": $('#User_LoginID').val(),
+                "Password": $('#User_Password').val(),
+                "IsLocked": $('#User_IsLocked').is(":checked")
+            };
+
+            var trNew = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "User")',
+                data: JSON.stringify({ userView: jsonObject, isInsert: $("#hdnIsInsert").val(), isResetPassword: $('#isResetPassword').val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {      
+                    trNew = "<tr>";
+                    trNew = trNew + "<td style='display:none'>" + data.UserID + "</td>";
+                    trNew = trNew + "<td >" + data.UserCode + "</td>";
+                    trNew = trNew + "<td style='display:none'>" +data.UserType  + "</td>";
+                    trNew = trNew + "<td><a class='loadUserInformation' href='javascript:void(0)'>" + data.Title + " " + data.FirstName + " " + checkNullvalue(data.MiddleName)+ " " + data.LastName + "</a></td>";
+                    trNew = trNew + "<td>" + data.Email + "</td>";
+                    trNew = trNew + "<td>" + data.Mobile + "</td>";
+                    trNew = trNew + "<td>" + "<label for=\"\">";
+                    if (data.IsActive == true) {
+                        trNew = trNew + "Active";
+                    } else {
+                        trNew = trNew + "In-Active";
+                    }
+                    trNew = trNew + "</label> </td>";
+                    trNew = trNew + "<td>" + data.Description + "</td>";
+                    trNew = trNew + "<td>" + data.LoginID + "</td>";
+                    trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                    trNew = trNew + " </tr>";
+
+                    if ($("#hdnIsInsert").val() == "true") {
+                        $('#gvUserList .t-grid-content tbody').prepend(trNew);
+                        $('#gvUserList .t-grid-content tbody .t-no-data').remove();
+                    } else {
+                        var tr = $("#gvUserList .t-grid-content tbody tr:contains(\"" + data.UserID + "\")");
+                        tr.replaceWith(trNew);
+                    }
+                    showMessage('Saved successfully.', 'success', 'Success!');
+                    clearUserData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+    $("#gvUserList").delegate("a.btn-link", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(0)").text();
+        var loginId = $(this).parent().parent().find("td:eq(8)").text();
+        editOptionEnable(loginId, id);
+    });
+
+    $("#gvUserList").delegate("a.loadUserInformation", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(0)").text();
+        var loginId = $(this).parent().parent().find("td:eq(8)").text();
+        editOptionEnable(loginId, id);
+    });
+
+    function editOptionEnable(loginId, id) {
+        if (loginId != "") {
+            $('#User_Password').val("******************");
+            $('#User_Password').attr("disabled", true);
+            $('#User_LoginID').attr("readonly", true);
+            $("#hdnIsInsert").val(false);
+        } else if (loginId == "") {
+            $('#User_Password').val("");
+            $('#User_Password').attr("disabled", false);
+            $('#User_LoginID').attr("readonly", false);
+            $("#hdnIsInsert").val(true);
+        }
+        editUserData(id.trim());
+    }
+
+    $("#gvUserList").delegate("a.btn-link-delete", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(0)").text();
+        deleteUserData(id.trim());
+    });
+
+    function editUserData(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetUser", "User")',
+            data: { id: id },
+            cache: false,
+            async: false,
+            success: function (data) {
+                $('#User_UserID').val(data.UserID);
+                $('#User_UserCode').val(data.UserCode);
+                $('#User_UserType').val(data.UserType);
+                $('#User_Title').val(data.Title);
+                $("#User_FirstName").val(data.FirstName);
+                $('#User_MiddleName').val(data.MiddleName);
+                $('#User_LastName').val(data.LastName);
+                $('#User_DesignationID').val(data.DesignationID).attr("selected", "selected");
+                $('#User_Email').val(data.Email);
+                $('#User_Phone').val(data.Phone);
+                $('#User_Mobile').val(data.Mobile);
+                $('#User_IsActive').prop("checked", data.IsActive);
+                $('#User_IsLocked').prop("checked", data.IsLocked);
+                if (data.SupervisorUserID != 0) {
+                    $('#User_SupervisorUserID').val(data.SupervisorUserID).attr("selected", "selected");
+                } else {
+                    $('#User_SupervisorUserID').val("");
+                }
+                $('#User_Description').val(data.Description);
+                $('#User_LoginID').val(data.LoginID);
+                if (data.Password) {
+                    $('#User_Password').val("******************");
+                    $('#User_Password').attr("disabled", true);
+                    $('#User_LoginID').attr("readonly", true);
+                    $("#hdnIsInsert").val(false);
+                } else {
+                    $('#User_Password').val("");
+                    $('#User_Password').attr("disabled", false);
+                    $('#User_LoginID').attr("readonly", false);
+                    $("#hdnIsInsert").val(true);
+                }
+                $('#User_LastPasswordChangedDate').val(data.LastPasswordChangedDate);
+                $('#User_SetOn').val(data.UCI_SetOn);
+                $('#User_SetBy').val(data.UCI_SetBy);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function deleteUserData(id) {
+        if (confirm("Are you sure you want to delete this User?")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "User")',
+                data: { id: id },
+                cache: false,
+                success: function () {
+                    var tr = $("#gvUserList .t-grid-content tbody tr:contains(\"" + id + "\")");
+                    tr.remove();
+                    showMessage('Deleted successfully.', 'success', 'Success!');
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    }
+
+    function generateUserCode() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UserCodeGenerate", "User")',
+            cache: false,
+            success: function (data) {
+                $("#User_UserCode").val(data);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function clearUserData() {
+        $('input[type=text]').val('');
+        $('#User_Title').val("");
+        $('#User_SupervisorUserID').val("");
+        $('#User_IsActive').prop("checked", false);
+        $('#User_Password').attr("disabled", false);
+        $('#User_LoginID').attr("readonly", false);
+        $("#hdnIsInsert").val(true);
+        $('#isResetPassword').val(false);
+        $("#IsExistMessage").html("");
+        $('#User_IsLocked').prop("checked", false);
+        generateUserCode();
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+            {
+                'message': message,
+                'priority': priority,
+                'title': title
+            }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

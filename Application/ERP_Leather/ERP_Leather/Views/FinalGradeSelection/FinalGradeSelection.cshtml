@@ -1,0 +1,1906 @@
+﻿@{
+    ViewBag.Title = "Final Grade Selection";
+    ViewBag.SearchTitle = "Selection No";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="headerForm">
+    @Html.Partial("~/Views/Common/_FormHeader.cshtml")
+</div>
+<div class="row">
+    <div class="FormBody">
+        <input type="hidden" id="WBSelectionID" class="" name="WBSelectionID" value="" placeholder="hidden WBSelectionID" readonly="readonly" />
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Production At</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("StoreID", new SelectList(ViewBag.ddlWetBlueStoreList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox" })
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <label>Selection No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" readonly="readonly" id="WBSelectionNo" name="WBSelectionNo" placeholder="Auto" />
+                <input type="text" id="SelectionDate" class="datePicker" name="SelectionDate" value="" placeholder="Selection Date (dd/mm/yyyy)" />
+            </div>
+        </div>
+
+        <div class="row">          
+            <div class="col-lg-2">
+                <label>Supplier* </label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="SupplierID" name="SupplierID" />
+                <input type="text" id="SupplierCode" class="col-lg-3" name="SupplierCode" value="" placeholder="F9" readonly="readonly" />
+                <input type="text" id="SupplierName" class="col-lg-8" name="SupplierName" value="" readonly="readonly" placeholder="Supplier Name" />
+            </div>
+            <div class="col-lg-2">
+                <label>Selection By*</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" readonly="readonly" class="col-lg-8" id="SelectedBy" name="SelectedBy" value="" placeholder="Press F9" />
+                <input type="hidden" readonly="readonly" id="UserID" name="UserID" value="" placeholder="User Code" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Address </label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="Address" class="col-lg-11" name="Address" value="" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Selection Note</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" class="col-lg-8" id="SelectionComments" name="SelectionComments" value="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="PurchaseID" class="" name="PurchaseID" value="" readonly="readonly" placeholder="Press F9" />
+                <input type="text" id="PurchaseNo" class="" name="PurchaseNo" value="" readonly="readonly" placeholder="Press F9" />
+                <input type="hidden" id="WBSelectItemID" class="" name="WBSelectItemID" value="" readonly="readonly" placeholder="hidden" />
+            </div>
+            <div class="col-lg-2">
+                <label>Purchase Quantity</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="number" min="0" readonly="readonly" id="PurchaseQty" name="PurchaseQty" value="" placeholder="0.00" />
+            </div>          
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Date </label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PurchaseDate" class="datePicker" readonly="readonly" name="PurchaseDate" value="" placeholder="dd/mm/yyyy" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Quantity</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="number" min="0" id="ProductionQty" readonly="readonly" name="ProductionQty" value="" placeholder="0.00" />
+            </div>
+            <div class="col-lg-2">
+                <label>Selection Completed</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="number" id="SelectionComplete" name="SelectionComplete" readonly="readonly" min="0" value="" placeholder="0.00" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label> </label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="SourceID" class="" name="SourceID" value="" readonly="readonly" placeholder="hidden" />
+                <input type="hidden" id="SourceName" class="" name="SourceName" value="" readonly="readonly" placeholder="Press F9" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Due</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="number" min="0" readonly="readonly" id="ProductionDue" name="ProductionDue" value="" placeholder="0.00" />
+            </div>
+            <div class="col-lg-2">
+                <label>Selection Due</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="number" min="0" readonly="readonly" id="SelectionDue" name="SelectionDue" value="" placeholder="0.00" />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="FormBody">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label>Item Type </label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="hidden" id="ItemTypeID" class="TypeName" name="ItemTypeID" value="" readonly="readonly" placeholder="hidden" />
+                                    <input type="text" id="ItemTypeName" class="TypeName" name="ItemTypeName" value="" readonly="readonly" placeholder="" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>Total PCS</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="number" id="ClosingProductionkPcs" class="" readonly="readonly" name="ClosingProductionkPcs" min="0" onblur="return IsNumber('ClosingProductionkPcs'); CheckPCSValidity();" value="" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label>Leather Status</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="hidden" id="LeatherStatusID" class="" name="LeatherStatusID" value="" readonly="readonly" placeholder="hidden" />
+                                    <input type="text" id="LeatherStatusName" class="" name="LeatherStatusName" readonly="readonly" value="" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>Total Side</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="number" readonly="readonly" min="0" id="ClosingProductionSide" onblur="return IsNumber('ClosingProductionSide');" class="" name="ClosingProductionSide" value="" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label>Unit</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    @Html.DropDownList("UnitID")                                   
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>Total Area</label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="number" readonly="readonly" id="ClosingProductionArea" onblur="return IsNumber('ClosingProductionArea');" min="0" class="" name="ClosingProductionArea" value="" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div id="GradingGrid">
+
+                </div>      
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="button" id="btnChecked" class="pull-right" name="btnChecked" value="Checked" />
+                <input type="button" id="btnConfirm" class="pull-right" name="btnConfirm" value="Confirmed" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+
+            </div>
+            <div class="col-lg-6">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="display:none">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-6">
+
+            </div>
+            <div class="col-lg-6">
+                <input type="button" value="Issue to Store" class="pull-right" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+@*############################ Leather Status Popup #######################*@
+
+<div id="LeatherStatusWindow" style="display: none;">
+    <p>Item Type:<input type="text" id="txtLeatherStatus" style="width: 250px;" /><input type="button" id="btnLeatherStatusGridSearch" value="Search" /></p>
+
+    <div id="LeatherStatusWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLeatherStatusWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLeatherStatusWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ Item Type Grid Popup #######################*@
+<div id="ItemTypeWindow" style="display: none;">
+    <p>Item Type:<input type="text" id="txtItemType" style="width: 250px;" /><input type="button" id="btnItemTypeGridSearch" value="Search" /></p>
+    <div id="ItemTypeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnItemTypeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnItemTypeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ Purchase Grid Popup #######################*@
+<div id="PurchaseWindow" style="display: none;">
+    <p>Purchase:<input type="text" id="txtPurchase" style="width: 250px;" /><input type="button" id="btnPurchaseGridSearch" value="Search" /></p>
+
+    <div id="PurchaseWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPurchaseWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPurchaseWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ Source Grid Popup #######################*@
+<div id="SourceWindow" style="display: none;">
+    <p>Source:<input type="text" id="txtSource" style="width: 250px;" /><input type="button" id="btnSourceGridSearch" value="Search" /></p>
+
+    <div id="SourceWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSourceWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSourceWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ Supplier Grid Popup #######################*@
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnSupplierGridSearch" value="Search" /></p>
+
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ User Grid Popup #######################*@
+<div id="UserWindow" style="display: none;">
+    <p>User:<input type="text" id="txtUser" style="width: 250px;" /><input type="button" id="btnUserGridSearch" value="Search" /></p>
+
+    <div id="UserWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnUserWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnUserWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    var dataitem = {};
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+    $("select").addClass("select");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+
+    var wbSelection = {
+        "StoreID":"","WBSelectionID": "", "WBSelectionNo": "", "SelectionDate": "", "SelectedBy": "", "SelectionComments": "",
+        "ConfirmedBy": "", "ConfirmedDate": "", "ConfirmedNote": "", "CheckedBy": "", "CheckDate": "", "CheckNote": "", "Remarks": "", "ProductionQty": "", "wbSelectionItem": []
+    };
+
+    var wbSelectionItem = {
+        "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectItemID": "", "WBSelectionID": "", "SupplierID": "", "PurchaseID": "", "ItemTypeID": "", "LeatherTypeID": "", "StoreID": "", "StoreName": "", "LeatherStatusID": "",
+        "ClosingProductionkPcs": "", "ClosingProductionSide": "", "ClosingProductionArea": "", "UnitName": "", "Remarks": "", "wbSelectionGrade": []
+    };
+
+    var wbSelectionGrade = {
+        "WBSelectionGradeID": "", "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "GradeArea": "",
+        "AreaUnitID": "", "Remarks": ""
+    };
+
+    //############################ Save Data#############################################
+    function Save() {
+
+        var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+        var gradeGridData = gradeGrid.data();
+        if (gradeGridData.length > 0) {
+            saveStatus = 1;
+            CheckRequiredTextBoxMaxLength('SupplierCode', 15);
+            CheckRequiredTextBoxMaxLength('PurchaseID', 30);
+            CheckRequiredTextBoxMaxLength('SelectedBy', 30);
+
+            if (saveStatus == 1) {
+                wbSelection = {
+                    "StoreID": "", "WBSelectionID": "", "WBSelectionNo": "", "SelectionDate": "", "SelectedBy": "", "SelectionComments": "",
+                    "ConfirmedBy": "", "ConfirmedDate": "", "ConfirmedNote": "", "CheckedBy": "", "CheckDate": "", "CheckNote": "", "Remarks": "", "ProductionQty": "", "wbSelectionItem": []
+                };
+
+                wbSelectionItem = {
+                    "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectItemID": "", "WBSelectionID": "", "SupplierID": "", "PurchaseID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "",
+                    "ClosingProductionkPcs": "", "ClosingProductionSide": "", "ClosingProductionArea": "", "UnitID": "", "UnitName": "", "Remarks": "", "StoreID": "", "StoreName": "", "wbSelectionGrade": []
+                };
+
+                wbSelectionGrade = {
+                    "WBSelectionGradeID": "", "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "GradeArea": "",
+                    "AreaUnitID": "", "Remarks": ""
+                };
+                wbSelection.StoreID = $("#StoreID").val();
+                wbSelection.WBSelectionID = $("#WBSelectionID").val();
+                wbSelection.WBSelectionNo = $("#WBSelectionNo").val();
+                wbSelection.SelectionDate = $("#SelectionDate").val();
+                wbSelection.SelectedBy = $("#UserID").val();
+                wbSelection.SelectionComments = $("#SelectionComments").val();
+                wbSelection.ConfirmedBy = '';
+                wbSelection.ConfirmedDate = '';
+                wbSelection.ConfirmedNote = '';
+                wbSelection.CheckedBy = '';
+                wbSelection.CheckDate = '';
+                wbSelection.CheckNote = '';
+                wbSelection.Remarks = '';
+                // -------    Read Leather Grid Data ---------------------
+
+                wbSelectionItem.WBSelectItemID = $("#WBSelectItemID").val();;
+                wbSelectionItem.WBSelectItemNo = '';
+                wbSelectionItem.WBSelectionID = '';
+                wbSelectionItem.SupplierID = $("#SupplierID").val();
+                wbSelectionItem.PurchaseID = $("#PurchaseID").val();
+                wbSelectionItem.ItemTypeID = $("#ItemTypeID").val();
+                wbSelectionItem.LeatherStatusID = $("#LeatherStatusID").val();
+                wbSelectionItem.StoreID = $("#StoreID").val();
+                wbSelectionItem.ClosingProductionkPcs = $("#ClosingProductionkPcs").val();
+                wbSelectionItem.ClosingProductionSide = $("#ClosingProductionSide").val();
+                wbSelectionItem.ClosingProductionArea = $("#ClosingProductionArea").val();
+                wbSelectionItem.UnitID = $("#UnitID").val();
+                wbSelectionItem.Remarks = '';
+                wbSelection.wbSelectionItem.push(wbSelectionItem);
+
+
+                // -------    Read GradingGrid Data ---------------------
+
+               // var gradeGridData = gradeGrid.data();
+                for (var i = 0; i < gradeGridData.length; i++) {
+                    if (gradeGridData[i].GradeQuantity != null && gradeGridData[i].GradeSide != null && gradeGridData[i].GradeArea != null) {
+                        //console.log(wbSelectionGrade);
+                        wbSelectionGrade.WBSelectionGradeID = gradeGridData[i].WBSelectionGradeID;
+                        wbSelectionGrade.WBSelectItemID = gradeGridData[i].WBSelectItemID;
+                        wbSelectionGrade.WBSelectItemNo = '';
+                        wbSelectionGrade.WBSelectionID = '';
+                        wbSelectionGrade.GradeID = gradeGridData[i].GradeID;
+                        wbSelectionGrade.GradeQty = gradeGridData[i].GradeQuantity;
+                        wbSelectionGrade.GradeSide = gradeGridData[i].GradeSide;
+                        wbSelectionGrade.GradeArea = gradeGridData[i].GradeArea;
+                        wbSelectionGrade.AreaUnitID = $("#UnitID").val();
+                       
+                        wbSelectionGrade.Remarks = '';
+                        wbSelectionItem.wbSelectionGrade.push(wbSelectionGrade);
+                        wbSelectionGrade = {
+                            "WBSelectionGradeID": "", "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "StoreID": "", "StoreName": "", "GradeArea": "",
+                            "AreaUnitID": "", "Remarks": ""
+                        };
+                    }
+                }
+
+                if ($("#WBSelectionID").val() == "") {
+
+                 
+                    // INSERT DATA
+                      $("#divLoading").show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Save", "FinalGradeSelection")',
+                        data: JSON.stringify(wbSelection),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.Type == 2) {                                
+                                $('#MessageText').html('');                      
+                                $('#btnSubmit').attr('disabled', true);
+                                $('#WBSelectionID').val(data.ReturnId);
+                                $('#WBSelectionNo').val(data.ReturnCode);
+                                $('#MessageText').html(data.Msg);
+                                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            }
+                            else {
+                                $('#WBSelectionID').val();
+                                $("#MessageText").html(data.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                        },
+                        error: function (respnse) {
+                            $("#divLoading").hide();
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+
+                    $("#divLoading").hide();
+                }
+                else {
+                    $("#divLoading").show();
+                    // UPDATE DATA
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Update", "FinalGradeSelection")',
+                        data: JSON.stringify(wbSelection),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (data) {                            
+                            if (data.Type == 2) {                             
+                                $('#WBSelectionID').val(data.ReturnId);
+                                $('#WBSelectionNo').val(data.ReturnCode);
+                                $('#MessageText').html(data.Msg);
+                                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            }
+                            else {
+                                $('#WBSelectionID').val();
+                                $("#MessageText").html(data.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                        },
+                        error: function (respnse) {
+                            $("#divLoading").hide();
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                 
+                }
+            }
+        }
+        else {
+            $("#MessageText").html("Selection Grade Grid should not empty.");
+            $("#MessageText").css("color", "red");
+        }
+    }
+    //########################### LeatherStatus Popup Value #############################
+
+
+    $(document).on('keyup', '.LeatherStatus', function (e) {
+        if (e.keyCode == 120) {
+            if ($("#PurchaseID").val() != "") {
+                SelectedItemOfListOfValue('LeatherStatusWindowGrid');
+
+                $.ajax({
+                    url: '@Url.Action("GetLeatherStatusInfo", "FinalGradeSelection")',
+                    type: 'GET',
+                    data: { purchaseID: $("#PurchaseID").val() },
+                    success: function (data33) {
+                        $("#LeatherStatusWindowGrid").data("kendoGrid").dataSource.data(data33);
+                    },
+                    complete: function (data) {
+
+                    }
+                });
+                LeatherStatusWindow.open();
+            }
+            else {
+                CheckRequiredTextBoxMaxLength('PurchaseID', 30);
+            }
+        }
+    });
+
+    var LeatherStatusWindow = $('#LeatherStatusWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LeatherStatus",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LeatherStatusGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LeatherStatusID",
+                fields: {
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LeatherStatusGrid = $("#LeatherStatusWindowGrid").kendoGrid({
+        dataSource: LeatherStatusGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+             { field: "LeatherStatusID", title: "Srl No", width: "60px" },
+             { field: "LeatherStatusName", title: "Item Type Name", width: "60px" }
+        ]
+    });
+
+
+
+    //Handling button click for LeatherStatus window grid
+    $('#btnLeatherStatusWindowOK').click(function () {
+        ListOfValuLeatherStatuseGridEvent('LeatherStatusWindowGrid');
+        LeatherStatusWindow.close();
+    });
+
+    $('#btnLeatherStatusWindowCancel').click(function () {
+        LeatherStatusWindow.close();
+    });
+
+    $("#LeatherStatusWindow").dblclick(function () {
+        ListOfValuLeatherStatuseGridEvent('LeatherStatusWindowGrid');
+        LeatherStatusWindow.close();
+    });
+
+    $("#LeatherStatusWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuLeatherStatuseGridEvent('LeatherStatusWindowGrid');
+            LeatherStatusWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            LeatherStatusWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnLeatherStatusGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchLeatherStatusByFirstName", "FinalGradeSelection")',
+            type: 'GET',
+            data: { search: $("#txtLeatherStatus").val(), purchaseID: $("#PurchaseID").val() },
+            success: function (data33) {
+                $("#LeatherStatusWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('LeatherStatusWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtLeatherStatus").keyup(function (event) {
+        if ($("#txtLeatherStatus").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLeatherStatusByFirstName", "FinalGradeSelection")',
+                    type: 'GET',
+                    data: { search: $("#txtLeatherStatus").val(), purchaseID: $("#PurchaseID").val() },
+                    success: function (data33) {
+                        $("#LeatherStatusWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.LeatherStatusList);
+                        if (data33.Count == 1) {
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceLeatherStatus = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLeatherStatusAutocompleteData", "FinalGradeSelection")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtLeatherStatus").kendoAutoComplete({
+        dataSource: dataSourceLeatherStatus,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search LeatherStatus..."
+    });
+
+    function ListOfValuLeatherStatuseGridEvent(gridName) {
+        var WindowGrid = $("#LeatherStatusWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#LeatherGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+        if (PageGridItem != null) {
+            console.log(WindowGridItem);
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+            PageGridItem.set("LeatherStatusName", WindowGridItem.LeatherStatusName);
+            PageGridItem.set("LeatherStatusID", WindowGridItem.LeatherStatusID);
+        }
+        LeatherStatusWindow.close();
+    }
+
+    //########################### ddGrade Dropdown  #############################
+    var ddGradeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    GradeID: { editable: false },
+                    GradeName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetGrade", "FinalGradeSelection")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddGrade(container, options) {
+        $('<input name="ddGrade" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "GradeName",
+                    dataValueField: "GradeID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("GradeID", dataItem.GradeID);
+                        options.model.set("GradeName", dataItem.GradeName);
+                    },
+                    dataSource: ddGradeDataSource
+                });
+    };
+
+    //########################### ddGradeUnit Dropdown  #############################
+    var ddGradeUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetUnit", "FinalGradeSelection")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddGradeUnit(container, options) {
+        $('<input name="ddGradeUnit" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "UnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("UnitName", dataItem.UnitName);
+                        options.model.set("UnitID", dataItem.UnitID);
+                    },
+                    dataSource: ddGradeUnitDataSource
+                });
+    };
+
+    //########################### ddUnit Dropdown  #############################
+    var ddUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetUnit", "FinalGradeSelection")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddUnit(container, options) {
+        $('<input name="ddUnit" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "UnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("UnitName", dataItem.UnitID);
+                        options.model.set("UnitID", dataItem.UnitName);
+                    },
+                    dataSource: ddUnitDataSource
+                });
+    };
+    
+    //########################### Purchase Popup Value #############################
+    $(document.body).keypress(function (e) {
+        if ($("#PurchaseNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                ListOfValueGridEventleatherInfo();
+                SelectedItemOfListOfValue('PurchaseWindowGrid');
+                PurchaseWindow.open();
+            }
+        }
+    });
+    var PurchaseWindow = $('#PurchaseWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Purchase",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PurchaseGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PurchaseID",
+                fields: {
+                    PurchaseID: { editable: false },
+                    PurchaseNo: { editable: false },
+                    PurchaseDate: { editable: false },
+                    StoreID: { editable: false },
+                    StoreName: { editable: false },
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    LeatherTypeID: { editable: false },
+                    LeatherTypeName: { editable: false },
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false },
+                    ProductionQty: { editable: false },
+                    ProductionDue: { editable: false },
+                    SelectionQty: { editable: false },
+                    SelectionDueQty: { editable: false },
+                    SelectionSideQty: { editable: false },
+                    SelectionSideDueQty: { editable: false },
+                    UnitName: { editable: false },
+                    PurchaseQty: { editable: false }
+                }
+            }
+        },       
+        pageSize: 10
+
+    });
+
+    var PurchaseGrid = $("#PurchaseWindowGrid").kendoGrid({
+        dataSource: PurchaseGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "PurchaseID", hidden: true },
+            { field: "PurchaseNo", title: "Purchase No", width: "60px", filterable: false, sortable: false },
+            { field: "PurchaseDate", title: "Purchase Date", width: "60px", filterable: false, sortable: false },
+            { field: "ItemTypeID", hidden: true },
+            { field: "ItemTypeName", title: "Item Type", width: "60px", filterable: false, sortable: false },
+            { field: "LeatherTypeID", hidden: true },
+            { field: "LeatherTypeName", title: "Leather Type", width: "60px", filterable: false, sortable: false },
+            { field: "LeatherStatusID", hidden: true },
+            { field: "LeatherStatusName", title: "Leather Status", width: "60px", filterable: false, sortable: false },            
+            { field: "PurchaseQty", title: "PurchaseQty", width: "60px" },
+            { field: "ProductionQty", title: "ProductionQty", width: "60px" },
+            { field: "SelectionQty", title: "SelectionQty", width: "60px" },
+            { field: "SelectionDueQty", title: "SelectionDueQty", width: "60px" },          
+
+        ]
+    });
+
+    function ListOfValueGridEventleatherInfo() {
+        CheckRequiredTextBoxMaxLength('StoreID', 15);
+        CheckRequiredTextBoxMaxLength('SupplierCode', 30);
+        
+        $.ajax({
+            url: '@Url.Action("GetLeatherInfoList", "FinalGradeSelection")',
+            type: 'GET',
+            data: { "ConcernStore": $("#StoreID").val(), "SupplierID": $("#SupplierID").val() },
+            success: function (data) {
+                $("#PurchaseWindowGrid").data("kendoGrid").dataSource.data(data);
+                $('#MessageText').html("");
+            }
+        });
+    }
+
+    //Handling button click for Purchase window grid
+    $('#btnPurchaseWindowOK').click(function () {
+        ListOfValuPurchaseeGridEvent('PurchaseWindowGrid');
+        PurchaseWindow.close();
+    });
+
+    $('#btnPurchaseWindowCancel').click(function () {
+        PurchaseWindow.close();
+    });
+
+    $("#PurchaseWindow").dblclick(function () {
+        ListOfValuPurchaseeGridEvent('PurchaseWindowGrid');
+        PurchaseWindow.close();
+    });
+
+    $("#PurchaseWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuPurchaseeGridEvent('PurchaseWindowGrid');
+            PurchaseWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PurchaseWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnPurchaseGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchPurchaseByFirstName", "FinalGradeSelection")',
+            type: 'GET',
+            data: { search: $("#txtPurchase").val(), SupplierID: $("#SupplierID").val(), ConcernStore: $("#StoreID").val() },
+            success: function (data33) {
+                $("#PurchaseWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('PurchaseWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtPurchase").keyup(function (event) {
+        if ($("#txtPurchase").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchPurchaseByFirstName", "FinalGradeSelection")',
+                    type: 'GET',
+                    data: { search: $("#txtPurchase").val() },
+                    success: function (data33) {
+                        $("#PurchaseWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourcePurchase = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetPurchaseAutocompleteData", "FinalGradeSelection")',
+                type: "GET"               
+            }
+        }
+    });
+
+    $("#txtPurchase").kendoAutoComplete({
+        dataSource: dataSourcePurchase,
+        filter: "startswith",
+        dataTextField: "PurchaseID",
+        placeholder: "Search Purchase...",
+    });
+
+    function ListOfValuPurchaseeGridEvent(gridName) {
+        $("#SelectionComplete").val("");
+        $("#SelectionDue").val("");
+        $("#UnitName").val("");
+        $("#ClosingProductionkPcs").val("");
+        $("#ClosingProductionSide").val("");
+        $("#ClosingProductionArea").val("");
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#ItemTypeName").val(selectedItem.ItemTypeName);
+        $("#PurchaseID").val(selectedItem.PurchaseID);
+        $("#LeatherStatusName").val(selectedItem.LeatherStatusName);
+        $("#SelectionComplete").val(selectedItem.SelectionComplete);
+        $("#SelectionComplete").val(selectedItem.SelectionQty);
+        $("#SelectionDue").val(selectedItem.SelectionDueQty);
+        $("#ProductionQty").val(selectedItem.ProductionQty);
+        $("#PurchaseQty").val(selectedItem.PurchaseQty);        
+        //$("#UnitID").val(selectedItem.AreaUnit);
+       // $("#UnitName").val(selectedItem.PurchaseQty);
+        $("#ItemTypeID").val(selectedItem.ItemTypeID);
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    //########################### Source Popup Value #############################
+    $(document.body).keypress(function (e) {
+        if ($("#SourceName").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SourceWindowGrid');
+                SourceWindow.open();
+            }
+        }
+    });
+
+    var SourceWindow = $('#SourceWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Source",
+        position: { top: 100},
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SourceGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SourceID",
+                fields: {
+                    SourceID: { editable: false },
+                    SourceName: { editable: false },
+                    SourceAddress: { editable: false },
+                    ContactNumber: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSourceInfo", "FinalGradeSelection")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SourceGrid = $("#SourceWindowGrid").kendoGrid({
+        dataSource: SourceGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "SourceID", title: "Source ID", width: "60px", filterable: false, sortable: false },
+              { field: "SourceName", title: "Source Name", width: "60px" },
+              { field: "SourceAddress", title: "Address", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+
+
+    //Handling button click for Source window grid
+    $('#btnSourceWindowOK').click(function () {
+        ListOfValuSourceeGridEvent('SourceWindowGrid');
+        SourceWindow.close();
+    });
+
+    $('#btnSourceWindowCancel').click(function () {
+        SourceWindow.close();
+    });
+
+    $("#SourceWindow").dblclick(function () {
+        ListOfValuSourceeGridEvent('SourceWindowGrid');
+        SourceWindow.close();
+    });
+
+    $("#SourceWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuSourceeGridEvent('SourceWindowGrid');
+            SourceWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SourceWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnSourceGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchSourceByFirstName", "FinalGradeSelection")',
+            type: 'GET',
+            data: { search: $("#txtSource").val() },
+            success: function (data33) {
+                $("#SourceWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    //SearchWindowEvents();
+                    ListOfValueGridEvent('SourceWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtSource").keyup(function (event) {
+        if ($("#txtSource").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchSourceByFirstName", "FinalGradeSelection")',
+                    type: 'GET',
+                    data: { search: $("#txtSource").val() },
+                    success: function (data33) {
+                        $("#SourceWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            //SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSourceAutocompleteData", "FinalGradeSelection")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSource").kendoAutoComplete({
+        dataSource: dataSourceSource,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Source...",
+    });
+
+    function ListOfValuSourceeGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $('#SourceName').val(selectedItem.SourceName);
+    }
+
+    //########################### UserGrid Popup Value #############################
+
+    $(document.body).keypress(function (e) {
+        if ($("#SelectedBy").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('UserWindowGrid');
+                UserWindow.open();
+            }
+        }
+    });
+
+    var UserWindow = $('#UserWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of User",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var UserGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UserID",
+                fields: {
+                    UserID: { editable: false },
+                    SelectedBy: { editable: false },
+                    Email: { editable: false },
+                    Phone: { editable: false },
+                    Mobile: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetUserInfo", "FinalGradeSelection")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var UserGrid = $("#UserWindowGrid").kendoGrid({
+        dataSource: UserGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              //{ field: "UserID", title: "User ID", width: "60px", filterable: false, sortable: false },
+              { field: "SelectedBy", title: "User Name", width: "60px" },
+              { field: "Email", title: "Address", width: "60px" },
+              { field: "Phone", title: "Contact Person", width: "60px" },
+              { field: "Mobile", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+    //Handling button click for User window grid
+    $('#btnUserWindowOK').click(function () {
+        ListOfValuUsereGridEvent('UserWindowGrid');
+        UserWindow.close();
+    });
+
+    $('#btnUserWindowCancel').click(function () {
+        UserWindow.close();
+    });
+
+    $("#UserWindow").dblclick(function () {
+        ListOfValuUsereGridEvent('UserWindowGrid');
+        UserWindow.close();
+    });
+
+    $("#UserWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuUsereGridEvent('UserWindowGrid');
+            UserWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            UserWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnUserGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchUserByFirstName", "FinalGradeSelection")',
+            type: 'GET',
+            data: { supplier: $("#txtUser").val() },
+            success: function (data33) {
+                $("#UserWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('UserWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtUser").keyup(function (event) {
+        if ($("#txtUser").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchUserByFirstName", "FinalGradeSelection")',
+                    type: 'GET',
+                    data: { search: $("#txtUser").val() },
+                    success: function (data33) {
+                        $("#UserWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.UserList);
+                        if (data33.Count == 1) {
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceUser = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetUserAutocompleteData", "FinalGradeSelection")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtUser").kendoAutoComplete({
+        dataSource: dataSourceUser,
+        filter: "startswith",
+        placeholder: "Search User...",
+    });
+
+    function ListOfValuUsereGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $('#SelectedBy').val(selectedItem.SelectedBy);
+        $('#RequestTo').val(selectedItem.UserID);
+    }
+
+
+    //########################### Supplier Popup Value #############################
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                ListOfValueGridEventSupplier();
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        }
+    });
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              //{ field: "SupplierID", title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+              { field: "SupplierName", title: "Supplier Name", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+    function ListOfValueGridEventSupplier() {
+        $.ajax({
+            url: '@Url.Action("GetSupplierFromStoreList", "FinalGradeSelection")',
+            type: 'GET',
+            data: { "ConcernStore": $("#StoreID").val() },
+            success: function (data) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnSupplierGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListSearchById", "FinalGradeSelection")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                console.log(data33.SupplierList);
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceSupplier = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "Supplier")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSourceSupplier,
+        filter: "startswith",
+        placeholder: "Search Supplier...",
+    });
+
+    function ListOfValuSuppliereGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $('#SupplierName').val(selectedItem.SupplierName);
+        $('#RequestTo').val(selectedItem.SupplierID);
+    }
+
+    var GradingGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    WBSelectionGradeID: { editable: false },
+                    WBSelectItemID: { editable: false },
+                    WBSelectionID: { editable: false },
+                    GradeID: { editable: true },
+                    GradeName: { editable: true },
+                    GradeQuantity: { editable: true },
+                    GradeSide: { editable: true },
+                    GradeArea: { editable: true },
+                    UnitID: { editable: true },
+                    UnitName: { editable: true }
+                }
+            }
+        },
+       
+        pageSize: 50
+    });
+
+    var grid = $("#GradingGrid").kendoGrid({
+        dataSource: GradingGridDataSource,
+        pageable: false,
+        scrolable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,       
+        toolbar: ["create"],
+        height: 180,
+        edit: function (e) {
+            $("[name='GradeQuantity']", e.container).blur(function () {
+                var grid = $("#GradingGrid").data("kendoGrid");
+                var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+                var gradeGridData = gradeGrid.data();
+                var row = $(this).closest("tr");
+                var sum = 0;                
+                for (var i = 0; i < gradeGridData.length; i++) {
+                    sum += (gradeGridData[i].GradeQuantity - 0);                 
+                }                
+                $('#ClosingProductionkPcs').val(sum);
+                if (sum > $('#SelectionDue').val()) {
+                    sum = sum - (grid.dataItem(row).GradeQuantity - 0);
+                    $('#ClosingProductionkPcs').val(sum);
+                    var returnQty = 0;
+                    grid.dataItem(row).GradeQuantity = returnQty;
+                    e.model.set("GradeQuantity", returnQty.toFixed(2));
+                    $("#MessageText").html("Your entered value is grater than Selection Due qty.");
+                    $("#MessageText").css("color", "red");
+                }
+                else {
+                    $("#MessageText").html("");
+                }
+            });
+
+            $("[name='GradeArea']", e.container).blur(function () {
+                var grid = $("#GradingGrid").data("kendoGrid");
+                var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+                var gradeGridData = gradeGrid.data();              
+                var area = 0;
+                for (var i = 0; i < gradeGridData.length; i++) {
+                    area += (gradeGridData[i].GradeArea - 0);
+                }
+                $('#ClosingProductionArea').val(area);
+            });
+
+            $("[name='GradeSide']", e.container).blur(function () {
+                var grid = $("#GradingGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+                var gradeGridData = gradeGrid.data();
+                var area = 0;
+                for (var i = 0; i < gradeGridData.length; i++) {
+                    area += (gradeGridData[i].GradeSide - 0);
+                }
+                $('#ClosingProductionSide').val(area);
+
+                if (grid.dataItem(row).GradeSide != "" && grid.dataItem(row).GradeQuantity =="")
+                {
+                    var data = (grid.dataItem(row).GradeSide - 0) / 2;
+                    grid.dataItem(row).GradeQuantity = data;
+                    e.model.set("GradeQuantity", data.toFixed(2));
+                    var sum = 0;
+                    for (var i = 0; i < gradeGridData.length; i++) {
+                        sum += (gradeGridData[i].GradeQuantity - 0);
+                    }
+                    if (sum > $('#SelectionDue').val()) {
+                       
+                        //sum = sum - (grid.dataItem(row).GradeQuantity - 0);
+                        //$('#ClosingProductionkPcs').val(sum);
+                        var returnQty = 0;
+                        grid.dataItem(row).GradeQuantity = returnQty;
+                        e.model.set("GradeQuantity", returnQty.toFixed(2));
+                        $("#MessageText").html("Your entered value is grater than Selection Due qty.");
+                        $("#MessageText").css("color", "red");
+                    }
+                    else {
+                        $('#ClosingProductionkPcs').val(sum);
+                        $("#MessageText").html("");
+                    }
+                  
+                    
+                }
+            });
+        },
+        columns: [
+              //{ field: "GradeID", title: "No", width: "40px", width: "40px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, attributes: { "class": "ChemicalItem" } },
+              { field: "GradeName", title: "Grade", width: "60px", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, attributes: { "class": "ChemicalItem" }, editor: ddGrade },
+              { field: "GradeQuantity", title: "Quantity", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "GradeSide", title: "Side", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "GradeArea", title: "Area", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+               { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteScheduleDate }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }              
+        ]
+    }).data('kendoGrid');
+
+    function handleDeleteScheduleDate() {
+        deleteStatus = 3;
+        var grid1 = $("#GradingGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select())); 
+        OpenConfirmationDialog();
+       
+    };
+
+    $('#btnConfirmationOK').click(function () {        
+        if ($("#WBSelectionID").val() != "") {
+            var grid1 = $("#GradingGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select()));
+            $.ajax({
+                url: '@Url.Action("DeleteSelectionGradeInfo", "FinalGradeSelection")',
+                type: 'POST',
+                data: JSON.stringify({ "WBSelectionGradeID": dataitem.WBSelectionGradeID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.Type == 0) {
+                        $("#GradingGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                   
+                    if (respnse.Type == 2) {
+                        $("#GradingGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $('#MessageText').html(respnse.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    
+                      
+                    } else {
+                        $("#MessageText").html(respnse.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                 
+                    }
+
+                }
+            });
+        }
+        else {
+            $("#GradingGrid").data("kendoGrid").dataSource.remove(dataitem);
+        } 
+        CloseConfirmationDialog();
+    });
+    // ################## Check ############################
+    $("#btnChecked").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("CheckedRecordStatus", "FinalGradeSelection")',
+            type: 'GET',
+            data: { status: 'CHK', wbSelectionID: $("#WBSelectionID").val() },
+            success: function (data) {
+                if (data.Type == 2) {
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    //$('.FormBody input[type=text]').val('');
+                    //$('.FormBody input[type=hidden]').val('');
+                    //$('.FormBody input[type=number]').val('');                
+                    //$('#MessageText').html('');
+                    //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+                   // $("#GradingGrid").data("kendoGrid").dataSource.data("");
+                }
+                else {
+                    $("#MessageText").html(data.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+
+    });
+    // ################## Confirm ############################
+    $("#btnConfirm").click(function () {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('ClosingProductionkPcs', 15);
+        if (saveStatus == 1) {
+            wbSelection = {
+                "StoreID": "", "WBSelectionID": "", "WBSelectionNo": "", "SelectionDate": "", "SelectedBy": "", "SelectionComments": "",
+                "ConfirmedBy": "", "ConfirmedDate": "", "ConfirmedNote": "", "CheckedBy": "", "CheckDate": "", "CheckNote": "", "Remarks": "","ProductionQty": "", "wbSelectionItem": []
+            };
+
+            wbSelectionItem = {
+                "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectItemID": "", "WBSelectionID": "", "SupplierID": "", "PurchaseID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "",
+                "ClosingProductionkPcs": "", "ClosingProductionSide": "", "ClosingProductionArea": "", "UnitID": "", "UnitName": "", "Remarks": "", "StoreID": "", "StoreName": "", "wbSelectionGrade": []
+            };
+
+            wbSelectionGrade = {
+                "WBSelectionGradeID": "", "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "GradeArea": "",
+                "AreaUnitID": "", "Remarks": ""
+            };
+
+            wbSelection.WBSelectionID = $("#WBSelectionID").val();
+            wbSelection.WBSelectionNo = $("#WBSelectionNo").val();
+            wbSelection.SelectionDate = $("#SelectionDate").val();
+            wbSelection.SelectedBy = $("#UserID").val();
+            wbSelection.SelectionComments = $("#SelectionComments").val();
+            wbSelection.ConfirmedBy = '';
+            wbSelection.ConfirmedDate = '';
+            wbSelection.ConfirmedNote = '';
+            wbSelection.CheckedBy = '';
+            wbSelection.CheckDate = '';
+            wbSelection.CheckNote = '';
+            wbSelection.Remarks = $("#PurchaseID").val();
+            wbSelection.ProductionQty = $("#ProductionQty").val();
+           
+            // -------    Read Leather Grid Data ---------------------
+
+            wbSelectionItem.WBSelectItemID = $("#WBSelectItemID").val();;
+            wbSelectionItem.WBSelectItemNo = '';
+            wbSelectionItem.WBSelectionID = '';
+            wbSelectionItem.SupplierID = $("#SupplierID").val();
+            wbSelectionItem.PurchaseID = $("#PurchaseID").val();
+            wbSelectionItem.ItemTypeID = $("#ItemTypeID").val();
+            wbSelectionItem.LeatherStatusID = $("#LeatherStatusID").val();
+            wbSelectionItem.StoreID = $("#StoreID").val();
+            wbSelectionItem.ClosingProductionkPcs = $("#ClosingProductionkPcs").val();
+            wbSelectionItem.ClosingProductionSide = $("#ClosingProductionSide").val();
+            wbSelectionItem.ClosingProductionArea = $("#ClosingProductionArea").val();
+            wbSelectionItem.UnitID = $("#UnitID").val();
+            wbSelectionItem.Remarks = '';
+         
+            wbSelection.wbSelectionItem.push(wbSelectionItem);
+
+
+            // -------    Read GradingGrid Data ---------------------
+            var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+            var gradeGridData = gradeGrid.data();
+            for (var i = 0; i < gradeGridData.length; i++) {
+                if (gradeGridData[i].GradeQuantity != null && gradeGridData[i].GradeSide != null && gradeGridData[i].GradeArea != null) {
+             
+                    wbSelectionGrade.WBSelectionGradeID = gradeGridData[i].WBSelectionGradeID;
+                    wbSelectionGrade.WBSelectItemID = gradeGridData[i].WBSelectItemID;
+                    wbSelectionGrade.WBSelectItemNo = '';
+                    wbSelectionGrade.WBSelectionID = '';
+                    wbSelectionGrade.GradeID = gradeGridData[i].GradeID;
+                    wbSelectionGrade.GradeQty = gradeGridData[i].GradeQuantity;
+                    wbSelectionGrade.GradeSide = gradeGridData[i].GradeSide;
+                    wbSelectionGrade.GradeArea = gradeGridData[i].GradeArea;
+                    wbSelectionGrade.AreaUnitID = $("#UnitID").val();         
+                    wbSelectionGrade.Remarks = '';
+                    wbSelectionItem.wbSelectionGrade.push(wbSelectionGrade);
+                    wbSelectionGrade = {
+                        "WBSelectionGradeID": "", "WBSelectItemID": "", "WBSelectItemNo": "", "WBSelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "StoreID": "", "StoreName": "", "GradeArea": "",
+                        "AreaUnitID": "", "Remarks": ""
+                    };
+                }
+            }
+            if ($("#WBSelectionID").val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ConfirmRecordStatus", "FinalGradeSelection")',
+                    data: JSON.stringify(wbSelection),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.Type == 2) {
+                            $('#WBSelectionID').val(data.ReturnID);
+                            $('#MessageText').html(data.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            $("#btnConfirm").attr('disabled', 'disabled'); 
+                            $("#btnChecked").attr('disabled', 'disabled');
+                            $('#btnDelete').attr('disabled', true);
+                            $("#btnSubmit").attr('disabled', 'disabled');
+                            $('#WBSelectionID').val(data.ReturnID);
+                        }
+                        else {
+                            $('#WBSelectionID').val();
+                            $("#MessageText").html(data.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+        }
+
+    });
+
+    // #################### Search ###############
+    $("#btnSearch").click(function () {        
+        SearchResult("GetFinalGradeSelectionInfo", "FinalGradeSelection", "WBSelectionID");
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+
+        GetSearchResult("SearchFinalGradeSelectionNo", "FinalGradeSelection");
+    });
+
+    AutoComplete("GetAutoCompleteData", "FinalGradeSelection");
+
+    function ListOfValueSearchGridEvent(gridName) {
+        CustomResetForm();
+        //$('#btnDelete').attr('disabled', true);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+
+      
+        
+        //$("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetSelectionInfoByID", "FinalGradeSelection")',
+            type: 'GET',
+            data: { id: selectedItem.WBSelectionID },
+            success: function (response) {
+               
+                if (response[0] != null) {
+                    $("#ClosingProductionkPcs").val("0");
+                    $("#ClosingProductionSide").val("0");
+                    $("#ClosingProductionArea").val("0");
+                    $.each(response[0], function (key, value) {
+                        if (value != null && value != 0) {
+                            $('#' + key).val(value);
+                        }
+
+                    });
+                }
+                $("#GradingGrid").data("kendoGrid").dataSource.data(response[0].Grade);
+                var grid = $("#GradingGrid").data("kendoGrid");
+                var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+                var gradeGridData = gradeGrid.data();
+                var row = $(this).closest("tr");
+                var tGradeQty = 0;
+                var tGradeSide = 0;
+                var tGradeArea = 0;
+                for (var i = 0; i < gradeGridData.length; i++) {
+                    tGradeQty += (gradeGridData[i].GradeQuantity - 0);
+                    tGradeSide += (gradeGridData[i].GradeSide - 0);
+                    tGradeArea += (gradeGridData[i].GradeArea - 0);
+                }
+
+              
+                if (response[0].RecordStatus == "NCF") {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnChecked").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                }
+                if (response[0].RecordStatus == "CHK") {
+                    $("#btnChecked").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#btnChecked").removeAttr('disabled');
+                }
+
+                if (response[0].RecordStatus == "CNF") {
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+
+                }
+                else {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnChecked").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').removeAttr('disabled');
+                }
+
+                $('#ClosingProductionkPcs').val(tGradeQty);
+                $('#ClosingProductionSide').val(tGradeSide);
+                $('#ClosingProductionArea').val(tGradeArea);
+
+                grid.dataItem(row).GradeQuantity = tGradeQty;
+                e.model.set("GradeQuantity", tGradeQty.toFixed(2));
+                grid.dataItem(row).GradeSide = tGradeSide;
+                e.model.set("GradeSide", tGradeSide.toFixed(2));
+                grid.dataItem(row).GradeArea = tGradeArea;
+                e.model.set("GradeArea", tGradeArea.toFixed(2));
+
+            },
+            error: function (xhr, status, error) {
+                alert("Error occured !!!");
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+
+    }
+
+    function CheckPCSValidity(inputVal, CheckVal) {
+        var input = $("#ClosingProductionkPcs").val() == "" ? 0 : ($("#ClosingProductionkPcs").val() - 0);
+        var check = $("#SelectionDue").val() == "" ? 0 : ($("#SelectionDue").val() - 0);
+        if (input > check) {
+            alert("PCS value should be less then Selection Due.");
+            $("#ClosingProductionkPcs").val("");
+        }
+    }
+
+    function CustomResetForm()
+    {
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $("#GradingGrid").data("kendoGrid").dataSource.data('');
+    }
+
+    $("#headerForm").click(function () {
+        $("#btnReset").click(function () {         
+            CustomResetForm();
+        });       
+    });
+
+    $("#btnDelete").click(function () {
+
+        var grid = $("#GradingGrid").data("kendoGrid");
+        var gradeGrid = $("#GradingGrid").data("kendoGrid").dataSource;
+        var gradeGridData = gradeGrid.data();
+        if (gradeGridData.length > 0) {
+            $("#MessageText").html("Please Delete All Grade Info First.");
+            $("#MessageText").css("color", "red");
+        }
+        else {
+            if ($("#WBSelectionID").val() != "")
+                {
+                  $.ajax({
+                      url: '@Url.Action("DeleteSelectionData", "FinalGradeSelection")',
+                      type: 'GET',
+                      data: { id: $("#WBSelectionID").val() },
+                      success: function (data) {
+                          console.log(data);
+                          if (data.Type == 2) {
+                              $('.FormBody input[type=text]').val('');
+                              $('.FormBody input[type=hidden]').val('');
+                              $('.FormBody input[type=number]').val('');
+                              $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                              $('#MessageText').html(data.Msg);
+                              $("#GradingGrid").data("kendoGrid").dataSource.data("");
+                          }
+                          else {
+                              $('#MessageText').html('Error Occured.');
+                          }
+                      },
+                      error: function (xhr, status, error) {
+                          alert("Error occured !!!");
+                      },
+                      complete: function (data) {
+                          $("#divLoading").hide();
+                      }
+                  });
+            }
+        }
+
+
+    });
+</script>
+

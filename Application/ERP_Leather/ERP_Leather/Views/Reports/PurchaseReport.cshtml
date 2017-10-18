@@ -1,0 +1,332 @@
+﻿@{
+    ViewBag.Title = "PurchaseReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("PurchaseReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {
+<div class="FormHeader">
+    <div class="row">
+        <div id="FormTitlePannel" class="col-lg-3">
+            <div id="FormTitle" style="font-size:larger; font-weight:bold;">Purchase Report</div>
+        </div>
+        <div id="MessageText" class="col-lg-5">
+
+        </div>
+        <div class="col-lg-2" style="">
+            <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+        </div>
+        <div class="col-lg-2">
+            <input type="submit" id="btnShowReport" value="Show Report" style="position: absolute; right:110px;" />
+            <input type="button" id="btnReset" value="Reset" style="position: absolute; right: 50px;" />
+        </div>
+    </div>
+</div>
+<div class="FormBody" style="font-size: 12px;">
+  
+
+        <div class="row">
+
+            <div class="col-lg-5" style="padding-left: 0; padding-right: 0;">
+                <div id="supplierInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Supplier</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="SupplierCode" class="txtBox" name="SupplierCode" placeholder="Press F9" readonly="readonly" />
+                        <input type="text" id="SupplierName" name="SupplierName" class="txtBox" readonly="readonly" />
+                        <input type="hidden" id="SupplierID" class="txtBox" name="SupplierID" />
+                    </div>
+                </div>
+
+                <div id="StoreInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Store</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0;">
+                        @Html.DropDownList("StoreID", new SelectList(ViewBag.Store, "StoreID", "StoreName"), "--Select All--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })
+                     </div>
+                </div>
+                
+                <div id="ItemInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Item</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0;">
+                        @Html.DropDownList("ItemTypeID", new SelectList(ViewBag.ItemList, "ItemTypeID", "ItemTypeName"), "--Select All--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })
+                    </div>
+                </div>
+                <div id="PurchaseInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Purchase Type</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0; width: 175px;">
+                        <select id="PurchaseType" name="PurchaseType" class="txtBox">
+                            <option value="0">-- Select All --</option>
+                            <option value="Spot">Spot</option>
+                            <option value="Supplier">Supplier</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="PurchaseYearInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Purchase Year</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="PurchaseYear" name="PurchaseYear" placeholder="YYYY" maxlength="4" />
+                    </div>
+                </div>
+
+                <div class="row col-lg-12" style="margin-bottom: 15px;">
+                    <div class="col-lg-3">
+                        <label style="">From Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateFrom" name="DateFrom" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <label style="padding-right: 0; padding-left: 0; margin-left: 50px;">To Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateTo" name="DateTo" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Supplier Wise Purchase Summary</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SupplierWisePurchaseSummary" name="ReportName" value="SupplierWisePurchaseSummary" checked="checked" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Supplier Wise Purchase Detail</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SupplierWisePurchaseDetail" name="ReportName" value="SupplierWisePurchaseDetail" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Source Wise Purchase Report</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SourceWisePurchase" name="ReportName" value="SourceWisePurchase" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Store And Supplier Wise Purchase Receive Summary</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="StoreWisePurchase" name="ReportName" value="StoreWisePurchase" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Purchase Type Wise Purchase Report</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="PurchaseTypeWisePurchase" name="ReportName" value="PurchaseTypeWisePurchase" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Item Wise Purchase Report</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ItemWisePurchase" name="ReportName" value="ItemWisePurchase" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Year Month Wise Purchase Summary</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MonthWisePurchaseSummary" name="ReportName" value="MonthWisePurchaseSummary" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style=""> Monthly Purchase and W/B Production Summary</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MonthlyPurchaseAndWBProduction" name="ReportName" value="MonthlyPurchaseAndWBProduction" />
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+</div>
+    }
+
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+        });
+
+        var supplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+                        Address: { editable: false },
+                        SupplierAddressID: { editable: false },
+                        ContactPerson: { editable: false },
+                        ContactNumber: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSupplierList", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 10
+
+        });
+
+        var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: supplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "SupplierID", hidden:true, title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+                  { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+                  { field: "SupplierName", title: "Supplier Name", width: "120px" },
+                  { field: "Address", title: "Address", width: "60px" },
+                  { field: "ContactPerson", title: "Contact Person", width: "60px" },
+                  { field: "ContactNumber", title: "Contact Number", width: "60px" }
+            ]
+        });
+
+    });
+
+   
+
+    var supplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                supplierWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        alert("test");
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            supplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    /*----------------------------------------------- Reset --------------------------------------------*/
+
+    $("#btnReset").click(function () {
+        $("#SupplierID").val("");
+        $("#SupplierName").val("");
+        $("#StoreID").val("");
+        $("#ItemTypeID").val("");
+        $("#PurchaseType").val("0");
+        $("#PurchaseYear").val("");
+        $("#dateFrom").val("");
+        $("#dateTo").val("");
+        $("#SupplierCode").val("");
+    });
+
+    
+
+    /*--------------------------------------------- Reset End ------------------------------------------*/
+
+</script>

@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BLC_DEVModelStoreContainer" CdmEntityContainer="BLC_DEVEntities">
+    <EntitySetMapping Name="AccessLogs">
+      <EntityTypeMapping TypeName="BLC_DEVModel.AccessLog">
+        <MappingFragment StoreEntitySet="AccessLog">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="PasswordAttemptCount" ColumnName="PasswordAttemptCount" />
+          <ScalarProperty Name="LogoutTime" ColumnName="LogoutTime" />
+          <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+          <ScalarProperty Name="LoginIPAddress" ColumnName="LoginIPAddress" />
+          <ScalarProperty Name="LoginDeviceName" ColumnName="LoginDeviceName" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="AccessSerial" ColumnName="AccessSerial" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdditionalOperationPermissions">
+      <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalOperationPermission">
+        <MappingFragment StoreEntitySet="AdditionalOperationPermissions">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+          <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdditionalOperationPermissionsAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalOperationPermissionsAudit">
+        <MappingFragment StoreEntitySet="AdditionalOperationPermissionsAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+          <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdditionalScreenPermissions">
+      <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalScreenPermission">
+        <MappingFragment StoreEntitySet="AdditionalScreenPermissions">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdditionalScreenPermissionsAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.AdditionalScreenPermissionsAudit">
+        <MappingFragment StoreEntitySet="AdditionalScreenPermissionsAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationPolicies">
+      <EntityTypeMapping TypeName="BLC_DEVModel.ApplicationPolicy">
+        <MappingFragment StoreEntitySet="ApplicationPolicies">
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+          <ScalarProperty Name="PolicyID" ColumnName="PolicyID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationPoliciesAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.ApplicationPoliciesAudit">
+        <MappingFragment StoreEntitySet="ApplicationPoliciesAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+          <ScalarProperty Name="PolicyID" ColumnName="PolicyID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Applications">
+      <EntityTypeMapping TypeName="BLC_DEVModel.Application">
+        <MappingFragment StoreEntitySet="Applications">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Designations">
+      <EntityTypeMapping TypeName="BLC_DEVModel.Designation">
+        <MappingFragment StoreEntitySet="Designations">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Modules">
+      <EntityTypeMapping TypeName="BLC_DEVModel.Module">
+        <MappingFragment StoreEntitySet="Modules">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+          <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="BLC_DEVModel.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RolesAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.RolesAudit">
+        <MappingFragment StoreEntitySet="RolesAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleWiseOperationPermissions">
+      <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseOperationPermission">
+        <MappingFragment StoreEntitySet="RoleWiseOperationPermissions">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+          <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleWiseOperationPermissionsAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseOperationPermissionsAudit">
+        <MappingFragment StoreEntitySet="RoleWiseOperationPermissionsAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="HaveAccess" ColumnName="HaveAccess" />
+          <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleWiseScreenPermissions">
+      <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseScreenPermission">
+        <MappingFragment StoreEntitySet="RoleWiseScreenPermissions">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleWiseScreenPermissionsAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.RoleWiseScreenPermissionsAudit">
+        <MappingFragment StoreEntitySet="RoleWiseScreenPermissionsAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="AccessRight" ColumnName="AccessRight" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ScreenOperations">
+      <EntityTypeMapping TypeName="BLC_DEVModel.ScreenOperation">
+        <MappingFragment StoreEntitySet="ScreenOperations">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="OperationTitle" ColumnName="OperationTitle" />
+          <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ScreenOperationsAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.ScreenOperationsAudit">
+        <MappingFragment StoreEntitySet="ScreenOperationsAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="OperationTitle" ColumnName="OperationTitle" />
+          <ScalarProperty Name="OperationID" ColumnName="OperationID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Screens">
+      <EntityTypeMapping TypeName="BLC_DEVModel.Screen">
+        <MappingFragment StoreEntitySet="Screens">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserCredentialInformations">
+      <EntityTypeMapping TypeName="BLC_DEVModel.UserCredentialInformation">
+        <MappingFragment StoreEntitySet="UserCredentialInformation">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+          <ScalarProperty Name="IsPasswordAccepted" ColumnName="IsPasswordAccepted" />
+          <ScalarProperty Name="LastPasswordChangedDate" ColumnName="LastPasswordChangedDate" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserCredentialInformationAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.UserCredentialInformationAudit">
+        <MappingFragment StoreEntitySet="UserCredentialInformationAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+          <ScalarProperty Name="IsPasswordAccepted" ColumnName="IsPasswordAccepted" />
+          <ScalarProperty Name="LastPasswordChangedDate" ColumnName="LastPasswordChangedDate" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInRoles">
+      <EntityTypeMapping TypeName="BLC_DEVModel.UserInRole">
+        <MappingFragment StoreEntitySet="UserInRoles">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInRolesAudits">
+      <EntityTypeMapping TypeName="BLC_DEVModel.UserInRolesAudit">
+        <MappingFragment StoreEntitySet="UserInRolesAudit">
+          <ScalarProperty Name="DataStatusFlag" ColumnName="DataStatusFlag" />
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="BLC_DEVModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="SupervisorUserID" ColumnName="SupervisorUserID" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_MenuInScreen">
+      <EntityTypeMapping TypeName="BLC_DEVModel.vw_MenuInScreen">
+        <MappingFragment StoreEntitySet="vw_MenuInScreen">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="ItemOrder" ColumnName="ItemOrder" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MenuItems">
+      <EntityTypeMapping TypeName="BLC_DEVModel.MenuItem">
+        <MappingFragment StoreEntitySet="MenuItems">
+          <ScalarProperty Name="SetBy" ColumnName="SetBy" />
+          <ScalarProperty Name="SetOn" ColumnName="SetOn" />
+          <ScalarProperty Name="HasChild" ColumnName="HasChild" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ScreenCode" ColumnName="ScreenCode" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="ItemOrder" ColumnName="ItemOrder" />
+          <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

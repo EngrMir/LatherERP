@@ -1,0 +1,504 @@
+﻿@model ERP.EntitiesModel.AppSetupModel.SysLeatherType
+@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTiltle</title>
+
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position: absolute; right: 75px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LeatherType ID</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LeatherTypeID" readonly="readonly" class="txtBox ReadOnlyTextbox" name="LeatherTypeID" />
+            </div>
+            <div class="col-lg-2">
+                <label>Leather Type </label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LeatherTypeName" class="txtBox RequiredTextBox SetFocus" name="LeatherTypeName" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>Description</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Description" class="txtBox" name="Description" tabindex="2" />
+            </div>
+            <div class="col-lg-2">
+                <label>Is Active</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="IsActive" class="txtBox">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+    </div>
+</div>
+<div id="DeleteConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row">
+        <label style="float: left;margin-left: 20px;">Data will be lost if you continue.</label>
+    </div>
+    <div class="row">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowNo" value="OK" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        //To Define Data LeatherType for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "LeatherTypeID",
+                    fields: {
+                        LeatherTypeID: { editable: false },
+                        LeatherTypeName: { editable: false },
+                        Description: { editable: false },                      
+                        IsActive: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetLeatherType", "LeatherType")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for LeatherType Kendo Grid
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "LeatherTypeID", title: "Leather Type ID", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LeatherTypeName", title: "Leather Type Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Description", title: "Description", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+               
+                { field: "IsActive", title: "Active Status", width: 110, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "LeatherType")',
+                //url: '/BillPayment/DeletedBillRefGridData',
+                type: 'POST',
+                data: JSON.stringify({ "sourceId": dataitem.LeatherTypeID }),
+                //data: { "periodItemId": dataitem.PeriodItemID },
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "white");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus LeatherTypeName textbox
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        // Edit Button in Grid
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                //ClearRequiredTextBoxRedColor();
+                $(".RequiredTextBox").css("border-color", "white");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                //$(".RequiredTextBox").css("border-color", "white");
+                //changeStatus = 0;
+            }
+        };
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowNo").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "white");
+                GridReload('PageDetailGrid');
+                $("#IsActive").val("Active");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                //$(".RequiredTextBox").css("border-color", "white");
+                $(".RequiredTextBox").css("border-color", "white");
+                SetMasterData(dataitem);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "LeatherType")',
+                    //url: '/BillPayment/DeletedBillRefGridData',
+                    type: 'POST',
+                    data: JSON.stringify({ "sourceId": $("#LeatherTypeID").val() }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "white");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var modelSysSource = { "LeatherTypeID": "", "LeatherTypeName": "", "Description": "", "IsActive": "" };
+    var saveStatus = 0;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 0;
+        // Check Empty or Maximum Length in LeatherTypeName
+        CheckRequiredTextBoxMaxLength('LeatherTypeName', 100);
+
+        // Check Maximum Length in Description
+        CheckNormalTextBoxMaxLength('Description', 200);
+        // Check Save Proper Data
+        if (saveStatus == 0) {
+            modelSysSource.LeatherTypeID = $("#LeatherTypeID").val();
+            modelSysSource.LeatherTypeName = $("#LeatherTypeName").val();
+            modelSysSource.Description = $("#Description").val();
+
+            modelSysSource.IsActive = $("#IsActive option:selected").val();
+            //modelSysSource.CrudStatus = $("#CrudStatus").val();
+            if (changeStatus == 1) {
+            $.ajax({
+                url: '@Url.Action("LeatherType", "LeatherType")',
+                data: JSON.stringify(modelSysSource),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        changeStatus = 0;
+                        $('#LeatherTypeID').val(response.LeatherTypeID);
+                        GridReload('PageDetailGrid');
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else if (response.msg.Type == 3) {
+                        changeStatus = 0;
+                        GridReload('PageDetailGrid');
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else if (response == "ORA-00001") {
+                        $("#MessageText").html("Duplicate Record.");
+                        $("#MessageText").css("color", "red");
+                        changeStatus = 0;
+                    }
+                    else {
+                        changeStatus = 0;
+                        $("#MessageText").html(response.Message);
+                        $("#MessageText").css("color", "red");
+                    }
+                }
+            });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("Nothing To Save.");
+                $("#MessageText").css("color", "red");
+                $("#LeatherTypeName").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "white");
+            GridReload('PageDetailGrid');
+            $("#IsActive").val("Active");
+        }
+    });
+
+    function CheckUnSavedMasterData() {
+        $(".txtBox").change(function () {
+            changeStatus = 1;
+        });
+    }
+</script>
+
+
+@*@{
+    ViewBag.Title = "LeatherType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/JSCustom.js"></script>
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-3">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="messageText" class="col-lg-6">
+                
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="LeatherTypeGrid"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var leatherTypeGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LeatherTypeID",
+                    fields: {
+                        LeatherTypeID: { type: "number", editable: false, validation: { required: true, min: 1 } },
+                        LeatherTypeName: { type: "string", editable: true, validation: { required: true, min: 1 } },
+                        Description: { type: "string", editable: true, validation: { required: true, min: 1 } },
+                        IsActive: { type: "boolean", editable: true, validation: { required: false } },
+                        IsDelete: { type: "boolean", editable: true, validation: { required: false } }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: "@Url.Action("GetLeatherType", "LeatherType")",
+                    dataType: "JSON",
+                    method: "POST"
+                },
+                create: {
+                    url: "@Url.Action("Create", "LeatherType")",
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.message.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $('#LeatherTypeGrid').data('kendoGrid').dataSource.read();
+                            $('#LeatherTypeGrid').data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                update: {
+                    url: '@Url.Action("Update", "LeatherType")',
+                    type: "POST",
+                    dataType: "json",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            console.log(result);
+                            $('#messageText').html("<div id='message'>" + result.message.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $('#LeatherTypeGrid').data('kendoGrid').dataSource.read();
+                            $('#LeatherTypeGrid').data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                destroy: {
+                    url: "@Url.Action("DeleteLeatherType", "LeatherType")",
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $('#LeatherTypeGrid').data('kendoGrid').dataSource.read();
+                            $('#LeatherTypeGrid').data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                parameterMap: function (options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return { models: kendo.stringify(options.models) };
+                    }
+                    return { models: kendo.stringify(options.models) };
+                }
+            },
+            batch: true,
+            pageSize: 10
+
+        });
+
+        var ddlDataSourceLeatherTypeName = [{ text: "Raw Hide", value: "Raw Hide" }, { text: "Wet Blue", value: "Wet Blue" },
+                                       { text: "Crust", value: "Crust" }, { text: "Finished", value: "Finished" }];
+
+        function ddlLeatherTypeName(container, options) {
+            $('<input name="LeatherTypeName" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        //change: function (e) {
+                        //    changeStatus = 1;
+                        //},
+                        dataSource: ddlDataSourceLeatherTypeName
+                    });
+        };
+
+        $("#LeatherTypeGrid").kendoGrid({
+            dataSource: leatherTypeGridDataSource,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            height: 300,
+            toolbar: ["create"],
+            sortable: true,
+            resizable: true,
+            pageable: true,
+            columns: [
+                { field: "LeatherTypeName", title: "Leather Type Name", width: "80px" },
+                { field: "Description", title: "Description", width: "80px" },
+                { field: "IsActive", title: "Is Active", width: "60px" },
+                { command: ["edit", "destroy"], title: "Action", width: "80px" }],
+            editable: "inline"
+        });
+
+        $("#LeatherTypeGrid").keypress(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#LeatherTypeGrid").data("kendoGrid");
+                grid.addRow();
+            }
+        });
+    }); //End of Document.Ready()
+
+</script>*@

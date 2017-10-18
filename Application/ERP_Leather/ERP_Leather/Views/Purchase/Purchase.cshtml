@@ -1,0 +1,1809 @@
+﻿@{
+    ViewBag.Title = "Purchase";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Supplier</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" class="txtBox" id="SupplierID" />
+                <input type="text" id="SupplierCode" class="txtBox RequiredTextBox "  readonly="readonly" placeholder="Press F9" style="width: 80px;" />
+                <input type="text" id="SupplierName" class="txtBox ReadOnlyTextbox"  readonly="readonly" style="width: 266px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Contact Number</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ContactNumber" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Contact Person</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ContactPerson" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" style="width:350px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Supplier Address</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="Address" class="txtBox" readonly="readonly" tabindex="" />
+                <input type="hidden" id="SupplierAddressID" value="" class="txtBox" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Number</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PurchaseNo" class="txtBox" name="" tabindex="" readonly="readonly" />
+                <input type="hidden" id="PurchaseID" class="txtBox" name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Purchase Type</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="PurchaseType">
+                    <option value="Supplier">Supplier</option>
+                    <option value="Spot">Spot</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Purchase Year</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("PurchaseYear", new SelectList(ViewBag.PurchaseYear, "PurchaseYear", "PurchaseYear"),  new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 175px; margin-left: 2px;" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PurchaseDate" class="datePicker RequiredTextBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Purchase Category</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="PurchaseCategory">
+                    <option value="Local">Local</option>
+                    <option value="Foreign">Foreign</option>
+                </select>
+
+            </div>
+            <div class="col-lg-2">
+                <label>Purchase Note</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PurchaseNote" class="txtBox" name="" tabindex="" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div id="ChallanGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div id="ItemGrid"></div>
+        <label id="" style="margin-left:550px;" >Total Receive Quantity</label>
+        <input type="text" readonly="readonly" class="txtBox" id="TotalReceiveQuantity" style="width:100px;" />
+    </div>
+
+    <input type="hidden" id="ChallanID" class="txtBox" />
+    <input type="hidden" id="RecordStatus" class="txtBox" />
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Confirm Comment</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="ConfirmComment" class="txtBox" name="" tabindex=""></textarea>
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="LocationWindow" style="display: none;">
+    <div id="LocationWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLocationWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLocationWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SourceWindow" style="display: none;">
+    <div id="SourceWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSourceWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSourceWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+
+    //$.ajaxSetup({
+    //    beforeSend: function () {
+    //        $("#divLoading").show();
+    //    },
+    //    complete: function () {
+    //        $("#divLoading").hide();
+    //}
+    //});
+
+
+
+
+
+
+
+    $(document).ready(function () {
+
+        //--------------------------To enable search option in supplier list of value pop up-------------------------------------
+
+        var SupplierSearchDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSupplierListForSearch", "Supplier")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtSupplier").kendoAutoComplete({
+            dataSource: SupplierSearchDataSource,
+            filter: "startswith",
+            //filter: "contains",
+            placeholder: "Search Supplier...",
+        });
+
+        $("#btnGridSearch").click(function () {
+            $.ajax({
+                url: '@Url.Action("GetSupplierListSearchById", "Common")',
+                type: 'GET',
+                data: { supplier: $("#txtSupplier").val() },
+                success: function (data33) {
+                    console.log(data33.SupplierList);
+                    $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                    if (data33.Count == 1) {
+                        ListOfValueGridEvent('SupplierWindowGrid');
+                        SearchWindow.close();
+                    }
+                }
+            });
+        });
+        $("#txtSupplier").keyup(function (event) {
+            if ($("#txtSupplier").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("GetSupplierListSearchById", "Common")',
+                        type: 'GET',
+                        data: { supplier: $("#txtSupplier").val() },
+                        success: function (data33) {
+                            $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                            //console.log(data33.SupplierList);
+                            if (data33.Count == 1) {
+                                ListOfValueGridEvent('SupplierWindowGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //--------------------------End of enabling search option in supplier list of value pop up-------------------------------------
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        var ddlChallanCategoryDataSource = [{ text: "Real", value: "Real" }, { text: "Dummy", value: "Dummy" }];
+
+        function ddlChallanCategory(container, options) {
+            $('<input id="ChallanCategory" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        optionLabel: "Select",
+                        //value: "Real",
+                        change: function (e) {
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlChallanCategoryDataSource
+                    });
+        };
+
+        var ddlStoreDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "StoreID",
+                    fields: {
+                        StoreID: { editable: false },
+                        StoreName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url:'@Url.Action("GetAllStore", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlReceiveStore(container, options) {
+            $('<input id="ReceiveStore" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "StoreName",
+                        dataValueField: "StoreName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlStoreDataSource
+                    });
+        };
+
+        var ddlSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SizeID",
+                    fields: {
+                        SizeID: { editable: false },
+                        SizeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllItemSize","Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlSize(container, options) {
+            $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "SizeName",
+                        dataValueField: "SizeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlSizeDataSource
+                    });
+        };
+
+        var ddlUnitDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnit", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnit(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlUnitDataSource
+                    });
+        };
+
+        var ddlItemTypeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemTypeID",
+                    fields: {
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllItemType", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlItemType(container, options) {
+            $('<input name="ItemTypeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "ItemTypeName",
+                        dataValueField: "ItemTypeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlItemTypeDataSource
+                    });
+        };
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var challanGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ChallanID",
+                    fields: {
+                        ChallanID: { editable: false },
+                        ChallanNo: { editable: true },
+                        SourceID: { editable: true },
+                        SourceName: { editable: true, defaultValue: 'Press F9' },
+                        LocationID: { editable: true },
+                        LocationName: { editable: true, defaultValue: 'Press F9' },
+                        ChallanNote: { editable: true },
+                        ChallanDate: { editable: true },
+                        ReceiveStore: { editable: true },
+                        ChallanCategory: { editable: true },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var challanGrid = $("#ChallanGrid").kendoGrid({
+            dataSource: challanGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: false,
+            groupable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+
+                //$("#ChallanCategory").val("Real");
+            },
+            height: 250,
+            toolbar: [{
+                text: "Add New Challan",
+                className: "btnChallanGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                  //{ field: "ChallanID", title: "Challan ID", width: "60px", sortable: false, filterable: false },
+                  { field: "ChallanNo", title: "S. Challan No<span style='color:red'>*</span>", width: "60px", sortable: false },
+                  { field: "ChallanDate", title: "S.Challan Date<span style='color:red'>*</span>", width: "80px", format: "{0:dd/MM/yyyy}", editor: dateTimeEditor },
+                  { field: "SourceName", title: "Source<span style='color:red'>*</span>", width: "60px", attributes: { "class": "Source", "placeholder": "optional" } },
+                  { field: "LocationName", title: "Location<span style='color:red'>*</span>", width: "60px", attributes: { "class": "Location" } },
+                  { field: "ChallanCategory", title: "Challan Category<span style='color:red'>*</span>", width: "60px", editor: ddlChallanCategory },
+                  { field: "ReceiveStore", title: "Receive Store<span style='color:red'>*</span>", width: "80px", editor: ddlReceiveStore },
+                  { field: "ChallanNote", title: "Remarks", width: "50px" },
+                  { field: "RecordStatus", title: "Record Status", width: "50px" },
+                  { command: [{ name: "DeltedRow", text: "Delete", click: DeleteChallan }], title: "Action", width: 50 }
+            ]
+        }).data('kendoGrid');
+
+        var itemGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ChallanItemID",
+                    fields: {
+                        ChallanItemID: { editable: false },
+                        ChallanID: { editable: false },
+                        ItemCategory: { editable: true },
+                        ItemTypeName: { editable: true },
+                        SizeName: { editable: true },
+                        UnitName: { editable: true, defaultValue: 'Piece' },
+                        Description: { editable: true },
+                        ChallanQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        ReceiveQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        Remark: { editable: true },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var itemGrid = $("#ItemGrid").kendoGrid({
+            dataSource: itemGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+                $("[name='ChallanQty']", e.container).blur(function (e) {
+                    var ReceiveQuantity = 0;
+                    var grid = $("#ItemGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+
+                        if (grid.dataItem(row).ChallanQty != "") {
+                            ReceiveQuantity = grid.dataItem(row).ChallanQty;
+                        }
+                    
+                    var item = grid.dataItem(row);
+                    item.ReceiveQty = ReceiveQuantity;
+                });
+
+                $("[name='ReceiveQty']", e.container).blur(function (e) {
+                    var TotalQty = 0;
+                    var challanItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+                    var challanItemGridData = challanItemGridDataSource.data();
+
+                    for (i = challanItemGridData.length - 1; i >= 0; i--) {
+                        
+                        TotalQty += parseInt(challanItemGridData[i].ReceiveQty);
+                    }
+
+
+                    $("#TotalReceiveQuantity").val(TotalQty);
+
+                });
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            dataBound: function (e) {
+                var TotalQty = 0;
+                var challanItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+                var challanItemGridData = challanItemGridDataSource.data();
+
+                for (i = challanItemGridData.length - 1; i >= 0; i--) {
+
+                    TotalQty += parseInt(challanItemGridData[i].ReceiveQty);
+                }
+
+
+                $("#TotalReceiveQuantity").val(TotalQty);
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: false,
+            groupable: true,
+            height: 300,
+            toolbar: [{
+                text: "Add New Item",
+                className: "btnItemGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                    //{ field: "ChallanItemID", title: "Challan Item ID", width: "60px", sortable: false, filterable: false },
+                    //{ field: "ChallanID", title: "ChallanID", width: "60px" },
+                    { field: "ItemTypeName", title: "Item Type<span style='color:red'>*</span>", editor: ddlItemType, width: "60px", sortable: false },
+                    { field: "SizeName", title: "Size<span style='color:red'>*</span>", editor: ddlSize, width: "50px" },
+                    { field: "UnitName", title: "Unit<span style='color:red'>*</span>", width: "50px", editor: ddlUnit },
+                    { field: "Description", title: "Description", width: "70px" },
+                    { field: "ChallanQty", format: "{0:n2}", title: "Challan Qty<span style='color:red'>*</span>", width: "60px" },
+                    { field: "ReceiveQty", format: "{0:n2}", title: "Receive Qty<span style='color:red'>*</span>", width: "60px" },
+                    { field: "Remark", title: "Remarks", width: "70px" },
+                    { field: "RecordStatus", title: "Record Status", width: "50px" },
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 50 },
+            ]
+
+        }).data('kendoGrid');
+
+        
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PurchaseID",
+                    fields: {
+                        PurchaseID: { editable: false },
+                        PurchaseNo: { editable: false },
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false },
+                        SupplierAddressID: { editable: false },
+                        Address: { editable: false },
+                        PurchaseCategory: { editable: false },
+                        PurchaseType: { editable: false },
+                        PurchaseYear: { editable: false },
+                        PurchaseDate: { editable: false },
+                        RecordStatus: { editable: false },
+                        TotalItem: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+            @*transport: {
+                read: {
+                    url: '@Url.Action("GetPurchaseInformation", "Purchase")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }*@
+        });
+
+        var searchGrid = $("#SearchWindowGrid").kendoGrid({
+            autoBind: false,
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: false,
+            groupable: true,
+            height: 320,
+            columns: [
+                  { field: "PurchaseNo", title: "Purchase Number", width: "60px" },
+                  { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                  { field: "PurchaseCategory", title: "Purchase Category", width: "60px" },
+                  { field: "PurchaseType", title: "Purchase Type", width: "60px" },
+                  { field: "PurchaseYear", title: "Purchase Year", width: "60px" },
+                  { field: "PurchaseDate", title: "Purchase Date", width: "70px" },
+                  { field: "RecordStatus", title: "Record Status", width: "70px" },
+                  { field: "TotalItem", title: "Total Item", width: "70px" }
+            ]
+        });
+
+        var supplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+                        Address: { editable: false },
+                        SupplierAddressID: { editable: false },
+                        ContactPerson: { editable: false },
+                        ContactNumber: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url:'@Url.Action("GetSupplierList", "Purchase")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: supplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: false,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+                  { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                  { field: "Address", title: "Address", width: "60px" },
+                  { field: "ContactPerson", title: "Contact Person", width: "60px" },
+                  { field: "ContactNumber", title: "Contact Number", width: "60px" }
+            ]
+        });
+
+        var locationGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LocationID",
+                    fields: {
+                        LocationID: { editable: false },
+                        LocationName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url:'@Url.Action("GetLocationList", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var locationGrid = $("#LocationWindowGrid").kendoGrid({
+            dataSource: locationGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: false,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "LocationID", title: "Location ID", width: "60px", filterable: false, sortable: false },
+                  { field: "LocationName", title: "Location Name", width: "60px" }
+            ]
+
+        });
+
+        var sourceGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SourceID",
+                    fields: {
+                        SourceID: { editable: false },
+                        SourceName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url:'@Url.Action("GetSourceList", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var sourceGrid = $("#SourceWindowGrid").kendoGrid({
+            dataSource: sourceGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "SourceID", title: "Source ID", width: "60px", filterable: false, sortable: false },
+                  { field: "SourceName", title: "Source Name", width: "60px" }
+            ]
+
+        });
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+
+        $(document).on('keyup', '.Location', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('LocationWindowGrid');
+                locationWindow.open(); //Open Popup
+                locationWindow.center();
+            }
+
+        });
+
+        $(document).on('keyup', '.Source', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('SourceWindowGrid');
+                sourceWindow.open(); //Open Popup
+                sourceWindow.center();
+            }
+
+        });
+
+        $(document.body).keyup(function (e) {
+
+            if ($("#SupplierCode").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#txtSupplier").val("");
+                    SelectedItemOfListOfValue('SupplierWindowGrid');
+                    supplierWindow.open();
+                    supplierWindow.center();
+                }
+            }
+        });
+
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var searchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Purchase List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        var supplierWindow = $('#SupplierWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Supplier",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var sourceWindow = $('#SourceWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Source",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var locationWindow = $('#LocationWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Location",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+        
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            max: new Date(),
+            change: function () {
+                changeStatus = 1;
+            }
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date(),
+                        change: function () {
+                            changeStatus = 1;
+                        }
+                    });
+        }
+
+        $("#ChallanGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+        $("#ItemGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $.ajax({
+                url:'@Url.Action("GetDetailPurchaseInformation", "Purchase")',
+                data: ({ "PurchaseNumber": selectedItem.PurchaseID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    //ResetData();
+                    if (response.PurchaseInformation != null) {
+                        $.each(response.PurchaseInformation, function (key, value) {
+                            if (value != null && value != 0)
+                                $('#' + key).val(value);
+                        });
+                    }
+                   
+                    PageStatus = response.PurchaseInformation.RecordStatus;
+                    //CheckRecordStatusForButton(PageStatus);
+
+                    //SelectedItemOfListOfValue('ChallanGrid');
+                    $("#ChallanGrid").data("kendoGrid").dataSource.data(response.ChallanList);
+                    $("#ItemGrid").data("kendoGrid").dataSource.data(response.ChallanItemList);
+
+
+                    //var TotalQty = 0;
+                    //var challanItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+                    //var challanItemGridData = challanItemGridDataSource.data();
+
+                    //for (i = challanItemGridData.length - 1; i >= 0; i--) {
+
+                    //    TotalQty += parseInt(challanItemGridData[i].ReceiveQty);
+                    //}
+
+
+                    //$("#TotalReceiveQuantity").val(TotalQty);
+                }
+            });
+
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            searchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            searchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            searchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                searchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                searchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        // Handling button click for Supplier window grid
+        $('#btnSupplierWindowOK').click(function () {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+        });
+        $('#btnSupplierWindowCancel').click(function () {
+            supplierWindow.close();
+        });
+        $("#SupplierWindowGrid").dblclick(function () {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+        });
+        $("#SupplierWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('SupplierWindowGrid');
+                supplierWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                supplierWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Location window grid
+        function LocationWindowEvent() {
+            var WindowGrid = $("#LocationWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ChallanGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("LocationName", WindowGridItem.LocationName);
+            PageGridItem.set("LocationID", WindowGridItem.LocationID);
+
+            changeStatus = 1;
+            
+            PageGrid.editCell($("#ChallanGrid tr:eq(" + (rowIndex + 1) + ") td:eq(4)"));
+
+            $("#ChallanGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            if(rowIndex>0)
+            $("#ChallanGrid tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnLocationWindowOK').click(function () {
+            LocationWindowEvent();
+            locationWindow.close();
+        });
+        $('#btnLocationWindowCancel').click(function () {
+            locationWindow.close();
+        });
+        $("#LocationWindow").dblclick(function () {
+            LocationWindowEvent();
+            locationWindow.close();
+        });
+        $("#LocationWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                LocationWindowEvent();
+                locationWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                locationWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Source window grid
+        function SourceWindowEvent() {
+            var WindowGrid = $("#SourceWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ChallanGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+            
+
+            PageGridItem.set("SourceName", WindowGridItem.SourceName);
+            PageGridItem.set("SourceID", WindowGridItem.SourceID);
+            PageGrid.editCell($("#ChallanGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+            changeStatus = 1;
+
+            $("#ChallanGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //alert(rowIndex);
+            if(rowIndex>0)
+            $("#ChallanGrid tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnSourceWindowOK').click(function () {
+            SourceWindowEvent();
+            sourceWindow.close();
+        });
+        $('#btnSourceWindowCancel').click(function () {
+            sourceWindow.close();
+        });
+        $("#SourceWindow").dblclick(function () {
+            SourceWindowEvent();
+            sourceWindow.close();
+        });
+        $("#SourceWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SourceWindowEvent();
+                sourceWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                sourceWindow.close();
+            }
+            event.stopPropagation();
+        });
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                ItemGridchangeStatus = 0;
+                $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                $("#ChallanGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+       
+       
+        function LoadSearchGrid() {
+            $.ajax({
+                url: '@Url.Action("GetPurchaseInformation", "Purchase")',
+                data: ({ "_ScheduleID": $("#ScheduleID").val() }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#divLoading").show();
+                },
+                complete: function () {
+                    $("#divLoading").hide();
+                },
+                success: function (response) {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data(response);
+                }
+            });
+        }
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+
+            if (changeStatus == 0) {
+                LoadSearchGrid();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ResetOnlyMasterPageData();
+                ItemGridchangeStatus = 0;
+                $("#ChallanGrid").data('kendoGrid').dataSource.data([]);
+                $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else if(resetEditStatus== 3) // For Challan Item Delete
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if(resetEditStatus==4) // For Challan Delete
+            {
+                DeleteFrom = 2;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Purchase Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnConfirm").click(function() {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmPurchase", "Purchase")',
+                type: 'GET',
+                data: { "purchaseNumber": $("#PurchaseID").val(), "confirmComment": $("#ConfirmComment").val() },
+                success: function(response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Confirmation Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+
+                        ClearOperationalMessage();
+                        //ResetOnlyMasterPageData();
+                        $(".RequiredTextBox").css("border-color", "white");
+                        ItemGridchangeStatus = 0;
+                        $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                        //$("#ChallanGrid").data('kendoGrid').dataSource.data([]);
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        $("#ItemGrid").on('input', function () {
+            ItemGridchangeStatus = 1;
+            changeStatus = 1;
+        });
+        $("#ChallanGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+        $("#ChallanGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var CheckRowCreation = 1;
+
+                var ChallanGridDataSource = $("#ChallanGrid").data("kendoGrid").dataSource;
+                var ChallanGridData = ChallanGridDataSource.data();
+
+                for (var i = 0; i < ChallanGridData.length; i++) {
+                    if (ChallanGridData[i].isNew()) {
+                        CheckRowCreation = 0;
+                        break;
+                    }
+                }
+                if (CheckRowCreation == 1 && ItemGridchangeStatus == 0) {
+                    var grid = $("#ChallanGrid").data("kendoGrid");
+
+                    $("#ChallanGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    grid.addRow();
+                    $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                }
+                else {
+                    $('#MessageText').html("You have unsaved Challan or Item");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    e.stopImmediatePropagation();
+                }
+            }
+        });
+
+        $(".btnChallanGrid").click(function (e) {
+            
+                var CheckRowCreation = 1;
+
+                var ChallanGridDataSource = $("#ChallanGrid").data("kendoGrid").dataSource;
+                var ChallanGridData = ChallanGridDataSource.data();
+
+                for (var i = 0; i < ChallanGridData.length; i++) {
+                    if (ChallanGridData[i].isNew()) {
+                        CheckRowCreation = 0;
+                        break;
+                    }
+                }
+
+                if (CheckRowCreation == 1 && ItemGridchangeStatus == 0) {
+                    var grid = $("#ChallanGrid").data("kendoGrid");
+
+                    $("#ChallanGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    grid.addRow();
+                    $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                    e.preventDefault();
+                }
+                else {
+                    $('#MessageText').html("You have unsaved Challan or Item");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    e.stopImmediatePropagation();
+                }
+            
+        });
+
+        $("#ItemGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var ParentGrid = $("#ChallanGrid").data("kendoGrid");
+                var ParentGridRow = ParentGrid.select();
+                var ParentGridItem = ParentGrid.dataItem(ParentGridRow);
+
+                var ChildGrid = $("#ItemGrid").data("kendoGrid");
+                $("#ItemGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                ChildGrid.addRow();
+                $("#ChallanID").val(ParentGridItem.ChallanID);
+            }
+        });
+
+        $(".btnItemGrid").click(function (e) {
+            var ParentGrid = $("#ChallanGrid").data("kendoGrid");
+            var ParentGridRow = ParentGrid.select();
+            var ParentGridItem = ParentGrid.dataItem(ParentGridRow);
+
+            var ChildGrid = $("#ItemGrid").data("kendoGrid");
+            $("#ItemGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            ChildGrid.addRow();
+            e.preventDefault();
+            $("#ChallanID").val(ParentGridItem.ChallanID);
+            
+        });
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+
+        //To face child data into another grid for a grid row on click
+        $("#ChallanGrid").on("click", "tr", function (e) {
+
+            var ItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+            var itemGridData = ItemGridDataSource.data();
+
+            var checkUnsavedData = 0;
+            for (var i = 0; i < itemGridData.length; i++) {
+                if (itemGridData[i].isNew()) {
+                    checkUnsavedData = 1;
+                    break;
+                }
+            }
+
+            if (checkUnsavedData == 0) {
+                var parentGrid = $("#ChallanGrid").data("kendoGrid");
+                var parentGridRow = parentGrid.select();
+                var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+                if (parentGridItem.ChallanID != "") {
+                    $.ajax({
+                        url:'@Url.Action("GetItemListForChallan", "Purchase")',
+                        type: 'GET',
+                        data: { "ChallanID": parentGridItem.ChallanID },
+                        success: function (response) {
+
+                            if (response != null) {
+
+                                $("#ItemGrid").data("kendoGrid").dataSource.data(response);
+                                //changeStatus = 0;
+
+                                //var TotalQty = 0;
+                                //var challanItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+                                //var challanItemGridData = challanItemGridDataSource.data();
+
+                                //for (i = challanItemGridData.length - 1; i >= 0; i--) {
+
+                                //    TotalQty += parseInt(challanItemGridData[i].ReceiveQty);
+                                //}
+
+                                //$("#TotalReceiveQuantity").val(TotalQty);
+
+                            }
+
+                        } //End of Success Call
+                    });
+                }
+                else {
+                    $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                }
+            }
+            else {
+                //alert("You have Unsaved data in item grid");
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+        var DeleteFrom = 0;
+        function DeleteChallan(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 2;
+                dataitem = challanGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 4;
+                dataitem = challanGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+
+        };
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 1;
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                //dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                //dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // Item Delete
+            {
+                if (dataitem.ChallanItemID == 0) {
+                    $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteChallanItem", "Purchase")',
+                        type: 'GET',
+                        //data: { "ChallanItemID": dataitem.ChallanItemID, "_PageStatus": PageStatus },
+                        data: { "ChallanItemID": dataitem.ChallanItemID, "_PageStatus": dataitem.RecordStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+
+            else if (DeleteFrom == 2) // Challan Delete
+            {
+                var challanItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+                var challanItemGridData = challanItemGridDataSource.data();
+                if (challanItemGridData.length > 0)
+                {
+                    $('#MessageText').html("Challan Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else
+                {
+                    if(dataitem.ChallanID == 0)
+                    {
+                        $("#ChallanGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $('#MessageText').html("Delete Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+           
+                    else{
+                            $.ajax({
+                            url: '@Url.Action("DeleteChallan", "Purchase")',
+                            type: 'GET',
+                            data: { "ChallanID": dataitem.ChallanID, "_PageStatus": dataitem.RecordStatus },
+                            success: function (response) {
+
+                                if (response.Msg == "Success") {
+                                    $('#MessageText').html("Delete Successful");
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                    $("#ChallanGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                }
+                                else if (response.Msg == "Fail") {
+                                    $('#MessageText').html("Delete Failed");
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                }
+                                else if (response.Msg == "CNF") {
+                                    $('#MessageText').html("Confirmed record can not be deleted.");
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                }
+
+                            } //End of success call
+                        });                                             
+                    }
+                }
+            }
+
+
+            else if (DeleteFrom == 3) //Purchase Delete
+            {
+                var challanGridDataSource = $("#ChallanGrid").data("kendoGrid").dataSource;
+                var challanGridData = challanGridDataSource.data();
+                if (challanGridData.length > 0) {
+                    $('#MessageText').html("Challan Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else
+                {
+                    $.ajax({
+                        url: '@Url.Action("DeletePurchase", "Purchase")',
+                        type: 'GET',
+                        data: { "PurchaseID": $("#PurchaseID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+
+    var ChallanList = { "ChallanNo": "", "ChallanDate": "", "SourceID": "", "LocationID": "", "ChallanCategory": "", "ReceiveStore": "", "ChallanNote": "", "RecordStatus": "" };
+
+    var ChallanItemList = {
+        "ChallanNo": "", "ItemCategory": "", "ItemTypeID": "", "ItemSizeID": "", "UnitID": "", "Description": "",
+        "ChallanQty": "", "ReceiveQty": "", "Remark": "", "RecordStatus": ""
+    };
+    var FinalObject = {
+        "SupplierID": "", "SupplierAddressID": "", "PurchaseID": "", "PurchaseCategory": "", "PurchaseYear": "", "PurchaseDate": "", "PurchaseNote": "", "CheckedBy": "",
+        "ChallanList": [], "ChallanItemList": [], "RecordStatus": ""
+    };
+
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('SupplierID', 50);
+        CheckRequiredTextBoxMaxLength('PurchaseYear', 4);
+        CheckRequiredTextBoxMaxLength('PurchaseDate', 12);
+        CheckRequiredTextBoxMaxLength('Address', 200);
+        CheckRequiredTextBoxMaxLength('PurchaseType', 15);
+        CheckRequiredTextBoxMaxLength('PurchaseCategory', 15);
+
+        var challanGridDataSource = $("#ChallanGrid").data("kendoGrid").dataSource;
+        var challanGridData = challanGridDataSource.data();
+
+
+        var challanItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+        var challanItemGridData = challanItemGridDataSource.data();
+
+
+
+        for (i = challanGridData.length - 1; i >= 0; i--) {
+            if (challanGridData[i].ChallanNo == "" || challanGridData[i].SourceID == "" || challanGridData[i].LocationID == "" || challanGridData[i].ReceiveStore == ""
+                || challanGridData[i].ChallanCategory == "" || challanGridData[i].ChallanDate == "")
+            {
+                saveStatus = 0;
+                break;
+            }
+                
+        }
+
+        for (i = challanItemGridData.length - 1; i >= 0; i--) {
+            if (challanItemGridData[i].ItemTypeID == "" || challanItemGridData[i].ItemSizeID == "" || challanItemGridData[i].UnitID == "" ||
+                challanItemGridData[i].ChallanQty == "" || challanItemGridData[i].ReceiveQty == "" ) {
+                saveStatus = 0;
+                break;
+            }
+
+        }
+
+        if (saveStatus == 1) {
+            FinalObject.SupplierID = $("#SupplierID").val();
+            FinalObject.SupplierAddressID = $("#SupplierAddressID").val();
+            FinalObject.PurchaseID = $("#PurchaseID").val();
+            FinalObject.PurchaseCategory = $("#PurchaseCategory").val();
+            FinalObject.PurchaseType = $("#PurchaseType").val();
+            FinalObject.PurchaseYear = $("#PurchaseYear").val();
+            FinalObject.PurchaseDate = $("#PurchaseDate").val();
+            FinalObject.PurchaseNote = $("#PurchaseNote").val();
+            FinalObject.RecordStatus = $("#RecordStatus").val();
+
+
+
+
+            for ( i = challanGridData.length - 1; i >= 0; i--) {
+                if (challanGridData[i].dirty) {
+
+                    ChallanList.ChallanID = challanGridData[i].ChallanID;
+                    ChallanList.ChallanNo = challanGridData[i].ChallanNo;
+                    ChallanList.ChallanDate = challanGridData[i].ChallanDate;
+                    ChallanList.SourceID = challanGridData[i].SourceID;
+                    ChallanList.LocationID = challanGridData[i].LocationID;
+                    ChallanList.ChallanCategory = challanGridData[i].ChallanCategory;
+                    ChallanList.ReceiveStore = challanGridData[i].ReceiveStore;
+                    ChallanList.ChallanNote = challanGridData[i].ChallanNote;
+                    ChallanList.RecordStatus = challanGridData[i].RecordStatus;
+
+                    FinalObject.ChallanList.push(ChallanList);
+                    ChallanList = { "ChallanNo": "", "ChallanDate": "", "SourceID": "", "LocationID": "", "ChallanCategory": "", "ReceiveStore": "", "ChallanNote": "", "RecordStatus": "" };
+                }
+            }
+
+
+
+            for (var i = challanItemGridData.length - 1; i >= 0; i--) {
+                    ChallanItemList.ChallanItemID = challanItemGridData[i].ChallanItemID;
+                    ChallanItemList.ChallanID = $("#ChallanID").val();
+                    ChallanItemList.ChallanNo = challanItemGridData[i].ChallanNo;
+                    ChallanItemList.ItemTypeID = challanItemGridData[i].ItemTypeName;
+                    ChallanItemList.ItemSizeID = challanItemGridData[i].SizeName;
+                    ChallanItemList.UnitID = challanItemGridData[i].UnitName;
+                    ChallanItemList.ItemCategory = challanItemGridData[i].ItemCategory;
+
+
+                    ChallanItemList.Description = challanItemGridData[i].Description;
+                    ChallanItemList.ChallanQty = challanItemGridData[i].ChallanQty;
+                    ChallanItemList.ReceiveQty = challanItemGridData[i].ReceiveQty;
+                    ChallanItemList.Remark = challanItemGridData[i].Remark;
+                    ChallanItemList.RecordStatus = challanItemGridData[i].RecordStatus;
+
+
+                    FinalObject.ChallanItemList.push(ChallanItemList);
+                    ChallanItemList = {
+                        "ChallanNo": "", "ItemCategory": "", "ItemTypeID": "", "ItemSizeID": "", "UnitID": "", "Description": "",
+                        "ChallanQty": "", "ReceiveQty": "", "Remark": "", "RecordStatus": ""
+                    };
+            }
+            if (changeStatus == 1)
+            {
+                $.ajax({
+                    url: '@Url.Action("Purchase","Purchase")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        ItemGridchangeStatus = 0;
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#PurchaseID").val(response.purchaseID);
+                            $("#PurchaseNo").val(response.PurchaseNo);
+
+                            $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                            $("#ChallanGrid").data('kendoGrid').dataSource.data(response.challanList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else if (response.Msg.Type == 3) {
+                            ItemGridchangeStatus = 0;
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+
+                            $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                            $("#ChallanGrid").data('kendoGrid').dataSource.data(response.challanList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+           
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "SupplierID": "", "SupplierAddressID": "", "PurchaseID": "", "PurchaseCategory": "", "PurchaseYear": "", "PurchaseDate": "", "PurchaseNote": "", "CheckedBy": "",
+            "ChallanList": [], "ChallanItemList": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>

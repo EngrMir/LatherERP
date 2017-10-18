@@ -1,0 +1,262 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model ApplicationVM
+
+@{
+    ViewBag.Title = "Index";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Application Setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Title</label>
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.Application.ApplicationID)
+                                    @Html.TextBoxFor(model => model.Application.Title, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Description</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Application.Description, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Is Active</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.Application.IsActive)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-lg-offset-10">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearApplicationData();" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Applications
+            </div>
+
+            <div class="panel-body">
+                @(Html.Telerik().Grid<ApplicationView>()
+                    .BindTo(ViewBag.ApplicationList as List<ApplicationView>)
+                    .Name("gvApplicationList")
+                    .Filterable()
+                    .DataKeys(keys => keys.Add(k => k.ApplicationID))
+                    .Columns(column =>
+                    {
+                        column.Bound(s => s.ApplicationID).Hidden();
+                        column.Bound(s => s.Title);
+                        column.Bound(s => s.Description);
+                        column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>);
+                        column.Bound(s => s.SetByPerson);
+                        column.Bound(s => s.SetOn);
+                        column.Bound(s => s.IsDelete).Hidden();
+                        column.Bound(s => s.ApplicationID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                    })
+                    .Selectable()
+                    .Pageable(pages => pages.PageSize(10))
+                    .Scrollable(scroll => scroll.Height(200))
+                    .Sortable()
+                    .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    @Html.Partial("_ConfirmationView")
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+    });
+
+    function validatedApplication() {
+        if ($('#Application_Title').val() == "") {
+            showMessage('Application Title is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#Application_Description').val() == "") {
+            showMessage('Application Description is required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+    $("#btnSave").click(function () {
+        if (validatedApplication()) {
+            var jsonObject = {
+                "ApplicationID": $('#Application_ApplicationID').val(),
+                "Title": $('#Application_Title').val(),
+                "Description": $('#Application_Description').val(),
+                "IsActive": $('#Application_IsActive').is(":checked")
+            };
+            var trNew = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "Application")',
+                data: JSON.stringify({ application: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    trNew = "<tr>";
+                    trNew = trNew + "<td style='display:none'>" + data.ApplicationID + "</td>";
+                    trNew = trNew + "<td>" + data.Title + "</td>";
+                    trNew = trNew + "<td>" + data.Description + "</td>";
+                    trNew = trNew + "<td>" + "<label for=\"\">";
+
+                    if (data.IsActive == true) {
+                        trNew = trNew + "Active";
+                    } else {
+                        trNew = trNew + "In-Active";
+                    }
+
+                    trNew = trNew + "</label> </td>";
+                    trNew = trNew + "<td>" + data.SetByPerson + "</td>";
+                    trNew = trNew + "<td>" + data.SetOn + "</td>";
+                    trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                    trNew = trNew + " </tr>";
+                    var tr;
+                    if ($("#hdnIsInsert").val() == "true") {
+                        $('#gvApplicationList .t-grid-content tbody').prepend(trNew);
+                        $('#gvApplicationList .t-grid-content tbody .t-no-data').remove();
+                    } else {
+                        tr = $("#gvApplicationList .t-grid-content tbody tr:contains(\"" + data.ApplicationID + "\")");
+                        tr.replaceWith(trNew);
+                    }
+
+                    showMessage('Saved successfully.', 'success', 'Success!');
+                    clearApplicationData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+    $("#gvApplicationList").delegate("a.btn-link", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(0)").text();
+        editApplicationData(id.trim());
+    });
+
+
+    $("#gvApplicationList").delegate("a.btn-link-delete", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(0)").text();
+        $('#commonIdForDelete').val(id);
+        $('#myModal').modal('show');
+    });
+
+    function editApplicationData(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetApplication", "Application")',
+            data: { id: id },
+            cache: false,
+            success: function (data) {
+                $('#Application_ApplicationID').val(data.ApplicationID);
+                $('#Application_Title').val(data.Title);
+                $('#Application_Description').val(data.Description);
+                $('#Application_IsActive').prop("checked", data.IsActive);
+                $("#hdnIsInsert").val(false);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function deleteItem(id) {
+        id = id.trim();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "Application")',
+            data: { id: id },
+            cache: false,
+            success: function () {
+                var tr = $("#gvApplicationList .t-grid-content tbody tr:contains(\"" + id + "\")");
+                tr.remove();
+                $('#applicationID').val("");
+                $("#myModal").modal('hide');
+                showMessage('Deleted successfully.', 'success', 'Success!');
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function clearApplicationData() {
+        $('#Application_ApplicationID').val("");
+        $('#Application_Title').val("");
+        $('#Application_Description').val("");
+        $('#Application_IsActive').prop('checked', false);
+        $("#hdnIsInsert").val(true);
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+          {
+              'message': message,
+              'priority': priority,
+              'title': title
+          }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

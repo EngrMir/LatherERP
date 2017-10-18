@@ -1,0 +1,1505 @@
+﻿
+@{
+    ViewBag.Title = "Production Requisition";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Category<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="RequisitionCategory" style="width:150px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="RPD">Regular Production</option>
+                    <option value="RJO">Regular Job Order</option>
+                    <option value="BOP">Buyer Order Production</option>
+                    <option value="BJO">Buyer Order Job Order</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Job Order No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="JobOrderNo" class="txtBox" name="" tabindex="" style="width:150px;" />
+                <input type="hidden" id="JobOrderID" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Requisition No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionNo" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" style="width:150px;" />
+                <input type="hidden" id="RequisitionID" class="txtBox" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Type</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="RequisitionType" style="width:150px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="UR">Urgent</option>
+                    <option value="NR">Normal</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Buyer Order</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerOrderID" class="txtBox" name="" tabindex="" style="width:150px; margin-left:2px;" />
+                <input type="text" id="BuyerOrderNo" class="txtBox" name="" tabindex="" style="width:150px; margin-left:2px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Requisition Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ReqRaisedOn" class="datePicker" name="" tabindex="" style="width:150px; margin-left:2px;" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Raised By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ReqRaisedBy" class="txtBox" name="" tabindex="" style="width:150px; margin-left:2px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Buyer</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerID" class="txtBox" />
+                <input type="text" id="BuyerName" class="" name="" tabindex="" style="width:150px; margin-left:2px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Required On</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequiredByTime" class="txtBox" name="" tabindex="" style="width:100px; margin-left:2px;" />
+                <label>Days</label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition From<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("RequisitionFrom", new SelectList(ViewBag.RequisitionFrom, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 200px; margin-left: 0px;" })
+            </div>
+
+           
+
+            <div class="col-lg-2">
+                <label>Requisition To<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("RequisitionTo", new SelectList(ViewBag.RequisitionTo, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 200px; margin-left: 0px;" })
+            </div>
+
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Recipe For</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("RecipeFor", new SelectList(ViewBag.RecipeFor, "ProcessID", "ProcessCategoryName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 150px; margin-left: 0px;" })
+            </div>
+
+            <div class="col-lg-2">
+                <label>Recipe No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RecipeID" class="txtBox RequiredTextBox Recipe " name="" tabindex="" readonly="readonly" style="width: 150px;" placeholder="Press F9" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Size</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LeatherSize" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 60px;" />
+                @Html.DropDownList("SizeUnit", new SelectList(ViewBag.UnitForLeather, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 90px; margin-left: 0px;" })
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Article No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleNo" class="txtBox RequiredTextBox Recipe " name="" tabindex="" readonly="readonly" style="width: 150px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Article Name</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleName" class="txtBox RequiredTextBox Recipe " name="" tabindex="" readonly="readonly" style="width: 150px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Selection Range</label>
+            </div>
+            <div class="col-lg-2">
+                
+                <input type="text" id="Selection" class="txtBox RequiredTextBox " name="" tabindex=""  style="width: 155px;" />
+                
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Challan No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleChallanNo" class="txtBox RequiredTextBox Recipe " name="" tabindex="" readonly="readonly" style="width: 150px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Color</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="ArticleColor" class="txtBox" />
+                <input type="text" id="ArticleColorName" class="txtBox RequiredTextBox " name="" tabindex="" readonly="readonly" style="width: 150px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Thickness</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Thickness" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 60px;" />
+                @Html.DropDownList("ThicknessUnit", new SelectList(ViewBag.UnitForThickness, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 90px; margin-left: 0px;" })
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Base Quantity</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BaseQuantity" class="txtBox RequiredTextBox " name="" tabindex="" readonly="readonly" style="width: 150px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Base Unit</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BaseUnit" class="txtBox" />
+                <input type="text" id="BaseUnitName" class="txtBox RequiredTextBox " name="" tabindex="" readonly="readonly" style="width: 150px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Production Quantity</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ProductionQty" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 60px;" />
+                <input type="text" id="ProductionQuantityUnit" class="txtBox RequiredTextBox " readonly="readonly" name="" tabindex="" style="width: 90px;" />
+                
+            </div>
+
+        </div>
+        
+    </div>
+    
+    <div class="FormBody">
+        <div id="RecipeItemGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Check Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="ApprovalAdviceNote" class="txtBox" name="" tabindex=""></textarea>
+                @*<input type="button" id="btnCheck" value="Check" />*@
+                <input type="button" id="btnApprove" value="Approve" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="ChemicalItemWindow" style="display: none;">
+    <div id="ChemicalItemWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalItemWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalItemWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="GradeWindow" style="display: none;">
+    <div id="GradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RecipeWindow" style="display: none;">
+    <div id="RecipeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRecipeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRecipeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+
+<script type="text/javascript">
+    //var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+    $(document).ready(function () {
+        OnlyNumericValue('RequiredByTime');
+
+        //--------------------------------------Start of recalculating Required Quantity-----------------------------------------------------------------
+        $("#ProductionQty").blur(function () {
+            var Factor = $("#ProductionQty").val() / $("#BaseQuantity").val();
+            $.ajax({
+                url: '@Url.Action("RecalculateItemQuantity", "ProductionRequisition")',
+                type: 'GET',
+                data: { "_RecipeID": $("#RecipeID").val(), "_Factor": Factor, "_StoreID": $("#RequisitionTo").val() },
+                success: function (response) {
+                    if (response != null) {
+                        $("#RecipeItemGrid").data('kendoGrid').dataSource.data(response);
+                    }
+
+                } //End of success call
+            });
+        });
+        //--------------------------------------End of recalculating Required Quantity-----------------------------------------------------------------
+
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+            var ddlSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SizeID",
+                    fields: {
+                        SizeID: { editable: false },
+                        SizeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 100,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllPackSizeForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlSize(container, options) {
+            $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "SizeName",
+                        dataValueField: "SizeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlSizeDataSource
+                    });
+        };
+
+        var ddlUnitForChemicalPackSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemicalPackSize", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemicalPackSize(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalPackSizeDataSource
+                    });
+        };
+
+
+        var ddlUnitForChemicalDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemical(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalDataSource
+                    });
+        };
+        //--------------------------------------End of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var RecipeItemGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RequisitionItemID",
+                    fields: {
+                        RequisitionItemID: { editable: true },
+                        RecipeID: { editable: true },
+                        ItemID: { editable: true },
+                        ItemName: { editable: true, defaultValue: 'Press F9' },
+                        RequiredQty: { editable: false, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        RequiredUnit: { editable: false },
+                        RequiredUnitName: { editable: false },
+                        StockQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        ProductionStock: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        PackSize: { editable: true },
+                        PackSizeName: { editable: true },
+                        SizeUnit: { editable: true },
+                        SizeUnitName: { editable: true },
+                        PackQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        RequsitionQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        RequisitionUnit: { editable: true },
+                        RequisitionUnitName: { editable: true, defaultValue: 'KG' },
+                        ApproveQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        ApproveUnit: { editable: true },
+                        ApproveUnitName: { editable: true, defaultValue: 'KG' },
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false }
+
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var RecipeItemGrid = $("#RecipeItemGrid").kendoGrid({
+            dataSource: RecipeItemGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+                $(".CalculationNeeded").unbind().change(function () {
+                    var grid = $("#RecipeItemGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("RequsitionQty", (grid.dataItem(row).PackSizeName * grid.dataItem(row).PackQty));
+                    e.model.set("ApproveQty", (grid.dataItem(row).PackSizeName * grid.dataItem(row).PackQty));
+                });
+
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable:true,
+            height: 300,
+            toolbar: [{
+                text: "Add New Requisition",
+                className: "btnRecipeItemGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+
+                    //{ field: "RequisitionItemID", title: "RecipeItemID", width: "100px", attributes: { "class": "ChemicalItemName" } },
+                    //{ field: "RecipeID", title: "RecipeID", width: "100px", attributes: { "class": "ChemicalItemName" } },
+                    { field: "ItemName", title: "Chemical<span style='color:red'>*</span>", width: "100px", attributes: { "class": "ChemicalItemName" } },
+                    { field: "RequiredQty", format: "{0:n2}", title: "Required Qty", width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "RequiredUnitName", title: "Unit", width: "75px", attributes: { style: "background-color: silver" } },
+                    { field: "StockQty", format: "{0:n2}", title: "Total Stock", width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "ProductionStock", format: "{0:n2}", title: "Production Stock", width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "PackSizeName", title: "Pack Size", width: "70px", editor: ddlSize, attributes: { "class": "CalculationNeeded" } },
+                    { field: "SizeUnitName", title: "Unit", width: "60px", editor: ddlUnitForChemicalPackSize },
+                    { field: "PackQty", format: "{0:n2}", title: "Pack Qty<span style='color:red'>*</span>", width: "70px", attributes: { "class": "CalculationNeeded" } },
+                    { field: "RequsitionQty", format: "{0:n2}", title: "Requisition Qty<span style='color:red'>*</span>", width: "80px" },
+                    { field: "RequisitionUnitName", title: "Unit<span style='color:red'>*</span>", width: "60px", editor: ddlUnitForChemical },
+                    { field: "ApproveQty", format: "{0:n2}", title: "Approve Qty<span style='color:red'>*</span>", width: "80px" },
+                    { field: "ApproveUnitName", title: "Unit<span style='color:red'>*</span>", width: "60px", editor: ddlUnitForChemical },
+                    { field: "SupplierName", title: "Supplier", width: "80px" },
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 70 }
+            ]
+        }).data('kendoGrid');
+
+        var RecipeGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RecipeID",
+                    fields: {
+                        RecipeID: { editable: false },
+                        RecipeNo: { editable: false },
+                        RecipeName: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleColor: { editable: false },
+                        ArticleColorName: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        BaseQuantity: { editable: false },
+                        BaseUnit: { editable: false },
+                        BaseUnitName: { editable: false },
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var RecipeGrid = $("#RecipeWindowGrid").kendoGrid({
+            dataSource: RecipeGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            columns: [
+                  { field: "RecipeNo", title: "Recipe No", width: "60px" },
+                  { field: "RecipeName", title: "Recipe Name", width: "60px" },
+                  { field: "ArticleNo", title: "Article No.", width: "60px" },
+                  { field: "ArticleName", title: "Article Name", width: "60px" },
+                  { field: "ArticleColorName", title: "Article Color", width: "80px" },
+                  { field: "ArticleChallanNo", title: "Article Challan No", width: "60px" },
+                  { field: "BaseQuantity", title: "Base Quantity", width: "80px" },
+                  { field: "BaseUnitName", title: "Base Unit", width: "60px" }
+            ]
+        });
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                data: "data", // records are returned in the "data" field of the response
+                total: "total", // total number of records is in the "total" field of the response
+                model: {
+                    id: "RequisitionID",
+                    fields: {
+                        RequisitionID: { editable: false },
+                        RequisitionNo: { editable: false },
+                        RequisitionCategory: { editable: false },
+                        RequisitionType: { editable: false },
+                        ReqRaisedOn: { editable: false },
+                        RecordStatus: { editable: false },
+                        RequisitionFromName: { editable: false },
+                        RequisitionToName: { editable: false }
+
+                    }
+                }
+            },
+            serverPaging: true, // enable server paging
+            serverFiltering: true,
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetRequistionInfoForSearch", "ProductionRequisition")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            autoBind:false,
+            columns: [
+                  { field: "RequisitionNo", title: "Requisition No", width: "60px" },
+                  { field: "RequisitionFromName", title: "Requisition From", width: "60px" },
+                  { field: "RequisitionToName", title: "Requisition To", width: "60px" },
+                  { field: "RequisitionCategory", title: "Requisition Category", width: "60px" },
+                  { field: "RequisitionType", title: "Requisition Type", width: "80px" },
+                  { field: "ReqRaisedOn", title: "Requisition Date", width: "60px" },
+                  { field: "RecordStatus", title: "Record Status", width: "60px" }
+            ]
+        });
+
+        var ChemicalItemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemID",
+                    fields: {
+                        ItemID: { editable: false },
+                        ItemName: { editable: false },
+                        ItemCategory: { editable: false },
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false },
+                        StockQty: { editable: false, type: "number", },
+                        SafetyStock: { editable: false, type: "number", }
+                    }
+                }
+            },
+            @*transport: {
+                read: {
+                    url: '@Url.Action("GetAllChemicalItem", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },*@
+            pageSize: 50
+
+        });
+
+        var ChemicalItemGrid = $("#ChemicalItemWindowGrid").kendoGrid({
+            dataSource: ChemicalItemDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "ItemName", title: "Item Name", width: "60px" },
+                  { field: "ItemCategory", title: "Item Category", width: "60px" },
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" },
+                  { field: "StockQty", title: "Total Stock", width: "60px" },
+                  { field: "SafetyStock", title: "Production Stock", width: "60px" }
+                  
+            ]
+
+        });
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+
+        function GetChemicalItemWithStock() {
+            $.ajax({
+                url: '@Url.Action("GetChemicalItemWithStock", "ProductionRequisition")',
+                type: 'GET',
+                data: { "_RequisitionFrom": $("#RequisitionFrom").val(), "_RequisitionTo": $("#RequisitionTo").val() },
+                success: function (response) {
+
+                    $("#ChemicalItemWindowGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+
+
+        $(document).on('keyup', '.ChemicalItemName', function (e) {
+            if (e.which == 120) {
+                if ( $("#RequisitionTo").val() != "" && $("#RequisitionFrom").val() != "") {
+                    GetChemicalItemWithStock();
+                    SelectedItemOfListOfValue('ChemicalItemWindowGrid');
+                    ChemicalItemWindow.open(); //Open Popup
+                    ChemicalItemWindow.center();
+                }
+                else {
+                    $('#MessageText').html("Please Select Requisition From & Requisition To");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                
+            }
+
+        });
+
+        function GetRecipeForFixedCategory() {
+            $.ajax({
+                url: '@Url.Action("GetRecipeForFixedCategory", "ProductionRequisition")',
+                type: 'GET',
+                data: { "_RecipeFor": $("#RecipeFor").val() },
+                success: function (response) {
+
+                    $("#RecipeWindowGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+
+
+        $(document.body).keyup(function (e) {
+
+            if ($(".Recipe").is(":focus")) {
+                if (e.which == 120) {
+                    if ($("#RecipeFor").val() != "" && $("#RequisitionTo").val() != "" && $("#RequisitionFrom").val() != "") {
+                        GetRecipeForFixedCategory();
+                        SelectedItemOfListOfValue('RecipeWindowGrid');
+                        RecipeWindow.open();
+                        RecipeWindow.center();
+                    }
+                    else {
+                        $('#MessageText').html("Please Select Requisition From, To & Recipe For");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+
+
+                }
+            }
+        });
+
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var SearchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Production Requisition",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        var ChemicalItemWindow = $('#ChemicalItemWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Source",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var RecipeWindow = $('#RecipeWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Recipe List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date()
+                        //change: function () {
+                        //    alert("test");
+                        //}
+                    });
+        }
+
+        $("#RecipeItemGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $.ajax({
+                url: '@Url.Action("GetRequisitionDetailsAfterSearch", "ProductionRequisition")',
+                data: ({ "_RequisitionID": selectedItem.RequisitionID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    //ResetData();
+                    if (response.RequisitionInfo != null) {
+                        $.each(response.RequisitionInfo, function (key, value) {
+                            //if (value != null && value != 0)
+                            $('#' + key).val(value);
+                        });
+                    }
+                    //SelectedItemOfListOfValue('ChallanGrid');
+                    $("#RecipeItemGrid").data("kendoGrid").dataSource.data(response.RequisitionItemList);
+
+                    PageStatus = response.RequisitionInfo.RecordStatus;
+                    CheckRecordStatusForButton(PageStatus);
+                }
+            });
+
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            SearchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                SearchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                SearchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //Handling button click for Location window grid
+        function RecipeWindowEvent() {
+            var WindowGrid = $("#RecipeWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            $("#RecipeID").val(WindowGridItem.RecipeID);
+            $("#ArticleNo").val(WindowGridItem.ArticleNo);
+            $("#ArticleName").val(WindowGridItem.ArticleName);
+            $("#ArticleColor").val(WindowGridItem.ArticleColor);
+            $("#ArticleColorName").val(WindowGridItem.ArticleColorName);
+            $("#ArticleChallanNo").val(WindowGridItem.ArticleChallanNo);
+
+            $("#BaseQuantity").val(WindowGridItem.BaseQuantity);
+            $("#BaseUnit").val(WindowGridItem.BaseUnit);
+            $("#BaseUnitName").val(WindowGridItem.BaseUnitName);
+
+            $("#ProductionQty").val(WindowGridItem.BaseQuantity);
+            $("#ProductionQuantityUnit").val(WindowGridItem.BaseUnitName);
+
+
+            $.ajax({
+                url: '@Url.Action("GetRecipeItemListForFixedRecipe", "ProductionRequisition")',
+                data: ({ "_RecipeID": WindowGridItem.RecipeID, "_RequisitionTo": $("#RequisitionTo").val(), "_RequisitionFrom": $("#RequisitionFrom").val() }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#RecipeItemGrid").data("kendoGrid").dataSource.data(response);
+                }
+            });
+
+            changeStatus = 1;
+
+
+            //PageGrid.editCell($("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ") td:eq(1)"));
+
+            //$("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#RequisitionGrid tr:eq(1)").removeClass('k-state-selected');
+
+
+        };
+
+        $('#btnRecipeWindowOK').click(function () {
+            RecipeWindowEvent();
+            RecipeWindow.close();
+        });
+        $('#btnRecipeWindowCancel').click(function () {
+            RecipeWindow.close();
+        });
+        $("#RecipeWindow").dblclick(function () {
+            RecipeWindowEvent();
+            RecipeWindow.close();
+        });
+        $("#RecipeWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                RecipeWindowEvent();
+                RecipeWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                RecipeWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function ChemicalItemWindowEvent() {
+            var WindowGrid = $("#ChemicalItemWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#RecipeItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+
+            PageGridItem.set("ItemID", WindowGridItem.ItemID);
+            PageGridItem.set("ItemName", WindowGridItem.ItemName);
+
+            PageGridItem.set("StockQty", WindowGridItem.StockQty);
+            PageGridItem.set("ProductionStock", WindowGridItem.SafetyStock);
+
+
+            //PageGrid.editCell($("#RecipeItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            //$("#RecipeItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#RecipeItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnChemicalItemWindowOK').click(function () {
+            ChemicalItemWindowEvent();
+            ChemicalItemWindow.close();
+        });
+        $('#btnChemicalItemWindowCancel').click(function () {
+            ChemicalItemWindow.close();
+        });
+        $("#ChemicalItemWindow").dblclick(function () {
+            ChemicalItemWindowEvent();
+            ChemicalItemWindow.close();
+        });
+        $("#ChemicalItemWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ChemicalItemWindowEvent();
+                ChemicalItemWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ChemicalItemWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                $("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog(); // Probelm opening window!
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog(); // Probelm opening window!
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ResetOnlyMasterPageData();
+                $("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else if (resetEditStatus == 3) // For Requisition Item Delete from Grid
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Requisition Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnCheck").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("CheckRequisition", "ProductionRequisition")',
+                type: 'GET',
+                data: { "_RequisitionID": $("#RequisitionID").val(), "_CheckComment": $("#ApprovalAdviceNote").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Checked Successfully");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+                        changeStatus = 0;
+                        PageStatus = "CHK";
+                        CheckRecordStatusForButton(PageStatus);
+
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+
+
+        $("#btnApprove").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ApproveRequisition", "ProductionRequisition")',
+                type: 'GET',
+                data: { "_RequisitionID": $("#RequisitionID").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Approved Successfully");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#RecipeItemGrid").data('kendoGrid').dataSource.data([]);
+                        changeStatus = 0;
+                        PageStatus = "APV";
+                        CheckRecordStatusForButton(PageStatus);
+
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        function MakeRequisitionGridEditable() {
+            var grid = $("#RecipeItemGrid").data("kendoGrid");
+
+            grid.dataSource.at(0).fields["ItemID"].editable = true;
+            grid.dataSource.at(0).fields["ItemName"].editable = true;
+        };
+
+
+
+
+        $("#RecipeItemGrid").keyup(function (e) {
+
+            if (e.keyCode == 13) {
+                var grid = $("#RecipeItemGrid").data("kendoGrid");
+                $("#RecipeItemGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                //MakeRequisitionGridEditable();
+            }
+        });
+
+        $(".btnRecipeItemGrid").click(function (e) {
+
+            var grid = $("#RecipeItemGrid").data("kendoGrid");
+            $("#RecipeItemGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            //MakeRequisitionGridEditable();
+            e.preventDefault();
+
+        });
+
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+
+        var DeleteFrom = 0;
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                dataitem = RecipeItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = RecipeItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // PIItem Delete
+            {
+                if (dataitem.RequisitionItemID == 0) {
+                    $("#RecipeItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteRequisitionItem", "ProductionRequisition")',
+                        type: 'GET',
+                        data: { "_RequisitionItemID": dataitem.RequisitionItemID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#RecipeItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+            else if (DeleteFrom == 3) //PI Delete
+            {
+                var RecipeItemGridDataSource = $("#RecipeItemGrid").data("kendoGrid").dataSource;
+                var RecipeItemGridData = RecipeItemGridDataSource.data();
+                if (RecipeItemGridData.length > 0) {
+                    $('#MessageText').html("Requisition Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteRequisition", "ProductionRequisition")',
+                        type: 'GET',
+                        data: { "_RequisitionID": $("#RequisitionID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+
+    var RequisitionItemList = {
+        "RequisitionItemID": "", "RequisitionID": "", "ItemID": "", "SupplierID": "", "ManufacturerID": "", "RequiredQty": "", "RequiredUnitName": "",
+        "RequsitionQty": "", "RequisitionUnitName": "", "PackSizeName": "", "SizeUnitName": "", "PackQty": "", "ApproveQty": "", "ApproveUnitName": "", "ItemSource": ""
+    };
+
+    var FinalObject = {
+        "RequisitionID": "", "RequisitionNo": "", "RequisitionCategory": "", "RequisitionType": "", "RequisitionFrom": "", "RequisitionTo": "", "RequiredByTime": "",
+        "ReqRaisedBy": "", "ReqRaisedOn": "", "RequisitionNote": "", "RecipeFor": "", "RecipeID": "", "ArticleNo": "", "LeatherSize": "", "SizeUnit": "", "Selection": "",
+        "Thickness": "", "ThicknessUnit": "", "BuyerID": "", "BuyerName": "", "BuyerOrderID": "", "JobOrderID": "", "JobOrderNo": "", "ProductionQty": "", "RequisitionItemList": []
+    };
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('RequisitionCategory', 50);
+        CheckRequiredTextBoxMaxLength('RequisitionFrom', 50);
+        CheckRequiredTextBoxMaxLength('RequisitionTo', 50);
+        //CheckRequiredTextBoxMaxLength('RecipeFor', 50);
+        //CheckRequiredTextBoxMaxLength('RecipeID', 50);
+
+        var RecipeItemGridDataSource = $("#RecipeItemGrid").data("kendoGrid").dataSource;
+        var RecipeItemGridData = RecipeItemGridDataSource.data();
+
+        if (RecipeItemGridData.length == 0)
+        {
+            saveStatus = 0;
+        }
+
+        //for (var i = RecipeItemGridData.length - 1; i >= 0; i--) {
+        //    if (RecipeItemGridData[i].PackSizeName == "" || RecipeItemGridData[i].SizeUnitName == "" || RecipeItemGridData[i].PackQty == "" ||
+        //        RecipeItemGridData[i].RequsitionQty == "" || RecipeItemGridData[i].RequisitionUnitName == "" || RecipeItemGridData[i].ApproveQty == "" ||
+        //        RecipeItemGridData[i].ApproveUnitName == "") {
+        //        saveStatus = 0;
+        //        break;
+        //    }
+        //}
+
+        if (saveStatus == 1) {
+            FinalObject.RequisitionID = $("#RequisitionID").val();
+            FinalObject.RequisitionNo = $("#RequisitionNo").val();
+            FinalObject.RequisitionCategory = $("#RequisitionCategory").val();
+            FinalObject.RequisitionType = $("#RequisitionType").val();
+            FinalObject.RequisitionFrom = $("#RequisitionFrom").val();
+            FinalObject.RequisitionTo = $("#RequisitionTo").val();
+
+            FinalObject.RequiredByTime = $("#RequiredByTime").val();
+            FinalObject.ReqRaisedBy = $("#ReqRaisedBy").val();
+            FinalObject.ReqRaisedOn = $("#ReqRaisedOn").val();
+
+            FinalObject.RecipeFor = $("#RecipeFor").val();
+            FinalObject.RecipeID = $("#RecipeID").val();
+
+            FinalObject.ArticleNo = $("#ArticleNo").val();
+            FinalObject.LeatherSize = $("#LeatherSize").val();
+
+            FinalObject.SizeUnit = $("#SizeUnit").val();
+            FinalObject.Selection = $("#Selection").val();
+            FinalObject.Thickness = $("#Thickness").val();
+            FinalObject.ThicknessUnit = $("#ThicknessUnit").val();
+            FinalObject.BuyerID = $("#BuyerID").val();
+            FinalObject.BuyerOrderID = $("#BuyerOrderID").val();
+
+            FinalObject.JobOrderID = $("#JobOrderID").val();
+            FinalObject.JobOrderNo = $("#JobOrderNo").val();
+
+            FinalObject.ProductionQty = $("#ProductionQty").val();
+
+            for (var i = RecipeItemGridData.length - 1; i >= 0; i--) {
+                //if (PIGridData[i].dirty) {
+                RequisitionItemList.RequisitionItemID = RecipeItemGridData[i].RequisitionItemID;
+                RequisitionItemList.RequisitionID = RecipeItemGridData[i].RequisitionID;
+                RequisitionItemList.ItemID = RecipeItemGridData[i].ItemID;
+                RequisitionItemList.SupplierID = RecipeItemGridData[i].SupplierID;
+                RequisitionItemList.RequiredQty = RecipeItemGridData[i].RequiredQty;
+                RequisitionItemList.RequiredUnitName = RecipeItemGridData[i].RequiredUnitName;
+
+                RequisitionItemList.RequsitionQty = RecipeItemGridData[i].RequsitionQty;
+                RequisitionItemList.RequisitionUnitName = RecipeItemGridData[i].RequisitionUnitName;
+                RequisitionItemList.PackSizeName = RecipeItemGridData[i].PackSizeName;
+                RequisitionItemList.SizeUnitName = RecipeItemGridData[i].SizeUnitName;
+                RequisitionItemList.PackQty = RecipeItemGridData[i].PackQty;
+                RequisitionItemList.ApproveQty = RecipeItemGridData[i].ApproveQty;
+                RequisitionItemList.ApproveUnitName = RecipeItemGridData[i].ApproveUnitName;
+                RequisitionItemList.ItemSource = RecipeItemGridData[i].ItemSource;
+
+                FinalObject.RequisitionItemList.push(RequisitionItemList);
+                RequisitionItemList = {
+                    "RequisitionItemID": "", "RequisitionID": "", "ItemID": "", "SupplierID": "", "ManufacturerID": "", "RequiredQty": "", "RequiredUnitName": "",
+                    "RequsitionQty": "", "RequisitionUnitName": "", "PackSizeName": "", "SizeUnitName": "", "PackQty": "", "ApproveQty": "", "ApproveUnitName": "", "ItemSource": ""
+                };
+                //}
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("ProductionRequisition", "ProductionRequisition")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        //ItemGridchangeStatus = 0;
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#RequisitionID").val(response.RequisitionID);
+                            $("#RequisitionNo").val(response.RequisitionNo);
+
+                            $("#RecipeItemGrid").data('kendoGrid').dataSource.data(response.RequisitionItemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else if (response.Msg.Type == 3) {
+                            //ItemGridchangeStatus = 0;
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#RecipeItemGrid").data('kendoGrid').dataSource.data(response.RequisitionItemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "RequisitionID": "", "RequisitionNo": "", "RequisitionCategory": "", "RequisitionType": "", "RequisitionFrom": "", "RequisitionTo": "", "RequiredByTime": "",
+            "ReqRaisedBy": "", "ReqRaisedOn": "", "RequisitionNote": "", "RecipeFor": "", "RecipeID": "", "ArticleNo": "", "LeatherSize": "", "SizeUnit": "", "Selection": "",
+            "Thickness": "", "ThicknessUnit": "", "BuyerID": "", "BuyerName": "", "BuyerOrderID": "", "JobOrderID": "", "JobOrderNo": "", "ProductionQty": "", "RequisitionItemList": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>
+

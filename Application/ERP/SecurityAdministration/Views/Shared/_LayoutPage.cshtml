@@ -1,0 +1,80 @@
+﻿@using Telerik.Web.Mvc.UI
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/Site.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/common.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="~/Content/2013.2.611/telerik.common.min.css" rel="stylesheet" />
+    <link href="~/Content/2013.2.611/telerik.vista.min.css" rel="stylesheet" />
+    @RenderSection("scripts", false)
+    @(Html.Telerik().ScriptRegistrar().DefaultGroup(group => group.Combined(false).Compress(false)))
+</head>
+<body>
+    <header>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <img src='@Url.Content("~/Content/Images/square_informatix_ltd_logo.png")' />
+                    
+                        @{
+    if (Session["IsLogged"] == null)
+    {
+        <span id="userinfo" style="padding-left: 306px; color: #ff0000; font-weight: bold; font-size: 16px;">
+            @Session["LoginError"]
+        </span>
+    }
+    else
+    {
+        <span id="userinfo" style="padding-left: 306px; color: #2F9F4F; font-weight: bold; font-size: 16px;">
+            @Session["UserName"]
+            @Session["RoleMsg"]
+        </span>
+    }
+
+}
+                       
+                    
+                </div>
+                <div class="navbar-collapse collapse" id="loginHeader">
+                    <div id="headerBeforeLogin">
+                        @(!Convert.ToBoolean(Session["IsLogged"]) ? Html.Partial("_LoginPanel") : Html.Partial("_LogoutPanel"))
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="menuSection">
+            @if (Convert.ToBoolean(Session["IsLogged"]))
+            {
+                Html.RenderPartial("_Menu");
+            }
+        </div>
+    </header>
+    <div class="container body-content">
+        <div class="middle">
+            @RenderBody()
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <hr />
+            <p>&copy; 2014 Square InformatiX Limited</p>
+        </div>
+    </footer>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            
+        });
+    </script>
+</body>
+</html>

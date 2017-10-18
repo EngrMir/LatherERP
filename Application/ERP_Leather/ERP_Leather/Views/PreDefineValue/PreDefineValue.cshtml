@@ -1,0 +1,841 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .grdKendo {
+    }
+</style>
+
+<title>@ViewBag.formTiltle</title>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<input type="hidden" class="txtBox" id="PreDefineValueForID" />
+<input type="hidden" class="txtBox" id="ConcernPageID" />
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>PreDefine Value For<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PreDefineValueFor" class="txtBox SetFocus" name="PreDefineValueFor" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Concern Page</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ConcernPage" placeholder="Press F9" class="txtBox" name="ConcernPage" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Remarks" class="txtBox" name="Remarks" tabindex="" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div id="PreDefineValueGrid" class="grdKendo" tabindex=""></div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ConcernPageWindow" style="display: none;">
+    @*<p>PreDefineValue:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="ConcernPageWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnConcernPageWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnConcernPageWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    @*<p>PreDefineValue:<input type="text" id="txtBuyer" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>*@
+
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+        //To Define Data PreDefineValue for Kendo Grid
+        var dataSourcePreDefineValue = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "PreDefineValueID",
+                    fields: {
+                        PreDefineValueID: { editable: false },
+                        PreDefineValueForID: { editable: false },
+                        PreDefineValueFor: { editable: true },
+                        PreDefineValueTitle: { editable: true },
+                        PreDefineValueContent: { editable: true },
+                        PreDefineValueGroup: { editable: true },
+                        PreDefineValueIncreaseBy: { editable: true },
+                        MaxValue: { editable: false },
+                        InternalMailAddress: { editable: true },
+                        InternalMailAutoSend: { editable: true },
+                        ExternalMailAddress: { editable: true },
+                        ExternalMailAutoSend: { editable: true },
+                        IsActive: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for PreDefineValue Kendo Grid
+        var gridPreDefineValue = $('#PreDefineValueGrid').kendoGrid({
+            dataSource: dataSourcePreDefineValue,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add PreDefine Value", className: "btnPreDefineValueGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "PreDefineValueID", hidden: true, title: "PreDefineValueIdID", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PreDefineValueForID", hidden: true },
+                { field: "PreDefineValueTitle", title: "Title", filterable: false, width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PreDefineValueContent", title: "Content", filterable: false, width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PreDefineValueGroup", title: "Group", editor: ddlGroup, filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PreDefineValueIncreaseBy", title: "IncreaseBy", editor: ddlIncreaseBy, filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "MaxValue", title: "MaxValue", width: 130, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "InternalMailAddress", title: "InMailAdd", filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "InternalMailAutoSend", title: "AutoSend", editor: ddlMailFlag, filterable: false, width: 70, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ExternalMailAddress", title: "ExMailAdd", filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ExternalMailAutoSend", title: "AutoSend", editor: ddlMailFlag, filterable: false, width: 70, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Status", editor: ddlStatus, width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handlePreDefineValueIdDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        $(".btnPreDefineValueGrid").click(function () {
+            var supplieraddressgrid = $("#PreDefineValueGrid").data("kendoGrid");
+            $("#PreDefineValueGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieraddressgrid.addRow();
+        });
+
+        $("#PreDefineValueGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#PreDefineValueGrid").data("kendoGrid");
+                $("#PreDefineValueGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+        var ddlGroupDataSource = [{ text: "Identity No", value: "Identity No" }, { text: "Identity No2", value: "Identity No2" }, { text: "Identity No3", value: "Identity No3" }, { text: "CC", value: "CC" }, { text: "Letter Signature", value: "Letter Signature" }];
+
+        function ddlGroup(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: ddlGroupDataSource
+                });
+        };
+
+        var ddlIncreaseByDataSource = [{ text: "Yearly", value: "Yearly" }, { text: "Monthly", value: "Monthly" }, { text: "Daily", value: "Daily" }, { text: "Respectively", value: "Respectively" }, { text: "Four Digits", value: "Four Digits" }];
+
+        function ddlIncreaseBy(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: ddlIncreaseByDataSource
+                });
+        };
+
+        var ddlMailFlagDataSource = [{ text: "Yes", value: "Yes" }, { text: "No", value: "No" }];
+
+        function ddlMailFlag(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: ddlMailFlagDataSource
+                });
+        };
+
+        var ddlStatusDataSource = [{ text: "Active", value: "Active" }, { text: "Inactive", value: "Inactive" }];
+
+        function ddlStatus(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: ddlStatusDataSource
+                });
+        };
+
+        //Handling Delete event for PageDeailsGrid row
+        function handlePreDefineValueIdDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PreDefineValueGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete PreDefineValueId Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#PreDefineValueForID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "PreDefineValue")',
+                        type: 'POST',
+                        data: JSON.stringify({ "PreDefineValueForID": $("#PreDefineValueForID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#IsActive").val("Active");
+                                $("#PreDefineValueGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.PreDefineValueID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedPreDefineValue", "PreDefineValue")',
+                        type: 'POST',
+                        data: JSON.stringify({ "PreDefineValueID": dataitem.PreDefineValueID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PreDefineValueGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PreDefineValueGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Focus ConcernPageID textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#IsActive").val("Active");
+                $("#PreDefineValueGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#IsActive").val("Active");
+                $("#PreDefineValueGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#PreDefineValueForID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "PreDefineValue")',
+                            type: 'POST',
+                            data: JSON.stringify({ "PreDefineValueForID": $("#PreDefineValueForID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#IsActive").val("Active");
+                                    $("#PreDefineValueGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.PreDefineValueID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedPreDefineValue", "PreDefineValue")',
+                            type: 'POST',
+                            data: JSON.stringify({ "PreDefineValueID": dataitem.PreDefineValueID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PreDefineValueGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PreDefineValueGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var PreDefineValueModel = { "PreDefineValueID": "", "PreDefineValueForID": "", "PreDefineValueTitle": "", "PreDefineValueContent": "", "PreDefineValueGroup": "", "PreDefineValueIncreaseBy": "", "MaxValue": "", "InternalMailAddress": "", "InternalMailAutoSend": "", "ExternalMailAddress": "", "ExternalMailAutoSend": "", "Remarks": "", "IsActive": "" };
+    var preDefineValueForModel = { "PreDefineValueForID": "", "PreDefineValueFor": "", "ConcernPageID": "", "Remarks": "", "IsActive": "", "PreDefineValueList": [] };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Empty or Maximum Length in ConcernPageID
+        CheckRequiredTextBoxMaxLength('PreDefineValueFor', 100);
+        // Check Empty or Maximum Length in ConcernPageID
+        CheckRequiredTextBoxMaxLength('ConcernPageID', 5);
+        // Check Maximum Length in Remarks
+        CheckNormalTextBoxMaxLength('Remarks', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            preDefineValueForModel.PreDefineValueForID = $("#PreDefineValueForID").val();
+            preDefineValueForModel.PreDefineValueFor = $("#PreDefineValueFor").val();
+            preDefineValueForModel.ConcernPageID = $("#ConcernPageID").val();
+            preDefineValueForModel.Remarks = $("#Remarks").val();
+            //preDefineValueForModel.IsActive = $("#IsActive option:selected").val();
+
+
+            var dataSource = $("#PreDefineValueGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            preDefineValueForModel.PreDefineValueList = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].dirty) {
+                        PreDefineValueModel.PreDefineValueID = data[i].PreDefineValueID;
+                        PreDefineValueModel.PreDefineValueForID = data[i].PreDefineValueForID;
+                        PreDefineValueModel.PreDefineValueTitle = data[i].PreDefineValueTitle;
+                        PreDefineValueModel.PreDefineValueContent = data[i].PreDefineValueContent;
+                        PreDefineValueModel.PreDefineValueGroup = data[i].PreDefineValueGroup;
+                        PreDefineValueModel.PreDefineValueIncreaseBy = data[i].PreDefineValueIncreaseBy;
+                        PreDefineValueModel.MaxValue = data[i].MaxValue;
+                        PreDefineValueModel.InternalMailAddress = data[i].InternalMailAddress;
+                        PreDefineValueModel.InternalMailAutoSend = data[i].InternalMailAutoSend;
+                        PreDefineValueModel.ExternalMailAddress = data[i].ExternalMailAddress;
+                        PreDefineValueModel.ExternalMailAutoSend = data[i].ExternalMailAutoSend;
+                        PreDefineValueModel.Remarks = data[i].Remarks;
+                        PreDefineValueModel.IsActive = data[i].IsActive;
+
+                        preDefineValueForModel.PreDefineValueList.push(PreDefineValueModel);
+                        PreDefineValueModel = { "PreDefineValueID": "", "PreDefineValueForID": "", "PreDefineValueTitle": "", "PreDefineValueContent": "", "PreDefineValueGroup": "", "PreDefineValueIncreaseBy": "", "MaxValue": "", "InternalMailAddress": "", "InternalMailAutoSend": "", "ExternalMailAddress": "", "ExternalMailAutoSend": "", "Remarks": "", "IsActive": "" };
+                    }
+                }
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("PreDefineValue", "PreDefineValue")',
+                    data: JSON.stringify(preDefineValueForModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#PreDefineValueForID').val(response.PreDefineValueForID);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetPreDefineValueList", "PreDefineValue")',
+                                type: 'GET',
+                                data: { PreDefineValueForID: $("#PreDefineValueForID").val() },
+                                success: function (data33) {
+                                    $("#PreDefineValueGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetPreDefineValueList", "PreDefineValue")',
+                                type: 'GET',
+                                data: { PreDefineValueForID: $("#PreDefineValueForID").val() },
+                                success: function (data33) {
+                                    $("#PreDefineValueGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 1) {
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#ConcernPageID").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#IsActive").val("Active");
+            $("#PreDefineValueGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    /////////////////////////////////////////////
+
+    var ConcernPageGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ConcernPageID",
+                fields: {
+                    ConcernPageID: { editable: false },
+                    ConcernPage: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetConcernPageList", "PreDefineValue")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var ConcernPageGrid = $("#ConcernPageWindowGrid").kendoGrid({
+        dataSource: ConcernPageGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "ConcernPageID", title: "PreDefineValue", width: "60px", filterable: true, sortable: true },
+            { field: "ConcernPage", title: "PreDefineValue Code", width: "60px", filterable: true, sortable: true }
+        ]
+    });
+
+    var ConcernPageWindow = $('#ConcernPageWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List Of PreDefineValue Agent",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ConcernPage window grid
+    function ConcernPageWindowEvent() {
+        var WindowGrid = $("#ConcernPageWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#ConcernPageID").val(WindowGridItem.ConcernPageID);
+        $("#ConcernPage").val(WindowGridItem.ConcernPage);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnConcernPageWindowOK').click(function () {
+        ConcernPageWindowEvent();
+        ConcernPageWindow.close();
+    });
+
+    $('#btnConcernPageWindowCancel').click(function () {
+        ConcernPageWindow.close();
+    });
+
+    $("#ConcernPageWindowGrid").dblclick(function () {
+        ConcernPageWindowEvent();
+        ConcernPageWindow.close();
+    });
+
+    $("#ConcernPageWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ConcernPageWindowEvent();
+            ConcernPageWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ConcernPageWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#ConcernPage").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ConcernPageWindowGrid');
+                ConcernPageWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#txtBuyer").val("");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PreDefineValueForID",
+                fields: {
+                    PreDefineValueForID: { editable: false },
+                    PreDefineValueFor: { editable: false },
+                    ConcernPageID: { editable: false },
+                    Remarks: { editable: false },
+                    BuyerType: { editable: false },
+                    IsActive: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "PreDefineValueForID", hidden: true },
+            { field: "ConcernPageID", hidden: true },
+            { field: "PreDefineValueFor", title: "PreDefineValueFor", width: "100px" },
+            { field: "ConcernPage", title: "ConcernPage", width: "100px" },
+            { field: "Remarks", title: "Remarks", width: "100px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "PreDefineValue Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetPreDefineValueForSearchList", "PreDefineValue")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#PreDefineValueForID").val(selectedItem.PreDefineValueForID);
+        $("#PreDefineValueFor").val(selectedItem.PreDefineValueFor);
+        $("#ConcernPageID").val(selectedItem.ConcernPageID);
+        $("#Remarks").val(selectedItem.Remarks);
+        $("#ConcernPage").val(selectedItem.ConcernPage);
+        //$("#IsActive").val(selectedItem.IsActive);
+        $.ajax({
+            url: '@Url.Action("GetPreDefineValueList", "PreDefineValue")',
+            type: 'GET',
+            data: { PreDefineValueForID: $("#PreDefineValueForID").val() },
+            success: function (data33) {
+                $("#PreDefineValueGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+    }
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    /////////////////////////////////////////////////////
+
+    @*var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBuyerListForSearch", "PreDefineValue")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtBuyer").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search PreDefineValue...",
+    });
+
+    $("#btnGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetBuyerList", "PreDefineValue")',
+            type: 'GET',
+            data: { supplier: $("#txtBuyer").val() },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33.BuyerList);
+                if (data33.Count == 1) {
+                    SearchWindowEvents();
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtBuyer").keyup(function (event) {
+        if ($("#txtBuyer").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetBuyerList", "PreDefineValue")',
+                    type: 'GET',
+                    data: { supplier: $("#txtBuyer").val() },
+                    success: function (data33) {
+                        $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33.BuyerList);
+                        if (data33.Count == 1) {
+                            SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });*@
+</script>

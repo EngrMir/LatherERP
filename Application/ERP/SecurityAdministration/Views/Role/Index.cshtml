@@ -1,0 +1,266 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model RoleVM
+
+@{
+    ViewBag.Title = "Role Management";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-custom">
+                <div class="panel-heading">
+                    Role Setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Role Name</label>
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.Role.RoleID)
+                                    @Html.TextBoxFor(model => model.Role.RoleName, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Description</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.Role.Description, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Is Active</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.Role.IsActive)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-lg-offset-10">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearRoleData();" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Roles
+            </div>
+
+            <div class="panel-body">
+                @(Html.Telerik().Grid<RoleView>()
+                    .BindTo(ViewBag.RoleList as List<RoleView>)
+                    .Name("gvRoleList")
+                    .Filterable()
+                    .DataKeys(keys => keys.Add(k => k.RoleID))
+                    .Columns(column =>
+                    {
+                        column.Bound(s => s.RoleID).Hidden().Template(@<input type="hidden" id="@item.RoleID" value="@item.RoleID" />);
+                        column.Bound(s => s.RoleID);
+                        column.Bound(s => s.RoleName);
+                        column.Bound(s => s.Description);
+                        column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>);
+                        column.Bound(s => s.SetOn);
+                        column.Bound(s => s.SetBy);
+                        column.Bound(s => s.RoleID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                    })
+                                                     .Selectable()
+                                                     .Pageable(pages => pages.PageSize(10))
+                                                     .Scrollable(scroll => scroll.Height(200))
+                                                     .Sortable()
+                                                     .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    @Html.Partial("_ConfirmationView")
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+    });
+
+    function validatedRole() {
+        if ($('#Role_RoleName').val() == "") {
+            showMessage('Role Name is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#Role_Description').val() == "") {
+            showMessage('Description is required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+    function clearRoleData() {
+        $('#Role_RoleID').val("");
+        $('#Role_RoleName').val("");
+        $('#Role_Description').val("");
+        $('#Role_IsActive').prop('checked', false);
+        $("#hdnIsInsert").val(true);
+    }
+
+    $("#btnSave").click(function () {
+        if (validatedRole()) {
+            var jsonObject = {
+                "RoleID": $('#Role_RoleID').val(),
+                "RoleName": $('#Role_RoleName').val(),
+                "Description": $('#Role_Description').val(),
+                "IsActive": $('#Role_IsActive').is(":checked")
+            };
+            var trNew = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "Role")',
+                data: JSON.stringify({ roleView: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (data == 1) {
+                        showMessage('Role ID already exists.', 'warning', 'Warning!');
+                    } else {
+
+
+                        trNew = "<tr>";
+                        trNew = trNew + "<td style='display:none'><input id='" + data.RoleID + "' type='hidden' value='" + data.RoleID + "'></td>";
+                        trNew = trNew + "<td>" + data.RoleID + "</td>";
+                        trNew = trNew + "<td>" + data.RoleName + "</td>";
+                        trNew = trNew + "<td>" + data.Description + "</td>";
+                        trNew = trNew + "<td>" + "<label for=\"\">";
+
+                        if (data.IsActive == true) {
+                            trNew = trNew + "Active";
+                        } else {
+                            trNew = trNew + "In-Active";
+                        }
+
+                        trNew = trNew + "</label> </td>";
+                        trNew = trNew + "<td>" + data.SetOn.toString() + "</td>";
+                        trNew = trNew + "<td>" + data.SetBy + "</td>";
+                        trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                        trNew = trNew + " </tr>";
+
+                        if ($("#hdnIsInsert").val() == "true") {
+                            $('#gvRoleList .t-grid-content tbody').prepend(trNew);
+                            $('#gvRoleList .t-grid-content tbody .t-no-data').remove();
+                        } else {
+                            var tr = $('#' + data.RoleID).parent().parent();
+                            tr.replaceWith(trNew);
+                        }
+
+                        showMessage('Saved successfully.', 'success', 'Success!');
+                    }
+                    clearRoleData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+    $("#gvRoleList").delegate("a.btn-link", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        editRoleData(id.trim());
+    });
+
+
+    $("#gvRoleList").delegate("a.btn-link-delete", "click", function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        $('#commonIdForDelete').val(id);
+        $('#myModal').modal('show');
+    });
+
+
+    function editRoleData(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRole", "Role")',
+            data: { id: id },
+            cache: false,
+            success: function (data) {
+                $('#Role_RoleID').val(data.RoleID);
+                $('#Role_RoleName').val(data.RoleName);
+                $('#Role_Description').val(data.Description);
+                $('#Role_IsActive').prop('checked', data.IsActive);
+                $("#hdnIsInsert").val(false);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function deleteItem(id) {
+        id = id.trim();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "Role")',
+            data: { id: id },
+            cache: false,
+            success: function () {
+                var tr = $('#' + id).parent().parent();
+                tr.remove();
+                $("#myModal").modal('hide');
+                showMessage('Deleted successfully.', 'success', 'Success!');
+            },
+            error: function () {
+                $("#myModal").modal('hide');
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+          {
+              'message': message,
+              'priority': priority,
+              'title': title
+          }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

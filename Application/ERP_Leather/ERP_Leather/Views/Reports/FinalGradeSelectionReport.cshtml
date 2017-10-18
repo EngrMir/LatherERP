@@ -1,0 +1,374 @@
+﻿@{
+    ViewBag.Title = "Selection Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .select {
+        min-width: 240px;
+    }
+
+    label {
+        padding-left: 10px;
+    }
+</style>
+
+@using (Html.BeginForm("FinalGradeSelectionReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            @ViewBag.Message
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">Grade Selection Report</div>
+                </div>
+                <div class="col-lg-3">
+                    <label id="MessageText"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 7%; float: right;" tabindex="3" checked="checked" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> PDF</label>
+                    <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 7%; float: right;" tabindex="4" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> Excel</label>
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="ClearAll();" />
+                    <input type="submit" id="btnSubmit" class="Button" value="Show Report" onclick="return CheckValue();" style="position: absolute; right: 100px;" />
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="FormBody">
+            <br />   
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Supplier:</label>
+                        </div>
+                        <div class="col-lg-9">
+                            @*@Html.DropDownList("SupplierID", "-- Select One --")*@
+
+                            <input type="text" id="SupplierCode" class="txtBox" name="SupplierCode" placeholder="Press F9" readonly="readonly" />
+                            <input type="text" id="SupplierName" name="SupplierName" class="txtBox" readonly="readonly" />
+                            <input type="hidden" id="SupplierID" class="txtBox" name="SupplierID" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Date Range:</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <table class="table-condensed">
+                                <tr>
+                                    <td><strong> From Date:</strong> </td>
+                                    <td><input type="text" id="dateFrom" class="datePicker" name="dateFrom" tabindex="" /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>To Date:</strong></td>
+                                    <td><input type="text" id="dateTo" class="datePicker" name="dateTo" tabindex="" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Purchase No:</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <select id="ddPurchase" class="select required pull-left" name="ddPurchase">
+                                <option value='all'>All Purchase Summary</option>
+                                <option value='alldetails'>All Purchase Details</option>
+
+                            </select>
+                            @*<div id="summary">
+                                <input id="chkSummary" type="checkbox" title="" name="chkSummary" /> Purchase Summary
+                            </div>*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Grade Range:</label>
+                        </div>
+                        <div class="col-lg-9">
+                            @Html.DropDownList("GradeRangeID", "-- Select One --")
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="radio" class="col-lg-7">
+                      
+                        <div class="row">
+                            <div class="col-lg-10 text-right">
+                                <label style="">Specific Purchase Wise Summary</label>
+                            </div>
+                            <div class="col-lg-1" style="">
+                                <input type="radio" id="PurchaseSelectionSummary" name="ReportName" value="PurchaseSelectionSummary" checked="checked" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 text-right">
+                                <label style="">Specific Purchase Wise Selection Details</label>
+                            </div>
+                            <div class="col-lg-1" style="">
+                                <input type="radio" id="PurchaseSelectionDetails" name="ReportName" value="PurchaseSelectionDetails" />
+                            </div>
+                        </div>     
+                                        
+                        <div class="row">
+                            <div class="col-lg-10 text-right">
+                                <label style="">Supplier Wise Purchase Summary</label>
+                            </div>
+                            <div class="col-lg-1" style="">
+                                <input type="radio" id="DateRange" name="ReportName" value="DateRange" />
+                            </div>
+                        </div>                  
+                    </div>
+
+                </div>
+            </div>
+              
+            <br />
+        </div>
+    </div>
+}
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    var rptSelectionList = {  "SupllierId": "", "DateFrom": "", "DateTo": "" };
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        //value: new Date(),
+        animation: {
+                    close: {
+                        effects: "fadeOut zoom:out",
+                        duration: 300
+                    },
+                    open: {
+                        effects: "fadeIn zoom:in",
+                        duration: 300
+                    }
+                }
+    });
+
+    $('#dateFrom').change(function () {
+        var start = $('#dateFrom').val();
+        var end = $('#dateTo').val();
+        if (end != "")
+          {
+                if ($.datepicker.parseDate('dd/mm/yy', start) >= $.datepicker.parseDate('dd/mm/yy', end)) {
+                    $("#MessageText").html("From Date should be less than To Date.");
+                    $("#MessageText").css("color", "red");
+                    $('#dateFrom').val(end);
+                }
+                else {
+                    $("#MessageText").html("");
+                }
+        }
+        BindPurchaseDDL();
+    });
+
+    $('#dateTo').change(function () {
+        BindPurchaseDDL();
+    });
+
+    function BindPurchaseDDL() {
+  
+        var supllierId = $("#SupplierID").val();
+        if (supllierId != "-- Select One --") {            
+            if (isNaN(supllierId)) {
+                supllierId = 0;
+                return;
+            }
+            rptSelectionList.SupllierId = supllierId;
+            rptSelectionList.DateFrom = $("#dateFrom").val();
+            rptSelectionList.DateTo = $("#dateTo").val();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PurchaseIDBySupplierID", "FinalGradeSelection")',
+                data: JSON.stringify(rptSelectionList),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    $("#ddPurchase").html(data);
+                    rptSelectionList = {  "SupllierId": "", "DateFrom": "", "DateTo": "" };
+                    return true;
+                },
+                error: function (msg) {
+                    console.log("Failed: " + msg.status + ": " + msg.statusText);
+                },
+                failure: function (response) {
+                    console.log(response.d);
+                }
+            });
+        }
+
+        else {
+
+            $("#ddPurchase").html("");
+        }
+    }
+
+   
+
+    function CheckValue() {
+        $("#MessageText").html("");
+       if($("#GradeRangeID").val() != "")
+        {
+            if (($("#ddPurchase").val() == null) && $("#GradeRangeID").val() != "") 
+            {
+                $("#DateRange").prop("checked", true)
+                    
+            }
+            return true;
+        }
+        else {
+            $("#MessageText").html("Please Select Grade Range.");
+             return false;
+        }
+    }
+    
+    function ClearAll() {
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $("#SupplierCode").val("");
+        $("#SupplierName").val("");
+        $("#dateFrom").val("");
+        $("#dateTo").val("");
+        $("#MessageText").html("");
+    }
+
+
+    //############### Supplier Popup ################
+    var supplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierList", "Common")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: supplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "SupplierID", hidden:true, title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+              { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+              { field: "SupplierName", title: "Supplier Name", width: "120px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+  
+    var supplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                supplierWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            supplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //################################################
+
+</script>
+

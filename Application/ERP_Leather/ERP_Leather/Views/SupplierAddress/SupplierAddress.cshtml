@@ -1,0 +1,181 @@
+﻿@model ERP.EntitiesModel.AppSetupModel.SysSupplierAddress
+@{
+    ViewBag.Title = "Supplier Address";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-3">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="messageText" class="col-lg-6">
+
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="SupplierAddressGrid"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var sourceGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierAddressID",
+                    fields: {
+                        SupplierAddressID: { type: "number", editable: false, validation: { required: false, min: 1 } },
+                        SupplierID: { editable: true, validation: { required: false, min: 1 } },
+                        Address: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        ContactPerson: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        ContactNumber: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        EmailAddress: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        PhoneNo: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        FaxNo: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        SkypeID: { type: "string", editable: true, validation: { required: false, min: 1 } },
+                        IsActive: { type: "boolean", editable: true, validation: { required: false } },
+                        IsDelete: { type: "boolean", editable: true, validation: { required: false } }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: "@Url.Action("GetSupplierAddressList", "SupplierAddress")",
+                    dataType: "JSON",
+                    method: "POST",
+                },
+                create: {
+                    url: "@Url.Action("Create", "SupplierAddress")",
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function(jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.message.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $('#SupplierAddressGrid').data('kendoGrid').dataSource.read();
+                            $('#SupplierAddressGrid').data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                update: {
+                    url: '@Url.Action("Update", "SupplierAddress")',
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function(jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.message.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $('#SupplierAddressGrid').data('kendoGrid').dataSource.read();
+                            $('#SupplierAddressGrid').data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                destroy: {
+                    url: "@Url.Action("Delete", "SupplierAddress")",
+                    dataType: "JSON",
+                    method: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        if (textStatus == 'success') {
+                            var result = jQuery.parseJSON(jqXhr.responseText);
+                            $('#messageText').html("<div id='message'>" + result.Msg + "</div>");
+                            $("#messageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#message").delay(3000).fadeOut();
+                            $('#SupplierAddressGrid').data('kendoGrid').dataSource.read();
+                            $('#SupplierAddressGrid').data('kendoGrid').refresh();
+                        }
+                    }
+                },
+                parameterMap: function (options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return { models: kendo.stringify(options.models) };
+                    }
+                    return { models: kendo.stringify(options.models) };
+                }
+            },
+            batch: true,
+            pageSize: 10
+
+        });
+
+        //To Define Data Source for InfoFor Kendo Grid
+        var ddlSupplierListDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: "/SupplierAddress/GetSupplierList",
+                    type: "GET",
+                    dataType: "JSON",
+                }
+            }
+        });
+
+        function ddlSupplierList(container, options) {
+            $('<input id="SupplierID"  data-text-field="SupplierName" data-value-field="SupplierID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "SupplierName",
+                        dataValueField: "SupplierID",
+                        change: function (e) {                           
+                        },
+                        dataSource: ddlSupplierListDataSource
+                    });
+        };
+
+
+        $("#SupplierAddressGrid").kendoGrid({
+            dataSource: sourceGridDataSource,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            height: 300,
+            toolbar: ["create"],
+            sortable: true,
+            resizable: true,
+            pageable: true,
+            columns: [
+                { field: "SupplierID", title: "Supplier", editor: ddlSupplierList, width: "90px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }},
+                { field: "Address", title: "Address", width: "120px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ContactPerson", title: "Contact Address", width: "100px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ContactNumber", title: "Contact Number", width: "80px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "EmailAddress", title: "Email Address", width: "80px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PhoneNo", title: "Phone No", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "FaxNo", title: "Fax No", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SkypeID", title: "Skype ID", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Status", width: "60px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: ["edit", "destroy"], title: "Action", width: "140px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }],
+            editable: "inline"
+        });
+
+       
+
+        $("#SupplierAddressGrid").keypress(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#SupplierAddressGrid").data("kendoGrid");
+                grid.addRow();
+            }
+        });
+
+    }); //End of Document.Ready()
+
+</script>

@@ -1,0 +1,566 @@
+﻿@{
+    ViewBag.Title = "GradeRangeFormatEntryForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-3">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-3 right">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" onclick="return btnDeleteParent()" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="return btnSaveGradeRange()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>Grade Range ID:</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input id="txtGradeRangeID" readonly="readonly" style="background-color:lightgray" type="text" required value="" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Grade Range Name:</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input id="txtGradeRangeName" type="text" value="" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Description:</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input id="txtDescription" type="text" value="" />
+                    </div>
+                </div><br />
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>Grade Range Status:</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <select id="IsActive" class="txtBox">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="GradeRangeFormatGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+
+</div>
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+<script>
+    clearAll();
+    var changeStatus = 0;
+    var dataitem = {};
+    var finalData = {
+        "GradeRangeId": "", "GradeRangeName": "", "GradeDescription": "", "IsActiveGradeRange": "", "gradeData": []
+    };
+    var gradeData = { "GradeIDFrom": "", "GradeIDTo": "", "Description": "", "IsActive": "" };
+    function btnSaveGradeRange() {
+       // alert("asd");
+        var GradeRangeDataSource = $("#GradeRangeFormatGrid").data("kendoGrid").dataSource;
+        var GradeRangeData = GradeRangeDataSource.data();
+
+        if (GradeRangeData.length > 0 && $("#txtGradeRangeName").val() != "") {
+            finalData.GradeRangeId = $("#txtGradeRangeID").val();
+            finalData.GradeRangeName = $("#txtGradeRangeName").val();
+            finalData.GradeDescription = $("#txtDescription").val();
+            finalData.IsActiveGradeRange = $("#IsActive").val();
+            for (var i = 0; i < GradeRangeData.length; i++) {
+                if (GradeRangeData[i]) {
+
+                    gradeData.GradeIDFrom = GradeRangeData[i].GradeIDFrom;
+                    gradeData.GradeIDTo = GradeRangeData[i].GradeIDTo;
+                    gradeData.Description = GradeRangeData[i].Description;
+                    gradeData.IsActive = GradeRangeData[i].IsActive;
+                    finalData.gradeData.push(gradeData);
+                    gradeData = { "GradeIDFrom": "", "GradeIDTo": "", "Description": "", "IsActive": "" };
+
+                }
+            }
+
+
+            $.ajax({
+                type: "POST",               
+                url: '@Url.Action("btnSaveGradeRange", "GradeRangeFormat")',
+                data: JSON.stringify(finalData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (respnse) {
+                    clearAll();
+                    GridReload("GradeRangeFormatGrid");
+                    console.log(respnse);
+                    finalData = {
+                        "GradeRangeId": "", "GradeRangeName": "", "GradeDescription": "", "IsActiveGradeRange": "", "gradeData": []
+                    };
+                    gradeData = { "GradeIDFrom": "", "GradeIDTo": "", "Description": "", "IsActive": "" };
+                    var json = $.parseJSON(respnse);
+                    if (json.Type == 1 || json.Type ==2) {
+                        $('#MessageText').html(json.Msg);
+                        $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    }
+                    else {
+                        $("#MessageText").html(json.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                    return true;
+                },
+                error: function (respnse) {
+                    alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                },
+                failure: function (respnse) {
+                   
+                }
+            });
+
+        }
+        else {
+            $("#MessageText").html("Add New Grade Range.");
+            $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+            //alert("Please Add new Grade Range First.");
+        }
+        return false;
+    }
+
+    function clearAll() {
+        $('#MessageText').empty();
+        $('#txtGradeRangeName').val("");
+        $('#txtDescription').val("");
+        $("#txtGradeRangeID").val("");
+        $('#IsActive').val("true").attr("selected", "selected");
+        LoadGradeRangeGrid();
+    }
+
+    function LoadGradeRangeGrid() {
+        var GradeRangeFormatGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "FormatID",
+                    fields: {
+                        GradeIDFrom: { editable: true, validation: { required: true } },
+                        GradeNameFrom: { editable: true, validation: { required: true } },
+                        GradeIDTo: { editable: true, validation: { required: true } },
+                        GradeNameTo: { editable: true, validation: { required: true } },
+                        Description: { editable: true },
+                        IsActive: {
+                            type: "boolean",
+                            editable: true,
+                            defaultValue: 'true'
+                        }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+
+        var grid = $("#GradeRangeFormatGrid").kendoGrid({
+            dataSource: GradeRangeFormatGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            toolbar: ["create"],
+            filterable: true,
+            sortable: true,
+            height: 250,
+        
+            columns: [
+                  { field: "GradeNameFrom", title: "Grade From", width: "60px", editor: ddlGradeIdList, width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "GradeNameTo", title: "Grade To", width: "70px", editor: ddlGradeIdList2, width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "Description", title: "Description", width: "60px" },
+                  { field: "IsActive", title: "Format Status", width: "60px" },
+                  { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (dataitem.FormatID != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteGradeRangeFormatById", "GradeRangeFormat")',
+                    type: 'POST',
+                    data: JSON.stringify({ "FormatID": dataitem.FormatID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#GradeRangeFormatGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    }
+                });
+            }
+            else
+            {
+                $("#GradeRangeFormatGrid").data("kendoGrid").dataSource.remove(dataitem);
+                $("#MessageText").html("Data Removede From List.");
+                $("#MessageText").css("color", "red");
+                
+            }
+            $(".RequiredTextBox").css("border-color", "white");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+
+
+
+        function ddlGradeIdList(container, options) {
+            $('<input id="GradeID"  data-text-field="GradeName" data-value-field="GradeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "GradeName",
+                        dataValueField: "GradeID",
+                        change: function (e) {
+                            var dataItem = e.sender.dataItem();
+                            options.model.set("GradeNameFrom", dataItem.GradeName);
+                            options.model.set("GradeIDFrom", dataItem.GradeID);
+
+                            var cell = $('#GradeRangeFormatGrid').find('tbody tr:eq(0) td:eq(0)'); // or different cell
+                            $('#GradeRangeFormatGrid').data('kendoGrid').closeCell(cell);
+                            cell = $('#GradeRangeFormatGrid').find('tbody tr:eq(0) td:eq(1)'); // or different cell
+                            $('#GradeRangeFormatGrid').data('kendoGrid').editCell(cell);
+                            //var dropdownlist = $("#GradeID").data("kendoDropDownList");
+                           // dropdownlist.text(dataItem.GradeName).attr("selected", "selected");
+                        },
+                        dataSource: ddlGradeIdListDataSource
+                    });
+        };
+
+        function ddlGradeIdList2(container, options) {
+            $('<input id="GradeID2"  data-text-field="GradeName" data-value-field="GradeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "GradeName",
+                        dataValueField: "GradeID",
+                        change: function (e) {
+                            var dataItem = e.sender.dataItem();
+                            options.model.set("GradeNameTo", dataItem.GradeName);
+                            options.model.set("GradeIDTo", dataItem.GradeID);
+                            var cell = $('#GradeRangeFormatGrid').find('tbody tr:eq(0) td:eq(1)'); // or different cell
+                            $('#GradeRangeFormatGrid').data('kendoGrid').closeCell(cell);
+                            cell = $('#GradeRangeFormatGrid').find('tbody tr:eq(0) td:eq(2)'); // or different cell
+                            $('#GradeRangeFormatGrid').data('kendoGrid').editCell(cell);
+                        
+                        },
+                        dataSource: ddlGradeIdListDataSource
+                    });
+        };
+
+
+        var ddlGradeIdListDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "GradeID",
+                    fields: {
+                        GradeID: { editable: false },
+                        GradeName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllGradeType", "GradeRangeFormat")',
+                    type: "GET",
+                    dataType: "JSON",
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        LoadGradeRangeGrid();
+
+
+    });
+
+
+
+    // Search
+
+    $("#btnSearch").click(function () {
+        resetEditStatus = 2; // 2 for Search
+        // $('#txtGradeRangeName').attr('readonly', true);
+        if (changeStatus == 0) {
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            searchWindow.open();
+        }
+        else {
+            OpenSaveChangesDialog();
+        }
+    });
+
+
+
+
+    //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+
+    //To bring data from search window to main page
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+       
+        $.ajax({
+            url: '@Url.Action("GetDetailGradeRangeInformation", "GradeRangeFormat")',
+            data: ({ "GradeRangeID": selectedItem.GradeRangeID }),
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                if (response[0].GradeRangeName != null) {
+                    GridReload('GradeRangeFormatGrid');
+                    $("#txtGradeRangeID").val(response[0].GradeRangeID);
+                    $("#txtGradeRangeName").val(response[0].GradeRangeName);
+                    $('#txtDescription').val(response[0].GradeDescription);
+                    if (response[0].IsActiveGradeRange) {
+                        $('#IsActive').val("true").attr("selected", "selected");
+                    }
+                    else {
+                        $('#IsActive').val("false").attr("selected", "selected");
+                    }
+                    if (response[0].GradeIDFrom == 0 && response[0].GradeIDTo == 0) {
+                      
+                    }
+                    else{
+                        $("#GradeRangeFormatGrid").data("kendoGrid").dataSource.data(response);
+                    }
+                }
+            }
+        });
+
+    }
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        searchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        searchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        searchWindow.close();
+    });
+    $("#SearchWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            searchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            searchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeRangeID",
+                fields: {
+                    GradeRangeID: { editable: false },
+                    GradeRangeName: { editable: false },
+                    Description: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 10,
+        transport: {
+            read: {
+                url: '@Url.Action("ListOfGradeRange", "GradeRangeFormat")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    var searchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+              { field: "GradeRangeID", title: "GradeRange ID", width: "60px" },
+              { field: "GradeRangeName", title: "GradeRange Name", width: "60px" },
+              { field: "Description", title: "Description", width: "60px" }
+             
+        ]
+    });
+
+
+    function _handleDelete(event) {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        $.ajax({
+            url: '@Url.Action("DeleteGradeRangeInfo", "GradeRangeFormat")',
+            data: ({ "GradeRangeID": selectedItem.GradeRangeID }),
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $('#MessageText').html(data.Msg);
+                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                searchWindow.close();
+            }
+        });
+
+
+    };
+    //-------------------------------------------------Common Function--------------------------------------------------------
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+    //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+    var searchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Grade Range List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+    $("#btnReset").click(function () {
+        clearAll();
+        //   $('#txtGradeRangeName').attr('readonly', false);
+    });
+
+    function btnDeleteParent() {
+        if ($("#txtGradeRangeID").val() != "") {
+            var grid = $("#GradeRangeFormatGrid").data("kendoGrid").dataSource;
+            var count = grid.data().length;
+
+            if (count == 0) {
+                if (confirm("Are you sure to delete?")) {
+                    var gradeRangeID = $("#txtGradeRangeID").val(); //Selected Row
+                    if (isNaN(gradeRangeID)) {
+                        gradeRangeID = 0;
+                    }
+
+                    $.ajax({
+                        url: '@Url.Action("DeleteGradeRangeInfo", "GradeRangeFormat")',
+                        data: ({ "GradeRangeID": gradeRangeID }),
+                        type: 'GET',
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (data) {
+                            clearAll();
+                            $('#MessageText').html(data.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                    });
+
+                }
+            }
+            else {
+                $('#MessageText').html("Grade Format Data Found.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+     
+            }
+        }
+        return true;
+    }
+
+</script>

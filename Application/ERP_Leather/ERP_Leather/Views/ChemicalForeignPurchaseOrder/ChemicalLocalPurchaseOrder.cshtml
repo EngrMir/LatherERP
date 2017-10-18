@@ -1,0 +1,1988 @@
+﻿@{
+    ViewBag.Title = "Chemical Local Purchase Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Order To</label>
+            </div>
+            <div class="col-lg-4">
+                <select class="txtBox RequiredTextBox Dropdown" id="OrderTo" style="width:150px;">
+                    <option value="SP">Supplier</option>
+                    <option value="LA">Local Agent</option>
+                    <option value="FA">Foreign Agent</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>Purchase Order No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="OrderNo" readonly="readonly" class="txtBox ReadOnlyTextbox" name="" tabindex="" style="width:150px;" />
+                <input type="hidden" id="OrderID" class="txtBox" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Order Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="OrderDate" class="txtBox datePicker" name="" tabindex="" style="width:150px; margin-left:2px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Order Type</label>
+            </div>
+            <div class="col-lg-4">
+                <select class="txtBox RequiredTextBox Dropdown" id="OrderType" style="width:150px;">
+                    <option value="UR">Urgent</option>
+                    <option value="NR">Normal</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Supplier Code<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="SupplierID" class="txtBox">
+                <input type="text" id="SupplierCode" class="txtBox RequiredTextBox SPRequired " readonly="readonly" placeholder="Press F9" style="width: 145px;" />
+                <input type="text" id="SupplierName" class="txtBox ReadOnlyTextbox SPRequired" readonly="readonly" style="width: 200px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Local Agent<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="LocalAgentID" class="txtBox" />
+                <input type="text" id="LocalAgentCode" class="txtBox RequiredTextBox SPRequired " readonly="readonly" style="width: 145px;" />
+                <input type="text" id="LocalAgentName" class="txtBox ReadOnlyTextbox SPRequired " readonly="readonly" style="width: 200px;" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Foreign Agent<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="ForeignAgentID" class="txtBox" />
+                <input type="text" id="ForeignAgentCode" class="txtBox RequiredTextBox SPRequired " name="" tabindex="" readonly="readonly" style="width: 145px;" />
+                <input type="text" id="ForeignAgentName" class="txtBox ReadOnlyTextbox SPRequired " name="" tabindex="" readonly="readonly" style="width: 200px;" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div id="RequisitionGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div id="RequisitionItemGrid"></div>
+    </div>
+
+    <input type="hidden" id="RequisitionID" class="txtBox" />
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Confirm Comment</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="ConfirmComment" class="txtBox" name="" tabindex=""></textarea>
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<div id="SupplierWindow" style="display: none;">
+    @*<p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>*@
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel"/>
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK"/>
+</div>
+
+<div id="LocalAgentWindow" style="display: none;">
+    <div id="LocalAgentWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLocalAgentWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLocalAgentWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ForeignAgentWindow" style="display: none;">
+    <div id="ForeignAgentWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnForeignAgentWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnForeignAgentWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RequisitionWindow" style="display: none;">
+    <div id="RequisitionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRequisitionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRequisitionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ChemicalItemWindow" style="display: none;">
+    <div id="ChemicalItemWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalItemWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalItemWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var checkUnsavedData = 0;
+    var PageStatus = "";
+    var OrderCategory = "LPO";
+
+    $(document).ready(function () {
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+        var ddlSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SizeID",
+                    fields: {
+                        SizeID: { editable: false },
+                        SizeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllPackSizeForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlSize(container, options) {
+            $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "SizeName",
+                        dataValueField: "SizeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlSizeDataSource
+                    });
+        };
+
+        var ddlUnitForChemicalPackSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemicalPackSize", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemicalPackSize(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalPackSizeDataSource
+                    });
+        };
+
+
+        var ddlUnitForChemicalDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemical(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalDataSource
+                    });
+        };
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+        var RequisitionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "OrederID",
+                    fields: {
+                        OrederID: { editable: true },
+                        RequisitionID: { editable: true },
+                        RequisitionNo: { editable: true, defaultValue: 'Press F9' },
+                        ReqRaisedOn: { editable: true },
+                        RequisitionType: { editable: true },
+                        ReqRaisedByID: { editable: true },
+                        ReqRaisedByName: { editable: true },
+                        RequisitionStatus: { editable: true },
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var RequisitionGrid = $("#RequisitionGrid").kendoGrid({
+            dataSource: RequisitionGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            height: 200,
+            toolbar: [{
+                text: "Add New Requisition",
+                className: "btnRequisition",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                  //{ field: "OrederID", title: "Order ID", width: "60px", sortable: false, filterable: false, attributes: { "class": "RequisitionNo" } },
+                  //{ field: "RequisitionID", title: "Requisition ID", width: "60px", sortable: false, filterable: false, attributes: { "class": "RequisitionNo" } },
+                  { field: "RequisitionNo", title: "Requisition No.<span style='color:red'>*</span>", width: "60px", sortable: false, filterable: false, attributes: { "class": "RequisitionNo" } },
+                  { field: "ReqRaisedOn", title: "Requisition Date", width: "60px", sortable: false, format: "{0:dd/MM/yyyy}", editor: dateTimeEditor },
+                  { field: "RequisitionType", title: "Requisition Type", width: "60px" },
+                  { field: "ReqRaisedByName", title: "Required By", width: "50px" },
+                  { field: "RequisitionStatus", title: "Requisition Status", width: "60px" },
+                  
+                  { command: [{ name: "btnDeleteRequisition", text: "Delete", click: DeleteRequisition }], title: "Action", width: 50 },
+                  { command: [{ name: "btnConcealRequisition", text: "Conseal", click: ConcealRequisition }], title: "Conseal", width: 50 }
+            ]
+        }).data('kendoGrid');
+
+        var RequisitionItemGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "OrderItemID",
+                    fields: {
+                        OrderItemID: { editable: true },
+                        RequisitionID: { editable: true },
+                        ItemID: { editable: true },
+                        ItemName: { editable: true, defaultValue: 'Press F9' },
+                        RequisitionPackSize: { editable: false },
+                        RequisitionPackSizeName: { editable: false },
+                        RequisitionPackSizeUnitID: { editable: false },
+                        RequisitionPackSizeUnitName: { editable: false },
+                        RequisitionUnitID: { editable: false },
+                        RequisitionUnitName: { editable: false },
+
+                        RequisitionPackQty: { editable: false, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        RequsitionQty: { editable: false, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        RequisitionUnitID: { editable: false },
+                        RequisitionUnitName: { editable: false },
+                        ApproveQty: { editable: false, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        ApproveUnitID: { editable: false },
+                        ApproveUnitName: { editable: false },
+
+                        OrderPackSizeID: { editable: true },
+                        OrderPackSizeName: { editable: true },
+                        OrderPackSizeUnitID: { editable: true },
+                        OrderPackSizeUnitName: { editable: true },
+
+                        OrderPackQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        OrderQty: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        OrderUnitID: { editable: true },
+                        OrderUnitName: { editable: true, defaultValue: 'KG' },
+                        //ManufacturerID: { editable: true },
+                        //ManufacturerName: { editable: true },
+                        ItemSource: { editable: true }
+
+
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var RequisitionItemGrid = $("#RequisitionItemGrid").kendoGrid({
+            dataSource: RequisitionItemGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+
+                $(".CalculationNeeded").unbind().change(function () {
+                    var grid = $("#RequisitionItemGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("OrderQty", (grid.dataItem(row).OrderPackSizeName * grid.dataItem(row).OrderPackQty));
+                });
+
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 250,
+            toolbar: [{
+                text: "Add New Item",
+                className: "btnRequisitionItemGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                    //{ field: "OrderItemID", title: "RequisitionItemID", width: "100px", sortable: false, attributes: { "class": "ChemicalItemName" } },
+                    //{ field: "RequisitionID", title: "RequisitionID", width: "60px" },
+
+                    { field: "ItemName", title: "Chemical", width: "90px", sortable: false, attributes: { "class": "ChemicalItemName" } },
+                    { field: "RequisitionPackSizeName", title: "Pack Size", width: "60px", attributes: { style: "background-color: silver" } },
+                    { field: "RequisitionPackSizeUnitName", title: "Unit", width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "RequisitionPackQty", format: "{0:n2}", title: "Pack Qty", width: "70px", attributes: { style: "background-color: silver" } },
+                    { field: "RequsitionQty", format: "{0:n2}", title: "Rqsn Qty", width: "70px", attributes: { style: "background-color: silver" } },
+                    { field: "RequisitionUnitName", title: "Unit", width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "ApproveQty", format: "{0:n2}", title: "Apv Qty", width: "70px", attributes: { style: "background-color: silver" } },
+                    { field: "ApproveUnitName", title: "Unit", width: "80px", attributes: { style: "background-color: silver" } },
+                    { field: "OrderPackSizeName", title: "Pack Size<span style='color:red'>*</span>", width: "60px", editor: ddlSize, attributes: { "class": "CalculationNeeded" } },
+                    { field: "OrderPackSizeUnitName", title: "Unit<span style='color:red'>*</span>", width: "80px", editor: ddlUnitForChemicalPackSize },
+                    { field: "OrderPackQty", format: "{0:n2}", title: "Pack Qty<span style='color:red'>*</span>", width: "70px", attributes: { "class": "CalculationNeeded" } },
+                    { field: "OrderQty", format: "{0:n2}", title: "Order Qty<span style='color:red'>*</span>", width: "70px" },
+                    { field: "OrderUnitName", title: "Unit<span style='color:red'>*</span>", width: "80px", editor: ddlUnitForChemical },
+                    //{ field: "ManufacturerName", title: "Manufacturer", width: "80px" },
+                    //{ field: "ItemSource", title: "Source", width: "80px" },
+                    { command: [{ name: "btnDeleteRequisitionItem", text: "Delete", click: DeleteItem }], title: "Action", width: 70 }
+            ]
+
+        }).data('kendoGrid');
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "OrderID",
+                    fields: {
+                        OrderID: { editable: false },
+                        OrderNo: { editable: false },
+                        OrderTo: { editable: false },
+                        OrderDate: { editable: false },
+                        OrderType: { editable: false },
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false },
+                        LocalAgent: { editable: false },
+                        LocalAgentName: { editable: false },
+                        ForeignAgent: { editable: false },
+                        ForeignAgentName: { editable: false },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetOrderInformationForSearch", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: ({ "_OrderCategory": "LPO" })
+                }
+            }
+        });
+
+        var searchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            autoBind: false,
+            columns: [
+                  { field: "OrderNo", title: "Order No.", width: "60px" },
+                  { field: "OrderTo", title: "Order To", width: "60px" },
+                  { field: "OrderDate", title: "Order Date", width: "80px" },
+                  { field: "OrderType", title: "Order Type", width: "60px" },
+                  { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                  { field: "LocalAgentName", title: "Local Agent", width: "60px" },
+                  { field: "ForeignAgentName", title: "Foreign Agent", width: "70px" },
+                  { field: "RecordStatus", title: "Record Status", width: "70px" }
+            ]
+        });
+
+        var supplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+
+                        LocalAgentID: { editable: false },
+                        LocalAgentCode: { editable: false },
+                        LocalAgentName: { editable: false },
+
+                        ForeignAgentID: { editable: false },
+                        ForeignAgentCode: { editable: false },
+                        ForeignAgentName: { editable: false },
+
+
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: supplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                    { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+                    { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                    { field: "LocalAgentName", title: "Local Agent", width: "60px" },
+                    { field: "ForeignAgentName", title: "Foreign Agent", width: "60px" }
+            ]
+        });
+
+        var LocalAgentGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LocalAgentID",
+                    fields: {
+                        LocalAgentID: { editable: false },
+                        LocalAgentCode: { editable: false },
+                        LocalAgentName: { editable: false },
+
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+
+                        ForeignAgentID: { editable: false },
+                        ForeignAgentCode: { editable: false },
+                        ForeignAgentName: { editable: false },
+
+
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var LocalAgentGrid = $("#LocalAgentWindowGrid").kendoGrid({
+            dataSource: LocalAgentGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                    { field: "LocalAgentCode", title: "Local Agent Code", width: "60px" },
+                    { field: "LocalAgentName", title: "Local Agent", width: "60px" },
+                    { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                    { field: "ForeignAgentName", title: "Foreign Agent", width: "60px" }
+            ]
+        });
+
+        var ForeignAgentGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ForeignAgentID",
+                    fields: {
+                        ForeignAgentID: { editable: false },
+                        ForeignAgentCode: { editable: false },
+                        ForeignAgentName: { editable: false },
+
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+
+                        LocalAgentID: { editable: false },
+                        LocalAgentCode: { editable: false },
+                        LocalAgentName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ForeignAgentGrid = $("#ForeignAgentWindowGrid").kendoGrid({
+            dataSource: ForeignAgentGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                    { field: "ForeignAgentCode", title: "Foreign Agent Code", width: "60px" },
+                    { field: "ForeignAgentName", title: "Foreign Agent", width: "60px" },
+                    { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                    { field: "LocalAgentName", title: "Local Agent", width: "60px" }
+            ]
+        });
+
+        var RequisitionLOVGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RequisitionID",
+                    fields: {
+                        RequisitionID: { editable: false },
+                        RequisitionNo: { editable: false },
+                        RequisitionType: { editable: false },
+                        ReqRaisedOn: { editable: false },
+                        ReqRaisedByID: { editable: false },
+                        ReqRaisedByName: { editable: false },
+                        RequisitionTo: { editable: true },
+                        SupplierName: { editable: true },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var RequisitionLOVGrid = $("#RequisitionWindowGrid").kendoGrid({
+            dataSource: RequisitionLOVGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "RequisitionNo", title: "Requisition No", width: "60px" },
+                  { field: "ReqRaisedOn", title: "Requisition Date", width: "60px" },
+                  { field: "RequisitionType", title: "Requisition Type", width: "60px" },
+                  { field: "ReqRaisedByName", title: "Required By", width: "60px" },
+                  { field: "SupplierName", title: "Supplier", width: "60px" },
+                  { field: "RecordStatus", title: "Record Status", width: "60px" }
+
+            ]
+
+        });
+
+        var ChemicalItemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemID",
+                    fields: {
+                        ItemID: { editable: false },
+                        ItemName: { editable: false },
+                        ItemCategory: { editable: false },
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllChemicalItem", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ChemicalItemGrid = $("#ChemicalItemWindowGrid").kendoGrid({
+            dataSource: ChemicalItemDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "ItemName", title: "Item Name", width: "60px" },
+                  { field: "ItemCategory", title: "Item Category", width: "60px" },
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" }
+
+            ]
+
+        });
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+        $(document).on('keyup', '.RequisitionNo', function (e) {
+            if (e.which == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetChemicalRequisition", "ChemicalForeignPurchaseOrder")',
+                    type: 'GET',
+                    data: ({ "_RequisitionCategory": "LP", "_SupplierID": $("#SupplierID").val() }),
+                    success: function (response) {
+                        $("#RequisitionWindowGrid").data("kendoGrid").dataSource.data(response);
+                    } //End of success call
+                });
+                SelectedItemOfListOfValue('RequisitionWindowGrid');
+                RequisitionWindow.open(); //Open Popup
+                RequisitionWindow.center();
+            }
+
+        });
+
+        $(document).on('keyup', '.ChemicalItemName', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('ChemicalItemWindowGrid');
+                ChemicalItemWindow.open(); //Open Popup
+                ChemicalItemWindow.center();
+            }
+
+        });
+
+        $("#OrderTo").change(function () {
+            if ($("#OrderTo").val() == "LA") {
+                $("#LocalAgentCode").attr("placeholder", "Press F9");
+                $("#SupplierCode").removeAttr("placeholder", "Press F9");
+                $("#ForeignAgentCode").removeAttr("placeholder", "Press F9");
+            }
+            else if ($("#OrderTo").val() == "FA") {
+                $("#ForeignAgentCode").attr("placeholder", "Press F9");
+                $("#SupplierCode").removeAttr("placeholder", "Press F9");
+                $("#LocalAgentCode").removeAttr("placeholder", "Press F9");
+            }
+            else if ($("#OrderTo").val() == "SP") {
+                $("#SupplierCode").attr("placeholder", "Press F9");
+                $("#ForeignAgentCode").removeAttr("placeholder", "Press F9");
+                $("#LocalAgentCode").removeAttr("placeholder", "Press F9");
+            }
+        });
+
+        $(document.body).keyup(function (e) {
+
+            if ($("#SupplierCode").is(":focus") && $("#OrderTo").val() == "SP") {
+                if (e.keyCode == 120) {
+                    $("#txtSupplier").val("");
+                    SelectedItemOfListOfValue('SupplierWindowGrid');
+
+                    $.ajax({
+                        url: '@Url.Action("GetSupplierListForChemicalForeignPurchaseOrder", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: ({ "_SupplierType": "Local" }),
+                        success: function (response) {
+                            $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(response);
+                        } //End of success call
+                    });
+                    supplierWindow.open();
+                    supplierWindow.center();
+                }
+            }
+            else if ($("#LocalAgentCode").is(":focus") && $("#OrderTo").val() == "LA") {
+                if (e.keyCode == 120) {
+                    $("#txtSupplier").val("");
+                    SelectedItemOfListOfValue('LocalAgentWindowGrid');
+
+                    $.ajax({
+                        url: '@Url.Action("GetLocalAgentListForChemicalForeignPurchaseOrder", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: ({ "_SupplierType": "Local" }),
+                        success: function (response) {
+                            $("#LocalAgentWindowGrid").data("kendoGrid").dataSource.data(response);
+                        } //End of success call
+                    });
+                    LocalAgentWindow.open();
+                    LocalAgentWindow.center();
+                }
+            }
+            else if ($("#ForeignAgentCode").is(":focus") && $("#OrderTo").val() == "FA") {
+                if (e.keyCode == 120) {
+                    $("#txtSupplier").val("");
+                    SelectedItemOfListOfValue('ForeignAgentWindowGrid');
+
+                    $.ajax({
+                        url: '@Url.Action("GetForeignAgentListForChemicalForeignPurchaseOrder", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: ({ "_SupplierType": "Local" }),
+                        success: function (response) {
+                            $("#ForeignAgentWindowGrid").data("kendoGrid").dataSource.data(response);
+                        } //End of success call
+                    });
+                    ForeignAgentWindow.open();
+                    ForeignAgentWindow.center();
+                }
+            }
+        });
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+        var searchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Requisition List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        var supplierWindow = $('#SupplierWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Supplier",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var LocalAgentWindow = $('#LocalAgentWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Local Agent",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ForeignAgentWindow = $('#ForeignAgentWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Foreign Agent",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ChemicalItemWindow = $('#ChemicalItemWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Source",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var RequisitionWindow = $('#RequisitionWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Location",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date()
+                        //change: function () {
+                        //    alert("test");
+                        //}
+                    });
+        }
+
+        $("#Requisition").on('input', function () {
+            changeStatus = 1;
+        });
+
+        $("#ItemGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $.ajax({
+                url: '@Url.Action("GetDetailOrderInformation", "ChemicalForeignPurchaseOrder")',
+                data: ({ "OrderID": selectedItem.OrderID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    //ResetData();
+                    if (response.OrderInformation != null) {
+                        $.each(response.OrderInformation, function (key, value) {
+                            if (value != null && value != 0)
+                                $('#' + key).val(value);
+                        });
+                    }
+                    //SelectedItemOfListOfValue('Requisition');
+                    $("#RequisitionGrid").data("kendoGrid").dataSource.data(response.RequisitionList);
+                    $("#RequisitionItemGrid").data("kendoGrid").dataSource.data(response.RequisitionItemList);
+
+                    PageStatus = response.OrderInformation.RecordStatus;
+                    CheckRecordStatusForButton(PageStatus);
+                }
+            });
+            //MakeRequisitionGridNonEditable();
+
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+
+            searchWindow.close();
+            MakeRequisitionGridNonEditable();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            searchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+
+            searchWindow.close();
+            MakeRequisitionGridNonEditable();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+
+                searchWindow.close();
+                MakeRequisitionGridNonEditable();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                searchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+
+
+      
+
+        $('#btnSupplierWindowOK').click(function () {
+            //FindSupplierInformation();
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+        });
+        $('#btnSupplierWindowCancel').click(function () {
+            supplierWindow.close();
+        });
+        $("#SupplierWindowGrid").dblclick(function () {
+            //FindSupplierInformation();
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+        });
+        $("#SupplierWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                //FindSupplierInformation();
+                ListOfValueGridEvent('SupplierWindowGrid');
+                supplierWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                supplierWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $('#btnLocalAgentWindowOK').click(function () {
+            //FindSupplierInformation();
+            ListOfValueGridEvent('LocalAgentWindowGrid');
+            LocalAgentWindow.close();
+        });
+        $('#btnLocalAgentWindowCancel').click(function () {
+            LocalAgentWindow.close();
+        });
+        $("#LocalAgentWindowGrid").dblclick(function () {
+            //FindSupplierInformation();
+            ListOfValueGridEvent('LocalAgentWindowGrid');
+            LocalAgentWindow.close();
+        });
+        $("#LocalAgentWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                //FindSupplierInformation();
+                ListOfValueGridEvent('LocalAgentWindowGrid');
+                LocalAgentWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                LocalAgentWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $('#btnForeignAgentWindowOK').click(function () {
+            //FindSupplierInformation();
+            ListOfValueGridEvent('ForeignAgentWindowGrid');
+            ForeignAgentWindow.close();
+        });
+        $('#btnForeignAgentWindowCancel').click(function () {
+            ForeignAgentWindow.close();
+        });
+        $("#ForeignAgentWindowGrid").dblclick(function () {
+            //FindSupplierInformation();
+            ListOfValueGridEvent('ForeignAgentWindowGrid');
+            ForeignAgentWindow.close();
+        });
+        $("#ForeignAgentWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                //FindSupplierInformation();
+                ListOfValueGridEvent('ForeignAgentWindowGrid');
+                ForeignAgentWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ForeignAgentWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Location window grid
+        function RequisitionWindowEvent() {
+            var WindowGrid = $("#RequisitionWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#RequisitionGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            var RequisitionGridDataSource = $("#RequisitionGrid").data("kendoGrid").dataSource;
+            var RequisitionGridData = RequisitionGridDataSource.data();
+
+            var check = 0; // To check if the requisition is already selected or not?
+
+            for (var i = 0; i < RequisitionGridData.length; i++) {
+                if (RequisitionGridData[i].RequisitionID == WindowGridItem.RequisitionID) {
+                    check = 1;
+                    break;
+                }
+
+            }
+
+            if (check == 0) {
+                var dataRows = PageGrid.items();
+                var rowIndex = dataRows.index(PageGrid.select());
+
+                PageGridItem.set("RequisitionID", WindowGridItem.RequisitionID);
+                PageGridItem.set("RequisitionNo", WindowGridItem.RequisitionNo);
+                PageGridItem.set("ReqRaisedOn", WindowGridItem.ReqRaisedOn);
+                PageGridItem.set("RequisitionType", WindowGridItem.RequisitionType);
+                PageGridItem.set("ReqRaisedByID", WindowGridItem.ReqRaisedByID);
+                PageGridItem.set("ReqRaisedByName", WindowGridItem.ReqRaisedByName);
+                PageGridItem.set("RequisitionStatus", WindowGridItem.RequisitionStatus);
+                $("#RequisitionID").val(WindowGridItem.RequisitionID);
+
+                $.ajax({
+                    url: '@Url.Action("GetChemicalRequisitionItemList", "ChemicalForeignPurchaseOrder")',
+                    data: ({ "_RequisitionID": WindowGridItem.RequisitionID }),
+                    type: 'GET',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        $("#RequisitionItemGrid").data("kendoGrid").dataSource.data(response);
+                    }
+                });
+
+                changeStatus = 1;
+                MakeRequisitionGridNonEditable();
+                //MakeRequisitionItemGridNonEditable();
+
+                PageGrid.editCell($("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ") td:eq(1)"));
+
+                $("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+                if (rowIndex > 0)
+                    $("#RequisitionGrid tr:eq(1)").removeClass('k-state-selected');
+            }
+            else {
+                $('#MessageText').html("Requisition Already Selected");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+
+
+        };
+
+        $('#btnRequisitionWindowOK').click(function () {
+            RequisitionWindowEvent();
+            RequisitionWindow.close();
+        });
+        $('#btnRequisitionWindowCancel').click(function () {
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").dblclick(function () {
+            RequisitionWindowEvent();
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                RequisitionWindowEvent();
+                RequisitionWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                RequisitionWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Source window grid
+        function ChemicalItemWindowEvent() {
+            var WindowGrid = $("#ChemicalItemWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#RequisitionItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+
+            PageGridItem.set("ItemID", WindowGridItem.ItemID);
+            PageGridItem.set("ItemName", WindowGridItem.ItemName);
+            PageGrid.editCell($("#RequisitionItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            $("#RequisitionItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //alert(rowIndex);
+            if (rowIndex > 0)
+                $("#RequisitionItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnChemicalItemWindowOK').click(function () {
+            ChemicalItemWindowEvent();
+            ChemicalItemWindow.close();
+        });
+        $('#btnChemicalItemWindowCancel').click(function () {
+            ChemicalItemWindow.close();
+        });
+        $("#ChemicalItemWindow").dblclick(function () {
+            ChemicalItemWindowEvent();
+            ChemicalItemWindow.close();
+        });
+        $("#ChemicalItemWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ChemicalItemWindowEvent();
+                ChemicalItemWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ChemicalItemWindow.close();
+            }
+            event.stopPropagation();
+        });
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                ItemGridchangeStatus = 0;
+                $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                $("#RequisitionGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                ItemGridchangeStatus = 0;
+                $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                $("#RequisitionGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else if (resetEditStatus == 3) // For Requisition Item Delete
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 4) // For Requisition Delete
+            {
+                DeleteFrom = 2;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Purchase Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmOrder", "ChemicalForeignPurchaseOrder")',
+                type: 'GET',
+                data: { "OrderID": $("#OrderID").val(), "confirmComment": $("#ConfirmComment").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Confirmation Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+                        changeStatus = 0;
+
+                        //$("#RequisitionGrid").data('kendoGrid').dataSource.data([]);
+                        //$("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+
+                } //End of success call
+            });
+        });
+
+
+        function ConcealRequisition(event) {
+
+            var CurrentRequisition = RequisitionGrid.dataItem($(event.currentTarget).closest("tr"));
+
+
+
+            $.ajax({
+                url: '@Url.Action("ConsealRequisition", "ChemicalForeignPurchaseOrder")',
+                type: 'GET',
+                data: { "RequisitionID": CurrentRequisition.RequisitionID },
+                success: function (response) {
+                    if (response.Msg == "Success") {
+                        $('#MessageText').html("Consealed Successfully");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        //$("#RequisitionGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Failed To Conseal");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+
+                } //End of success call
+            });
+        };
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+        function MakeRequisitionGridEditable() {
+            var grid = $("#RequisitionGrid").data("kendoGrid");
+
+            grid.dataSource.at(0).fields["RequisitionNo"].editable = true;
+            grid.dataSource.at(0).fields["ReqRaisedOn"].editable = true;
+            grid.dataSource.at(0).fields["RequisitionType"].editable = true;
+            grid.dataSource.at(0).fields["ReqRaisedByID"].editable = true;
+            grid.dataSource.at(0).fields["ReqRaisedByName"].editable = true;
+            grid.dataSource.at(0).fields["RequisitionStatus"].editable = true;
+        };
+
+        function MakeRequisitionGridNonEditable() {
+            var grid = $("#RequisitionGrid").data("kendoGrid");
+
+            grid.dataSource.at(0).fields["RequisitionNo"].editable = false;
+            grid.dataSource.at(0).fields["ReqRaisedOn"].editable = false;
+            grid.dataSource.at(0).fields["RequisitionType"].editable = false;
+            grid.dataSource.at(0).fields["ReqRaisedByID"].editable = false;
+            grid.dataSource.at(0).fields["ReqRaisedByName"].editable = false;
+            grid.dataSource.at(0).fields["RequisitionStatus"].editable = false;
+        };
+
+        function MakeRequisitionItemGridEditable() {
+            var grid = $("#RequisitionItemGrid").data("kendoGrid");
+
+            grid.dataSource.at(0).fields["ItemID"].editable = true;
+            grid.dataSource.at(0).fields["ItemName"].editable = true;
+            //grid.dataSource.at(0).fields["RequisitionType"].editable = true;
+            //grid.dataSource.at(0).fields["ReqRaisedByID"].editable = true;
+            //grid.dataSource.at(0).fields["ReqRaisedByName"].editable = true;
+            //grid.dataSource.at(0).fields["RequisitionStatus"].editable = true;
+        };
+
+        function MakeRequisitionItemGridNonEditable() {
+            var grid = $("#RequisitionItemGrid").data("kendoGrid");
+
+            grid.dataSource.at(0).fields["ItemID"].editable = false;
+            grid.dataSource.at(0).fields["ItemName"].editable = false;
+            //grid.dataSource.at(0).fields["RequisitionType"].editable = true;
+            //grid.dataSource.at(0).fields["ReqRaisedByID"].editable = true;
+            //grid.dataSource.at(0).fields["ReqRaisedByName"].editable = true;
+            //grid.dataSource.at(0).fields["RequisitionStatus"].editable = true;
+        };
+
+
+        $("#RequisitionItemGrid").on('input', function () {
+            ItemGridchangeStatus = 1;
+            changeStatus = 1;
+            checkUnsavedData = 1;
+        });
+        $("#RequisitionGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+        $("#RequisitionGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var CheckRowCreation = 1;
+
+                var ChallanGridDataSource = $("#RequisitionGrid").data("kendoGrid").dataSource;
+                var ChallanGridData = ChallanGridDataSource.data();
+
+                for (var i = 0; i < ChallanGridData.length; i++) {
+                    if (ChallanGridData[i].isNew()) {
+                        CheckRowCreation = 0;
+                        break;
+                    }
+                }
+                if (CheckRowCreation == 1 && ItemGridchangeStatus == 0) {
+                    var grid = $("#RequisitionGrid").data("kendoGrid");
+
+                    $("#RequisitionGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    grid.addRow();
+                    $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                    MakeRequisitionGridEditable();
+                }
+                else {
+                    $('#MessageText').html("You have unsaved Challan or Item");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                }
+            }
+        });
+
+        $(".btnRequisition").click(function (e) {
+
+            var CheckRowCreation = 1;
+
+            var ChallanGridDataSource = $("#RequisitionGrid").data("kendoGrid").dataSource;
+            var ChallanGridData = ChallanGridDataSource.data();
+
+            for (var i = 0; i < ChallanGridData.length; i++) {
+                if (ChallanGridData[i].isNew()) {
+                    CheckRowCreation = 0;
+                    break;
+                }
+            }
+
+            if (CheckRowCreation == 1 && ItemGridchangeStatus == 0) {
+                var grid = $("#RequisitionGrid").data("kendoGrid");
+
+                $("#RequisitionGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                MakeRequisitionGridEditable();
+                e.preventDefault();
+            }
+            else {
+                $('#MessageText').html("You have unsaved Challan or Item");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                e.stopImmediatePropagation();
+            }
+
+        });
+
+        $("#RequisitionItemGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var ParentGrid = $("#RequisitionGrid").data("kendoGrid");
+                var ParentGridRow = ParentGrid.select();
+                var ParentGridItem = ParentGrid.dataItem(ParentGridRow);
+
+                var ChildGrid = $("#RequisitionItemGrid").data("kendoGrid");
+                $("#RequisitionItemGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                ChildGrid.addRow();
+                MakeRequisitionItemGridEditable();
+                $("#RequisitionID").val(ParentGridItem.RequisitionID);
+            }
+        });
+
+        $(".btnRequisitionItemGrid").click(function (e) {
+            var ParentGrid = $("#RequisitionGrid").data("kendoGrid");
+            var ParentGridRow = ParentGrid.select();
+            var ParentGridItem = ParentGrid.dataItem(ParentGridRow);
+
+            var ChildGrid = $("#RequisitionItemGrid").data("kendoGrid");
+            $("#RequisitionItemGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            ChildGrid.addRow();
+            MakeRequisitionItemGridEditable();
+            e.preventDefault();
+            $("#RequisitionID").val(ParentGridItem.RequisitionID);
+           
+            
+        });
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+        //To face child data into another grid for a grid row on click
+        $("#RequisitionGrid").on("click", "tr", function (e) {
+
+            var ItemGridDataSource = $("#RequisitionItemGrid").data("kendoGrid").dataSource;
+            var itemGridData = ItemGridDataSource.data();
+
+
+            //for (var i = 0; i < itemGridData.length; i++) {
+            //    if (itemGridData[i].isNew()) {
+            //        checkUnsavedData = 1;
+            //        break;
+            //    }
+            //}
+
+            if (checkUnsavedData == 0) {
+                var parentGrid = $("#RequisitionGrid").data("kendoGrid");
+                var parentGridRow = parentGrid.select();
+                var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+                if (parentGridItem.RequisitionID != "") {
+                    $.ajax({
+                        url: '@Url.Action("GetChemicalRequisitionItemList", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: { "_RequisitionID": parentGridItem.RequisitionID, "OrderID": $("#OrderID").val() },
+                        success: function (response) {
+
+                            if (response != null) {
+
+                                $("#RequisitionItemGrid").data("kendoGrid").dataSource.data(response);
+                                //changeStatus = 0;
+                            }
+
+                        } //End of Success Call
+                    });
+                }
+                else {
+                    $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                }
+            }
+            else if (checkUnsavedData == 1) {
+                $('#MessageText').html("You have unsaved Challan or Item");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+
+        var DeleteFrom = 0;
+        function DeleteRequisition(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 2;
+                dataitem = RequisitionGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 4;
+                dataitem = RequisitionGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+        };
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                dataitem = RequisitionItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 1;
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = RequisitionItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                //dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                //dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // Item Delete
+            {
+                //alert(dataitem.OrderItemID);
+                if (dataitem.OrderItemID == null) {
+                    $("#RequisitionItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteRequisitionItem", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: { "OrderItemID": dataitem.OrderItemID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#RequisitionItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            else if (DeleteFrom == 2) // Requisition Delete
+            {
+                var RequisitionItemGridDataSource = $("#RequisitionItemGrid").data("kendoGrid").dataSource;
+                var RequisitionItemGridData = RequisitionItemGridDataSource.data();
+                //alert(dataitem.OrederID);
+                if (dataitem.OrederID == "") {
+                    $("#RequisitionGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                }
+                else if (RequisitionItemGridData.length > 0) {
+                    $('#MessageText').html("Order Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteRequisition", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: { "OrderID": dataitem.OrederID, "RequisitionID": dataitem.RequisitionID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#RequisitionGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+
+            else if (DeleteFrom == 3) //Order Delete
+            {
+                var RequisitionGridDataSource = $("#RequisitionGrid").data("kendoGrid").dataSource;
+                var RequisitionGridData = RequisitionGridDataSource.data();
+                if (RequisitionGridData.length > 0) {
+                    $('#MessageText').html("Order Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteOrder", "ChemicalForeignPurchaseOrder")',
+                        type: 'GET',
+                        data: { "OrderID": $("#OrderID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+    var RequisitionList = { "RequisitionID": "" };
+
+    var RequisitionItemList = {
+        "RequisitionID": "", "ItemID": "", "RequsitionQty": "", "RequisitionUnitID": "", "OrderPackSizeID": "", "OrderPackSizeUnitID": "", "OrderPackQty": "",
+        "OrderQty": "", "OrderUnitID": "", "ItemSource": "", "OrderItemID": "", "OrderItemID": "", "ApproveQty": "", "ApproveUnitID": ""
+    };
+    var FinalObject = {
+        "OrderID": "", "OrderTo": "", "OrderNo": "", "OrderCategory": "", "OrderDate": "", "OrderType": "", "SupplierID": "", "LocalAgentID": "", "ForeignAgentID": "", "OrderNote": "",
+        "RequisitionList": [], "RequisitionItemList": []
+    };
+
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('OrderTo', 50);
+        CheckRequiredTextBoxMaxLength('OrderType', 4);
+        if ($("#SupplierID").val() == "" && $("#LocalAgentID").val() == "" && $("#ForeignAgentID").val() == "") {
+            $(".SPRequired").css("border-color", "red");
+            saveStatus = 0;
+        }
+        var RequisitionGridDataSource = $("#RequisitionGrid").data("kendoGrid").dataSource;
+        var RequisitionGridData = RequisitionGridDataSource.data();
+
+        var RequisitionItemGridDataSource = $("#RequisitionItemGrid").data("kendoGrid").dataSource;
+        var RequisitionItemGridData = RequisitionItemGridDataSource.data();
+
+        for (i = RequisitionGridData.length - 1; i >= 0; i--) {
+            if (RequisitionGridData[i].RequisitionID == "") {
+                saveStatus = 0;
+                break;
+            }
+        }
+
+        for (i = RequisitionItemGridData.length - 1; i >= 0; i--) {
+            if (RequisitionItemGridData[i].ItemID == "" || RequisitionItemGridData[i].OrderPackSizeName == "" || RequisitionItemGridData[i].OrderPackSizeUnitName == "" ||
+                RequisitionItemGridData[i].OrderPackQty == "" || RequisitionItemGridData[i].OrderQty == "" || RequisitionItemGridData[i].OrderUnitName == "") {
+                saveStatus = 0;
+                break;
+            }
+        }
+
+        if (saveStatus == 1) {
+            FinalObject.OrderID = $("#OrderID").val();
+            FinalObject.OrderTo = $("#OrderTo").val();
+            FinalObject.OrderNo = $("#OrderNo").val();
+            FinalObject.OrderDate = $("#OrderDate").val();
+            FinalObject.OrderType = $("#OrderType").val();
+            FinalObject.SupplierID = $("#SupplierID").val();
+            FinalObject.LocalAgentID = $("#LocalAgentID").val();
+            FinalObject.ForeignAgentID = $("#ForeignAgentID").val();
+            FinalObject.OrderNote = $("#OrderNote").val();
+            FinalObject.OrderCategory = OrderCategory;
+
+            for (i = RequisitionGridData.length - 1; i >= 0; i--) {
+                if (RequisitionGridData[i].dirty) {
+
+                    RequisitionList.RequisitionID = RequisitionGridData[i].RequisitionID;
+
+                    FinalObject.RequisitionList.push(RequisitionList);
+                    RequisitionList = { "RequisitionID": "" };
+                }
+            }
+
+            for (var i = RequisitionItemGridData.length - 1; i >= 0; i--) {
+                RequisitionItemList.OrderItemID = RequisitionItemGridData[i].OrderItemID
+                RequisitionItemList.RequisitionID = $("#RequisitionID").val();
+                RequisitionItemList.ItemID = RequisitionItemGridData[i].ItemID;
+                RequisitionItemList.RequsitionQty = RequisitionItemGridData[i].RequsitionQty;
+                RequisitionItemList.RequisitionUnitID = RequisitionItemGridData[i].RequisitionUnitID;
+                RequisitionItemList.ApproveQty = RequisitionItemGridData[i].ApproveQty;
+                RequisitionItemList.ApproveUnitID = RequisitionItemGridData[i].ApproveUnitID;
+                RequisitionItemList.OrderPackSizeID = RequisitionItemGridData[i].OrderPackSizeName;
+                RequisitionItemList.OrderPackSizeUnitID = RequisitionItemGridData[i].OrderPackSizeUnitName;
+                RequisitionItemList.OrderPackQty = RequisitionItemGridData[i].OrderPackQty;
+                RequisitionItemList.OrderQty = RequisitionItemGridData[i].OrderQty;
+                RequisitionItemList.OrderUnitID = RequisitionItemGridData[i].OrderUnitName;
+                RequisitionItemList.ItemSource = RequisitionItemGridData[i].ItemSource;
+                RequisitionItemList.SupplierID = $("#SupplierID").val();
+
+                FinalObject.RequisitionItemList.push(RequisitionItemList);
+                RequisitionItemList = {
+                    "RequisitionID": "", "ItemID": "", "RequsitionQty": "", "RequisitionUnitID": "", "OrderPackSizeID": "", "OrderPackSizeUnitID": "", "OrderPackQty": "",
+                    "OrderQty": "", "OrderUnitID": "", "ItemSource": "", "OrderItemID": "", "OrderItemID": ""
+                };
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("ChemicalLocalPurchaseOrder", "ChemicalForeignPurchaseOrder")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        ItemGridchangeStatus = 0;
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                            $("#RequisitionGrid").data('kendoGrid').dataSource.data(response.RequisitionList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                            checkUnsavedData = 0;
+                            $("#OrderNo").val(response.OrderNo);
+                            $("#OrderID").val(response.OrderID);
+                        }
+                        else if (response.Msg.Type == 3) {
+                            ItemGridchangeStatus = 0;
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#RequisitionItemGrid").data('kendoGrid').dataSource.data([]);
+                            $("#RequisitionGrid").data('kendoGrid').dataSource.data(response.RequisitionList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                            checkUnsavedData = 0;
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "OrderID": "", "OrderTo": "", "OrderNo": "", "OrderCategory": "", "OrderDate": "", "OrderType": "", "SupplierID": "", "LocalAgentID": "", "ForeignAgentID": "", "OrderNote": "",
+            "RequisitionList": [], "RequisitionItemList": []
+        };
+    };
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>
+
+
+
+
+
+
+

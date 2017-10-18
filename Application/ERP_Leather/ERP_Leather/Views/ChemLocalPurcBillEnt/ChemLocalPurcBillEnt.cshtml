@@ -1,0 +1,2357 @@
+﻿@{
+    ViewBag.Title = "Chemical Local Purchase Bill Entry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row FormHeader" style="padding: 5px 0 5px 0;">
+
+    <div id="FormTitlePannel" class="col-lg-4">
+        <div id="FormTitle" style="font-size:larger; font-weight:bold;">Chemical Local Purchase Bill Entry</div>
+    </div>
+    <div id="MessageText" class="col-lg-5">
+    </div>
+    <div id="" class="col-lg-3" style="padding: 0 0 0 0;">
+
+        @*<button type="button" id="btnSave" title="Save" onclick="" class="" style="margin-left: 10px; width: 58px; font-size: 12px;">Save</button>
+
+            <button type="button" id="btnSearch" onclick="" value="Search" class="" style=" width: 58px; font-size: 12px;">Search</button>
+
+            <button type="button" id="btnReset" onclick="" value="Reset" class="" style="margin-left: 10px; width: 58px; font-size: 12px; ">Reset</button>
+
+            <button type="button" id="btnDelete" onclick="" value="Delete" class="" style="width: 58px; font-size: 12px;">Delete</button>*@
+
+        <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+
+    </div>
+
+</div>
+
+
+<div class="row FormBody" style="padding: 0 0 0 0;">
+    <div class="col-lg-4" style="margin-top: 5px; margin-bottom: 5px;">
+        <label>Bill Entry No.</label>
+        <input type="text" id="txtCLPBEId" class="txtField" style="display: none;" />
+        <input type="text" id="txtCLPBENo" class="txtField" placeholder="(Auto generated)" style="width: 160px;" readonly />
+    </div>
+    <div class="col-lg-4" style="margin-top: 5px; margin-bottom: 5px;">
+        <label style="margin-right: 5px; margin-left: 50px; margin-top: 4px;">Bill Entry Date</label>
+        <input type="text" id="txtCLPBEDate" class="datePicker txtField" style="" />
+    </div>
+    <div class="col-lg-4" style="margin-top: 5px; margin-bottom: 5px;">
+        <input type="text" id="txtCLPBEPurcYear" class="txtField" maxlength="4" style="float: right; " />
+        <label style="float: right; margin-right: 5px;margin-top: 4px;">Purchase Year</label>
+
+    </div>
+</div>
+
+
+<div class="row FormBody" style="padding: 0 0 0 5px;">
+    <div class="col-lg-4">
+        <div class="row" style="margin-top: 5px;">
+            <label>Supplier</label>
+        </div>
+        <div class="row" style="border: 1px solid lightgray; ">
+            <div class="row" style="margin-left: 10px; margin-top: 4px;">
+                <label>Name</label>
+                <input type="text" id="txtCLPBESupId" class="txtField" style="display: none;" />
+                <input type="text" id="txtCLPBESupName" class="txtField" style="margin-left: 18px; width: 200px;" placeholder="Press (F9)" readonly />
+            </div>
+            <div class="row" style="margin-left: 10px;">
+                <label>Address</label>
+                <input type="text" id="txtCLPBESupAddressId" class="txtField" style="width: 300px; display: none;" />
+                <input type="text" id="txtCLPBESupAddress" class="txtField" style="width: 300px;" readonly />
+            </div>
+            <div class="row" style="margin-left: 10px;">
+                <label>Bill No.</label>
+                <input type="text" id="txtCLPBESupBillNo" class="txtField" style="margin-left: 12px; margin-bottom: 5px; width: 200px;" maxlength="8" />
+            </div>
+            <div class="row" style="margin-left: 10px; margin-bottom: 4px;">
+                <label style="margin-right: 4px;">Bill Date</label>
+                <input type="text" id="txtCLPBESupBillDate" class="datePicker txtField" style=" width: 200px;" maxlength="8" />
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8" style="padding: 0 0 0 10px;">
+        <div id="ChemLocalPurcBillRefGrid" style="padding: 0 0 0 0;"></div>
+    </div>
+</div>
+<div class="row FormBody" style="padding: 0 15px 0 15px;">
+    <div id="ChemLocalPurcBillItemGrid" class="row"></div>
+    <div class="row" style="margin-top: 10px; margin-left: 10px; margin-right: 10px; border: 1px solid silver;">
+        <div class="col-lg-3" style="margin-top: 5px; margin-bottom: 5px;">
+            <div class="row">
+                <label style="margin-left: 3px;">Bill Amount</label>
+                <input type="text" id="txtCLPBEBillAmt" class="txtField" style="margin-left: 35px; width: 160px;" />
+            </div>
+            <div class="row">
+                <label style="margin-left: 3px;">Vat Amount</label>
+                <input type="text" id="txtCLPBEVatAmt" class="txtField" style="margin-left: 34px; width: 160px;" />
+            </div>
+            <div class="row">
+                <label style="margin-left: 3px;">Discount</label>
+                <input type="text" id="txtCLPBEDiscPer" class="txtField" style="width: 40px; margin-left: 49px;" placeholder="%" />
+                <input type="text" id="txtCLPBEDiscAmt" class="txtField" style="margin-left: -4px; width: 119px;" placeholder="Amount" />
+            </div>
+            <div class="row">
+                <label style="margin-left: 3px;">Payment Amount</label>
+                <input type="text" id="txtCLPBEPayAmt" class="txtField" style="width: 160px;" readonly/>
+            </div>
+        </div>
+        <div class="col-lg-5" style="margin-top: 5px; margin-bottom: 5px;">
+            <div class="row" style="margin-left: 2px;">
+                <label style="margin-top: 4px; margin-left: 25px;">Exchange Currency</label>
+                @Html.DropDownList("ddlCLPBEExcCur", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "txtField dDown", @style = "width: 100px;" })
+            </div>
+            <div class="row" style="margin-left: 2px;">
+                <label style="margin-top: 4px; margin-left: 25px;">Exchange Rate</label>
+                <input type="text" id="txtCLPBEExcRate" class="txtField" style="margin-left: 27px;" />
+                @Html.DropDownList("ddlCLPBEExcRateCur", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "txtField dDown", @style = "width: 100px;" })
+            </div>
+            <div class="row" style="margin-left: 2px;">
+                <label style="margin-top: 4px; margin-left: 25px;">Exchange Amt</label>
+                <input type="text" id="txtCLPBEExcAmt" class="txtField" style="margin-left: 30px;" />
+            </div>
+        </div>
+        <div class="col-lg-4" style="margin-top: 5px; margin-bottom: 5px;">
+            <div class="row" style="padding: 0 0 0 0;">
+                <div class="row">
+                    <label style="">Check Note</label>
+                    <button type="button" id="btnCheck" style="float: right; margin-right: 36px;">Check</button>
+                </div>
+                <div class="row">
+                    <input id="txtCheckNote" class="txtArea" style=" width: 380px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <label style="">Confirm Note</label>
+                    <button type="button" id="btnConfirm" style="float: right; margin-right: 36px;">Confirm</button>
+                </div>
+                <div class="row">
+                    <input id="txtConfirmNote" class="txtArea" style=" width: 381px;" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px; margin-bottom: 5px;">
+
+    </div>
+</div>
+<div id="SupplierWindow" style="display: none;">
+    <div class="row" style="width: 99%;">
+        <label style="margin-left: 20px;">Supplier</label>
+        <input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnSupGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 99%; height: 70%;">
+        <div id="SupplierWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="POWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Purchase Order No.</label>
+        <input type="text" id="txtPoNo" style="width: 250px;" /><input type="button" id="btnPOGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="POWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnPOWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnPOWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="ReceiveWindow" style="display: none;">
+    <div class="row" style="width: 99%;">
+        <label style="margin-left: 20px;">Purchase Order No.</label>
+        <input type="text" id="txtReceiveNo" style="width: 250px;" /><input type="button" id="btnReceiveGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 99%; height:70%;">
+        <div id="ReceiveWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnReceiveWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnReceiveWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="ChemicalWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Purchase Order No.</label>
+        <input type="text" id="txtChemicalName" style="width: 250px;" /><input type="button" id="btnChemicalGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ChemicalWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="ManufacturerWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Purchase Order No.</label>
+        <input type="text" id="txtManufacturerName" style="width: 250px;" /><input type="button" id="btnManufacturerGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="ManufacturerWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnManufacturerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnManufacturerWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="BillWindow" style="display: none;">
+    <div class="row" style="">
+        <label style="margin-left: 20px;">Supplier Bill No.</label>
+        <input type="text" id="txtSuppBillNo" style="width: 250px;" /><input type="button" id="btnBillGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 99%; height: 70%;">
+        <div id="BillWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnBillWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBillWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+<div id="DeleteConfirmWindow" style="display: none; ">
+    <div class="row" style="width: 250px; margin-left: 9px;">
+        <h5>Are you sure you want to delete?</h5>
+    </div>
+    <div class="row" style="width: 179px; margin-left: 100px;">
+        <input type="button" style="height: 25px; width: 60px; margin-left: 50px;" id="btnDeleteConfirmationOK" value="OK" />
+        <input type="button" style="height: 25px; width: 60px; " id="btnDeleteConfirmationCancel" value="Cancel" />
+    </div>
+</div>
+<div id="divLoading" style="margin: 0; padding: 0; position: fixed; right: 0;
+    top: 0; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 45%; left: 45%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({ format: "dd/MM/yyyy", max: new Date() }); $(".datePicker").attr("readonly", true);
+
+        // ------------ Add new row in reference grid ------------ //
+
+        function createRef() {
+            var grid = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+            $("#ChemLocalPurcBillRefGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            var ds = ChemLocalPurcBillRefGridDatasource.data();
+            rowAdd = ds.length;
+            var gridRef = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+            var selectedRefGrid = (gridRef.dataItem(gridRef.select()));
+            selectedRefGrid.SlNo = rowAdd;
+            if (currSlNo == 0) {
+                currSlNo = selectedRefGrid.SlNo;
+            }
+            var cell = $('#ChemLocalPurcBillRefGrid').find('tr.k-state-selected td:eq(0)');
+            $('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell);
+            gridDataSave();
+        }
+
+        $(".btnAddReference").click(function () {
+            createRef();
+        });
+        $("#ChemLocalPurcBillRefGrid").keyup(function (e) {
+            if (e.keyCode == "13") {
+                createRef();
+            }
+        });// ------------ Add new row in reference grid end ------------ //
+
+        // ------------ Add new row in bill item grid ------------ //
+        function createItemRow() {
+            var gridRef = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+            var selectedRefGrid = (gridRef.dataItem(gridRef.select()));
+            if (selectedRefGrid != null) {
+                if (selectedRefGrid.ReceiveID == null || selectedRefGrid.OrderID == null) {
+                    if (selectedRefGrid.ReceiveID == null && selectedRefGrid.OrderID == null) {
+                        msgShow = 1;
+                        $('#MessageText').html("Please insert Order and Revceive info in the selected row.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        return false;
+                    }
+                    if (selectedRefGrid.ReceiveID == null) {
+                        msgShow = 1;
+                        $('#MessageText').html("Please insert Revceive info in the selected row.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        return false;
+                    }
+                    if (selectedRefGrid.OrderID == null) {
+                        msgShow = 1; $('#MessageText').html("Please insert Order info in the selected row.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        return false;
+                    }
+                } else {
+                    var gridItem = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+                    $("#ChemLocalPurcBillItemGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    var ds = ChemLocalPurcBillItemGridDatasource.data();
+                    rowAdd2 = ds.length;
+                    gridItem.addRow();
+                    var selectedItemGrid = (gridItem.dataItem(gridItem.select()));
+                    selectedItemGrid.SlNo = selectedRefGrid.SlNo;
+                    selectedItemGrid.SlNo2 = rowAdd2 + 1;
+                    selectedItemGrid.ReceiveID = selectedRefGrid.ReceiveID;
+                    selectedItemGrid.OrderID = selectedRefGrid.OrderID;
+                    //console.log(selectedItemGrid);
+                    setTimeout(function () {
+                        $("#ChemLocalPurcBillItemGrid tbody tr:first td:eq(0)").focus();
+                    }, 1);
+                }
+            } else {
+                msgShow = 1;
+                $('#MessageText').html("Please select a row in the reference grid first.");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+        $(".btnAddItem").click(function () { createItemRow(); });
+        $(".ChemLocalPurcBillItemGrid").keyup(function (e) { if (e.keyCode == 13) { createItemRow(); } });
+
+        // ------------ Add new row in bill item grid end ------------ //
+    });// Document Ready end
+
+    // ######################################## Grid And Window Declaration ######################################## //
+
+    // ------------ Chemical Local Purchase Bill Reference Grid Declaration ------------ //
+
+    var ChemLocalPurcBillRefGridDatasource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BillRefId",
+                fields: {
+                    BillRefId: { editable: true },
+                    BillId: { editable: true },
+                    SlNo: { editable: true },
+                    ReceiveID: { editable: true },
+                    ReceiveNo: { editable: true },
+                    ReceiveDate: { editable: true },
+                    OrderID: { editable: true },
+                    OrderNo: { eidtable: true, defaultValue: "Press (F9)" },
+                    OrderDate: { editable: true }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    $("#ChemLocalPurcBillRefGrid").kendoGrid({
+        dataSource: ChemLocalPurcBillRefGridDatasource,
+        pageable: true,
+        edit: function (e) {
+            $('input[name = "OrderDate"]').attr("readonly", true);
+            $('input[name = "ReceiveDate"]').attr("readonly", true);
+            $("[name='OrderNo']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+
+                    GetPurcReceive();
+                    
+                }
+            });
+            //$("[name='ReceiveNo']", e.container).keyup(function (event) {
+            //    if (event.keyCode == 120) {
+            //        var grid = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+            //        var row = $(this).closest("tr");
+            //        var orderId = grid.dataItem(row).OrderID;
+            //        GetPurcReceive(orderId);
+            //        ReceiveWindow.open();
+            //        ReceiveWindow.center();
+            //    }
+            //});
+        },
+        save: function (e) {
+
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 150,
+        toolbar: [{
+            text: "Add Reference",
+            className: "btnAddReference",
+            imageClass: "k-icon k-add"
+        }],
+        columns: [
+            { field: "OrderNo", title: "Ref PO No." },
+            { field: "OrderDate", title: "PO Date" },
+            { field: "ReceiveNo", title: "Ref Receive No." },
+            { field: "ReceiveDate", title: "Receive Date" },
+            { command: [{ name: "DeletedRow", text: "Delete", click: DeleteReference }], title: "Delete" }
+        ]
+    });// ------------ Chemical Local Purchase Bill Reference Grid Declaration End ------------ //
+
+    // ------------ Chemical Local Purchase Bill Item Grid Declaration ------------ //
+
+    function ddo(row) {
+        var slno = row.SlNo;
+        var slno2 = row.SlNo2;
+        var ttl = 0;
+        if (items.length > 0) {
+            for (var i = 0; i < items.length; i++) {
+                var slnoa = items[i].SlNo;
+                var slno2a = items[i].SlNo2;
+                if (slnoa == slno && slno2a == slno2) {
+                    
+                    items[i].BillItemId = row.BillItemId;
+                    items[i].BillRefId = row.BillRefId;
+                    items[i].SlNo = row.SlNo;
+                    items[i].SlNo2 = row.SlNo2;
+                    items[i].ItemId = row.ItemId;
+                    items[i].ItemName = row.ItemName;
+                    items[i].PackSize = row.PackSize;
+                    items[i].PackSizeName = row.PackSizeName;
+                    items[i].SizeUnit = row.SizeUnit;
+                    items[i].SizeUnitName = row.SizeUnitName;
+                    items[i].PackQty = row.PackQty;
+                    items[i].ReceiveQty = row.ReceiveQty;
+                    items[i].UnitId = row.UnitId;
+                    items[i].UnitName = row.UnitName;
+                    items[i].ManufacturerId = row.ManufacturerId;
+                    items[i].ManufacturerName = row.ManufacturerName;
+                    items[i].UnitPrice = row.UnitPrice;
+                    items[i].TotalPrice = row.TotalPrice;
+                    items[i].ReceiveID = row.ReceiveID;
+                    items[i].OrderID = row.OrderID;
+                }
+            }
+            
+           
+            ////items.push(item);
+            ////ClearItem();
+
+            for (var j = 0; j < items.length ; j++) {
+                ttl += items[j].TotalPrice;
+            }
+            $('#txtCLPBEBillAmt').val(ttl);
+            $('#txtCLPBEPayAmt').val(ttl);
+        }
+    }
+
+
+    var ChemLocalPurcBillItemGridDatasource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BillItemId",
+                fields: {
+                    BillItemId: { editable: true },
+                    BillRefId: { editable: true },
+                    SlNo: { editable: true },
+                    SlNo2: { editable: true },
+                    ItemId: { editable: true },
+                    ItemName: { editable: true, defaultValue: "Press (F9)" },
+                    PackSize: { editable: true },
+                    PackSizeName: { editable: true },
+                    SizeUnit: { eidtable: true },
+                    SizeUnitName: { editable: true },
+                    PackQty: { editable: true },
+                    ReceiveQty: { editable: true },
+                    UnitId: { editable: true },
+                    UnitName: { editable: true },
+                    ManufacturerId: { editable: true },
+                    ManufacturerName: { eidtable: true, defaultValue: "Press (F9)" },
+                    UnitPrice: { editable: true },
+                    TotalPrice: { editable: true },
+                    ReceiveID: { editable: true },
+                    OrderID: { editable: true }
+                }
+            }
+        }, pageSize: 30
+    });
+
+    $("#ChemLocalPurcBillItemGrid").kendoGrid({
+        dataSource: ChemLocalPurcBillItemGridDatasource,
+        pageable: true,
+        edit: function (e) {
+
+            if (recordStatus == "CNF") {
+
+            }
+            $('input[name = "ReceiveQty"]').attr("readonly", true);
+            $('input[name = "TotalPrice"]').attr("readonly", true);
+            $('input[name = "RefSerial"]').attr("readonly", true);
+            $("[name='PackQty']", e.container).blur(function (event) {
+                var grid = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var receiveQty = 0;
+                var packSize = parseFloat(grid.dataItem(row).PackSizeName);
+                var packQty = parseFloat(grid.dataItem(row).PackQty);
+                if (packSize != 0 && packQty != 0) {
+                    receiveQty = packSize * packQty;
+                    if (!isNaN(receiveQty)) {
+                        grid.dataItem(row).ReceiveQty = receiveQty;
+                    }
+                }
+            });
+            $("[name='UnitPrice']", e.container).blur(function () {
+                var grid = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var totalPrice = 0;
+                var receiveQty = parseFloat(grid.dataItem(row).ReceiveQty);
+                var unitPrice = parseFloat(grid.dataItem(row).UnitPrice);
+                if (receiveQty != 0 && unitPrice != 0) {
+                    totalPrice = receiveQty * unitPrice;
+                    if (!isNaN(totalPrice)) {
+                        grid.dataItem(row).TotalPrice = Math.round(totalPrice);
+                    }
+                }
+                row = $(this).closest("tr");
+                ddo(grid.dataItem(row));
+            });
+            $("[name='ItemName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    ChemicalWindow.open();
+                    ChemicalWindow.center();
+                }
+            }); //SupplierGrid
+            $("[name='ManufacturerName']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    ManufacturerWindow.open();
+                    ManufacturerWindow.center();
+                }
+            });
+            var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+            if (ddl) {
+                ddl.open();
+            }
+        },
+        save: function (e) {
+            var grid = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+            //var fieldName = grid.columns[e.container.index()].field;
+
+            //$("[name='" + fieldName + "']", e.container).change(function(event) {
+
+
+            var row = this.dataItem(this.select());
+
+            //});
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 180,
+        toolbar: [
+            {
+                text: "Add Item",
+                className: "btnAddItem",
+                imageClass: "k-icon k-add"
+            }
+        ],
+        columns: [
+            { field: "ItemName", title: "Chemical Name", width: 126 },
+            { field: "PackSizeName", title: "Pack Size", editor: SizeDropDownEditor, width: 110 },
+            { field: "SizeUnitName", title: "Unit", editor: ChemicalPackUnitDropDownEditor, width: 110 },
+            { field: "PackQty", title: "Pack Qty", width: 110 },
+            { field: "ReceiveQty", title: "Receive Qty", width: 110 },
+            { field: "UnitName", title: "Unit", editor: ChemicalUnitDropDownEditor, width: 110 },
+            { field: "ManufacturerName", title: "Manufacturer", width: 130 },
+            { field: "UnitPrice", title: "Unit Price", width: 110 },
+            { field: "TotalPrice", title: "Total Price", width: 110 },
+            { command: [{ name: "DeletedRow", text: "Delete", click: DeleteItem }], title: "Delete", width: 110 }
+        ]
+    });// ------------ Chemical Local Purchase Bill Item Grid Declaration End ------------ //
+    // ************ Supplier Grid & Window Declaration ************ //
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "99%",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100, left: 5 },
+        modal: true, draggable: true
+    }).data('kendoWindow');
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                    SupplierAddressID: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLocalChemicalSupplierList", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+    var ManufacturerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetManufacturer", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //width: 795,
+        //height: 350,
+        columns: [
+            { field: "SupplierCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierName", title: "Name", width: "60px" }, { field: "Address", title: "Address", width: "60px" },
+            { field: "ContactPerson", title: "Contact Person", width: "60px" },
+            { field: "ContactNumber", title: "Contact Number", width: "60px" }]
+    });// ************ Supplier Grid & Window Declaration End ************ //
+
+    // ************ Active Supplier Window ************ //
+    $("#txtCLPBESupName").keyup(function (e) { if (e.keyCode == 120) {
+        SupplierWindow.open();
+        //SupplierWindow.center();
+        } })
+    ;// ************ Active Supplier Window End ************ //
+
+    // ************ Purchase Order Grid & Window ************ //
+    var POWindow = $('#POWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "99%",
+        height: "500px",
+        title: "List Of Purchase Order",
+        //position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var POGridDataSource = new kendo.data.DataSource({
+        schema:
+        {
+            model: {
+                id: "OrderID",
+                fields: {
+                    OrderID: { editable: false },
+                    OrderNo: { editable: false },
+                    OrderType: { editable: false },
+                    OrderDate: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLocalPurchaseOrder", "ChemLocalPurcBillEnt")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+    var POGrid = $("#POWindowGrid").kendoGrid({
+        dataSource: POGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //width: 795,
+        heigth: 400,
+        columns: [
+            { field: "OrderNo", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "OrderType", title: "Name", width: "60px" },
+            { field: "OrderDate", title: "Date", width: "60px" }
+        ]
+    });// ************ Purchase Order Grid & Window End ************ //
+
+    // ************ Purchase Receive Grid & Window ************ //
+    var ReceiveWindow = $('#ReceiveWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "99%",
+        height: "auto",
+        title: "List Of Purchase Receive",
+        position: { top: 100, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var ReceiveGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ReceiveID",
+                fields: {
+                    OrderID: { editable: false },
+                    OrderNo: { editable: false },
+                    OrderDate: { editable: false },
+                    ReceiveID: { editable: false },
+                    ReceiveNo: { editable: false },
+                    ReceiveType: { editable: false },
+                    ReceiveDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+    var ReceiveGrid = $("#ReceiveWindowGrid").kendoGrid({
+        dataSource: ReceiveGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //width: 795,
+        //height: 350,
+        columns: [
+            { field: "OrderNo", title: "Order No.", width: "60px", filterable: false, sortable: false },
+            { field: "OrderDate", title: "Order Date", width: "60px", filterable: false, sortable: false },
+            { field: "ReceiveNo", title: "Receive No.", width: "60px", filterable: false, sortable: false },
+            //{ field: "ReceiveType", title: "Type", width: "60px" },
+            { field: "ReceiveDate", title: "Receive Date", width: "60px" }]
+    });// ************ Purchase Receive Grid & Window End ************ //
+
+    // ************ Chemical Item Grid & Window ************ //
+    var ChemicalWindow = $('#ChemicalWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "auto",
+        title: "List Of Chemical Items",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var ChemicalGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: false },
+                    ItemName: { editable: false },
+                    HSCode: { editable: false },
+                    ItemCategory: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalItemsForSearch", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var ChemicalGrid = $("#ChemicalWindowGrid").kendoGrid({
+        dataSource: ChemicalGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "ItemName", title: "Name", width: "60px", filterable: false, sortable: false },
+            { field: "HSCode", title: "Code", width: "60px" },
+            { field: "ItemCategory", title: "Category", width: "60px" }]
+    });// ************ Chemical Item Grid & Window End ************ //
+
+    // ************ Manufacturer Grid & Window ************ //
+    var ManufacturerWindow = $('#ManufacturerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "auto",
+        title: "List Of Manufacturer",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var ManufacturerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetManufacturer", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 10
+    });
+
+    var ManufacturerGrid = $("#ManufacturerWindowGrid").kendoGrid({
+        dataSource: ManufacturerGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        columns: [
+            { field: "SupplierCode", title: "Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierName", title: "Name", width: "60px" }]
+    });// ************ Manufacturer Grid & Window End ************ //
+
+    // ************ Bill Grid & Window ************ //
+    var BillWindow = $('#BillWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "99%",
+        height: "auto",
+        title: "List Of Bills",
+        position: { top: 100, left: 5},
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var BillGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BillID",
+                fields: {
+                    BillID: { editable: false },
+                    BillNo: { editable: false },
+                    SupplierBillNo : {editable: false},
+                    BillDate: { editable: false },
+                    SupplierName: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BillGrid = $("#BillWindowGrid").kendoGrid({
+        dataSource: BillGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        width: 795,
+        //height: 400,
+        columns: [
+            { field: "BillNo", title: "Bill No.", width: "60px" },
+            { field: "SupplierBillNo", title: "Supplier Bill No.", width: "60px" },
+            { field: "BillDate", title: "Date", width: "60px" },
+            { field: "SupplierName", title: "Name", width: "60px" },
+            { field: "RecordStatus", title: "Status", width: "60px" }
+        ]
+    });
+
+    function getBills() {
+        $.ajax({
+            url: '@Url.Action("GetBills", "ChemLocalPurcBillEnt")',
+            type: 'GET',
+            //data: ({ storeId: id, qcLabel: lbl }),
+            contentType: 'application/json;', dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    BillGridDataSource.data(data);
+                    //buyerChk = true;
+                }
+                
+            }
+        });
+    }
+    // ************ Bill Grid & Window End ************ //
+    // ######################################## Grid And Window Declaration End ######################################## //
+
+    // ######################################## Drop Down List Declaration ######################################## //
+    // ************ Package Size Drop Down List ************ //
+    var ddlChemicalSizeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    SizeID: { editable: false },
+                    SizeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllSize", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 8
+    });
+    function SizeDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>').appendTo(container).kendoDropDownList({
+            dataTextField: "SizeName",
+            dataValueField: "SizeID",
+            optionLabel: "Select",
+            autoBind: false,
+            dataSource: ddlChemicalSizeDataSource,
+            change: function (e) {
+                var dataItem = e.sender.dataItem();
+                options.model.set("PackSizeName", dataItem.SizeName);
+                options.model.set("PackSize", dataItem.SizeID);
+                var cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(2)');
+                $('#ChemLocalPurcBillItemGrid').data('kendoGrid').closeCell(cell);
+                cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(3)');
+                $('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell);
+            }
+        });
+    }// ************ Package Size Drop Down List End ************ //
+
+    // ************ Chemical Pack Unit Drop Down List ************ //
+    var ddlChemicalPackUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalPackUnit", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }, pageSize: 8
+    });
+    function ChemicalPackUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>').appendTo(container).kendoDropDownList({
+            dataTextField: "UnitName",
+            dataValueField: "UnitID",
+            optionLabel: "Select",
+            autoBind: false,
+            dataSource: ddlChemicalPackUnitDataSource,
+            change: function (e) {
+                var dataItem = e.sender.dataItem();
+                options.model.set("SizeUnitName", dataItem.UnitName);
+                options.model.set("SizeUnit", dataItem.UnitID);
+                var cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(3)');
+                $('#ChemLocalPurcBillItemGrid').data('kendoGrid').closeCell(cell);
+                cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(4)');
+                $('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell);
+            }
+        });
+    }// ************ Chemical Pack Unit Drop Down List End ************ //
+
+    // ************ Chemical Unit Drop Down List ************ //
+    var ddlChemicalUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalUnit", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 8
+    });
+
+    function ChemicalUnitDropDownEditor(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>').appendTo(container).kendoDropDownList({
+            dataTextField: "UnitName",
+            dataValueField: "UnitID",
+            optionLabel: "Select",
+            autoBind: false,
+            dataSource: ddlChemicalUnitDataSource,
+            change: function (e) {
+                var dataItem = e.sender.dataItem();
+                options.model.set("UnitName", dataItem.UnitName);
+                options.model.set("UnitId", dataItem.UnitID);
+                var cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(6)');
+                $('#ChemLocalPurcBillItemGrid').data('kendoGrid').closeCell(cell);
+                cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(7)');
+                $('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell);
+            }
+        });
+    } // ************ Chemical Unit Drop Down List End ************ //
+    // ######################################## Drop Down List Declaration End ######################################## //
+
+    // ######################################## Pop-Up Window Events ######################################## //
+    // ************ Supplier Window Events ************ //
+    function SetSupplier() {
+        var gridISupplierSearch = $("#SupplierWindowGrid").data("kendoGrid");
+        var selectedSupGridItem = (gridISupplierSearch.dataItem(gridISupplierSearch.select())); //Selected Row
+        $("#txtCLPBESupId").val(selectedSupGridItem.SupplierID);
+        $("#txtCLPBESupName").val(selectedSupGridItem.SupplierName);
+        $("#txtCLPBESupAddressId").val(selectedSupGridItem.SupplierAddressID);
+        $("#txtCLPBESupAddress").val(selectedSupGridItem.Address);
+        changeStatus = 1;
+    }
+
+    $("#btnSupplierWindowOK").click(function () {
+        SetSupplier();
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").dblclick(function () {
+        SetSupplier();
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetSupplier();
+            SupplierWindow.close();
+        }
+    });
+    $("#btnSupplierWindowCancel").click(function () {
+        SupplierWindow.close();
+    }); // ************ Supplier Window Events End ************ //
+
+    // ************ Purchase Order Window Events ************ //
+    function SetPurchaseOrder() {
+        var gridPoSearch = $("#POWindowGrid").data("kendoGrid");
+        var selectedPoGrid = (gridPoSearch.dataItem(gridPoSearch.select())); //Selected Row
+        var gridRef = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+        var selectedRow = (gridRef.dataItem(gridRef.select()));
+        selectedRow.set("OrderID", selectedPoGrid.OrderID);
+        selectedRow.set("OrderNo", selectedPoGrid.OrderNo);
+        selectedRow.set("OrderDate", selectedPoGrid.OrderDate);
+        var cell = $('#ChemLocalPurcBillRefGrid').find('tr.k-state-selected td:eq(3)');
+        $('#ChemLocalPurcBillRefGrid').data('kendoGrid').editCell(cell);
+        changeStatus = 1;
+    }
+
+    $("#btnPOWindowOK").click(function () {
+        SetPurchaseOrder();
+        POWindow.close();
+    });
+    $("#POWindowGrid").dblclick(function () {
+        SetPurchaseOrder();
+        POWindow.close();
+    });
+    $("#POWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetPurchaseOrder();
+            POWindow.close();
+        }
+    });
+    $("#btnPOWindowCancel").click(function () { POWindow.close(); }); // ************ Purchase Order Window Events End ************ //
+
+    // ************ Purchase Receive Window Events ************ //
+
+    function GetPurcReceive() {
+        if ($("#txtCLPBESupId").val() != "") {
+            $.ajax({
+                url: '@Url.Action("GetLocalPurchaseReceive", "ChemLocalPurcBillEnt")',
+                type: 'GET',
+                data: ({ "supplierId": $("#txtCLPBESupId").val() }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.length > 0) {
+                        ReceiveGridDataSource.data(data);
+                        ReceiveWindow.open();
+                        //ReceiveWindow.center();
+                    } else {
+                        $('#MessageText').html("Supplier does not have any order.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                    
+                }
+            });
+        } else {
+            $('#MessageText').html("Please select a supplier first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    }
+
+    function SetItemToGrid(receiveId, orderId, serial) {
+        ChemLocalPurcBillItemGridDatasource.data([]);
+        $.ajax({
+            url: '@Url.Action("GetPurchaseReceiveItems", "ChemLocalPurcBillEnt")',
+            type: 'GET',
+            data: ({ "receiveId": receiveId, "orderId": orderId }),
+            contentType: 'application/json;', dataType: 'json',
+            success: function (data) {
+                var allData = [];
+                if (data != null) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        item.SlNo = serial;
+                        item.SlNo2 = i + 1;
+                        item.BillItemId = data[i].BillItemId;
+                        item.BillRefId = data[i].BillRefId;
+                        item.ItemId = data[i].ItemId;
+                        item.ItemName = data[i].ItemName;
+                        item.PackSize = data[i].PackSize;
+                        item.PackSizeName = data[i].PackSizeName;
+                        item.SizeUnit = data[i].SizeUnit;
+                        item.SizeUnitName = data[i].SizeUnitName;
+                        item.PackQty = data[i].PackQty;
+                        item.ReceiveQty = data[i].ReceiveQty;
+                        item.UnitId = data[i].UnitId;
+                        item.UnitName = data[i].UnitName;
+                        item.UnitPrice = data[i].UnitPrice;
+                        item.TotalPrice = data[i].TotalPrice;
+                        item.ManufacturerId = data[i].ManufacturerId;
+                        item.ManufacturerName = data[i].ManufacturerName;
+                        item.ReceiveID = data[i].ReceiveID;
+                        item.OrderID = data[i].OrderID;
+                        items.push(item);
+                        ClearItem();
+                    }
+                    //ChemLocalPurcBillItemGridDatasource.data(data);
+                    var showData = [];
+                    if (items.length > 0) {
+                        for (var j = 0; j < items.length; j++) {
+                            if (items[j].SlNo == serial) {
+                                showData.push(items[j]);
+                            }
+                        }
+                    }
+
+                    if (showData.length > 0) {
+                        ChemLocalPurcBillItemGridDatasource.data(showData);
+                    }
+                } else {
+                    $('#MessageText').html("This supplier does not have any orders.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+
+               
+
+
+                //console.log(items);
+            }, error: function () { }
+        });
+    }
+
+    function SetPurchaseReceive() {
+        var gridReceiveSearch = $("#ReceiveWindowGrid").data("kendoGrid");
+        var selectedReceiveGrid = (gridReceiveSearch.dataItem(gridReceiveSearch.select()));
+        var gridRef = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+        var selectedRow = (gridRef.dataItem(gridRef.select()));
+        var checkGrid = ChemLocalPurcBillRefGridDatasource.data();
+        if (checkGrid.length > 1) {
+            for (var i = 0; i < checkGrid.length; i++) {
+                if (checkGrid[i].OrderID == selectedRow.OrderID && checkGrid[i].ReceiveID == selectedReceiveGrid.ReceiveID) {
+                    return false;
+                }
+            }
+        }
+        if (selectedRow.OrderID != null) {
+            selectedRow.set("OrderID", selectedReceiveGrid.OrderID);
+            selectedRow.set("OrderNo", selectedReceiveGrid.OrderNo);
+            selectedRow.set("OrderDate", selectedReceiveGrid.OrderDate);
+            selectedRow.set("ReceiveID", selectedReceiveGrid.ReceiveID);
+            selectedRow.set("ReceiveNo", selectedReceiveGrid.ReceiveNo);
+            selectedRow.set("ReceiveDate", selectedReceiveGrid.ReceiveDate);
+            var cell = $('#ChemLocalPurcBillRefGrid').find('.k-state-selected td:eq(2)');
+            $('#ChemLocalPurcBillRefGrid').data('kendoGrid').editCell(cell);
+            SetItemToGrid(selectedReceiveGrid.ReceiveID, selectedRow.OrderID, selectedRow.SlNo);
+        }
+        changeStatus = 1;
+        return true;
+    }
+
+    $("#btnReceiveWindowOK").click(function () {
+        SetPurchaseReceive();
+        ReceiveWindow.close();
+    });
+
+    $("#ReceiveWindowGrid").dblclick(function () {
+        SetPurchaseReceive();
+        ReceiveWindow.close();
+    });
+
+    $("#ReceiveWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetPurchaseReceive();
+            ReceiveWindow.close();
+        }
+    });
+    $("#btnReceiveWindowCancel").click(function () {
+        ReceiveWindow.close();
+    }); // ************ Purchase Receive Window Events End ************ //
+
+    // ************ Chemical Window Events ************ //
+    function SetChecmicalItem() {
+        var gridReceiveSearch = $("#ChemicalWindowGrid").data("kendoGrid");
+        var selectedReceiveGrid = (gridReceiveSearch.dataItem(gridReceiveSearch.select())); //Selected Row
+        var gridRef = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+        var selectedRow = (gridRef.dataItem(gridRef.select()));
+        selectedRow.set("ItemId", selectedReceiveGrid.ItemID);
+        selectedRow.set("ItemName", selectedReceiveGrid.ItemName);
+        var cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(0)');
+        $('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell); changeStatus = 1;
+    }
+
+    $("#btnChemicalWindowOK").click(function () {
+        SetChecmicalItem();
+        ChemicalWindow.close();
+    });
+
+    $("#ChemicalWindowGrid").dblclick(function () {
+        SetChecmicalItem();
+        ChemicalWindow.close();
+    });
+
+    $("#ChemicalWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetChecmicalItem();
+            ChemicalWindow.close();
+        }
+    });
+
+    $("#btnChemicalWindowCancel").click(function () {
+        ChemicalWindow.close();
+    }); // ************ Chemical Window Events End ************ //
+
+    // ************ Manufacturer Window Events ************ //
+    function SetManufacturer() {
+        var gridManufacturerSearch = $("#ManufacturerWindowGrid").data("kendoGrid");
+        var selectedManufacturerGrid = (gridManufacturerSearch.dataItem(gridManufacturerSearch.select()));
+        var gridRef = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+        var selectedRow = (gridRef.dataItem(gridRef.select()));
+        selectedRow.set("ManufacturerId", selectedManufacturerGrid.SupplierID);
+        selectedRow.set("ManufacturerName", selectedManufacturerGrid.SupplierName);
+        var cell = $('#ChemLocalPurcBillItemGrid').find('.k-state-selected td:eq(7)');
+        $('#ChemLocalPurcBillItemGrid').data('kendoGrid').editCell(cell);
+        changeStatus = 1;
+    }
+
+    $("#btnManufacturerWindowOK").click(function () {
+        SetManufacturer();
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindowGrid").dblclick(function () {
+        SetManufacturer();
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetManufacturer();
+            ManufacturerWindow.close();
+        }
+    });
+
+    $("#btnManufacturerWindowCancel").click(function () {
+        ManufacturerWindow.close();
+    }); // ************ Manufacturer Window Events End ************ //
+
+    // ************ Bill Window Events ************ //
+    function SetBill(billId) {
+        reset();
+        var references = [];
+        $.ajax({
+            url: '@Url.Action("GetBillById", "ChemLocalPurcBillEnt")',
+            type: 'GET',
+            data: ({ billId: billId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    recordStatus = data.RecordStatus;
+                    CheckRecordStatusForButton(data.RecordStatus);
+                    $('#txtCLPBEId').val(data.BillId);
+                    $('#txtCLPBENo').val(data.BillNo);
+                    $('#txtCLPBEDate').val(data.BillDate);
+                    $('#txtCLPBEPurcYear').val(data.PurchaseYear);
+                    $('#txtCLPBESupId').val(data.SupplierId);
+                    $('#txtCLPBESupName').val(data.SupplierName);
+                    $('#txtCLPBESupAddressId').val(data.SupplierAddressId);
+                    $('#txtCLPBESupAddress').val(data.SupplierAddress);
+                    $('#txtCLPBESupBillNo').val(data.SupplierBillNo);
+                    $('#txtCLPBESupBillDate').val(data.SupBillDate);
+                    $('#ddlCLPBEExcCurr').val(data.Currency);
+                    $('#txtCLPBEExcRate').val(data.ExchangRate);
+                    $('#ddlCLPBEEcxRateCur').val(data.ExchangCurrency);
+                    $('#txtCLPBEExcAmt').val(data.ExchangValue);
+                    $('#txtCLPBEBillAmt').val(data.BillAmt);
+                    $('#txtCLPBEVatAmt').val(data.VatAmt);
+                    $('#txtCLPBEDiscPer').val(data.DiscountPercent);
+                    $('#txtCLPBEDiscAmt').val(data.DiscountAmt);
+                    $('#txtCLPBEPayAmt').val(data.PayableAmt);
+                    $('#ddlCLPBEExcCur').val(data.Currency);
+                    $('#ddlCLPBEExcRateCur').val(data.ExchangCurrency);
+                    if (recordStatus == "CHK") {
+                        $('#txtCheckNote').val(data.CheckComments);
+
+                    }
+                    if (recordStatus == "CNF") {
+                        $('#txtConfirmNote').val(data.CheckComments);
+                        
+                        //lock();
+                    }
+                    var count1 = data.References.length;
+                    for (var i = 0; i < count1; i++) {
+                        reference.BillRefId = data.References[i].BillRefId;
+                        reference.BillId = data.References[i].BillId;
+                        reference.SlNo = i + 1;
+                        reference.ReceiveID = data.References[i].ReceiveID;
+                        reference.ReceiveNo = data.References[i].ReceiveNo;
+                        reference.ReceiveDate = data.References[i].ReceiveDate;
+                        reference.OrderID = data.References[i].OrderID;
+                        reference.OrderNo = data.References[i].OrderNo;
+                        reference.OrderDate = data.References[i].OrderDate;
+                        if (data.References[i].Items != null) {
+                            var count2 = data.References[i].Items.length;
+                            if (count2 > 0) {
+                                for (var j = 0; j < count2; j++) {
+                                    item.BillItemId = data.References[i].Items[j].BillItemId;
+                                    item.BillRefId = data.References[i].Items[j].BillRefId;
+                                    item.SlNo = reference.SlNo;
+                                    item.SlNo2 = j + 1;
+                                    item.ItemId = data.References[i].Items[j].ItemId;
+                                    item.ItemName = data.References[i].Items[j].ItemName;
+                                    item.PackSize = data.References[i].Items[j].PackSize;
+                                    item.PackSizeName = data.References[i].Items[j].PackSizeName;
+                                    item.SizeUnit = data.References[i].Items[j].SizeUnit;
+                                    item.SizeUnitName = data.References[i].Items[j].SizeUnitName;
+                                    item.PackQty = data.References[i].Items[j].PackQty;
+                                    item.ReceiveQty = data.References[i].Items[j].ReceiveQty;
+                                    item.UnitId = data.References[i].Items[j].UnitId;
+                                    item.UnitName = data.References[i].Items[j].UnitName;
+                                    item.ManufacturerId = data.References[i].Items[j].ManufacturerId;
+                                    item.ManufacturerName = data.References[i].Items[j].ManufacturerName;
+                                    item.UnitPrice = data.References[i].Items[j].UnitPrice;
+                                    item.TotalPrice = data.References[i].Items[j].TotalPrice;
+                                    item.ReceiveID = data.References[i].Items[j].ReceiveID;
+                                    item.OrderID = data.References[i].Items[j].OrderID;
+                                    items.push(item);
+                                    ClearItem();
+                                }
+                            }
+                        } references.push(reference);
+                        ClearReference();
+                    }
+                }
+                ChemLocalPurcBillRefGridDatasource.data(references);
+                //ChemLocalPurcBillItemGridDatasource.data(items);
+            }
+        });
+    }
+
+    function GetBillId() {
+        var gridBillSearch = $("#BillWindowGrid").data("kendoGrid");
+        var selectedBillGridRow = (gridBillSearch.dataItem(gridBillSearch.select()));
+        SetBill(selectedBillGridRow.BillID);
+    }
+
+    //btnBillWindowOK
+    $("#btnBillWindowOK").click(function () {
+        GetBillId();
+        BillWindow.close();
+    });
+
+    $("#BillWindowGrid").dblclick(function () {
+        GetBillId();
+        BillWindow.close();
+    });
+
+    $("#BillWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            GetBillId();
+            BillWindow.close();
+        }
+    });
+
+    $("#btnBillWindowCancel").click(function () {
+        BillWindow.close();
+    }); // ************ Bill Window Events End ************ //
+
+    // ######################################## Pop-Up Window Events End ######################################## //
+
+    // ######################################## Text-Box Events ######################################## //
+    //// ************ BillAmount Event ************ //
+    //function sumColumn(name) {
+    //    var field = name;
+    //    var dataSource = ChemLocalPurcBillItemGridDatasource;
+    //    var newValue = 0;
+    //    $.each(dataSource.data(),
+    //        function (index, model) {
+    //            newValue += parseFloat(model.get(field));
+    //        });
+    //    if (isNaN(newValue)) {
+    //        newValue = 0;
+    //    }
+    //    return newValue;
+    //}
+    //$("#txtCLPBEBillAmt").focus(function (e) {
+    //    var value = sumColumn("TotalPrice");
+    //    $("#txtCLPBEBillAmt").val(value.toFixed(2));
+    //});// ************ Bill Amount Event End ************ //
+    // ************ Discount Event ************ //
+    $("#txtCLPBEDiscAmt").focus(function () {
+        var billAmt = parseFloat($("#txtCLPBEBillAmt").val());
+        var pyAmnt = parseFloat($("#txtCLPBEPayAmt").val());
+        var discPer = parseFloat($("#txtCLPBEDiscPer").val());
+        var discAmt;
+        if (billAmt != 0 || !isNaN(billAmt)) {
+            if ((discPer != 0 && discPer < 100) || !isNaN(discPer)) {
+                billAmt = billAmt / 100; discAmt = billAmt * discPer;
+                $("#txtCLPBEDiscAmt").val(discAmt.toFixed(2));
+                pyAmnt -= discAmt;
+                $("#txtCLPBEPayAmt").val(pyAmnt);
+            }
+        }
+    });
+
+    $("#txtCLPBEDiscAmt").blur(function () {
+        var billAmt = parseFloat($("#txtCLPBEBillAmt").val());
+        var pyAmnt = parseFloat($("#txtCLPBEPayAmt").val());
+        var discAmt = parseFloat($("#txtCLPBEDiscAmt").val());
+        var discPer;
+        if (billAmt != 0 || !isNaN(billAmt)) {
+            if ((discAmt != 0 && discAmt < billAmt) || !isNaN(discAmt)) {
+                var dsAmnt = discAmt;
+                discAmt = discAmt * 100;
+                discPer = discAmt / billAmt;
+                if ($("#txtCLPBEDiscPer").val != "") {
+                    $("#txtCLPBEDiscPer").val(discPer.toFixed(2));
+                    pyAmnt -= dsAmnt;
+                    $("#txtCLPBEPayAmt").val(pyAmnt);
+                }
+            }
+        }
+    });// ************ Discount Event End ************ //
+    // ************ Payable Amount Event ************ //
+    $("#txtCLPBEVatAmt").focusout(function() {
+        if ($('#txtCLPBEBillAmt').val() != "" && $("#txtCLPBEVatAmt").val() != "") {
+            var vat = parseFloat($("#txtCLPBEVatAmt").val());
+            var amt = parseFloat($('#txtCLPBEBillAmt').val());
+            amt += vat;
+            $('#txtCLPBEPayAmt').val(amt);
+        }
+    });
+
+
+
+    //$("#txtCLPBEPayAmt").focus(function () {
+    //    var billAmt = parseFloat($("#txtCLPBEBillAmt").val());
+    //    var vatAmt = parseFloat($("#txtCLPBEVatAmt").val());
+    //    var discAmt = parseFloat($("#txtCLPBEDiscAmt").val());
+    //    var payAmt = 0;
+    //    if (!isNaN(billAmt)) {
+    //        payAmt = billAmt;
+    //        if (!isNaN(vatAmt)) {
+    //            payAmt = payAmt + vatAmt;
+
+    //        }
+    //        if (!isNaN(discAmt)) {
+    //            payAmt = payAmt - discAmt;
+    //        }
+    //        $("#txtCLPBEPayAmt").val(payAmt.toFixed(2));
+    //    }
+    //});
+    // ************ Payable Amount Event End ************ //
+    // ************ Exchange Amount Event ************ //
+    $("#txtCLPBEExcAmt").focus(function () {
+        var payAmt = parseFloat($("#txtCLPBEPayAmt").val());
+        var excRate = parseFloat($("#txtCLPBEExcRate").val());
+        var excAmt;
+        if (!isNaN(payAmt) && !isNaN(excRate)) {
+            excAmt = payAmt * excRate;
+            if (!isNaN(excAmt)) {
+                $("#txtCLPBEExcAmt").val(excAmt);
+            }
+        }
+    });
+    // ************ Exchange Amount Event End ************ //
+    // ######################################## Common Events End ######################################## //
+
+    // ######################################## Purchase Bill Item Grid Events ######################################## //
+
+
+    function insColor(obj) {
+        item.SlNo = prevSlNo;
+        item.SlNo2 = obj.SlNo2;
+        item.BillItemId = obj.BillItemId;
+        item.BillRefId = obj.BillRefId;
+        item.ItemId = obj.ItemId;
+        item.ItemName = obj.ItemName;
+        item.SupplierId = obj.SupplierId;
+        item.PackSize = obj.PackSize;
+        item.PackSizeName = obj.PackSizeName;
+        item.SizeUnit = obj.SizeUnit;
+        item.SizeUnitName = obj.SizeUnitName;
+        item.PackQty = obj.PackQty;
+        item.ReceiveQty = obj.ReceiveQty;
+        item.UnitId = obj.UnitId;
+        item.UnitName = obj.UnitName;
+        item.UnitPrice = obj.UnitPrice;
+        item.TotalPrice = obj.TotalPrice;
+        item.ManufacturerId = obj.ManufacturerId;
+        item.ManufacturerName = obj.ManufacturerName;
+        item.Remark = obj.Remark;
+        item.ReceiveID = obj.ReceiveID;
+        item.OrderID = obj.OrderID;
+        items.push(item);
+        ClearItem();
+    }
+
+    function gridDataSave() {
+        if (currSlNo != 0) {
+            slNoCount++;
+        }
+        var gridItemSearch = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+        var selectedItem = (gridItemSearch.dataItem(gridItemSearch.select()));
+        if (selectedItem != null) {
+
+            if (slNoCount > 1 || items.length > 0) {
+                prevSlNo = currSlNo;
+                currSlNo = selectedItem.SlNo;
+            }
+            var itemGrid = ChemLocalPurcBillItemGridDatasource.data();
+
+            if (itemGrid.length > 0) {
+                for (var i = 0; i < itemGrid.length; i++) {
+                    if (items.length < 1) {
+                        insColor(itemGrid[i]);
+                    } else {
+                        var count = items.length;
+                        var flag1 = false;
+                        var flag2 = false;
+
+                        for (var j = 0; j < count; j++) {
+                            if (items[j].SlNo == currSlNo && items[j].SlNo2 == itemGrid[i].SlNo2) {
+                                flag1 = true;
+                            }
+                            if (items[j].SlNo == prevSlNo && items[j].SlNo2 == itemGrid[i].SlNo2) {
+                                flag2 = true;
+                            }
+                        }
+                        if ((flag1 == false && flag2 == false) || (flag1 == true && flag2 == false)) {
+                            insColor(itemGrid[i]);
+                        }
+                    }
+                }
+                $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data([]);
+            }
+            //console.log(itemColors);
+            var showColor = [];
+            if (items.length > 0) {
+                for (var k = 0; k < items.length; k++) {
+                    if (currSlNo == items[k].SlNo) {
+                        item.SlNo = currSlNo;
+                        item.SlNo2 = items[k].SlNo2;
+                        item.BillItemId = items[k].BillItemId;
+                        item.BillRefId = items[k].BillRefId;
+                        item.ItemId = items[k].ItemId;
+                        item.ItemName = items[k].ItemName;
+                        item.SupplierId = items[k].SupplierId;
+                        item.PackSize = items[k].PackSize;
+                        item.PackSizeName = items[k].PackSizeName;
+                        item.SizeUnit = items[k].SizeUnit;
+                        item.SizeUnitName = items[k].SizeUnitName;
+                        item.PackQty = items[k].PackQty;
+                        item.ReceiveQty = items[k].ReceiveQty;
+                        item.UnitId = items[k].UnitId;
+                        item.UnitName = items[k].UnitName;
+                        item.UnitPrice = items[k].UnitPrice;
+                        item.TotalPrice = items[k].TotalPrice;
+                        item.ManufacturerId = items[k].ManufacturerId;
+                        item.ManufacturerName = items[k].ManufacturerName;
+                        item.Remark = items[k].Remark;
+                        item.ReceiveID = items[k].ReceiveID;
+                        item.OrderID = items[k].OrderID;
+                        showColor.push(item);
+                        ClearItem();
+                    }
+                }
+            }
+            if (showColor.length > 0) {
+                $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data(showColor);
+            }
+        }
+    }
+
+    $("#ChemLocalPurcBillRefGrid").on('click', 'tr', function () {
+        gridDataSave();
+
+    });
+
+    // ######################################## Purchase Bill Item Grid Events End ######################################## //
+
+    // ######################################## Save Events ######################################## //
+    function save() {
+        model.BillId = $("#txtCLPBEId").val();
+        model.BillNo = $("#txtCLPBENo").val();
+        model.BillDate = $("#txtCLPBEDate").val();
+        model.SupplierId = $("#txtCLPBESupId").val();
+        model.SupplierAddressId = $("#txtCLPBESupAddressId").val();
+        model.PurchaseYear = $("#txtCLPBEPurcYear").val();
+        model.SupplierBillNo = $("#txtCLPBESupBillNo").val();
+        model.SupBillDate = $("#txtCLPBESupBillDate").val();
+        model.BillAmt = $("#txtCLPBEBillAmt").val();
+        model.Currency = $("#ddlCLPBEExcRateCur").val();
+        model.VatAmt = $("#txtCLPBEVatAmt").val();
+        model.DiscountPercent = $("#txtCLPBEDiscPer").val();
+        model.DiscountAmt = $("#txtCLPBEDiscAmt").val();
+        model.PayableAmt = $("#txtCLPBEPayAmt").val();
+        model.ExchangCurrency = $("#ddlCLPBEExcCur").val();
+        model.ExchangRate = $("#txtCLPBEExcRate").val();
+        model.ExchangValue = $("#txtCLPBEExcAmt").val();
+        var refGridData = ChemLocalPurcBillRefGridDatasource.data();
+        if (refGridData.length > 0) {
+            for (var i = 0; i < refGridData.length; i++) {
+                reference.BillRefId = refGridData[i].BillRefId;
+                reference.BillId = $("#txtCLPBEId").val();
+                reference.ReceiveID = refGridData[i].ReceiveID;
+                reference.ReceiveNo = refGridData[i].ReceiveNo;
+                reference.OrderID = refGridData[i].OrderID;
+                var itemData = ChemLocalPurcBillItemGridDatasource.data();
+                
+                if (itemData.length > 0) {
+                    var tempItms = [];
+                    for (var k = 0; k < itemData.length; k++) {
+                        for (var l = 0; l < items.length; l++) {
+                            var slnoa = itemData[k].SlNo;
+                            var slnob = items[l].SlNo;
+                            var slno2a = itemData[k].SlNo2;
+                            var slno2b = items[l].SlNo2;
+                            if (slnoa != slnob && slno2a != slno2b) {
+                                //items.pop(items[l]);
+                                tempItms.add(items[l]);
+                                //items[l].SlNo = itemData[k].SlNo;
+                                //items[l].SlNo2 = itemData[k].SlNo2;
+                                //items[l].BillItemId = itemData[k].BillItemId;
+                                //items[l].BillRefId = itemData[k].BillRefId;
+                                //items[l].ItemId = itemData[k].ItemId;
+                                //items[l].PackSize = itemData[k].PackSize;
+                                //items[l].SizeUnit = itemData[k].SizeUnit;
+                                //items[l].PackQty = itemData[k].PackQty;
+                                //items[l].ReceiveQty = itemData[k].ReceiveQty;
+                                //items[l].UnitId = itemData[k].UnitId;
+                                //items[l].UnitPrice = itemData[k].UnitPrice;
+                                //items[l].TotalPrice = itemData[k].TotalPrice;
+                                //items[l].ManufacturerId = itemData[k].ManufacturerId;
+                                //items[l].ReceiveID = itemData[k].ReceiveID;
+                                //items[l].OrderID = itemData[k].OrderID;
+                            }
+                        }
+                    }
+                    items = tempItms;
+                }
+
+                //for (var j = 0; j < itemData.length; j++) {
+                //    item.SlNo = itemData[j].SlNo;
+                //    item.SlNo2 = itemData[j].SlNo2;
+                //    item.BillItemId = itemData[j].BillItemId;
+                //    item.BillRefId = itemData[j].BillRefId;
+                //    item.ItemId = itemData[j].ItemId;
+                //    item.PackSize = itemData[j].PackSize;
+                //    item.SizeUnit = itemData[j].SizeUnit;
+                //    item.PackQty = itemData[j].PackQty;
+                //    item.ReceiveQty = itemData[j].ReceiveQty;
+                //    item.UnitId = itemData[j].UnitId;
+                //    item.UnitPrice = itemData[j].UnitPrice;
+                //    item.TotalPrice = itemData[j].TotalPrice;
+                //    item.ManufacturerId = itemData[j].ManufacturerId;
+                //    item.ReceiveID = itemData[j].ReceiveID;
+                //    item.OrderID = itemData[j].OrderID;
+                //    items.push(item);
+                //    ClearItem();
+                //}
+
+                if (items.length > 0) {
+                    for (var m = 0; m < items.length; m++) {
+                        if (refGridData[i].SlNo == items[m].SlNo) {
+                            item.BillItemId = items[m].BillItemId;
+                            item.BillRefId = items[m].BillRefId;
+                            item.ItemId = items[m].ItemId;
+                            item.PackSize = items[m].PackSize;
+                            item.SizeUnit = items[m].SizeUnit;
+                            item.PackQty = items[m].PackQty;
+                            item.ReceiveQty = items[m].ReceiveQty;
+                            item.UnitId = items[m].UnitId;
+                            item.UnitPrice = items[m].UnitPrice;
+                            item.TotalPrice = items[m].TotalPrice;
+                            item.ManufacturerId = items[m].ManufacturerId;
+                            item.ReceiveID = items[m].ReceiveID;
+                            item.OrderID = items[m].OrderID;
+                            reference.Items.push(item);
+                            ClearItem();
+                        }
+                    }
+                }
+
+                model.References.push(reference);
+                ClearReference();
+            }
+        }
+
+
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "ChemLocalPurcBillEnt")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: model }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $("#txtCLPBEId").val(data.ReturnId);
+                    $("#txtCLPBENo").val(data.ReturnCode);
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else if (data.Type == 3) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' }); changeStatus = 0;
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    // ######################################## Save Events End ######################################## //
+
+    // ######################################## Delete Events ######################################## //
+
+    // ************ Delete confirm Window Declaration ************ //
+
+    var DeleteWindow = $('#DeleteConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Delete Confirmation",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    // ************ Delete confirm Window Declaration End ************ //
+
+    function ItemCheck() {
+        var itemGrid = ChemLocalPurcBillItemGridDatasource.data();
+        var count = itemGrid.length;
+        if (count > 0) {
+            for (var i = 0; i < count; i++) {
+                if (dataItem.Serial == itemGrid[i].RefSerial) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    function Delete(del, billId) {
+        var itms = [];
+        if ($("#txtCLPBENo").val() != "") {
+            if (del == "gridReference") {
+                $.ajax({
+                    url: '@Url.Action("DeleteReference", "ChemLocalPurcBillEnt")',
+                    type: 'GET',
+                    data: ({ "billRefId": dataItem.BillRefId }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            changeStatus = 1;
+                            del = "";
+                            if (items.length > 0) {
+                                for (var p = 0; p < items.length; p++) {
+                                    if (items[p].SlNo == dataItem.SlNo) {
+
+                                    } else {
+                                        itms.push(items[p]);
+                                    }
+                                }
+                                items = [];
+                                items = itms;
+                            }
+                            if (items.length > 0) {
+                                var itmsShow = [];
+                                for (var q = 0; q < items.length; q++) {
+                                    if (items[q].SlNo == dataItem.SlNo) {
+                                        itmsShow.push(items[q]);
+                                    }
+                                }
+                                //ChemLocalPurcBillItemGridDatasource.data(showItms);
+                                $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data([]);
+                                $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data(itmsShow);
+                                $("#ChemLocalPurcBillRefGrid").data("kendoGrid").dataSource.remove(dataItem);
+                            }
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            del = "";
+                        }
+                    }
+                });
+                
+                $("#ChemLocalPurcBillRefGrid").data("kendoGrid").dataSource.remove(dataItem);
+            }
+            if (del == "gridItem") {
+                $.ajax({
+                    url: '@Url.Action("DeleteItem", "ChemLocalPurcBillEnt")',
+                    type: 'GET',
+                    data: ({ "billItemId": dataItem.BillItemId }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            changeStatus = 1;
+                            del = "";
+                            if (items.length > 0) {
+                                
+                                for (var j = 0; j < items.length; j++) {
+                                    if (items[j].SlNo == dataItem.SlNo && items[j].SlNo2 == dataItem.SlNo2) {
+                                        
+                                    } else {
+                                        itms.push(items[j]);
+                                    }
+                                }
+                                items = [];
+                                items = itms;
+                            }
+                            if (items.length > 0) {
+                                var itmsShow = [];
+                                for (var k = 0; k < items.length; k++) {
+                                    itmsShow.push(items[k]);
+                                }
+                                //ChemLocalPurcBillItemGridDatasource.data(showItms);
+                                $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data([]);
+                                $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data(showItms);
+                            }
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            del = "";
+                        }
+                    }
+                });
+                $("#ChemLocalPurcBillItemGrid").data("kendoGrid").dataSource.remove(dataItem);
+            }
+            if (del == "bill") {
+                $.ajax({
+                    url: '@Url.Action("DeleteBill", "ChemLocalPurcBillEnt")',
+                    type: 'GET',
+                    data: ({ "billId": billId }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            changeStatus = 1;
+                            del = "";
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            del = "";
+                        }
+                    }
+                });
+                reset();
+            }
+        } else {
+            if (del == "gridReference") {
+                if (items.length > 0) {
+                    for (var n = 0; n < items.length; n++) {
+                        if (items[n].SlNo == dataItem.SlNo) {
+
+                        } else {
+                            itms.push(items[n]);
+                        }
+                    }
+                    items = [];
+                    items = itms;
+                }
+                //if (items.length > 0) {
+                    //var showItm = [];
+                    //for (var o = 0; o < items.length; o++) {
+                    //    if (items[o].SlNo == dataItem.SlNo) {
+                    //        showItms.push(items[o]);
+                    //    }
+                    //}
+                    //ChemLocalPurcBillItemGridDatasource.data(showItms);
+                    $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data([]);
+                    //$("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data(showItm);
+                    $("#ChemLocalPurcBillRefGrid").data("kendoGrid").dataSource.remove(dataItem);
+                //}
+            }
+            if (del == "gridItem") {
+                if (items.length > 0) {
+                    for (var l = 0; l < items.length; l++) {
+                        if (items[l].SlNo == dataItem.SlNo && items[l].SlNo2 == dataItem.SlNo2) {
+                            
+                        } else {
+                            itms.push(items[l]);
+                        }
+                    }
+                    items = [];
+                    items = itms;
+                }
+                if (items.length > 0) {
+                    var showItms = [];
+                    for (var m = 0; m < items.length; m++) {
+                        if (items[m].SlNo == dataItem.SlNo) {
+                            showItms.push(items[m]);
+                        }
+                        
+                    }
+                    //ChemLocalPurcBillItemGridDatasource.data(showItms);
+                    $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data([]);
+                    $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data(showItms);
+                }
+            }
+            if (del == "bill") {
+                reset();
+            }
+        }
+        
+        return true;
+    }
+
+    function DeleteReference() {
+        if (recordStatus != "CNF") {
+            del = "gridReference";
+            DeleteWindow.open();
+            DeleteWindow.center();
+            var grid = $("#ChemLocalPurcBillRefGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select()));
+
+        }
+    };
+
+    function DeleteItem() {
+        if (recordStatus != "CNF") {
+            del = "gridItem";
+            DeleteWindow.open();
+            DeleteWindow.center();
+            var grid = $("#ChemLocalPurcBillItemGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select()));
+        }
+    };
+
+    function DeleteBill() {
+        if (recordStatus != "CNF") {
+            del = 'bill';
+            DeleteWindow.open();
+            DeleteWindow.center();
+            billId = "";
+            billId = $('#txtCLPBEId').val();
+        }
+    }
+
+    $('#btnDeleteConfirmationOK').click(function () {
+        Delete(del);
+        DeleteWindow.close();
+    });
+    $('#btnDeleteConfirmationCancel').click(function () {
+        DeleteWindow.close();
+    });
+
+    $('#btnDelete').click(function () {
+        DeleteBill(del);
+    });
+    // ######################################## Delete Events End ######################################## //
+
+    // ######################################## Check Events ######################################## //
+
+    function Check() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("Check", "ChemLocalPurcBillEnt")',
+            type: 'GET', data: { billId: $("#txtCLPBEId").val(), comment: $("#txtCheckNote").val() },
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnCheck').click(function () {
+        if (changeStatus == 1) {
+            $('#MessageText').html("Save the changes to continue.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            return false;
+        } else {
+            Check();
+        } return true;
+    });
+
+    // ######################################## Check Events End ######################################## //
+
+    // ######################################## Confirm Events ######################################## //
+
+    function Confirm() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("Confirm", "ChemLocalPurcBillEnt")',
+            type: 'GET',
+            data: { billId: $("#txtCLPBEId").val(), comment: $("#txtConfirmNote").val() },
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' }); saveStatus = 1; changeStatus = 0;
+                    //CheckRecordStatusForButton(data.RecordStatus);
+                    SetBill(data.ReturnId);
+                    //lock();
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("Unknown error occured please try again later.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnConfirm').click(function () {
+        if (changeStatus == 1) {
+            $('#MessageText').html("Save the changes to continue.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            return false;
+        } else {
+            Confirm();
+        } return true;
+    });
+
+    // ######################################## Confirm Events End ######################################## //
+
+    // ######################################## Variables Declaration ######################################## //
+
+    var saveStatus = 0;
+    var changeStatus = 0;
+    var msgShow;
+    var rowAdd = 0;
+    var recordStatus = "";
+    var del = "";
+    var dataItem;
+    var billId;
+    var rowAdd2 = 0;
+    var prevSlNo = 0;
+    var currSlNo = 0;
+    var slNoCount = 0;
+    var model = {
+        "BillId": "", "BillNo": "", "BillDate": "", "SupplierId": "", "SupplierAddressId": "", "PurchaseYear": "",
+        "SupplierBillNo": "", "SupBillDate": "", "BillAmt": "", "Currency": "", "VatAmt": "", "ApprovedAmt": "",
+        "OtherCost": "", "DiscountPercent": "", "DiscountAmt": "", "PayableAmt": "", "ExchangCurrency": "",
+        "ExchangRate": "", "ExchangValue": "", "Remarks": "", "CheckComments": "", "ApprovalComments": "", "RecordStatus": "",
+        "References": []
+    };
+    var reference = {
+        "SlNo": "", "BillRefId": "", "BillId": "", "Serial": "", "ReceiveID": "", "ReceiveNo": "", "ReceiveDate": "",
+        "OrderID": "", "OrderNo": "", "OrderDate": "", "Items": []
+    };
+
+    var items = [];
+
+    var item = {
+        "SlNo": "", "SlNo2": "", "BillItemId": "", "BillRefId": "", "ItemId": "", "ItemName": "", "SupplierId": "",
+        "PackSize": "", "PackSizeName": "", "SizeUnit": "", "SizeUnitName": "", "PackQty": "", "ReceiveQty": "", "UnitId": "",
+        "UnitName": "", "UnitPrice": "", "TotalPrice": "", "ManufacturerId": "", "ManufacturerName": "", "Remark": "",
+        "ReceiveID": "", "OrderID": ""
+    };
+
+    function ClearModel() {
+        model = {
+            "BillId": "", "BillNo": "", "BillDate": "", "SupplierId": "", "SupplierAddressId": "", "PurchaseYear": "",
+            "SupplierBillNo": "", "SupBillDate": "", "BillAmt": "", "Currency": "", "VatAmt": "", "ApprovedAmt": "",
+            "OtherCost": "", "DiscountPercent": "", "DiscountAmt": "", "PayableAmt": "", "ExchangCurrency": "",
+            "ExchangRate": "", "ExchangValue": "", "Remarks": "", "CheckComments": "", "ApprovalComments": "",
+            "RecordStatus": "", "References": []
+        };
+    }
+
+    function ClearReference() {
+        reference = {
+            "SlNo": "", "BillRefId": "", "BillId": "", "Serial": "", "ReceiveID": "", "ReceiveNo": "", "ReceiveDate": "",
+            "OrderID": "", "OrderNo": "", "OrderDate": "", "Items": []
+        };
+    }
+
+    function ClearItem() {
+        item = {
+            "SlNo": "", "SlNo2": "", "BillItemId": "", "BillRefId": "", "ItemId": "", "ItemName": "", "SupplierId": "",
+            "PackSize": "", "PackSizeName": "", "SizeUnit": "", "SizeUnitName": "", "PackQty": "", "ReceiveQty": "",
+            "UnitId": "", "UnitName": "", "UnitPrice": "", "TotalPrice": "", "ManufacturerId": "", "ManufacturerName": "",
+            "Remark": "", "ReceiveID": "", "OrderID": ""
+        };
+    }
+
+    //"":"",
+    // ######################################## Variables Declaration End ######################################## //
+
+    // ######################################## Button Click Events ######################################## //
+    $("#btnSave").click(function () {
+        var refCheck = doesDataSourceHaveChanges(ChemLocalPurcBillRefGridDatasource);
+        var itemCheck = doesDataSourceHaveChanges(ChemLocalPurcBillItemGridDatasource);
+        if (refCheck || itemCheck) {
+            changeStatus = 1;
+        }
+        if (changeStatus == 1 && saveStatus == 0) {
+            save();
+        } else {
+            if (changeStatus == 0) {
+                $('#MessageText').html("No changes were made.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' }); return false;
+            }
+            if (saveStatus == 1) {
+                $('#MessageText').html("Data has been saved already.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' }); return false;
+            }
+        } return true;
+    });
+
+    $('#btnSearch').click(function () {
+
+        if (changeStatus == 1) {
+
+        } else {
+            getBills();
+            BillWindow.open();
+            //BillWindow.center();
+        }
+    });
+
+    $('#btnReset').click(function () { reset(); });
+    $('body').click(function () { if (msgShow == 1) { msgShow = 0; } else { $("#MessageText").html(""); } });
+
+    // ######################################## Button Click End ######################################## //
+
+    // ######################################## Detect Changes ######################################## //
+
+    function doesDataSourceHaveChanges(ds) {
+        var dirty = false;
+        $.each(ds._data, function () {
+            if (this.dirty == true) {
+                dirty = true;
+            }
+        });
+        if (ds._destroyed.length > 0)
+            dirty = true;
+        return dirty;
+    }
+
+    $(".txtField").change(function() {
+         changeStatus = 1;
+    });
+    numberCheck('txtCLPBEPurcYear');
+    numberCheck('txtCLPBEVatAmt');
+    numberCheck('txtCLPBEDiscPer');
+    numberCheck('txtCLPBEDiscAmt');
+    numberCheck('txtCLPBEExcRate');
+
+    // ######################################## Detect Changes End ######################################## //
+
+    function lock() {
+        $('#btnSave').attr("disabled", disabled);
+        $('#btnConfirm').attr('disabled', disabled);
+        $('#btnDelete').attr('disabled', disabled);
+        $('#btnCheck').attr('disabled', disabled);
+    }
+
+    function reset() {
+        $(".txtField").val("");
+        $(".txtArea").val("");
+        $("#ChemLocalPurcBillRefGrid").data('kendoGrid').dataSource.data([]);
+        $("#ChemLocalPurcBillItemGrid").data('kendoGrid').dataSource.data([]);
+        saveStatus = 0;
+        changeStatus = 0;
+        rowAdd = 0;
+        recordStatus = "";
+        del = "";
+        dataItem = {};
+        rowAdd2 = 0;
+        prevSlNo = 0;
+        currSlNo = 0;
+        slNoCount = 0;
+        items = [];
+        ClearModel();
+        ClearReference();
+        ClearItem();
+        $("#btnCheck").removeAttr("disabled");
+        $("#btnConfirm").removeAttr("disabled");
+        $("#btnSave").removeAttr("disabled");
+        $("#btnDelete").removeAttr("disabled");
+        $("#btnApprove").removeAttr("disabled");
+    }
+    // ######################################## Pop Window Text box Search ######################################## //
+
+    // ************ Bill pop-up window text-box search ************ //
+
+    var dataSourceBill = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBillListForSearch", "ChemLocalPurcBillEnt")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSuppBillNo").kendoAutoComplete({
+        dataSource: dataSourceBill,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search supplier bill..."
+    });
+
+    $("#btnBillGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetBillList", "ChemLocalPurcBillEnt")',
+            type: 'GET',
+            data: { billNo: $("#txtSuppBillNo").val() },
+            success: function (data) {
+                $("#BillWindowGrid").data("kendoGrid").dataSource.data(data);
+
+            }
+        });
+    });
+    $("#txtSuppBillNo").keyup(function (event) {
+        if ($("#txtSuppBillNo").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetBillList", "ChemLocalPurcBillEnt")',
+                    type: 'GET',
+                    data: { billNo: $("#txtSuppBillNo").val() },
+                    success: function (data) {
+                        $("#BillWindowGrid").data("kendoGrid").dataSource.data(data);
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Bill pop-up window text-box search End ************ //
+
+    // ************ Supplier pop-up window text-box search ************ //
+
+    var dataSourceSupplier = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "ChemLocalPurcBillEnt")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSourceSupplier,
+        //filter: "startswith",
+        filter: "contains",
+        placeholder: "Search supplier..."
+    });
+
+    $("#btnSupGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierList", "ChemLocalPurcBillEnt")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+
+            }
+        });
+    });
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierList", "ChemLocalPurcBillEnt")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+                    }
+                });
+            }
+        }
+    });
+
+    // ************ Supplier pop-up window text-box search End ************ //
+
+    // ######################################## Pop Window Text box Search End ######################################## //
+</script>

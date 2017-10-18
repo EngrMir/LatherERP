@@ -1,0 +1,882 @@
+﻿@{
+    ViewBag.Title = "L/C Retirement Documentation";
+    ViewBag.SearchTitle = "L/C NO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+@*LC Portion*@
+<div class="row">
+    <div class="FormBody">
+        <input type="hidden" id="LCRetirementID" name="LCRetirementID" class="txtBox" />
+        <input type="hidden" id="LCID" name="LCID" value="" placeholder="LCID" readonly="readonly" />
+        <input type="hidden" id="CIID" name="CIID" value="" placeholder="CIID" readonly="readonly" />
+        <input type="hidden" id="CurrencyID" name="CurrencyID" value="" placeholder="" readonly="readonly" />
+
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>L/C No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" style="width:352px" id="LCNo" class="txtBox RequiredTextBox" placeholder="Press F9" readonly="readonly" onblur="" name="LCNo" tabindex="1" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>L/C Retirement No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LCRetirementNo" class="txtBox RequiredTextBox" placeholder="Auto Generated" readonly="readonly"  name="LCRetirementNo" tabindex="2" style="width:352px" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Less Margin</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LessMargin" class="txtBox RequiredTextBox"  name="LessMargin" tabindex="3" style="width: 352px; text-align: right;" placeholder="0.00" onblur=" return IsNumber('LessMargin');" />
+            </div>
+            <div class="col-lg-2">
+                <label>L/CRetirement Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LCRetirementDate" class="txtBox datePicker RequiredTextBox" name="LCRetirementDate" tabindex="4" style="width:352px" />
+            </div>
+        </div>
+    </div>
+
+        
+            <div class="FormBody" >
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>Bill Value</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" style="width: 250px; text-align: right;" id="BillValue" readonly="readonly" class="txtBox RequiredTextBox" placeholder="0.00" onblur=" return IsNumber('BillValue');" name="BillValue" tabindex="5" />
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>Swift Charge</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" style="width: 250px; text-align: right" id="SwiftCharge" class="txtBox RequiredTextBox" placeholder="0.00" onblur=" return IsNumber('SwiftCharge');" name="SwiftCharge" tabindex="8" />
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-lg-2">
+                        <label>Bill Currency</label>
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.DropDownList("LCRCurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "txtField dDown", @style = "width: 250px;text-align: center ", @tabindex = "24" })
+
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>BankCommissionAmt</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" style="width: 250px; text-align: right" id="BankCommissionAmt" name="BankCommissionAmt" class="txtBox RequiredTextBox" placeholder="0.00" onblur=" return IsNumber('BankCommissionAmt');" tabindex="8" />
+                    </div>
+                 </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>Exchange Rate</label>
+                    </div>
+                    <div class="col-lg-4">
+                            <input type="text" id="ExchangeRate" name="ExchangeRate" style="text-align: right;width:160px" value="" placeholder="0.00" onblur="ExchangeAmountCalcultaion(); TotalAmountCalcultaion(); GrandTotalCalcultaion(); return IsNumber('ExchangeRate');" />
+                            @Html.DropDownList("ExchangeCurrency", new SelectList(ViewBag.ExchangeCurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "txtField dDown", @style = "width: 85px;text-align: center ", @tabindex = "24" })    
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>Other Charge</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="OtherCharge" class="txtBox RequiredTextBox" placeholder="0.00" onblur="InterestAmountCalculation(); return IsNumber('InterestPersent');" name="OtherCharge" style="width: 250px; text-align: right" tabindex="10" />
+                    </div>
+                 </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>ExchangeAmount</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="ExchangeValue" name="ExchangeValue" style="width: 250px; text-align: right;" readonly="readonly" class="txtBox RequiredTextBox" placeholder="0.00" onblur="TotalAmountCalcultaion(); GrandTotalCalcultaion(); return IsNumber('ExchangeValue');" tabindex="5" />
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>Total Amount</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" style="width: 250px; text-align: right; " id="TotalAmount" readonly="readonly" class="txtBox RequiredTextBox" placeholder="0.00" onblur=" GrandTotalCalcultaion(); return IsNumber('TotalAmount');" name="TotalAmount" tabindex="5" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>Interest Persent</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="InterestPersent" class="txtBox RequiredTextBox" placeholder="0.00" onblur="InterestAmountCalculation(); return IsNumber('InterestPersent');" name="InterestPersent" style="width: 245px; text-align: right" tabindex="6" /><label>%</label>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>Grand Total</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" style="width: 250px; text-align: right; " id="GrandTotal" readonly="readonly" class="txtBox RequiredTextBox" placeholder="0.00" onblur="GrandTotalCalcultaion(); return IsNumber('GrandTotal');" name="GrandTotal" tabindex="5" />
+                    </div>
+                    </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label>InterestAmount</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="InterestAmount" name="InterestAmount" class="txtBox RequiredTextBox " placeholder="0.00" onblur="InterestRateCalcultaion();return IsNumber('InterestAmount');" tabindex="7" style="width: 250px;text-align:right" />
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>Remarks</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <textarea  style="width:250px;height:3%" id="Remarks" name="Remarks" placeholder="" tabindex="12"></textarea><br />
+                        <input type="button" id="btnConfirm" class="" name="btnConfirm" value="Confirmed" />
+                    </div>
+                 </div>
+
+             </div>
+</div>
+
+<div id="LCIDWindow" style="display: none;">
+    <p>Bank:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>
+    <div id="LCIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DeleteListConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnLCRetirementListOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnLCRetirementListCancel" value="Cancel" />
+</div>
+
+
+
+
+<script type="text/javascript">
+
+
+        NumericAndDecimalValue('BillValue');
+        NumericAndDecimalValue('InterestPersent');
+        NumericAndDecimalValue('InterestAmount');
+        NumericAndDecimalValue('BankCommissionAmt');
+        NumericAndDecimalValue('TotalAmount');
+        NumericAndDecimalValue('ExchangeRate');
+        NumericAndDecimalValue('ExchangeValue');
+        NumericAndDecimalValue('SwiftCharge');
+        NumericAndDecimalValue('OtherCharge');
+        //isNaN(BillValue);
+        //isNaN(InterestAmount);
+        //isNaN(InterestPersent);
+        //isNaN(BankCommissionAmt);
+        //isNaN(TotalAmount);
+        //isNaN(ExchangeRate);
+        //isNaN(ExchangeValue);
+        //isNaN(SwiftCharge);
+        //isNaN(OtherCharge);
+        
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+
+
+
+
+
+        //$("#btnChecked").css("display", "block");
+        //$("#btnConfirm").css("display", "block");
+        //$("#btnConfirm").removeAttr('disabled');
+        //$("#btnChecked").removeAttr('disabled');
+        $("select").addClass("select");
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date()
+        });
+
+
+        var changeStatus = 0;
+        $("#LCID").val('');
+        //$("#LCRetirementID").val('');
+        var saveUpdateStatus = 1;
+        var ItemGridchangeStatus = 0;
+        var changeStatus = 0; // any change textbox/Dropdown/Grid
+        var resetEditStatus = 0;
+        var dataitem = {};
+        
+
+
+    // ##################### NaN Validation Check ###################
+
+
+
+            //################### LC No Pop Up ######################
+
+            var LCIDWindow = $('#LCIDWindow').kendoWindow({
+                actions: ["Minimize", "Maximize", "Close"],
+                visible: false,
+                width: "1352px",
+                height: "auto",
+                title: "List Of LC No.",
+                position: { top: 100, left: 50 },
+                modal: true,
+                draggable: true
+            }).data('kendoWindow');
+            var LCIDDataSource = new kendo.data.DataSource({
+                schema: {
+                    model: {
+                        id: "LCID",
+                        fields: {
+                            LCID: { editable: false },
+                            LCNo: { editable: false },
+                            LCDate: { editable: false },
+                            LCAmount: { editable: false },
+                            CITotalValue: { editable: false },
+                            CIDate: { editable: false },
+                            LCMargin: { editable: false },
+                            LessMargin:{editable:false},
+                            //LCRetirementNo: { editable: false, hidden: true },
+                            CIID: { editable: false, hidden: true },
+                            ExchangeValueInvoice: { editable: false, hidden: true },
+                            ExchangeRateInvoice: { editable: false, hidden: true }
+
+                        }
+                    }
+                },
+                pageSize: 10
+            });
+
+            var LCIDGrid = $("#LCIDGrid").kendoGrid({
+                dataSource: LCIDDataSource,
+                pageable: true,
+                editable: true,
+                selectable: "row",
+                navigatable: true,
+                filterable: true,
+                sortable: true,
+                height: 350,
+                columns: [
+                      { field: "LCID", title: "LCID", hidden: true, width: "60px", filterable: true, sortable: false },
+                      { field: "LCNo", title: "LC No", filterable: true,   },
+                      { field: "LCDate", title: "LCDate", filterable: true, hidden: true, format: "{0:dd/MM/yyyy}",   },
+                      { field: "LCAmount", title: "LC Amount", filterable: true },
+                      { field: "LessMargin", title: "Less Margin", filterable: true },
+                  
+                     // { field: "LCRetirementNo", hidden: true, title: "LCRetirementNo", filterable: true},
+                 
+                      { field: "CIID", title: "CIID", filterable: true, hidden: true },
+                      { field: "CINo", title: "CI No", filterable: true },
+                      { field: "CITotalValue", title: "CI Total Value", filterable: true },
+                      { field: "CIDate", title: "CIDate", filterable: true, format: "{0:dd/MM/yyyy}", hidden: true, editor: dateTimeEditor }
+                ]
+            });
+
+
+            // Display Date into kendo Grid Row
+            function dateTimeEditor(container, options) {
+                $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                        .appendTo(container)
+                        .kendoDatePicker({});
+            }
+
+            //Open PopUp by pressing F9 key
+            $(document.body).keypress(function (e) {
+                if ($("#LCNo").is(":focus")) {
+                    if (e.keyCode == 120) {
+                        $.ajax({
+                            url: '@Url.Action("GetLCNoList", "LCRetirement")',
+                            type: "GET",
+                            //data: { bankCategory: "BNK", bankType: "LOC" },
+                            dataType: "JSON",
+                            success: function (data33) {
+                                console.log(data33);
+                                $("#LCIDGrid").data("kendoGrid").dataSource.data(data33);
+                            }
+                        });
+                        SelectedItemOfListOfValue('LCIDGrid');
+
+                        LCIDWindow.open();
+                    }
+                }
+            });
+
+
+
+            //Press Ok button after Select Data From PopUp
+            $('#btnLCIDWindowOK').click(function () {
+                ListOfValueOpeningLCIDGridGridEvent('LCIDGrid');
+                LCIDWindow.close();
+                
+            });
+
+            //Press Cancel button after Select Data From PopUp
+            $('#btnLCIDWindowCancel').click(function () {
+                LCIDWindow.close();
+            });
+
+            // Select Data through double Click From PopUp
+            $("#LCIDWindow").dblclick(function () {
+                ListOfValueOpeningLCIDGridGridEvent('LCIDGrid');
+                LCIDWindow.close();
+                
+            });
+
+            // Select Data through keypress From PopUp
+            $("#LCIDWindow").keypress(function (event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    ListOfValueOpeningLCIDGridGridEvent('LCIDGrid');
+                    LCIDWindow.close();
+                }
+                else if (keycode == '27') {
+                    LCIDWindow.close();
+                }
+                event.stopPropagation();
+            });
+
+            //To Bring Data from List of Value Grid to Main Page
+            function ListOfValueOpeningLCIDGridGridEvent(gridName) {
+                var grid = $('#' + gridName).data("kendoGrid");
+                var selectedItem = (grid.dataItem(grid.select()));
+                $.each(selectedItem, function (key, value) {
+                    if (value != null && value != 0)
+                        $('#' + key).val(value);
+                });
+                // $("#LCRetirementID").val("");
+                $("#LCID").val(selectedItem.LCID);
+                $("#LessMargin").val(selectedItem.LessMargin);
+                $("#BillValue").val(selectedItem.CITotalValue);
+            }
+
+            //Select Data from Pop up Grid
+            function SelectedItemOfListOfValue(gridName) {
+                var grid = $('#' + gridName).data("kendoGrid");
+                grid.dataSource.read();
+                $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+                $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+            }
+
+            //$("#btnReset").click(function () {
+            //    $('.FormBody input[type=text]').val('');
+            //    $('#MessageText').html('');
+            //    location.reload();
+            //});
+
+            //################### END of LC No Pop Up ######################
+
+
+
+
+
+            function InterestAmountCalculation() {
+                if ($("#BillValue").val() != "" && $("#InterestPersent").val() != "" && $("#ExchangeValue").val() != "") {
+                    var sum = (((($("#InterestPersent").val() - 0) * ($("#ExchangeValue").val() - 0)) / 100).toFixed(2));//$("#InterestAmount").val(
+                    if (isNaN(sum)) {
+                        $("#InterestAmount").val('');
+                    }
+                    else {
+                        $("#InterestAmount").val(sum - 0);
+                    }
+                    TotalAmountCalcultaion();
+                    GrandTotalCalcultaion();
+                    
+                }
+                else {
+            
+                    $("#InterestPersent").val("");
+                    $("#InterestAmount").val("");
+                }
+            }
+
+            function InterestRateCalcultaion() {
+
+                if ($("#BillValue").val() != "" && $("#InterestAmount").val() != "" && $("#ExchangeValue").val() != "") {
+                    $("#InterestPersent").val((((($("#InterestAmount").val() - 0) * 100)) / $("#ExchangeValue").val()).toFixed(2));
+                    //$("#AmountToBePaid").val((($("#InterestAmount").val() - 0) + ($("#LoanAmounts").val() - 0)).toFixed(2));
+                    TotalAmountCalcultaion();
+                    GrandTotalCalcultaion();
+                }
+                else {
+
+                    $("#InterestPersent").val("");
+                    $("#InterestAmount").val("");
+                    $("#BankCommissionAmt").val("");
+
+                }
+            }
+
+
+            function TotalAmountCalcultaion() {
+
+
+                var sum = (((($("#ExchangeValue").val()) - 0)
+                                                        + (($("#SwiftCharge").val()) - 0)
+                                                        + (($("#OtherCharge").val()) - 0)
+                                                        + (($("#BankCommissionAmt").val()) - 0)
+                                                        + (($("#InterestAmount").val()) - 0)).toFixed(2));//$("#TotalAmount").val(
+                if (isNaN(sum)) {
+                    $("#TotalAmount").val('');
+                }
+                else {
+                    $("#TotalAmount").val(sum - 0);
+                }
+                GrandTotalCalcultaion();
+            }
+
+
+
+            function GrandTotalCalcultaion()
+            {
+                if (($("#TotalAmount").val() != ""))
+                {
+                  var sum = (((($("#TotalAmount").val()) - 0) - (($("#LessMargin").val()) - 0)).toFixed(2));
+                    if (isNaN(sum)) {
+                        $("#GrandTotal").val('');
+                    }
+                    else {
+                        $("#GrandTotal").val(sum - 0);
+                    }
+
+
+                }
+                else {
+                    $("#TotalAmount").val("");
+
+                }
+            }
+
+
+            function ExchangeAmountCalcultaion() {
+
+                if (($("#BillValue").val() != "")) {
+                    var sum = ((((($("#BillValue").val()) - 0)) * (($("#ExchangeRate").val()) - 0)).toFixed(2));
+                    if (isNaN(sum)) {
+                        $("#ExchangeValue").val('');
+                    }
+                    else {
+                        $("#ExchangeValue").val(sum - 0);
+                    }
+                }
+                else {
+                    $("#ExchangeValue").val("");
+
+                }
+            }
+
+
+
+
+
+
+            //#################################### SAVE Data #############################
+            var obDataSet = {
+                "LCRetirementID": "",
+                "LCRetirementNo": "",
+                "LCRetirementDate": "",
+                "LCID": "",
+                "LCNo": "",
+                "BillValue": "",
+                "InterestPersent": "",
+                "InterestAmount": "",
+                "BankCommissionAmt": "",
+                "SwiftCharge": "",
+                "OtherCharge": "",
+                "Remarks": "",
+                "LCMargin": "",
+                "CIID": "",
+                "TotalAmount": "",
+                "LessMargin": "",
+                "GrandTotal": "",
+                "LCRCurrency": "",
+                "ExchangeCurrency": "",
+                "ExchangeRate": "",
+                "ExchangeValue": "",
+                "RecordStatus": ""
+
+            }
+
+
+
+
+            function Save() {
+                saveUpdateStatus = 1;
+
+
+                CheckRequiredTextBoxMaxLength('LCNo', 30);
+
+
+
+
+                if (saveStatus == 1) {
+
+
+                    obDataSet.LCRetirementID = $("#LCRetirementID").val();
+                    obDataSet.LCRetirementNo = $("#LCRetirementNo").val();
+                    obDataSet.LCRetirementDate = $("#LCRetirementDate").val();
+                    obDataSet.LCNo = $("#LCNo").val();
+                    obDataSet.LCID = $("#LCID").val();
+                    obDataSet.BillValue = $("#BillValue").val();
+                    obDataSet.InterestPersent = $("#InterestPersent").val();
+                    obDataSet.InterestAmount = $("#InterestAmount").val();
+                    obDataSet.BankCommissionAmt = $("#BankCommissionAmt").val();
+                    obDataSet.SwiftCharge = $("#SwiftCharge").val();
+                    obDataSet.OtherCharge = $("#OtherCharge").val();
+                    obDataSet.TotalAmount = $("#TotalAmount").val();
+                    obDataSet.LessMargin = $("#LessMargin").val();
+                    obDataSet.GrandTotal = $("#GrandTotal").val();
+                    obDataSet.ExchangeCurrency = $("#ExchangeCurrency").val();//.find('.select').val(data33.ExchangeCurrency);
+                    obDataSet.ExchangeRate = $("#ExchangeRate").val();
+                    obDataSet.ExchangeValue = $("#ExchangeValue").val();
+                    obDataSet.LCRCurrency = $("#LCRCurrency").val();
+                    obDataSet.RecordStatus = $("#RecordStatus").val();
+                    obDataSet.Remarks = $("#Remarks").val();
+
+
+
+                    if (obDataSet.LCRetirementID == "") {
+
+                        // INSERT DATA
+                        $("#divLoading").show();
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("Save", "LCRetirement")',
+                            data: JSON.stringify(obDataSet),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.msg.Type == 2) {
+                                    $("#LCRetirementID").val(data.ReturnId);
+                                    $("#LCRetirementNo").val(data.ReturnCode);
+                                    $('#MessageText').html(data.msg.Msg);
+                                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                                }
+                                else {
+                                    $("#MessageText").html(data.msg.Msg);
+                                    $("#MessageText").css("color", "red");
+                                }
+                            },
+
+                            error: function (respnse) {
+                                //alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                            },
+                            complete: function(data){
+                                $("#divLoading").hide();
+                            }
+                        });
+
+                    }
+                    else {
+                        // UPDATE DATA
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("Update", "LCRetirement")',
+                            data: JSON.stringify(obDataSet),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.msg.Type == 2) {
+                                    $('#MessageText').html(data.msg.Msg);
+                                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                                    $("#LCRetirementID").val(data.ReturnId);
+                                    $("#LCRetirementNo").val(data.ReturnCode);
+                                }
+                                else {
+                                    $("#MessageText").html(data.msg.Msg);
+                                    $("#MessageText").css("color", "red");
+                                }
+                            },
+                            error: function (respnse) {
+                                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                            },
+                            failure: function (respnse) {
+
+                            }
+                        });
+                    }
+                }
+
+            }
+
+
+
+            //############################## Search Button #####################
+
+            function Reset() {
+
+                $('.Dropdown').val('');
+                $('.FormBody input[type=text]').val('');
+                // <input id="checkSelection" name="checkbox" type="checkbox" value="true" /> <label style="font-family:Constantia;font-size:x-small">Lock Selection</label>
+                $('.FormBody input[type=text]').val('');
+                $('.txtBox').val('');
+                $('.FormBody input[type=hidden]').val('');
+                $('.FormBody input[type=number]').val('');
+                $('.FormBody input[type=button]').attr('disabled', false);
+                $('#MessageText').html('');
+                //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+                $('.FormBody .datePicker').val('');
+                $('#btnSubmit').attr('disabled', false);
+                $('#btnDelete').attr('disabled', false);
+                $("#Remarks").val("");
+                $("#LCRCurrency").val("");
+                $("#ExchangeCurrency").val("");
+                $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+                //$('input:checkbox[name=checkbox]').attr('checked', false);
+            }
+
+            $("#btnSearch").click(function () {
+                SearchResult("GetLcmRetirementInfo", "LCRetirement", "LCRetirementID,LCID,LessMargin,LCRCurrency,ExchangeCurrency,SupplierID");//GetBankDebitVoucherInfo
+            });
+
+            $("#btnSearchGridSearch").click(function () {
+                GetSearchResult("SearchLcmRetirementInfoByLCNo", "LCRetirement");
+            });
+
+            AutoComplete("GetAutoCompleteData", "LCRetirement");
+
+
+
+            function ListOfValueSearchGridEvent(gridName) {
+                var grid = $('#' + gridName).data("kendoGrid");
+                var selectedItem = (grid.dataItem(grid.select()));
+                $.each(selectedItem, function (key, value) {
+                    if (value != null && value != 0)
+                        $('#' + key).val(value);
+                });
+
+                $("#LCRetirementID").val(selectedItem.LCRetirementID);
+                $("#LCRCurrency").val(selectedItem.LCRCurrency);
+
+                $.ajax({
+                    url: '@Url.Action("GetLcmRetirementByLCRetirementID", "LCRetirement")',
+                    type: 'GET',
+                    data: { LCRetirementID: selectedItem.LCRetirementID },
+                    success: function (data) {
+
+                        $("#LCID").val(data.LCID);
+                        $("#LCNo").val(data.LCNo);
+                        $("#LCRetirementID").val(data.LCRetirementID);
+                        $("#LCRetirementNo").val(data.LCRetirementNo);
+                        $("#LCRetirementDate").val(data.LCRetirementDate);
+                        $("#BillValue").val(data.BillValue);
+                        $("#InterestPersent").val(data.InterestPersent);
+                        $("#InterestAmount").val(data.InterestAmount);
+                        $("#BankCommissionAmt").val(data.BankCommissionAmt);
+                        $("#SwiftCharge").val(data.SwiftCharge);
+                        $("#OtherCharge").val(data.OtherCharge);
+                        $("#TotalAmount").val(data.TotalAmount);
+                        $("#LessMargin").val(data.LessMargin);
+                        $("#GrandTotal").val(data.GrandTotal);
+                        $("#ExchangeCurrency").val(data.ExchangeCurrency);
+                        $("#ExchangeRate").val(data.ExchangeRate);
+                        $("#ExchangeValue").val(data.ExchangeValue);
+                        //$("#LCRCurrency").val(data.LCRCurrency);
+                        $("#Remarks").val(data.Remarks);
+                        $("#RecordStatus").val(data.RecordStatus);
+                        $("#CIID").val(data.CIID);
+                        $("#LCMargin").val(data.LCMargin);
+                        if (selectedItem.RecordStatus == "Not Confirmed") {
+                            $("#btnConfirm").removeAttr('disabled');
+                            $("#btnCheck").removeAttr('disabled');
+                            $("#btnSubmit").removeAttr('disabled');
+                        }
+                        else if (selectedItem.RecordStatus == "Checked") {
+                            $("#btnCheck").attr('disabled', 'disabled');
+
+                        }
+                            //else {
+                            //    $("#btnCheck").removeAttr('disabled');
+                            //}
+
+                        else if (selectedItem.RecordStatus == "Confirmed") {
+                            $("#btnConfirm").attr('disabled', 'disabled');
+                            $("#btnCheck").attr('disabled', 'disabled');
+                            $("#btnSubmit").attr('disabled', 'disabled');
+                            $('#btnDelete').attr('disabled', true);
+
+                        }
+                        else {
+                            $("#btnConfirm").removeAttr('disabled');
+                            $("#btnCheck").removeAttr('disabled');
+                            $("#btnSubmit").removeAttr('disabled');
+                            $('#btnDelete').removeAttr('disabled');
+                        }
+
+
+                    },
+                    error: function (xhr, status, error) {
+                        // alert(xhr.responseText);
+                    }
+                });
+
+
+            }
+
+
+            //############################## END Of Search Button #####################
+
+
+            @*function IsValidLCRetirementNo() {
+
+            if ($("#LCRetirementNo").val() != "") {
+                $.ajax({
+                    url: '@Url.Action("IsAlreadyExist", "Utility")',
+                    type: 'POST',
+                    data: { table: "LCM_LCRetirement", fld: "LCRetirementNo", val: $("#LCRetirementNo").val(), datatype: "str" },
+                    success: function (data) {
+                        if (data == "True") {
+                            $('#MessageText').html("This LC Retirement No. Already Exist");
+                            $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+                            $("#LCRetirementNo").val("");
+                            return false;
+                        }
+                        else {
+                            $('#MessageText').html("");
+
+                        }
+                    }
+                });
+            }
+            return true;
+        }*@
+
+
+            //################# Search END ######################
+
+
+
+            //###################### DELETE #################
+            // Delete row of Commercial Invoice Item grid and full delete
+            var LCRetirementListDeleteWindow = $('#DeleteListConfirmWindow').kendoWindow({
+                width: "300px",
+                padding: "0px 0px 0px 100px",
+                title: "Do You Want To Delete This Record?",
+                visible: false,
+                modal: true,
+                draggable: true
+                //position: { top: 300, left: 400 }
+            }).data('kendoWindow');
+
+
+
+            $("#btnDelete").click(function () {
+                if ($("#LCRetirementID").val() != "") {
+                    gridToDelete = "all";
+                    LCRetirementListDeleteWindow.open();
+                    LCRetirementListDeleteWindow.center();
+                } else if ($("#LCRetirementID").val() == "" && changeStatus == 1) {
+                    $('#MessageText').html("The record you are trying to delete is not in the database.");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                } else {
+
+                }
+            });
+
+
+
+            $('#btnLCRetirementListOK').click(function () {
+                if (gridToDelete == "all") {
+                    if ($("#LCRetirementID").val() != "") {
+                        var lcRetirementID = $("#LCRetirementID").val();
+                        $.ajax({
+                            url: '@Url.Action("DeleteLCRetirementID", "LCRetirement")',
+                            type: 'GET',
+                            data: ({ "lcRetirementID": lcRetirementID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (response) {
+                                Reset();
+                                if (response.Type == 4) {
+                                    $('#MessageText').html(response.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                } else {
+                                    $("#MessageText").html(response.Msg);
+                                    $("#MessageText").css("color", "red");
+                                }
+                                LCRetirementListDeleteWindow.close();
+                            
+                            }
+                        });
+                    }
+                    gridToDelete = "";
+                    LCRetirementListDeleteWindow.close();
+
+                }
+            });
+            $("#btnLCRetirementListCancel").click(function () {
+                LCRetirementListDeleteWindow.close();
+            });
+
+
+
+            //############################################################### CONFIRM CnF Bill ###################################################
+
+            $("#btnConfirm").click(function () {
+                $("#divLoading").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ConfirmRecordStatus", "LCRetirement")',
+                    data: { lcRetirementID: $("#LCRetirementID").val() },
+                    success: function (data) {
+                        console.log(data);
+                        $("#divLoading").hide();
+                        if (data.msg.Type == 2) {
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            $("#btnConfirm").attr('disabled', 'disabled');
+                            $("#btnChecked").attr('disabled', 'disabled');
+                            $('#btnDelete').attr('disabled', true);
+                            $("#btnSubmit").attr('disabled', 'disabled');
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            });
+
+            //############################################################### END OF CONFIRMED CnfBill ###################################################
+
+
+
+
+
+
+
+
+
+
+
+</script>

@@ -1,0 +1,1284 @@
+﻿@{
+    ViewBag.Title = "Export LC Opening";
+    ViewBag.SearchTitle = "LC NO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+
+
+<div class="row">
+    @*<label>LCID</label>*@
+    <input type="hidden" id="LCID" name="LCID" class="txtBox" />
+    @*<label>PIID</label>*@
+    <input type="hidden" id="PIID" name="PIID" class="txtBox" />
+    @*<label>BankID</label>*@
+    <input type="hidden" id="BankID" name="BankID" class="txtBox" />
+    @*<label>BranchID</label>*@
+    <input type="hidden" id="BranchID" name="BranchID" class="txtBox" />
+    @*<label>SupplierID</label>*@
+    <input type="hidden" id="SupplierID" name="SupplierID" class="txtBox" />
+
+
+    @*<label>AdvisingBank</label>*@
+    <input type="hidden" id="AdvisingBank" name="AdvisingBank" class="txtBox" />
+    @*<label>PI CurrencyID</label>*@
+    <input type="hidden" id="CurrencyID" name="CurrencyID" class="txtBox" />
+
+
+    @*<label>BeneficiaryAddressID</label>*@
+    <input type="hidden" id="BeneficiaryAddressID" name="BeneficiaryAddressID" class="txtBox" />
+    @*<label>Beneficiary</label>*@
+    <input type="hidden" id="Beneficiary" name="Beneficiary" class="txtBox" />
+    @*<label>PIBeneficiary</label>*@
+    <input type="hidden" id="PIBeneficiary" name="PIBeneficiary" class="txtBox" />
+    @*<label>LCOpeningBank</label>*@
+    <input type="hidden" id="LCOpeningBank" name="LCOpeningBank" class="txtBox" />
+
+    @*<label>LCCurrencyID</label>*@
+    <input type="hidden" id="LCCurrencyID" name="LCCurrencyID" class="txtBox" />
+
+    <input type="hidden" id="RecordStatus" name="RecordStatus" class="txtBox" />
+
+
+
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="col-lg-3">
+                    <label>PI No.</label><label style="color:red">*</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" class="txtBox " id="PINo" name="PINo" readonly="readonly" placeholder="Press F9" style="width: 352PX;text-align: center" />
+
+                </div><br /><br />
+
+                <div class="col-lg-3">
+                    <label>PI Date</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" class="txtBox" id="PIDate" name="PIDate" readonly="readonly" style="width: 352PX; text-align: center" />
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+                <input type="button" value="Show PI Details" id="btnPIDetails" name="btnPIDetails" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>L/C No.</label><label style="color:red">*</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="txtBox" id="LCNo" name="LCNo" style="text-align: center"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>L/C Date</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="txtBox datePicker" id="LCDate" name="LCDate" style="text-align:center" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>L/C Amount</label><label style="color:red">*</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="txtBox" id="LCAmount" name="LCAmount" placeholder="0.00" style="text-align:right" onblur="ExchangeAmountCalcultaion()" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>L/C Currency</label>
+                    </div>
+                    <div id="LCCurrencyID" class="col-lg-8">
+                        @Html.DropDownList("Currency", (SelectList)ViewBag.Currency, new { style = "width:98.5%;text-align:center" })
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="FormBody"> 
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Shipment Date</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="txtBox datePicker" id="LastShipmentDate" name="LastShipmentDate" style="text-align:center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Expiry Date</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="txtBox datePicker" id="ExpiryDate" name="ExpiryDate" style="text-align:center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Expiry Place</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="txtBox" id="ExpiryPlace" name="ExpiryPlace" style="text-align:center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Note</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <textarea id="Remarks" name="Remarks" style="width:352PX"></textarea>
+                        <input id="btnConfirm" type="button" value="Confirm" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div id="ConfirmWindow" style="display: none;">
+    <p><h5 style="color: red;">At First Save this Record.</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationClose" value="Close" />
+</div>
+
+<div id="LCPIWindow" style="display: none;">
+    @*<p>
+        PI:<input type="text" id="txtPI" style="width: 250px;" placeholder="Search PI.." />
+        <input type="button" id="btnPIGridSearch" value="Search" />
+    </p>*@
+
+    <div id="LCPIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCPIWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCPIWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="LCAdvisingBankWindow" style="display: none;">
+    @*<p>Bank:<input type="text" id="txtAdvisingBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnAdvisingGridSearch" value="Search" /></p>*@
+
+    <div id="LCAdvisingBankGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCAdvisingBankWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCAdvisingBankWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="LCOpeningBankWnicow" style="display: none;">
+    @*<p>Bank:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>*@
+
+    <div id="LCOpeningBankGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCOpeningBankWnicowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCOpeningBankWnicowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="PIDetailsWindow" style="display: none;">
+
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".SetFocus").focus();
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            //max: new Date() // sets max date to Jan 1st, 2013
+        });
+    });
+
+
+    $('#btnDelete').attr('disabled', true);
+
+    NumericAndDecimalValue('LCAmount');
+    NumericAndDecimalValue('ExchangeRate');
+    NumericAndDecimalValue('ExchangeValue');
+
+
+    function ExchangeAmountCalcultaion() {
+        if (($("#LCAmount").val() != ""))
+        {
+            ($("#ExchangeValue").val(((($("#LCAmount").val()) - 0) * (($("#ExchangeRate").val()) - 0)).toFixed(2)));
+        }
+        else
+        {
+            $("#ExchangeValue").val("");
+            $("#ExchangeRate").val("");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //********************** START DOCUMENT.READY FUNCTION ******************************//
+
+    $(document).ready(function () {
+        $(document.body).keypress(function (e) {
+            if ($("#BankName").is(":focus")) {
+                if (e.keyCode == 120) {
+
+                    $("#divLoading").show();
+
+                    $.ajax({
+                        url: '@Url.Action("GetLCBankList", "EXPLCOpening")',
+                        type: "GET",
+                        data: { bankCategory: "BNK", bankType: "FRN" },
+                        dataType: "JSON",
+                        success: function (data33) {
+                            $("#LCOpeningBankGrid").data("kendoGrid").dataSource.data(data33);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('LCOpeningBankGrid');
+                    LCOpeningBankWnicow.open();
+                }
+            }
+        });
+
+
+        $(document.body).keypress(function (e) {
+            if ($("#PINo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#divLoading").show();
+                    $.ajax({
+                        url: '@Url.Action("GetPIInfo", "EXPLCOpening")',
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data33) {
+                            $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('LCPIGrid');
+                    LCPIWindow.open();
+                }
+            }
+        });
+    });
+
+    //********************** END DOCUMENT.READY FUNCTION ******************************//
+
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+    //************************* PI POP UP ************************************//
+    var LCPIWindow = $('#LCPIWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        groupable: true,
+        title: "List Of PI",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCPIDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PIID",
+                fields: {
+                    PIID: { editable: false },
+                    PINo: { editable: false },
+                    BeneficiaryAddressID: { editable: false },
+                    PIBeneficiary: { editable: false },
+                    Beneficiary: { editable: false },
+                    SupplierName: { editable: false },
+                    BeneficiaryName: { editable: false },
+                    BeneficiaryName: { editable: false },
+                    PICurrency: { editable: false },
+                    PICurrencyName: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LCPIGrid = $("#LCPIGrid").kendoGrid({
+        dataSource: LCPIDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              { field: "PINo", title: "PI No" },
+              { field: "PIBeneficiary", title: "PIBeneficiary",hidden:true },
+              { field: "PIDate", title: "PI Date", template: '#= kendo.toString(PIDate,"dd/MM/yyyy") #' },
+              { field: "PICurrencyName", title: "PI Currency" },
+              { field: "BeneficiaryName", title: "Beneficiary" },
+              { field: "BeneficiaryAddressID", title: "BeneficiaryAddressID", hidden: true },
+        ]
+    });
+
+
+    $('#btnLCPIWindowOK').click(function () {
+        ListOfValuePIGridEvent('LCPIGrid');
+        LCPIWindow.close();
+    });
+    $('#btnLCPIWindowCancel').click(function () {
+        LCPIWindow.close();
+    });
+    $("#LCPIWindow").dblclick(function () {
+        ListOfValuePIGridEvent('LCPIGrid');
+        LCPIWindow.close();
+    });
+    $("#LCPIWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuePIGridEvent('LCPIGrid');
+            LCPIWindow.close();
+        }
+        else if (keycode == '27') {
+            LCPIWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnPIGridSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("SearchPIByPI", "EXPLCOpening")',
+            type: 'GET',
+            data: { beni: $("#txtPI").val() },
+            success: function (data33) {
+                $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValuePIGridEvent('LCPIGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetPISearch", "EXPLCOpening")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtPI").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtPI").keyup(function (event) {
+        if ($("#txtPI").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchPIByPI", "EXPLCOpening")',
+                    type: 'GET',
+                    data: { beni: $("#txtPI").val() },
+                    success: function (data33) {
+                        $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValuePIGridEvent('LCPIGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValuePIGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#PINo").val(selectedItem.PINo);
+        $("#PIDate").val(selectedItem.PIDate);
+        $("#PIID").val(selectedItem.PIID);
+       // $("#PIBeneficiary").val(selectedItem.PIBeneficiary);
+        $("#Beneficiary").val(selectedItem.PIBeneficiary);
+        $("#BeneficiaryAddressID").val(selectedItem.BeneficiaryAddressID);
+        $("#LCCurrencyID").val(selectedItem.PICurrency);
+        $("#PICurrencyName").val(selectedItem.PICurrencyName);
+
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetPIGrandTotalSFT", "EXPLCOpening")',
+            type: 'GET',
+            data: { _PIID: selectedItem.PIID },
+            success: function (data33) {
+                $("#LCAmount").val(data33);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+    //************************* END OF PI POP UP ************************************//
+
+
+
+
+
+
+
+
+    //************************************ ADVISISNG BANK POP UP ****************//
+
+    $(document.body).keypress(function (e) {
+        if ($("#AdvisingBankName").is(":focus")) {
+            if (e.keyCode == 120) {
+
+                $("#divLoading").show();
+
+                $.ajax({
+                    url: '@Url.Action("GetAdvisingBankList", "EXPLCOpening")',
+                    type: "GET",
+                    data: { bankCategory: "BNK", bankType: "ADV" },
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#LCAdvisingBankGrid").data("kendoGrid").dataSource.data(data33);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('LCAdvisingBankGrid');
+                LCAdvisingBankWindow.open();
+            }
+
+        }
+    });
+
+    $("#LCAmount").focus(function () {
+        if( $("#LCAmount").val()=='0')
+        {
+            $("#LCAmount").val("");
+        }
+    });
+
+
+
+
+
+        var LCAdvisingBankWindow = $('#LCAdvisingBankWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "80%",
+            height: "auto",
+            title: "List of L/C Advising Bank",
+            position: { top: 100 },
+            modal: true,
+            groupable: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var LCAdvisingBankDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BankID",
+                    fields: {
+                    
+                        BranchID: { editable: false },
+                        BranchName: { editable: false },
+                        BanchCode: { editable: false },
+                        BankName: { editable: false },
+                        BranchSwiftCode: { editable: false },
+                        BankBINNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var LCAdvisingBankGrid = $("#LCAdvisingBankGrid").kendoGrid({
+            dataSource: LCAdvisingBankDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 300,
+            groupable: true,
+            columns: [
+                  //{ field: "BankID", title: "Bank ID", width: "60px", filterable: false, sortable: false },
+                  { field: "BanchCode", title: "Branch Code" },
+                  { field: "BankName", title: "Bank Name" },
+                  { field: "BranchSwiftCode", title: "Swift Code " },
+                  { field: "BranchName", title: "Branch Name" }
+            ]
+        });
+
+        $('#btnLCAdvisingBankWindowOK').click(function () {
+            ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+            LCAdvisingBankWindow.close();
+        });
+
+        $('#btnLCAdvisingBankWindowCancel').click(function () {
+            LCAdvisingBankWindow.close();
+        });
+
+        $("#LCAdvisingBankWindow").dblclick(function () {
+            ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+            LCAdvisingBankWindow.close();
+        });
+
+        $("#LCAdvisingBankWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+                LCAdvisingBankWindow.close();
+            }
+            else if (keycode == '27') {
+                LCAdvisingBankWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $("#btnAdvisingGridSearch").click(function () {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("SearchLCBankByBank", "EXPLCOpening")',
+                type: 'GET',
+                data: { bank: $("#txtAdvisingBank").val(), bankCategory: "BNK", bankType: "ADV" },
+                success: function (data33) {
+                    $("#LCAdvisingBankGrid").data("kendoGrid").dataSource.data(data33);
+                    if (data33.Count == 1) {
+                        ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+                        SearchWindow.close();
+                    }
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        });
+
+        var dataSource2 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetLCBankNameList", "EXPLCOpening")',
+                    data: { bankCategory: "BNK", bankType: "ADV" },
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtAdvisingBank").kendoAutoComplete({
+            dataSource: dataSource2,
+            filter: "startswith",
+            placeholder: "Search ...",
+        });
+
+        $("#txtAdvisingBank").keyup(function (event) {
+            if ($("#txtAdvisingBank").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchLCBankByBank", "EXPLCOpening")',
+                        type: 'GET',
+                        data: { bank: $("#txtAdvisingBank").val(), bankCategory: "BNK", bankType: "ADV" },
+                        success: function (data33) {
+                            $("#LCAdvisingBankGrid").data("kendoGrid").dataSource.data(data33);
+                            if (data33.Count == 1) {
+                                ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueAdvisingBankGridEvent(gridName) {
+
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#AdvisingBank").val(selectedItem.BranchID);
+            $("#BranchSwiftCode").val(selectedItem.BranchSwiftCode);
+            $("#AdvisingBankName").val(selectedItem.BankName);
+            $("#AdvisingBankBINNo").val(selectedItem.BankBINNo);
+
+        }
+
+
+
+
+        //************************************** END OF ADVISING BANK ************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //************************* LC Opening Bank *************************************//
+        var LCOpeningBankWnicow = $('#LCOpeningBankWnicow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "80%",
+            height: "auto",
+            title: "List Of LC Opening Bank",
+            position: { top: 100 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BankIDDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BranchID",
+                    fields: {
+                        BranchID: { editable: false },
+                        BranchName: { editable: false },
+                        BankID: { editable: false },
+                        BankName: { editable: false },
+                        //SupplierID: { editable: false },
+                        //SupplierAddressID: { editable: false },
+                        //BeneficiaryAddressID: { editable: false },
+                        Address: { editable: false },
+                        //AdvisingBank: { editable: false },
+                        //BranchSwiftCode: { editable: false },
+                        CurrencyName: { editable: false },
+                        LCLimit: { editable: false },
+                        LCMargin: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var LCOpeningBankGrid = $("#LCOpeningBankGrid").kendoGrid({
+            dataSource: BankIDDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+
+                  { field: "BankID", title: "Bank ID", hidden: true },
+                  { field: "BranchID", title: "Branch ID", hidden: true },
+                  //{ field: "SupplierID", title: "Supplier ID", hidden: true },
+                  //{ field: "BeneficiaryAddressID", title: "Supplier Address ID", hidden: true },
+                  //{ field: "BeneficiaryAddressID", title: "BeneficiaryAddressID", hidden: true },
+                  { field: "BankName", title: "Bank Name" },
+                  { field: "Address", title: "Address" },
+                  { field: "CurrencyName", title: "Currency" },
+                  { field: "LCBalance", title: "LC Balance" },
+                  { field: "LCLimit", title: "LC Limit" }
+            ]
+        });
+
+        $('#btnLCOpeningBankWnicowOK').click(function () {
+            ListOfValueOpeningBankGridEvent('LCOpeningBankGrid');
+            LCOpeningBankWnicow.close();
+        });
+
+        $('#btnLCOpeningBankWnicowCancel').click(function () {
+            LCOpeningBankWnicow.close();
+        });
+
+        $("#LCOpeningBankWnicow").dblclick(function () {
+            ListOfValueOpeningBankGridEvent('LCOpeningBankGrid');
+            LCOpeningBankWnicow.close();
+        });
+
+        $("#LCOpeningBankWnicow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueOpeningBankGridEvent('LCOpeningBankGrid');
+                LCOpeningBankWnicow.close();
+            }
+            else if (keycode == '27') {
+                LCOpeningBankWnicow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $("#btnOpeningGridSearch").click(function () {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("SearchLCBankByBank", "EXPLCOpening")',
+                type: 'GET',
+                data: { bank: $("#txtOpeningBank").val(), bankCategory: "BNK", bankType: "FRN" },
+                success: function (data33) {
+                    $("#LCOpeningBankGrid").data("kendoGrid").dataSource.data(data33);
+                    if (data33.Count == 1) {
+                        ListOfValueOpeningBankGridEvent('LCOpeningBankGrid');
+                        SearchWindow.close();
+                    }
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        });
+
+
+        var dataSource1 = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetLCBankNameList", "EXPLCOpening")',
+                    data: { bankCategory: "BNK", BankType: "FRN" },
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtOpeningBank").kendoAutoComplete({
+            dataSource: dataSource1,
+            filter: "startswith",
+            placeholder: "Search ...",
+        });
+
+        $("#txtOpeningBank").keyup(function (event) {
+            if ($("#txtOpeningBank").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchLCBankByBank", "EXPLCOpening")',
+                        type: 'GET',
+                        data: { bank: $("#txtOpeningBank").val(), bankCategory: "BNK", bankType: "FRN" },
+                        success: function (data33) {
+                            $("#LCOpeningBankGrid").data("kendoGrid").dataSource.data(data33);
+                            if (data33.Count == 1) {
+                                ListOfValueOpeningBankGridEvent('LCOpeningBankGrid');
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueOpeningBankGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+            $("#BankID").val(selectedItem.BankID);
+            $("#LCOpeningBank").val(selectedItem.BranchID);
+            $("#LcOpeningBankName").val(selectedItem.BranchName);
+            $("#Address").val(selectedItem.Address);
+            //$("#BeneficiaryAddressID").val(selectedItem.BeneficiaryAddressID);
+            //$("#AdvisingBankName").val(selectedItem.AdvisingBankName);
+            //$("#SupplierID").val(selectedItem.SupplierID);
+            $("#LimitCurrency").val(selectedItem.CurrencyName);
+
+        }
+
+
+        $("#btnPIDetails").click(function () {
+            var PINo = $("#PINo").val();
+            if (PINo != "") {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetPIDetailsInfo", "EXPLCOpening")',
+                    type: 'POST',
+                    data: { piNo: PINo },
+                    success: function (data) {
+                        OpenConfirmationDialog();
+                        $('#PIDetailsWindow').html(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                $('#MessageText').html("");
+            }
+            else {
+                $('#MessageText').html("First Select a PINO.");
+                $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+            }
+        });
+
+
+        var PIDetailsWindow;
+        function OpenConfirmationDialog() {
+            PIDetailsWindow = $('#PIDetailsWindow').kendoWindow({
+                width: "80%",
+                // padding: "top:100px",
+                title: "PI Details",
+                visible: false,
+                resizable: false,
+                draggable: true,
+                actions: [
+                            "Pin",
+                            "Minimize",
+                            "Maximize",
+                            "Close"
+                ],
+                position: { top: 100 }
+            }).data('kendoWindow');
+
+            PIDetailsWindow.open();
+        }
+
+
+
+
+        //************************* END OF LC Opening Bank *************************************//
+
+
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+
+
+
+        var obDataSet = {
+
+            "LCID": "",
+            "LCNo": "",
+            "RefLCNo": "",
+            "LCDate": "",
+            "LCAmount": "",
+            "LCCurrencyID": "",
+            "ExchangeRate": "",
+            "ExchangeCurrency": "",
+            "ExchangeValue": "",
+            "IssueDate": "",
+            "ExpiryDate": "",
+            "ExpiryPlace": "",
+            "NNDSendingTime": "",
+            "LCANo": "",
+            "IRCNo": "",
+            "VatRegNo": "",
+            "TINNo": "",
+            "BINNo": "",
+            "ICNNo": "",
+            "ICNDate": "",
+            "LastShipmentDate": "",
+            "LCOpeningBank": "",
+            "AdvisingBank": "",
+            "Beneficiary": "",
+            "BeneficiaryAddressID": "",
+            "PIBeneficiary": "",
+            "PIID": "",
+            "LCReviceNo": "",
+            "LCReviceDate": "",
+            "RunningStatus": "",
+            "LCState": "",
+            "LCStatus": "",
+            "RecordStatus": "",
+            "ApprovedBy": "",
+            "ApproveDate": "",
+            "BankID": "",
+            "BankName": "",
+            "BranchID": "",
+            "BranchName": "",
+            "Address1": "",
+            "BranchSwiftCode": "",
+            "LCLimit": "",
+            "Remarks": "",
+            "LCLimitCurrencyID": "",
+            "PIDate": ""
+        };
+
+        var saveStatus = 1;
+
+        function Save() {
+            saveStatus = 1;
+            //CheckRequiredTextBoxMaxLength('BankName', 500);
+            CheckRequiredTextBoxMaxLength('PINo', 30);
+            //CheckRequiredTextBoxMaxLength('LCNo', 30);
+            //CheckRequiredTextBoxMaxLength('AdvisingBankName', 200);
+            //CheckRequiredTextBoxMaxLength('LCAmount', 30);
+
+
+            if (saveStatus == 1) {
+                obDataSet.LCID = $("#LCID").val();
+                obDataSet.LCNo = $("#LCNo").val();
+                obDataSet.LCDate = $("#LCDate").val();
+                obDataSet.LCAmount = $("#LCAmount").val();
+                obDataSet.LCCurrencyID = $("#LCCurrencyID").val();
+                obDataSet.ExchangeRate = $("#ExchangeRate").val();
+                obDataSet.ExchangeCurrency = $("#ExchangeCurrency").val();
+                obDataSet.ExchangeValue = $("#ExchangeValue").val();
+                obDataSet.IssueDate = $("#IssueDate").val();
+                obDataSet.ExpiryDate = $("#ExpiryDate").val();
+                obDataSet.ExpiryPlace = $("#ExpiryPlace").val();
+                obDataSet.NNDSendingTime = $("#NNDSendingTime").val();
+                obDataSet.LCANo = $("#LCANo").val();
+                obDataSet.IRCNo = $("#IRCNo").val();
+                obDataSet.VatRegNo = $("#VatRegNo").val();
+                obDataSet.TINNo = $("#TINNo").val();
+                obDataSet.BINNo = $("#BINNo").val();
+                obDataSet.ICNNo = $("#ICNNo").val();
+                obDataSet.ICNDate = $("#ICNDate").val();
+                obDataSet.LastShipmentDate = $("#LastShipmentDate").val();
+                obDataSet.Remarks = $("#Remarks").val();
+
+                obDataSet.LCOpeningBank = $("#LCOpeningBank").val();
+                obDataSet.AdvisingBank = $("#AdvisingBank").val();
+                obDataSet.Beneficiary = $("#PIBeneficiary").val();
+                obDataSet.BeneficiaryAddressID = $("#BeneficiaryAddressID").val();
+                obDataSet.PIID = $("#PIID").val();
+                obDataSet.RecordStatus = $("#RecordStatus").val();
+
+
+
+                obDataSet.BankID = $("#BankID").val();
+                obDataSet.BranchID = $("#BranchID").val();
+                obDataSet.Address1 = $("#Address1").val();
+                obDataSet.BranchSwiftCode = $("#BranchSwiftCode").val();
+                obDataSet.LCLimit = $("#LCLimit").val();
+                obDataSet.LCMargin = $("#LCMargin").val(); //LCMarginCurrency
+                obDataSet.PINo = $("#PINo").val();
+                obDataSet.PIID = $("#PIID").val();
+                obDataSet.PIDate = $("#PIDate").val();
+
+
+
+                if (obDataSet.LCID == "") {
+                    // INSERT DATA
+                    $("#divLoading").show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Save", "EXPLCOpening")',
+                        data: JSON.stringify(obDataSet),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.msg.Type == 2) {
+                                // Reset();
+                                $("#LCID").val(data.msg.ReturnId);
+                                $("#LCNo").val(data.msg.ReturnCode);
+                                $('#MessageText').html(data.msg.Msg);
+                                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            }
+                            else {
+                                $("#MessageText").html(data.msg.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                        },
+                        error: function (respnse) {
+                            // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                }
+                else {
+                    $("#divLoading").show();
+                    // UPDATE DATA
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Update", "EXPLCOpening")',
+                        data: JSON.stringify(obDataSet),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data.RecordStatus);
+                            if (data.msg.Type == 2) {
+                            
+                                $('#MessageText').html(data.msg.Msg);
+                                $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                            }
+                            else {
+                                $("#MessageText").html(data.msg.Msg);
+                                $("#MessageText").css("color", "red");
+                            }
+                        },
+                        error: function (respnse) {
+                            // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                }
+            }
+
+        }
+
+
+
+        function Reset() {
+
+            $('.Dropdown').val('');
+            $('.FormBody input[type=text]').val('');
+            // <input id="checkSelection" name="checkbox" type="checkbox" value="true" /> <label style="font-family:Constantia;font-size:x-small">Lock Selection</label>
+
+            $('.FormBody input[type=text]').val('');
+            $('.txtBox').val('');
+
+            $('.FormBody input[type=hidden]').val('');
+            $('.FormBody input[type=number]').val('');
+            $('.FormBody input[type=button]').attr('disabled', false);
+            $('#MessageText').html('');
+            $('.FormBody .datePicker').val(getISODateTime(new Date()));
+            $('#btnSubmit').attr('disabled', false);
+            $('#btnDelete').attr('disabled', false);
+            $("#Remarks").val("");
+            $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+            //$('input:checkbox[name=checkbox]').attr('checked', false);
+        }
+
+
+
+        //********************************** Start Search Data  *******************************
+
+        $("#btnSearch").click(function () {
+            SearchResult("GetLCInfo", "EXPLCOpening", "LCID,Remarks,LCCurrencyID,LCCurrencyName,LastShipmentDate,ExpiryDate,PIID,LCOpeningBank,BankID,BranchID,PIDate,Address,BranchSwiftCode,BranchCode,LCLimit,AdvisingBank,BankCode");//GetBankDebitVoucherInfo
+        });
+
+        $("#btnSearchGridSearch").click(function () {
+            GetSearchResult("SearchLCInfoByLCNo", "EXPLCOpening");
+        });
+
+        AutoComplete("GetAutoCompleteData", "EXPLCOpening");
+
+        $("#txtSearch").keyup(function (event) {
+            if ($("#txtSearch").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    GetSearchResult("SearchLCInfoByLCNo", "EXPLCOpening");
+                }
+            }
+        });
+
+
+        function ListOfValueSearchGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+            $("#LCID").val(selectedItem.LCID);
+
+        
+
+            $.ajax({
+                url: '@Url.Action("GetLCDetailInfoByLCID", "EXPLCOpening")',
+                type: 'GET',
+                data: { LCID: selectedItem.LCID },
+                success: function (data) {
+                    $("#LCID").val(data.LCID);
+                    $("#LCNo").val(data.LCNo);
+                    $("#ExchangeCurrency").val(data.ExchangeCurrency);
+                    $("#ExchangeRate").val(data.ExchangeRate);
+                    $("#ExchangeValue").val(data.ExchangeValue);
+                    $("#LCAmount").val(data.LCAmount);
+                    $("#PINo").val(data.PINo);
+                    $("#PIID").val(data.PIID);
+                    $("#LCCurrencyID").val(data.LCCurrencyID);
+                    $("#IssueDate").val(data.IssueDate);
+                    $("#ICNDate").val(data.ICNDate);
+                    $("#LastShipmentDate").val(data.LastShipmentDate);
+                    $("#ExpiryPlace").val(data.ExpiryPlace);
+                    $("#ExpiryDate").val(data.ExpiryDate);
+
+                    $("#NNDSendingTime").val(data.NNDSendingTime);
+                    $("#LCANo").val(data.LCANo);
+
+                    $("#IRCNo").val(data.IRCNo);
+                    $("#VatRegNo").val(data.VatRegNo);
+                    $("#TINNo").val(data.TINNo);
+                    $("#BINNo").val(data.BINNo);
+                    $("#ICNNo").val(data.ICNNo);
+                    $("#BankID").val(data.BankID);
+                    $("#BranchID").val(data.BranchID);
+                    $("#AdvisingBank").val(data.AdvisingBank);
+
+
+                    $("#RecordStatus").val(data.RecordStatus);
+                    $("#Remarks").val(data.Remarks);
+
+                    if (selectedItem.RecordStatus == "Not Confirmed") {
+                        $("#btnConfirm").removeAttr('disabled');
+                        $("#btnCheck").removeAttr('disabled');
+                        $("#btnSubmit").removeAttr('disabled');
+                        $('#btnDelete').attr('disabled', true);
+                    }
+                    else if (selectedItem.RecordStatus == "Checked") {
+                        $("#btnCheck").attr('disabled', 'disabled');
+
+                    }
+
+                    else if (selectedItem.RecordStatus == "Confirmed") {
+                        $("#btnConfirm").attr('disabled', 'disabled');
+                        $("#btnCheck").attr('disabled', 'disabled');
+                        $("#btnSubmit").attr('disabled', 'disabled');
+                        $('#btnDelete').attr('disabled', true);
+
+                    }
+                    else {
+                        $("#btnConfirm").removeAttr('disabled');
+                        $("#btnCheck").removeAttr('disabled');
+                        $("#btnSubmit").removeAttr('disabled');
+                        $('#btnDelete').removeAttr('disabled');
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+
+            });
+        }
+
+        //********************************** END Search Data  *******************************
+
+
+
+
+
+
+
+        //****************************************** CONFIRM DATA **************************************************//
+
+        $("#btnConfirm").click(function () {
+            $("#divLoading").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmRecordStatus", "EXPLCOpening")',
+                data: { lcId: $("#LCID").val() },
+                success: function (data) {
+                    console.log(data);
+                    $("#divLoading").hide();
+                    if (data.msg.Type == 2) {
+                        $('#MessageText').html(data.msg.Msg);
+                        $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        $("#btnConfirm").attr('disabled', 'disabled');
+                        $("#btnChecked").attr('disabled', 'disabled');
+                        $('#btnDelete').attr('disabled', true);
+                        $("#btnSubmit").attr('disabled', 'disabled');
+                    }
+                    else {
+                        $("#MessageText").html(data.msg.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                },
+                error: function (respnse) {
+                    // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    $("#divLoading").hide();
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        });
+
+
+        //****************************************** END OF CONFIRM DATA **************************************************//
+
+
+
+
+
+
+
+
+</script>

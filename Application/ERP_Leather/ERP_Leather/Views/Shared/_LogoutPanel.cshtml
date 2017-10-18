@@ -1,0 +1,29 @@
+﻿<ul id="signOut" class="nav pull-right navbar-nav">
+    <li class="divider-vertical"></li>
+    <li class=""><a href="@Url.Action("index","Home")">Home</a></li>
+    <li class="dropdown">
+        <a id="signOutLink" class="dropdown-toggle" href="javascript:void(0)" data-toggle="">Sign Out</a>
+    </li>
+</ul>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#signOutLink').click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("LogOut", "Home")',
+                cache: false,
+                success: function (data) {
+
+                    window.location.replace('@Url.Action("Login","Home")');
+                },
+                error: function () {
+                }
+            });
+        });
+
+
+    });
+</script>

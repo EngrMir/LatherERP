@@ -1,0 +1,199 @@
+﻿
+<div id="PopupWindow" style="display: none;"> 
+   <table class="table table-condensed">
+       <tr>
+           <td width="140px"><label> @ViewBag.SearchTitle</label></td>
+           <td><input type="text" id="txtPopup" style="width: 400px" /></td>
+           <td><input type="button" id="btnPopupGridSearch" value="Search" /></td>
+       </tr>
+   </table>
+
+    <div id="PopupWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPopupWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPopupWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<script type="text/javascript">
+
+    function PopupResult(action, controller, val) {
+        var route = "/" + controller + "/" + action;
+        if (val != "") {
+            $("#txtPopup").val("");
+            var param = val;// '{"bankCategory":"BNK","bankType":"LOC"}';  //'[{ "bankCategory": "BNK", "bankType": "LOC" }]';           
+            $.ajax({
+                url: route,
+                type: "POST",
+                data: param,
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    var grid = $("#PopupWindowGrid").data("kendoGrid");
+                    grid.destroy();
+                    $("#PopupWindowGrid")
+                        .empty() // clear the old HTML
+                        .kendoGrid({
+                            dataSource: {
+                                data: data,
+                                pageSize:10,
+                            },
+                            pageable: true,
+                            editable: false,
+                            selectable: "row",
+                            navigatable: true,
+                            filterable: true,
+                            sortable: true,
+                            height: 300
+                        });
+
+            
+                    return true;
+                }
+            });
+        }
+        else {
+            $.ajax({
+                url: route,
+                type: "GET",
+                dataType: "JSON",
+                success: function (data) {
+                    var grid = $("#PopupWindowGrid").data("kendoGrid");
+                    // destroy it
+                    grid.destroy();
+                    $("#PopupWindowGrid")
+                        .empty() // clear the old HTML
+                        .kendoGrid({
+                            dataSource: {
+                                data: data,
+                                pageSize: 10
+                            },
+                            pageable: true,
+                            editable: false,
+                            selectable: "row",
+                            navigatable: true,
+                            filterable: true,
+                            sortable: true,
+                            height: 300
+                        });
+
+                }
+            });
+        }
+        
+        SelectedItemOfListOfValues('PopupWindowGrid');
+        PopupWindow.open();
+    }
+    function SelectedItemOfListOfValues(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    var PopupWindow = $('#PopupWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PopupWindowGrid = $("#PopupWindowGrid").kendoGrid({
+        dataSource: PopupWindowDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300
+    });
+
+    var PopupWindowDataSource = new kendo.data.DataSource({
+        pageSize: 10
+    });
+    $('#btnPopupWindowOK').click(function () {
+        ListOfValuePopupGridEvent('PopupWindowGrid');
+        PopupWindow.close();
+    });
+    $('#btnPopupWindowCancel').click(function () {
+        PopupWindow.close();
+    });
+    $("#PopupWindow").dblclick(function () {
+        ListOfValuePopupGridEvent('PopupWindowGrid');
+        PopupWindow.close();
+    });
+    $("#PopupWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuePopupGridEvent('PopupWindowGrid');
+            PopupWindow.close();
+        }
+        else if (keycode == '27') {
+            PopupWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#PopupWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuePopupGridEvent('PopupWindowGrid');
+            PopupWindow.close();
+        }
+        else if (keycode == '27') {
+            PopupWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    function GetPopupSearchResult(action, controller) {
+        var route = "/" + controller + "/" + action;
+        $.ajax({
+            url: route,
+            type: 'GET',
+            data: { search: $("#txtPopup").val() },
+            success: function (data) {
+                $("#PopupWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.Count == 1) {
+                    ListOfValuePopupGridEvent('PopupWindowGrid');
+                    PopupWindow.close();
+                }
+            }
+        });
+    }
+
+    //function AutoComplete(action, controller, val) {
+    //    var route = "/" + controller + "/" + action;
+    //    var autoCompleteDataSource = new kendo.data.DataSource({
+    //        transport: {
+    //            read: {
+    //                url: route,
+    //                type: "GET"
+    //            }
+    //        }
+    //    });
+
+
+   
+
+    function ListOfValuePopupGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        SelectedData();
+    }
+
+    function BtnPopupGridSearch()
+    { }
+   
+</script>

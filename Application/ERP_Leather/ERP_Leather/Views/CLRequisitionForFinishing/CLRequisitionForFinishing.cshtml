@@ -1,0 +1,2643 @@
+﻿@{
+    ViewBag.Title = "Crust Leather Requisition For Finishing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="" disabled="disabled" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Category</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="" readonly="readonly" class="ReadOnlyTextbox" value="Requistion For Crusting" style="width:175PX;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Floor</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ProductionFloor", new SelectList(ViewBag.ProductionFloor, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 185px; margin-left: 0px; " })
+            </div>
+            <div class="col-lg-2">
+                <label>Requisition To</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ConcernStore", new SelectList(ViewBag.ConcernStore, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 185px; margin-left: 0px; " })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Year</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ScheduleYear" class="txtBox RequiredTextBox" placeholder="Press F9" />
+                <input type="hidden" id="YearMonID" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Requisition Month</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="ScheduleMonth" class="txtBox RequiredTextBox" style="width:185px;">
+                    <option value="">--Select--</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnAddNewYearMonth" class="Button" value="Add New Year Month" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Code</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ScheduleNo" class="txtBox RequiredTextBox FormBody2" readonly="readonly" placeholder="Press F9" />
+                <input type="hidden" id="ScheduleID" class="txtBox FormBody2" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Prepare Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PrepareDate" class="datePicker RequiredTextBox FormBody2" />
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnAddNewRequisition" value="Add New Requistion" />
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Serial</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionNo" class="txtBox RequiredTextBox FormBody3" readonly="readonly" placeholder="Press F9" />
+                <input type="hidden" id="RequisitionDateID" class="txtBox FormBody3" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Required On</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequiredDate" class="datePicker RequiredTextBox FormBody3" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnAddNewDate" value="Add New Date" />
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div id="ItemGrid"></div>
+        <input type="hidden" id="RequisitionItemID" class="txtBox">
+    </div>
+
+    <div class="FormBody">
+        <div id="ColorGrid"></div>
+    </div>
+
+    <input type="hidden" id="RecordStatus" class="txtBox" />
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="Remark" class="txtBox" name="" tabindex=""></textarea>
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="YearMonthWindow" style="display: none;">
+    <div id="YearMonthWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnYearMonthWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnYearMonthWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RequisitionWindow" style="display: none;">
+    <div id="RequisitionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRequisitionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRequisitionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RequisitionDateWindow" style="display: none;">
+    <div id="RequisitionDateWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRequisitionDateWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRequisitionDateWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ColorWindow" style="display: none;">
+    <div id="ColorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnColorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnColorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ArticleChallanWindow" style="display: none;">
+    <div id="ArticleChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ScheduleWindow" style="display: none;">
+    <div id="ScheduleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnScheduleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnScheduleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="BuyerWindow" style="display: none;">
+    <div id="BuyerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="BuyerOrderWindow" style="display: none;">
+    <div id="BuyerOrderWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+    $(document).ready(function () {
+
+        //--------------------------To Add new year month-------------------------------------
+
+        $("#btnAddNewYearMonth").click(function () {
+            $.ajax({
+                url: '@Url.Action("AddNewYearMonth", "CLRequisitionForFinishing")',
+                data: ({
+                    "_ScheduleYear": $("#ScheduleYear").val(), "_ScheduleMonth": $("#ScheduleMonth").val(), "_ProductionFloor": $("#ProductionFloor").val(),
+                    "_YearMonID": $("#YearMonID").val(), "_ConcernStore": $("#ConcernStore").val()
+                }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    $("#YearMonID").val(response.YearMonID);
+
+                    $("#ScheduleID").val("");
+                    $("#ScheduleNo").val("");
+                    $("#RequisitionNo").val("");
+                    $("#RequisitionDateID").val("");
+                    $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                    $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+
+
+
+
+
+                }
+            });
+        })
+
+        $("#btnAddNewRequisition").click(function (e) {
+            if ($("#YearMonID").val() != "") {
+                $.ajax({
+                    url: '@Url.Action("AddNewRequisition", "WBRequisitionForCrusting")',
+                    data: ({
+                        "_YearMonID": $("#YearMonID").val(), "_PrepareDate": $("#PrepareDate").val()
+                    }),
+                    type: 'GET',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.ScheduleID > 0) {
+                            $('#MessageText').html("Requisition Added Successfully");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#ScheduleID").val(response.ScheduleID);
+                            $("#ScheduleNo").val(response.ScheduleNo);
+
+                            $("#RequisitionNo").val("");
+                            $("#RequisitionDateID").val("");
+                            $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                            $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                        }
+                        else {
+                            $('#MessageText').html("Failed to Add Requisition");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                });
+            }
+            else {
+                $('#MessageText').html("Please Select Requisition Information First");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                e.stopImmediatePropagation();
+            }
+
+
+
+        })
+
+        $("#btnAddNewDate").click(function (e) {
+            if ($("#ScheduleID").val() != "") {
+                $.ajax({
+                    url: '@Url.Action("AddNewRequisitionDate", "CLRequisitionForFinishing")',
+                    data: ({
+                        "_ScheduleID": $("#ScheduleID").val(), "_RequiredDate": $("#RequiredDate").val()
+                    }),
+                    type: 'GET',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.RequisitionDateID > 0) {
+                            $('#MessageText').html("Requisition Added Successfully");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#RequisitionDateID").val(response.RequisitionDateID);
+                            $("#RequisitionNo").val(response.RequisitionNo);
+
+                            $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                            $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                        }
+                        else {
+                            $('#MessageText').html("Failed to Add Requisition Date");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    }
+                });
+            }
+            else {
+                $('#MessageText').html("Please Select Requisition Information First");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                e.stopImmediatePropagation();
+            }
+
+
+
+        })
+
+        //--------------------------To Add new year month-------------------------------------
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        var ddlUnitDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnit", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnit(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlUnitDataSource
+                    });
+        };
+
+
+        var ddlUnitDataSourceForThickness = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetCategoryWiseUnit", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: { "_UnitCategory": "Thickness" }
+                }
+            }
+        });
+
+        function ddlUnitForThickness(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlUnitDataSourceForThickness
+                    });
+        };
+
+        var ddlItemTypeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemTypeID",
+                    fields: {
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllItemType", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlItemType(container, options) {
+            $('<input name="ItemTypeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "ItemTypeName",
+                        dataValueField: "ItemTypeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlItemTypeDataSource
+                    });
+        };
+
+
+
+        var ddlLeatherStatusDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LeatherStatusID",
+                    fields: {
+                        LeatherStatusID: { editable: false },
+                        LeatherStatusName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllLeatherStatus", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlLeatherStatus(container, options) {
+            $('<input name="LeatherStatusID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "LeatherStatusName",
+                        dataValueField: "LeatherStatusName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlLeatherStatusDataSource
+                    });
+        };
+
+
+        var ddlThicknessAtDataSource = [{ text: "After Shaving", value: "After Shaving" }, { text: "After Finishing", value: "After Finishing" }];
+
+        function ddlChallanCategory(container, options) {
+            $('<input id="ThicknessAt" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        optionLabel: "Select",
+                        change: function (e) {
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlThicknessAtDataSource
+                    });
+        };
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var ItemGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RequisitionItemID",
+                    fields: {
+                        RequisitionItemID: { editable: true },
+                        ScheduleItemID: { editable: true },
+                        ScheduleProductionNo: { editable: true, defaultValue: 'Press F9' },
+                        BuyerID: { editable: true },
+                        BuyerName: { editable: true, defaultValue: 'Press F9' },
+                        BuyerOrderID: { editable: true },
+                        BuyerOrderNo: { editable: true, defaultValue: 'Press F9' },
+                        ItemTypeID: { editable: true },
+                        ItemTypeName: { editable: true },
+                        LeatherStatusID: { editable: true },
+                        LeatherStatusName: { editable: true },
+                        ArticleID: { editable: true },
+                        ArticleNo: { editable: true },
+                        ArticleName: { editable: true, defaultValue: 'Press F9' },
+                        ArticleChallanID: { editable: true },
+                        ArticleChallanNo: { editable: true, defaultValue: 'Press F9' },
+                        AvgSize: { editable: true },
+                        AvgSizeUnit: { editable: true },
+                        AvgSizeUnitName: { editable: true, defaultValue: 'SFT' },
+                        Thickness: { editable: true },
+                        ThicknessUnit: { editable: true },
+                        ThicknessUnitName: { editable: true, defaultValue: 'MM' },
+                        ThicknessAt: { editable: true, defaultValue: 'After Shaving' },
+                        Remarks: { editable: true },
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var ItemGrid = $("#ItemGrid").kendoGrid({
+            dataSource: ItemGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 250,
+            toolbar: [{
+                text: "Add New Item",
+                className: "btnItemGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                    //{ field: "RequisitionItemID", title: "Item ID", width: "60px", sortable: false, filterable: false },
+                    { field: "ScheduleProductionNo", title: "S.P. No", width: "100px", attributes: { "Class": "ScheduleProductionNo" } },
+                    { field: "BuyerName", title: "Party", width: "60px", attributes: { "Class": "BuyerName" } },
+                    { field: "BuyerOrderNo", title: "Order", width: "60px", attributes: { "Class": "BuyerOrder" } },
+                    { field: "ItemTypeName", title: "Item Type<span style='color:red'>*</span>", width: "60px", editor: ddlItemType, },
+                    { field: "LeatherStatusName", title: "Leather Status<span style='color:red'>*</span>", width: "80px", editor: ddlLeatherStatus },
+                    //{ field: "ArticleID", title: "ArticleID", width: "60px" },
+                    //{ field: "ArticleNo", title: "ArticleNo", width: "60px" },
+                    { field: "ArticleName", title: "Article<span style='color:red'>*</span>", width: "60px", attributes: { "Class": "ArticleName" } },
+                    { field: "ArticleChallanNo", title: "Challan No", width: "60px", attributes: { "Class": "ArticleChallanNo" } },
+                    { field: "AvgSize", title: "Size", width: "50px", filterable: false },
+                    { field: "AvgSizeUnitName", title: "Unit", width: "50px", editor: ddlUnit, filterable: false },
+                    { field: "SideDescription", title: "Side", width: "70px", filterable: false },
+                    { field: "SelectionRange", title: "Selection Range", width: "60px", filterable: false },
+                    { field: "Thickness", title: "Thickness", width: "60px", filterable: false },
+                    { field: "ThicknessUnitName", title: "Unit", width: "70px", editor: ddlUnitForThickness, filterable: false },
+                    { field: "ThicknessAt", title: "Thickness At", width: "80px", editor: ddlChallanCategory, filterable: false },
+                    { field: "Remarks", title: "Remarks", width: "60px", filterable: false },
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 70 },
+            ]
+
+        }).data('kendoGrid');
+
+
+        var ColorGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ReqItemColorID",
+                    fields: {
+                        ReqItemColorID: { editable: false },
+                        RequisitionItemID: { editable: false },
+                        ColorID: { editable: true },
+                        ArticleColorNo: { editable: true },
+                        ColorName: { editable: true, defaultValue: 'Press F9' },
+                        ColorPCS: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        ColorSide: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        ColorArea: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        Remarks: { editable: true },
+                        AreaUnit: { editable: true },
+                        AreaUnitName: { editable: true, defaultValue: 'SFT' }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var ColorGrid = $("#ColorGrid").kendoGrid({
+            dataSource: ColorGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            height: 200,
+            toolbar: [{
+                text: "Add New Color",
+                className: "btnColorGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                //{ field: "ReqItemColorID", title: "Color ID", width: "60px", sortable: false, attributes: { "Class": "ColorName" } },
+                //{ field: "RequisitionItemID", title: "Req ID", width: "60px", sortable: false, attributes: { "Class": "ColorName" } },
+                  { field: "ArticleColorNo", title: "Color No", width: "60px", sortable: false },
+                  { field: "ColorName", title: "Color Name<span style='color:red'>*</span>", width: "60px", sortable: false, attributes: { "Class": "ColorName" } },
+                  { field: "ColorPCS", format: "{0:n2}", title: "Color PCS", width: "80px" },
+                  { field: "ColorSide", format: "{0:n2}", title: "Color Side", width: "60px" },
+                  { field: "ColorArea", format: "{0:n2}", title: "Color Area", width: "60px" },
+                  { field: "AreaUnitName", title: "Area Unit", width: "60px", editor: ddlUnit },
+                  { field: "Remarks", title: "Remarks", width: "60px" },
+                  { command: [{ name: "DeltedRow", text: "Delete", click: DeleteColor }], title: "Action", width: 60 }
+            ]
+        }).data('kendoGrid');
+
+
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "YearMonID",
+                    fields: {
+                        YearMonID: { editable: false },
+                        ScheduleMonth: { editable: false },
+                        ScheduleMonthName: { editable: false },
+                        ScheduleYear: { editable: false },
+                        ProductionFloor: { editable: false },
+                        ProductionFloorName: { editable: false },
+                        ConcernStore: { editable: false },
+                        ConcernStoreName: { editable: false },
+                        ScheduleID: { editable: false },
+                        ScheduleNo: { editable: false },
+                        PrepareDate: { editable: false },
+                        RequisitionDateID: { editable: false },
+                        RequisitionNo: { editable: false },
+                        RequiredDate: { editable: false },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSearchInformation", "CLRequisitionForFinishing")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        var searchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ScheduleMonthName", title: "Month", width: "60px" },
+                  { field: "ScheduleYear", title: "Year", width: "60px" },
+                  { field: "ProductionFloorName", title: "Production Floor", width: "60px" },
+                  { field: "ConcernStoreName", title: "Concern Store", width: "60px" },
+                  { field: "PrepareDate", title: "Prepare Date", width: "60px" },
+                  { field: "RequiredDate", title: "Required Date", width: "70px" },
+                  { field: "RecordStatus", title: "Record Status", width: "70px" }
+            ]
+        });
+
+        var YearMonthGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "YearMonID",
+                    fields: {
+                        YearMonID: { editable: false },
+                        ScheduleMonth: { editable: false },
+                        ScheduleMonthName: { editable: false },
+                        ScheduleYear: { editable: false },
+                        ProductionFloor: { editable: false },
+                        ProductionFloorName: { editable: false },
+                        ConcernStore: { editable: false },
+                        ConcernStoreName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllYearMonthCombination", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: {"_ScheduleFor": "CRR"}
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var YearMonthGrid = $("#YearMonthWindowGrid").kendoGrid({
+            dataSource: YearMonthGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "ProductionFloorName", title: "Production Floor", width: "60px" },
+                  { field: "ConcernStoreName", title: "Requisition To", width: "60px" },
+                  { field: "ScheduleYear", title: "Requisition Year", width: "60px" },
+                  { field: "ScheduleMonthName", title: "Requisition Month", width: "60px" }
+            ]
+        });
+
+        var RequisitionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ScheduleID",
+                    fields: {
+                        ScheduleID: { editable: false },
+                        ScheduleNo: { editable: false },
+                        PrepareDate: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var RequisitionGrid = $("#RequisitionWindowGrid").kendoGrid({
+            dataSource: RequisitionGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ScheduleNo", title: "Requisition Code", width: "60px", filterable: false, sortable: false },
+                  { field: "PrepareDate", title: "Prepare Date", width: "60px" }
+            ]
+
+        });
+
+        var RequisitionDateGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RequisitionDateID",
+                    fields: {
+                        RequisitionDateID: { editable: false },
+                        RequisitionNo: { editable: false },
+                        RequiredDate: { editable: false },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var RequisitionDateGrid = $("#RequisitionDateWindowGrid").kendoGrid({
+            dataSource: RequisitionDateGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "RequisitionNo", title: "Requisition No", width: "60px", filterable: false, sortable: false },
+                  { field: "RequiredDate", title: "Required Date", width: "60px" },
+                  { field: "RecordStatus", title: "Record Status", width: "60px" }
+            ]
+
+        });
+
+
+        var ArticleChallanWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleChallanID",
+                    fields: {
+                        ArticleChallanID: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        PreparationDate: { editable: false },
+                    }
+                }
+            },
+            pageSize: 50,
+        });
+
+        var ArticleChallanWindowGrid = $("#ArticleChallanWindowGrid").kendoGrid({
+            dataSource: ArticleChallanWindowGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ArticleChallanNo", title: "Article Challan No", width: "60px" },
+                  //{ field: "BuyerName", title: "Party", width: "60px" },
+                  //{ field: "ArticleName", title: "Article Name", width: "60px" },
+                  { field: "PreparationDate", title: "Preparation Date", width: "60px" }
+            ]
+        });
+
+        var ColorWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ColorID",
+                    fields: {
+                        ColorID: { editable: false },
+                        ColorCode: { editable: false },
+                        ColorName: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveColor", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ColorWindowGrid = $("#ColorWindowGrid").kendoGrid({
+            dataSource: ColorWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "ColorCode", title: "Color Code", width: "60px" },
+                  { field: "ColorName", title: "Color Name", width: "60px" }
+            ]
+        });
+
+
+        var BuyerWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BuyerID",
+                    fields: {
+                        BuyerID: { editable: false },
+                        BuyerCode: { editable: false },
+                        BuyerName: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveBuyer", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ArticleWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleID",
+                    fields: {
+                        ArticleID: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        ArticleColor: { editable: false },
+                        ColorName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveArticle", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ArticleWindowGrid = $("#ArticleWindowGrid").kendoGrid({
+            dataSource: ArticleWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "ArticleNo", title: "Article Number", width: "60px" },
+                  { field: "ArticleName", title: "Article Name", width: "60px" },
+                  { field: "ArticleChallanNo", title: "Article Challan", width: "60px" },
+                  { field: "ColorName", title: "Article Color", width: "60px" }
+            ]
+        });
+
+        var BuyerWindowGrid = $("#BuyerWindowGrid").kendoGrid({
+            dataSource: BuyerWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "BuyerCode", title: "Buyer Code", width: "60px" },
+                  { field: "BuyerName", title: "Buyer Name", width: "60px" }
+            ]
+        });
+
+
+        var BuyerOrderWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BuyerOrderID",
+                    fields: {
+                        BuyerOrderID: { editable: false },
+                        BuyerOrderNo: { editable: false },
+                        BuyerOrderDate: { editable: false },
+
+                        ArticleId: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleName: { editable: false },
+
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false },
+                        LeatherStatusID: { editable: false },
+                        LeatherStatusName: { editable: false },
+
+                        AvgSize: { editable: false },
+                        AvgSizeUnit: { editable: false },
+                        AvgSizeUnitName: { editable: false },
+
+                        SideDescription: { editable: false },
+                        SelectionRange: { editable: false },
+                        Thickness: { editable: false },
+
+                        ThicknessUnit: { editable: false },
+                        ThicknessUnitName: { editable: false },
+                        ThicknessAt: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var BuyerOrderWindowGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+            dataSource: BuyerOrderWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "BuyerOrderNo", title: "Order No", width: "60px" },
+                  { field: "BuyerOrderDate", title: "Order Date", width: "60px" },
+
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" },
+                  { field: "LeatherStatusName", title: "Leather Status", width: "60px" },
+
+                  { field: "ArticleName", title: "Article", width: "60px" },
+                  { field: "AvgSize", title: "Size", width: "60px" },
+
+                  { field: "AvgSizeUnitName", title: "Unit", width: "60px" },
+                  { field: "SideDescription", title: "Side", width: "60px" },
+
+                  { field: "SelectionRange", title: "Selection Range", width: "60px" },
+                  { field: "Thickness", title: "Thickness", width: "60px" },
+
+                  { field: "ThicknessUnitName", title: "Unit", width: "60px" },
+                  { field: "ThicknessAt", title: "Thickness At", width: "60px" }
+            ]
+        });
+
+
+        var ScheduleWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ScheduleItemID",
+                    fields: {
+                        ScheduleItemID: { editable: false },
+                        ScheduleProductionNo: { editable: false },
+                        BuyerID: { editable: false },
+                        BuyerName: { editable: false },
+                        BuyerOrderID: { editable: false },
+                        BuyerOrderNo: { editable: false },
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false },
+                        LeatherStatusID: { editable: false },
+                        LeatherStatusName: { editable: false },
+                        ArticleID: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleChallanID: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        AvgSize: { editable: false },
+                        AvgSizeUnit: { editable: false },
+                        AvgSizeUnitName: { editable: false },
+                        Thickness: { editable: false },
+                        ThicknessUnit: { editable: false },
+                        ThicknessUnitName: { editable: false },
+                        ThicknessAt: { editable: false },
+                    }
+                }
+            },
+
+            pageSize: 50
+        });
+
+        var ScheduleWindowGrid = $("#ScheduleWindowGrid").kendoGrid({
+            dataSource: ScheduleWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "ScheduleProductionNo", title: "S.P. No", width: "60px" },
+                  { field: "BuyerName", title: "Party", width: "60px" },
+                  { field: "BuyerOrderNo", title: "Order", width: "60px" },
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" },
+                  { field: "LeatherStatusName", title: "Leather Status", width: "60px" },
+                  { field: "ArticleName", title: "Article", width: "60px" },
+                  { field: "ArticleChallanNo", title: "Challan", width: "60px" },
+                  { field: "AvgSize", title: "Size", width: "50px" },
+                  { field: "AvgSizeUnitName", title: "Unit", width: "50px" },
+                  { field: "SideDescription", title: "Side", width: "70px" },
+                  { field: "SelectionRange", title: "Selection Range", width: "60px" },
+                  { field: "Thickness", title: "Thickness", width: "60px" },
+                  { field: "ThicknessUnitName", title: "Unit", width: "70px" },
+                  { field: "ThicknessAt", title: "Thickness At", width: "80px" }
+            ]
+        });
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+
+        $(document).on('keyup', '.ColorName', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('ColorWindowGrid');
+                ColorWindow.open(); //Open Popup
+                ColorWindow.center();
+            }
+
+        });
+
+        $(document).on('keyup', '.ArticleName', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('ArticleWindowGrid');
+                ArticleWindow.open(); //Open Popup
+                ArticleWindow.center();
+            }
+
+        });
+
+        function LoadArticleChallanWindowGrid() {
+            var grid = $("#ItemGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            $.ajax({
+                url: '@Url.Action("GetArticleChallanList", "WBRequisitionForCrusting")',
+                type: 'GET',
+                data: { "_BuyerID": selectedItem.BuyerID, "_ArticleID": selectedItem.ArticleID },
+                success: function (data) {
+                    $("#ArticleChallanWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+
+        $(document).on('keyup', '.ArticleChallanNo', function (e) {
+            if (e.which == 120) {
+                var grid = $("#ItemGrid").data("kendoGrid");
+                var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+                if (selectedItem.ArticleID != null && selectedItem.ArticleID != "") {
+                    LoadArticleChallanWindowGrid();
+                    SelectedItemOfListOfValue('ArticleChallanWindowGrid');
+                    ArticleChallanWindow.open(); //Open Popup
+                    ArticleChallanWindow.center();
+                }
+                else {
+                    $('#MessageText').html("Please Select Article First");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+
+
+            }
+        });
+
+        $(document).on('keyup', '.BuyerName', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('BuyerWindowGrid');
+                BuyerWindow.open(); //Open Popup
+                BuyerWindow.center();
+            }
+
+        });
+
+        function LoadBuyerOrderGrid() {
+            var grid = $("#ItemGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            $.ajax({
+                url: '@Url.Action("GetBuyerOrderList", "WBRequisitionForCrusting")',
+                type: 'GET',
+                data: { "_BuyerID": selectedItem.BuyerID },
+                success: function (data) {
+                    $("#BuyerOrderWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+
+        $(document).on('keyup', '.BuyerOrder', function (e) {
+            if (e.which == 120) {
+                LoadBuyerOrderGrid();
+                SelectedItemOfListOfValue('BuyerOrderWindowGrid');
+                BuyerOrderWindow.open(); //Open Popup
+                BuyerOrderWindow.center();
+            }
+
+        });
+
+
+
+
+
+
+        $(document).on('keyup', '.ScheduleProductionNo', function (e) {
+            if (e.which == 120) {
+                if ($("#YearMonID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("GetScheduleList", "CLRequisitionForFinishing")',
+                        type: 'GET',
+                        data: { "_ScheduleYear": $("#ScheduleYear").val(), "_ScheduleMonth": $("#ScheduleMonth").val(), "_ProductionFloor": $("#ProductionFloor").val() },
+                        success: function (response) {
+                            $("#ScheduleWindowGrid").data("kendoGrid").dataSource.data(response);
+                        } //End of success call
+                    });
+                    SelectedItemOfListOfValue('ScheduleWindowGrid');
+                    ScheduleWindow.open(); //Open Popup
+                    ScheduleWindow.center();
+                }
+                else {
+                    $('#MessageText').html("Please Select Requisition Information First");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    e.stopImmediatePropagation();
+                }
+            }
+
+        });
+
+        $(document.body).keyup(function (e) {
+
+            if ($("#ScheduleYear").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('YearMonthWindowGrid');
+                    YearMonthWindow.open();
+                    YearMonthWindow.center();
+                }
+            }
+            else if ($("#ScheduleNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    if ($("#YearMonID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("GetAllRequisition", "WBRequisitionForCrusting")',
+                            type: 'GET',
+                            data: { "_YearMonID": $("#YearMonID").val() },
+                            success: function (response) {
+                                $("#RequisitionWindowGrid").data("kendoGrid").dataSource.data(response);
+                            } //End of success call
+                        });
+                        SelectedItemOfListOfValue('RequisitionWindowGrid');
+                        RequisitionWindow.open();
+                        RequisitionWindow.center();
+                    }
+                    else {
+                        $('#MessageText').html("Please Select Requisition Information First");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        e.stopImmediatePropagation();
+                    }
+
+
+                }
+            }
+            else if ($("#RequisitionNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    if ($("#ScheduleID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("GetAllRequisitionDate", "CLRequisitionForFinishing")',
+                            type: 'GET',
+                            data: { "_ScheduleID": $("#ScheduleID").val() },
+                            success: function (response) {
+                                $("#RequisitionDateWindowGrid").data("kendoGrid").dataSource.data(response);
+                            } //End of success call
+                        });
+                        SelectedItemOfListOfValue('RequisitionDateWindowGrid');
+                        RequisitionDateWindow.open();
+                        RequisitionDateWindow.center();
+                    }
+                    else {
+                        $('#MessageText').html("Please Select Requisition Code First");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        e.stopImmediatePropagation();
+                    }
+
+
+                }
+            }
+        });
+
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var searchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Requisition List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        var YearMonthWindow = $('#YearMonthWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Year Month",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var RequisitionDateWindow = $('#RequisitionDateWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Requisition Date",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var RequisitionWindow = $('#RequisitionWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Requisition",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ColorWindow = $('#ColorWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Color",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ArticleWindow = $('#ArticleWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Article",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ArticleChallanWindow = $('#ArticleChallanWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Article Challan",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BuyerWindow = $('#BuyerWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Buyer",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BuyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Buyer Order",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ScheduleWindow = $('#ScheduleWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Schedule List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            //max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date()
+                        //change: function () {
+                        //    alert("test");
+                        //}
+                    });
+        }
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            ListOfValueGridEvent('SearchWindowGrid');
+
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            PageStatus = selectedItem.RecordStatus;
+            CheckRecordStatusForButton(PageStatus);
+
+            $.ajax({
+                url: '@Url.Action("GetRequisitionItemList", "CLRequisitionForFinishing")',
+                data: ({ "_RequisitionDateID": $("#RequisitionDateID").val() }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#ItemGrid").data("kendoGrid").dataSource.data(response);
+                    $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+                    ItemGridchangeStatus = 0;
+                    changeStatus = 0;
+
+                }
+            });
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            searchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            searchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            searchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                searchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                searchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        // Handling button click for YearMonth window grid
+        $('#btnYearMonthWindowOK').click(function () {
+            ListOfValueGridEvent('YearMonthWindowGrid');
+            YearMonthWindow.close();
+            $(".FormBody2, .FormBody3").val("");
+            $("#ItemGrid").data("kendoGrid").dataSource.data([]);
+            $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+        });
+        $('#btnYearMonthWindowCancel').click(function () {
+            YearMonthWindow.close();
+        });
+        $("#YearMonthWindowGrid").dblclick(function () {
+            ListOfValueGridEvent('YearMonthWindowGrid');
+            YearMonthWindow.close();
+            $(".FormBody2, .FormBody3").val("");
+            $("#ItemGrid").data("kendoGrid").dataSource.data([]);
+            $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+        });
+        $("#YearMonthWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('YearMonthWindowGrid');
+                YearMonthWindow.close();
+                $(".FormBody2, .FormBody3").val("");
+                $("#ItemGrid").data("kendoGrid").dataSource.data([]);
+                $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                YearMonthWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Requisition window grid
+
+        $('#btnRequisitionWindowOK').click(function () {
+            ListOfValueGridEvent('RequisitionWindowGrid');
+            RequisitionWindow.close();
+            $(".FormBody3").val("");
+            $("#ItemGrid").data("kendoGrid").dataSource.data([]);
+            $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+        });
+        $('#btnRequisitionWindowCancel').click(function () {
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").dblclick(function () {
+            ListOfValueGridEvent('RequisitionWindowGrid');
+            RequisitionWindow.close();
+            $(".FormBody3").val("");
+            $("#ItemGrid").data("kendoGrid").dataSource.data([]);
+            $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+        });
+        $("#RequisitionWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('RequisitionWindowGrid');
+                RequisitionWindow.close();
+                $(".FormBody3").val("");
+                $("#ItemGrid").data("kendoGrid").dataSource.data([]);
+                $("#ColorGrid").data("kendoGrid").dataSource.data([]);
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                RequisitionWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function GetRequisitionItemList()
+        {
+            var grid = $("#RequisitionDateWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            PageStatus = selectedItem.RecordStatus;
+            CheckRecordStatusForButton(PageStatus);
+            $.ajax({
+                url: '@Url.Action("GetRequisitionItemList", "CLRequisitionForFinishing")',
+                data: ({ "_RequisitionDateID": $("#RequisitionDateID").val() }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#ItemGrid").data("kendoGrid").dataSource.data(response);
+                    //$("#ColorGrid").data("kendoGrid").dataSource.data(response.ColorList);
+                    ItemGridchangeStatus = 0;
+
+                }
+            });
+        }
+        $('#btnRequisitionDateWindowOK').click(function () {
+            ListOfValueGridEvent('RequisitionDateWindowGrid');
+            GetRequisitionItemList();
+            RequisitionDateWindow.close();
+        });
+        $('#btnRequisitionDateWindowCancel').click(function () {
+            RequisitionDateWindow.close();
+        });
+        $("#RequisitionDateWindow").dblclick(function () {
+            ListOfValueGridEvent('RequisitionDateWindowGrid');
+            GetRequisitionItemList();
+            RequisitionDateWindow.close();
+        });
+        $("#RequisitionDateWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('RequisitionDateWindowGrid');
+                GetRequisitionItemList();
+                RequisitionDateWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                RequisitionDateWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+
+
+        function ColorWindowEvent() {
+            var WindowGrid = $("#ColorWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ColorGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+
+            PageGridItem.set("ColorID", WindowGridItem.ColorID);
+            PageGridItem.set("ColorName", WindowGridItem.ColorName);
+            PageGrid.editCell($("#ColorGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            $("#ColorItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //alert(rowIndex);
+            if (rowIndex > 0)
+                $("#ColorItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnColorWindowOK').click(function () {
+            ColorWindowEvent();
+            ColorWindow.close();
+        });
+        $('#btnColorWindowCancel').click(function () {
+            ColorWindow.close();
+        });
+        $("#ColorWindow").dblclick(function () {
+            ColorWindowEvent();
+            ColorWindow.close();
+        });
+        $("#ColorWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ColorWindowEvent();
+                ColorWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ColorWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        function ArticleWindowEvent() {
+            var WindowGrid = $("#ArticleWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+
+            PageGridItem.set("ArticleID", WindowGridItem.ArticleID);
+            PageGridItem.set("ArticleNo", WindowGridItem.ArticleNo);
+            PageGridItem.set("ArticleName", WindowGridItem.ArticleName);
+            PageGrid.editCell($("#ArticleGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            $("#ArticleItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //alert(rowIndex);
+            if (rowIndex > 0)
+                $("#ArticleItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnArticleWindowOK').click(function () {
+            ArticleWindowEvent();
+            ArticleWindow.close();
+        });
+        $('#btnArticleWindowCancel').click(function () {
+            ArticleWindow.close();
+        });
+        $("#ArticleWindow").dblclick(function () {
+            ArticleWindowEvent();
+            ArticleWindow.close();
+        });
+        $("#ArticleWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ArticleWindowEvent();
+                ArticleWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ArticleWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function ArticleChallanWindowEvent() {
+            var WindowGrid = $("#ArticleChallanWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            PageGridItem.set("ArticleChallanID", WindowGridItem.ArticleChallanID);
+            PageGridItem.set("ArticleChallanNo", WindowGridItem.ArticleChallanNo);
+
+            var grid = $("#ItemGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $.ajax({
+                url: '@Url.Action("GetColorListAccordingToArticleChallan", "WBRequisitionForCrusting")',
+                data: { "_BuyerOrderItemID": selectedItem.BuyerOrderItemID, "_ArticleChallanID": selectedItem.ArticleChallanID },
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#ColorGrid").data("kendoGrid").dataSource.data(response);
+                }
+            });
+
+            changeStatus = 1;
+            checkUnsavedData = 1;
+        };
+        $('#btnArticleChallanWindowOK').click(function () {
+            ArticleChallanWindowEvent();
+            ArticleChallanWindow.close();
+        });
+        $('#btnArticleChallanWindowCancel').click(function () {
+            ArticleChallanWindow.close();
+        });
+        $("#ArticleChallanWindow").dblclick(function () {
+            ArticleChallanWindowEvent();
+            ArticleChallanWindow.close();
+        });
+        $("#ArticleChallanWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ArticleChallanWindowEvent();
+                ArticleChallanWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ArticleChallanWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function BuyerWindowEvent() {
+            var WindowGrid = $("#BuyerWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+            var PageGrid = $("#ItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("BuyerID", WindowGridItem.BuyerID);
+            PageGridItem.set("BuyerName", WindowGridItem.BuyerName);
+            //PageGrid.editCell($("#BuyerGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            //$("#BuyerItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            ////alert(rowIndex);
+            //if (rowIndex > 0)
+            //    $("#BuyerItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnBuyerWindowOK').click(function () {
+            BuyerWindowEvent();
+            BuyerWindow.close();
+        });
+        $('#btnBuyerWindowCancel').click(function () {
+            BuyerWindow.close();
+        });
+        $("#BuyerWindow").dblclick(function () {
+            BuyerWindowEvent();
+            BuyerWindow.close();
+        });
+        $("#BuyerWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                BuyerWindowEvent();
+                BuyerWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BuyerWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        function BuyerOrderWindowEvent() {
+            var WindowGrid = $("#BuyerOrderWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("BuyerOrderItemID", WindowGridItem.BuyerOrderItemID);
+            PageGridItem.set("BuyerOrderID", WindowGridItem.BuyerOrderID);
+            PageGridItem.set("BuyerOrderNo", WindowGridItem.BuyerOrderNo);
+            PageGridItem.set("ItemTypeID", WindowGridItem.ItemTypeID);
+            PageGridItem.set("ItemTypeName", WindowGridItem.ItemTypeName);
+            PageGridItem.set("LeatherStatusID", WindowGridItem.LeatherStatusID);
+            PageGridItem.set("LeatherStatusName", WindowGridItem.LeatherStatusName);
+            PageGridItem.set("ArticleID", WindowGridItem.ArticleID);
+            PageGridItem.set("ArticleNo", WindowGridItem.ArticleNo);
+            PageGridItem.set("ArticleName", WindowGridItem.ArticleName);
+            PageGridItem.set("AvgSize", WindowGridItem.AvgSize);
+            PageGridItem.set("AvgSizeUnit", WindowGridItem.AvgSizeUnit);
+            PageGridItem.set("AvgSizeUnitName", WindowGridItem.AvgSizeUnitName);
+            PageGridItem.set("SideDescription", WindowGridItem.SideDescription);
+            PageGridItem.set("SelectionRange", WindowGridItem.SelectionRange);
+            PageGridItem.set("Thickness", WindowGridItem.Thickness);
+            PageGridItem.set("ThicknessAt", WindowGridItem.ThicknessAt);
+            PageGridItem.set("ThicknessUnit", WindowGridItem.ThicknessUnit);
+            PageGridItem.set("ThicknessUnitName", WindowGridItem.ThicknessUnitName);
+
+
+            $.ajax({
+                url: '@Url.Action("GetColorListForOrderItem", "WBRequisitionForCrusting")',
+                data: ({ "_BuyerOrderItemID": WindowGridItem.BuyerOrderItemID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#ColorGrid").data("kendoGrid").dataSource.data(response);
+                }
+            });
+
+
+            //PageGrid.editCell($("#BuyerGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            //$("#BuyerItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            ////alert(rowIndex);
+            //if (rowIndex > 0)
+            //    $("#BuyerItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnBuyerOrderWindowOK').click(function () {
+            BuyerOrderWindowEvent();
+            BuyerOrderWindow.close();
+        });
+        $('#btnBuyerOrderWindowCancel').click(function () {
+            BuyerOrderWindow.close();
+        });
+        $("#BuyerOrderWindow").dblclick(function () {
+            BuyerOrderWindowEvent();
+            BuyerOrderWindow.close();
+        });
+        $("#BuyerOrderWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                BuyerOrderWindowEvent();
+                BuyerOrderWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BuyerOrderWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+
+
+        function ScheduleWindowEvent() {
+            var WindowGrid = $("#ScheduleWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ItemGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("ScheduleItemID", WindowGridItem.ScheduleItemID);
+            PageGridItem.set("ScheduleProductionNo", WindowGridItem.ScheduleProductionNo);
+            PageGridItem.set("BuyerID", WindowGridItem.BuyerID);
+            PageGridItem.set("BuyerName", WindowGridItem.BuyerName);
+            PageGridItem.set("BuyerOrderID", WindowGridItem.BuyerOrderID);
+            PageGridItem.set("BuyerOrderNo", WindowGridItem.BuyerOrderNo);
+            PageGridItem.set("ItemTypeID", WindowGridItem.ItemTypeID);
+            PageGridItem.set("ItemTypeName", WindowGridItem.ItemTypeName);
+            PageGridItem.set("LeatherStatusID", WindowGridItem.LeatherStatusID);
+            PageGridItem.set("LeatherStatusName", WindowGridItem.LeatherStatusName);
+            PageGridItem.set("ArticleID", WindowGridItem.ArticleID);
+            PageGridItem.set("ArticleNo", WindowGridItem.ArticleNo);
+            PageGridItem.set("ArticleName", WindowGridItem.ArticleName);
+            PageGridItem.set("ArticleChallanNo", WindowGridItem.ArticleChallanNo);
+            PageGridItem.set("ArticleChallanID", WindowGridItem.ArticleChallanID);
+            PageGridItem.set("AvgSize", WindowGridItem.AvgSize);
+            PageGridItem.set("AvgSizeUnit", WindowGridItem.AvgSizeUnit);
+            PageGridItem.set("AvgSizeUnitName", WindowGridItem.AvgSizeUnitName);
+            PageGridItem.set("SideDescription", WindowGridItem.SideDescription);
+            PageGridItem.set("SelectionRange", WindowGridItem.SelectionRange);
+            PageGridItem.set("Thickness", WindowGridItem.Thickness);
+
+            PageGridItem.set("ThicknessAt", WindowGridItem.ThicknessAt);
+            PageGridItem.set("ThicknessUnit", WindowGridItem.ThicknessUnit);
+            PageGridItem.set("ThicknessUnitName", WindowGridItem.ThicknessUnitName);
+            PageGridItem.set("Remarks", WindowGridItem.Remarks);
+
+            $.ajax({
+                url: '@Url.Action("GetColorListForScheduleItem", "CLRequisitionForFinishing")',
+                data: ({ "_ScheduleItemID": WindowGridItem.ScheduleItemID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#ColorGrid").data("kendoGrid").dataSource.data(response);
+                }
+            });
+
+
+            //MakeIssueToProductionGridNonEditable();
+            //PageGrid.editCell($("#RecipeItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(7)"));
+            changeStatus = 1;
+            checkUnsavedData = 1;
+
+            //$("#RecipeItem tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#RecipeItem tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnScheduleWindowOK').click(function () {
+            ScheduleWindowEvent();
+            ScheduleWindow.close();
+        });
+        $('#btnScheduleWindowCancel').click(function () {
+            ScheduleWindow.close();
+        });
+        $("#ScheduleWindow").dblclick(function () {
+            ScheduleWindowEvent();
+            ScheduleWindow.close();
+        });
+        $("#ScheduleWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ScheduleWindowEvent();
+                ScheduleWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ScheduleWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                ItemGridchangeStatus = 0;
+                $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ResetOnlyMasterPageData();
+                ItemGridchangeStatus = 0;
+                $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                $("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else if (resetEditStatus == 4) // For Color Delete
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 3) // For Item Delete
+            {
+                DeleteFrom = 2;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmRequisition", "CLRequisitionForFinishing")',
+                type: 'GET',
+                data: { "_RequisitionDateID": $("#RequisitionDateID").val(), "confirmComment": $("#Remark").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Confirmation Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+                        changeStatus = 0;
+
+                        //$("#ChallanGrid").data('kendoGrid').dataSource.data([]);
+                        //$("#ItemGrid").data('kendoGrid').dataSource.data([]);
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        $("#ItemGrid").on('input', function () {
+            changeStatus = 1;
+        });
+        $("#ColorGrid").on('input', function () {
+            changeStatus = 1;
+            ItemGridchangeStatus = 1;
+        });
+
+        $("#ItemGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var CheckRowCreation = 1;
+
+                var ChallanGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+                var ChallanGridData = ChallanGridDataSource.data();
+
+                for (var i = 0; i < ChallanGridData.length; i++) {
+                    if (ChallanGridData[i].isNew()) {
+                        CheckRowCreation = 0;
+                        break;
+                    }
+                }
+                if (CheckRowCreation == 1 && ItemGridchangeStatus == 0) {
+                    var grid = $("#ItemGrid").data("kendoGrid");
+
+                    $("#ItemGrid").data().kendoGrid.bind('dataBound', function () {
+                        this.element.find('tbody tr:first').addClass('k-state-selected');
+                    });
+                    grid.addRow();
+                    $("#RequisitionItemID").val(0);
+                    $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                }
+                else {
+                    $('#MessageText').html("You have unsaved Item");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    e.stopImmediatePropagation();
+                }
+            }
+        });
+
+        $(".btnItemGrid").click(function (e) {
+
+            var CheckRowCreation = 1;
+
+            var ChallanGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+            var ChallanGridData = ChallanGridDataSource.data();
+
+            for (var i = 0; i < ChallanGridData.length; i++) {
+                if (ChallanGridData[i].isNew()) {
+                    CheckRowCreation = 0;
+                    break;
+                }
+            }
+            if (CheckRowCreation == 1 && ItemGridchangeStatus == 0) {
+                var grid = $("#ItemGrid").data("kendoGrid");
+
+                $("#ItemGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                //alert($("#SelectedRequisitionItemID").val());
+                $("#RequisitionItemID").val(0);
+                e.preventDefault();
+                $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                $('#MessageText').html("You have unsaved Item");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                e.stopImmediatePropagation();
+            }
+
+        });
+
+        $("#ColorGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var ParentGrid = $("#ItemGrid").data("kendoGrid");
+                var ParentGridRow = ParentGrid.select();
+                var ParentGridItem = ParentGrid.dataItem(ParentGridRow);
+
+                var ChildGrid = $("#ColorGrid").data("kendoGrid");
+                $("#ColorGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                ChildGrid.addRow();
+                $("#RequisitionItemID").val(ParentGridItem.RequisitionItemID);
+            }
+        });
+
+        $(".btnColorGrid").click(function (e) {
+            var ParentGrid = $("#ItemGrid").data("kendoGrid");
+            var ParentGridRow = ParentGrid.select();
+            var ParentGridItem = ParentGrid.dataItem(ParentGridRow);
+
+            var ChildGrid = $("#ColorGrid").data("kendoGrid");
+            $("#ColorGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            ChildGrid.addRow();
+            e.preventDefault();
+            $("#RequisitionItemID").val(ParentGridItem.RequisitionItemID);
+        });
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+
+        //To face child data into another grid for a grid row on click
+        $("#ItemGrid").on("click", "tr", function (e) {
+
+            var ItemGridDataSource = $("#ColorGrid").data("kendoGrid").dataSource;
+            var itemGridData = ItemGridDataSource.data();
+
+            var checkUnsavedData = 0;
+            for (var i = 0; i < itemGridData.length; i++) {
+                if (itemGridData[i].dirty) {
+                    checkUnsavedData = 1;
+                    break;
+                }
+            }
+
+            if (checkUnsavedData == 0) {
+                var parentGrid = $("#ItemGrid").data("kendoGrid");
+                var parentGridRow = parentGrid.select();
+                var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+                $("#RequisitionItemID").val(parentGridItem.RequisitionItemID);
+
+                if (parentGridItem.RequisitionItemID != "") {
+                    $.ajax({
+                        url: '@Url.Action("GetColorListForRequisitionItem", "CLRequisitionForFinishing")',
+                        type: 'GET',
+                        data: { "_RequisitionItemID": parentGridItem.RequisitionItemID },
+                        success: function (response) {
+
+                            if (response != null) {
+
+                                $("#ColorGrid").data("kendoGrid").dataSource.data(response);
+                                //changeStatus = 0;
+                            }
+
+                        } //End of Success Call
+                    });
+                }
+                else {
+                    //$("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                }
+            }
+            else {
+                //alert("You have Unsaved data in item grid");
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+        var DeleteFrom = 0;
+        function DeleteColor(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                dataitem = ColorGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 4;
+                dataitem = ColorGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+
+        };
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                dataitem = ItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 2;
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = ItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+
+        };
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // Color Delete
+            {
+                if (dataitem.ReqItemColorID == 0) {
+                    $("#ColorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteColorItem", "CLRequisitionForFinishing")',
+                        type: 'GET',
+                        data: { "_ReqItemColorID": dataitem.ReqItemColorID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#ColorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+
+            else if (DeleteFrom == 2) // Challan Delete
+            {
+                var ColorGridDataSource = $("#ColorGrid").data("kendoGrid").dataSource;
+                var ColorGridData = ColorGridDataSource.data();
+                if (ColorGridData.length > 0) {
+                    $('#MessageText').html("Color Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    if (dataitem.RequisitionItemID == 0) {
+                        $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $('#MessageText').html("Delete Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+
+                    else {
+                        $.ajax({
+                            url: '@Url.Action("DeleteItem", "CLRequisitionForFinishing")',
+                            type: 'GET',
+                            data: { "_RequisitionItemID": dataitem.RequisitionItemID, "_PageStatus": PageStatus },
+                            success: function (response) {
+
+                                if (response.Msg == "Success") {
+                                    $('#MessageText').html("Delete Successful");
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                    $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                }
+                                else if (response.Msg == "Fail") {
+                                    $('#MessageText').html("Delete Failed");
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                }
+                                else if (response.Msg == "CNF") {
+                                    $('#MessageText').html("Confirmed record can not be deleted.");
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                }
+
+                            } //End of success call
+                        });
+                    }
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+    var ItemList = {
+        "RequisitionItemID": "", "RequisitionDateID": "", "RequisitionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ArticleChallanID": "",
+        "ArticleChallanNo": "", "AvgSize": "", "AvgSizeUnitName": "", "SelectionRange": "", "SideDescription": "", "Thickness": "", "ThicknessUnitName": "", "ThicknessAt": "",
+        "ItemTypeName": "", "LeatherStatusName": "", "Remarks": "", "ScheduleItemID": "", "ScheduleProductionNo": ""
+    };
+
+    var ColorList = {
+        "ReqItemColorID": "", "RequisitionItemID": "", "ColorID": "", "ArticleColorNo": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "",
+        "AreaUnitName": "", "Remarks": ""
+    };
+
+    var FinalObject = {
+        "ConfirmNote": "", "RequisitionDateID": "", "SelectedRequisitionItemID": "", "ItemList": [], "ColorList": []
+    };
+
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('ScheduleYear', 4);
+        CheckRequiredTextBoxMaxLength('ScheduleMonth', 20);
+        CheckRequiredTextBoxMaxLength('ProductionFloor', 100);
+        CheckRequiredTextBoxMaxLength('ConcernStore', 100);
+        CheckRequiredTextBoxMaxLength('RequisitionNo', 15);
+        CheckRequiredTextBoxMaxLength('ScheduleNo', 15);
+
+        var ItemGridDataSource = $("#ItemGrid").data("kendoGrid").dataSource;
+        var ItemGridData = ItemGridDataSource.data();
+        var ColorGridDataSource = $("#ColorGrid").data("kendoGrid").dataSource;
+        var ColorGridData = ColorGridDataSource.data();
+
+        if (ItemGridData.length < 0 || ColorGridData.length < 0) {
+            saveStatus = 0;
+        }
+        if (saveStatus == 1) {
+            FinalObject.RequisitionDateID = $("#RequisitionDateID").val();
+            FinalObject.SelectedRequisitionItemID = $("#RequisitionItemID").val();
+            FinalObject.ConfirmNote = $("#Remark").val();
+
+            for (i = ItemGridData.length - 1; i >= 0; i--) {
+                if (ItemGridData[i].dirty) {
+                    ItemList.RequisitionItemID = ItemGridData[i].RequisitionItemID;
+                    ItemList.RequisitionDateID = $("#RequisitionDateID").val(); // Form Data
+                    //ItemList.RequisitionNo = ItemGridData[i].RequisitionNo; // Form Data
+                    ItemList.BuyerID = ItemGridData[i].BuyerID;
+                    ItemList.BuyerOrderID = ItemGridData[i].BuyerOrderID;
+                    ItemList.ArticleID = ItemGridData[i].ArticleID;
+                    ItemList.ArticleNo = ItemGridData[i].ArticleNo;
+                    ItemList.ArticleChallanID = ItemGridData[i].ArticleChallanID;
+                    ItemList.ArticleChallanNo = ItemGridData[i].ArticleChallanNo;
+                    ItemList.AvgSize = ItemGridData[i].AvgSize;
+                    ItemList.AvgSizeUnitName = ItemGridData[i].AvgSizeUnitName; // Have to carry Name
+                    ItemList.SelectionRange = ItemGridData[i].SelectionRange;
+                    ItemList.SideDescription = ItemGridData[i].SideDescription;
+                    ItemList.Thickness = ItemGridData[i].Thickness;
+                    ItemList.ThicknessUnitName = ItemGridData[i].ThicknessUnitName; // Have to carry Name
+                    ItemList.ThicknessAt = ItemGridData[i].ThicknessAt;
+                    ItemList.ItemTypeName = ItemGridData[i].ItemTypeName;
+                    ItemList.LeatherStatusName = ItemGridData[i].LeatherStatusName;
+                    ItemList.Remarks = ItemGridData[i].Remarks;
+                    ItemList.ScheduleItemID = ItemGridData[i].ScheduleItemID;
+                    ItemList.ScheduleProductionNo = ItemGridData[i].ScheduleProductionNo;
+
+                    FinalObject.ItemList.push(ItemList);
+                    ItemList = {
+                        "RequisitionItemID": "", "RequisitionDateID": "", "RequisitionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ArticleChallanID": "",
+                        "ArticleChallanNo": "", "AvgSize": "", "AvgSizeUnitName": "", "SelectionRange": "", "SideDescription": "", "Thickness": "", "ThicknessUnitName": "", "ThicknessAt": "",
+                        "ItemTypeName": "", "LeatherStatusName": "", "Remarks": "", "ScheduleItemID": "", "ScheduleProductionNo": ""
+                    };
+                }
+            }
+            for (var i = ColorGridData.length - 1; i >= 0; i--) {
+                ColorList.ReqItemColorID = ColorGridData[i].ReqItemColorID;
+                //ColorList.RequisitionItemID = $("#RequisitionItemID").val();
+                ColorList.RequisitionItemID = ColorGridData[i].RequisitionItemID;
+                ColorList.ColorID = ColorGridData[i].ColorID;
+                ColorList.ArticleColorNo = ColorGridData[i].ArticleColorNo;
+                ColorList.ColorPCS = ColorGridData[i].ColorPCS;
+                ColorList.ColorSide = ColorGridData[i].ColorSide;
+                ColorList.ColorArea = ColorGridData[i].ColorArea;
+                ColorList.AreaUnitName = ColorGridData[i].AreaUnitName; // Have to carry Name
+                ColorList.Remarks = ColorGridData[i].Remarks;
+
+                FinalObject.ColorList.push(ColorList);
+                ColorList = {
+                    "ReqItemColorID": "", "RequisitionItemID": "", "ColorID": "", "ArticleColorNo": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "",
+                    "AreaUnitName": "", "Remarks": ""
+                };
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("CLRequisitionForFinishing", "CLRequisitionForFinishing")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        ItemGridchangeStatus = 0;
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            //$("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                            $("#ItemGrid").data('kendoGrid').dataSource.data(response.RequistionItemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                        }
+                        else if (response.Msg.Type == 3) {
+                            ItemGridchangeStatus = 0;
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+
+                            $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                            $("#ItemGrid").data('kendoGrid').dataSource.data(response.RequistionItemList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "ConfirmNote": "", "RequisitionDateID": "", "SelectedRequisitionItemID": "", "ItemList": [], "ColorList": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>

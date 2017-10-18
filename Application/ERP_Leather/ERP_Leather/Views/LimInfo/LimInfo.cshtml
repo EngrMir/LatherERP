@@ -1,0 +1,1340 @@
+@{
+    ViewBag.Title = "Loan Against Imported Marchandise";
+    ViewBag.SearchTitle = "LC NO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@*<script src="~/Scripts/bootstrap.js"></script>*@
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+
+@*Bank To Loan Status  Portion*@
+<div class="row">
+    <input type="hidden" id="LimID" name="LimID" value="" placeholder="LimID" readonly="readonly" />
+    <input type="hidden" id="LCID" name="LCID" value="" placeholder="LCID" readonly="readonly" />
+    <input type="hidden" id="BankID" name="BankID" value="" placeholder="LimID" readonly="readonly" />
+    <input type="hidden" id="BranchID" name="BranchID" value="" placeholder="LCID" readonly="readonly" />
+
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bank</label><label style="color:red">*</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BankCode" class="txtBox RequiredTextBox " name="BankCode" tabindex="1" readonly="readonly" placeholder="Press F9" style="width: 80px;" />
+                <input type="text" id="BankName" class="txtBox RequiredTextBox" name="BankName" tabindex="" readonly="readonly" style="width: 266px;" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>L/C No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LCNo" class="txtBox RequiredTextBox" readonly="readonly" name="LCNo" tabindex="3" style="width:344PX" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Branch</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BanchCode" class="txtBox RequiredTextBox " name="BanchCode" tabindex="2" readonly="readonly" style="width: 80px;" />
+                <input type="text" id="BranchName" class="txtBox RequiredTextBox" name="BranchName" tabindex="" readonly="readonly" style="width: 266px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Loan Status</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="RecordStatus" class="txtBox RequiredTextBox" readonly="readonly" name="RecordStatus" tabindex="4" style="width:344PX" />
+                @*<input type="hidden" id="SupplierAddressID" value="" />*@
+            </div>
+        </div>
+    </div>
+
+
+    @*Lim No to lim Balance  Portion*@
+
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LIM No</label><label style="color:red">*</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimNo" class="txtBox RequiredTextBox " placeholder="" name="LimNo" tabindex="5" style="width: 344px;" />
+
+            </div>
+            <div class="col-lg-2">
+                <label>Lim Limit</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimLimit" readonly="readonly" class="txtBox RequiredTextBox" style="text-align: right;width:344PX" maxlength="20" name="LimLimit" tabindex="7" placeholder="0.00" onblur="return IsNumber('LimLimit');" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Lim Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimDate" class="txtBox datePicker " name="LimDate" tabindex="6" style="width: 342px; " />
+            </div>
+            <div class="col-lg-2">
+                <label>Lim Balance</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LimBalance" name="LimBalance" readonly="readonly" class="txtBox RequiredTextBox" maxlength="20" tabindex="8" style="text-align: right; width: 344PX" placeholder="0.00" onblur="CalculateLimBalance(); return IsNumber('LimBalance');" />
+                @*<input type="hidden" id="SupplierAddressID" value="" />*@
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Opening A/C Liability<span style='color:red'>*</span></label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LoanAmounts" class="txtBox RequiredTextBox " name="LoanAmounts" maxlength="20" tabindex="9" style="width: 344px; text-align: right" placeholder="0.00" onblur=" CalculateLimBalance(); TotalAmountCalcultaion(); InterestAmountCalculation(); return IsNumber('LoanAmounts');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Exchange Currency</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="LimCurrency" tabindex="19">
+                            @Html.DropDownList("Currency", (SelectList)ViewBag.Currency, new { style = "width: 344px;;text-align: center" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Exchange Rate</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="ExchangeCurrency">
+                            <input type="text" id="ExchangeRate" tabindex="20" name="ExchangeRate" style="width:278px;text-align: right" value="" placeholder="0.00" onblur="ExchangeAmountCalcultaion(); return IsNumber('ExchangeRate');" />
+                            @Html.DropDownList("Currency")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Exchange Amount</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="ExchangeValue" tabindex="21" name="ExchangeValue" style="width: 344px; text-align: right" value="" readonly="readonly" placeholder="0.00" onblur="return IsNumber('ExchangeValue');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Interest Rate</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="InterestPersent" class="txtBox RequiredTextBox " name="InterestPersent" maxlength="20" placeholder="0.00" onblur="InterestAmountCalculation();return IsNumber('InterestRate');" tabindex="10" style="width: 335px; text-align: right" /><label>%</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Interest Amount</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="InterestAmount" name="InterestAmount" class="txtBox RequiredTextBox " maxlength="20" placeholder="0.00" onblur="InterestRateCalcultaion();return IsNumber('InterestAmount');" tabindex="11" style="width: 344px;text-align:right" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Amount To Be Paid</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="AmountToBePaid" class="txtBox RequiredTextBox " name="AmountToBePaid" tabindex="12" maxlength="20" readonly="readonly" placeholder="0.00" onblur=" return IsNumber('AmountToBePaid');" style="width: 344px; text-align: right" />
+                    </div>
+                </div><br /><br />
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Other Charges</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="OtherCharges" class="txtBox RequiredTextBox" tabindex="14" maxlength="20" style="width: 344PX; text-align: right" placeholder="0.00" onblur="TotalAmountCalcultaion();return IsNumber('OtherCharges');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Handling Charges</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="HandlingCharge" class="txtBox RequiredTextBox" maxlength="20" style="width: 344px; text-align: right" tabindex="16" placeholder="0.00" onblur="TotalAmountCalcultaion(); return IsNumber('HandlingCharge');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Acceptance Commission</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="AcceptanceCommission" class="txtBox RequiredTextBox" tabindex="15" maxlength="20" style="width: 344px; text-align: right" placeholder="0.00" onblur="TotalAmountCalcultaion(); return IsNumber('AcceptanceCommission');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Total Amount To Be Paid</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="TotalAmountToBePaid" name="TotalAmountToBePaid" class="txtBox RequiredTextBox" tabindex="17" maxlength="20" readonly="readonly" style="width: 344px; text-align: right" placeholder="0.00" onblur="return IsNumber('TotalAmountToBePaid');" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="FormBody">
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Adjustment Time</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="AdjustmentTime" class="txtBox RequiredTextBox " name="AdjustmentTime" maxlength="20" tabindex="9" style="width: 300px; text-align: right" placeholder="0.00" onblur=" CalculateInterestAmountOnAdjustmentDay(); return IsNumber('AdjustmentTime');" /><label>Days's</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Interest Calculation Date</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="InterestCalcDate" class="txtBox RequiredTextBox datePicker" name="InterestCalcDate" maxlength="20" tabindex="9" style="width: 344px; text-align: left" placeholder="" onblur="  " />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Calculated Interest Amount</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="ExchangeCurrency">
+                            <input type="text" id="CalcInterestAmt" tabindex="20" name="CalcInterestAmt" style="width:278px;text-align: right" value="" placeholder="0.00" onblur="CalculateInterestAmountOnAdjustmentDay(); return IsNumber('CalcInterestAmt');" />
+                            @Html.DropDownList("Currency")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Calculated Amnt To Be Paid</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="CalcAmtToPaid" tabindex="21" name="CalcAmtToPaid" style="width: 344px; text-align: right" value="" readonly="readonly" placeholder="0.00" onblur="return IsNumber('CalcAmtToPaid');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Total Calc. Amnt. To Be Paid</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="TotalCalcAmtToPaid" class="txtBox RequiredTextBox " name="TotalCalcAmtToPaid" maxlength="20" placeholder="0.00" onblur="InterestAmountCalculation();return IsNumber('InterestRate');" tabindex="10" style="width: 344px; text-align: right" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Paid Amount</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="PaidAmount" class="txtBox RequiredTextBox " name="PaidAmount" maxlength="20" placeholder="0.00" onblur="CalculatePaidAmount(); return IsNumber('InterestRate');" tabindex="10" style="width: 344px; text-align: right" />
+                    </div>
+                </div><br /><br />
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>L/C Margin Transfer</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LCMarginTransfer" name="LCMarginTransfer" class="txtBox RequiredTextBox " maxlength="20" placeholder="0.00" onblur=" return IsNumber('LCMarginTransfer');" tabindex="11" style="width: 344px;text-align:right" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Lim Margin</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LimMarginTransPercnt" class="txtBox RequiredTextBox " name="LimMarginTransPercnt" tabindex="12" maxlength="20" placeholder="0.00" onblur="return IsNumber('LimMarginTransPercnt');" style="width: 335px; text-align: right" /><label>%</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Lim Margin Transfer</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LimMarginTrans" name="LimMarginTrans" class="txtBox RequiredTextBox" tabindex="14" maxlength="20" style="width: 344PX; text-align: right" placeholder="0.00" onblur=" return IsNumber('LimMarginTrans');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Excise Duty</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="ExciseDuty" name="ExciseDuty" class="txtBox RequiredTextBox" maxlength="20" style="width: 344px; text-align: right" tabindex="16" placeholder="0.00" onblur="return IsNumber('ExciseDuty');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Transfer Cash</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="TransCash" name="TransCash" class="txtBox RequiredTextBox" tabindex="15" maxlength="20" style="width: 344px; text-align: right" placeholder="0.00" onblur=" return IsNumber('AcceptanceCommission');" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Lim Adjustment(Debit)</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LimAdjustDr" class="txtBox RequiredTextBox " name="LimAdjustDr" maxlength="20" tabindex="9" style="width: 344px; text-align: right" placeholder="0.00" onblur=" return IsNumber('LimAdjustDr');" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Lim Adjustment(Credit)</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LimAdjustCr" class="txtBox RequiredTextBox" name="LimAdjustCr" maxlength="20" tabindex="9" style="width: 344px; text-align: right" placeholder="0.00" onblur="return IsNumber('LimAdjustCr');  " />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Remarks</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <textarea id="Remarks" class="" name="Remarks" style="width:344PX"></textarea>
+
+                        <input type="button" id="btnConfirm" class="" name="btnConfirm" value="Confirmed" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="BankIDWindow" style="display: none;">
+    <p>Bank:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>
+
+    <div id="BankIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBankIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBankIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DeleteLimInfoListConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteLimInfoListOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteLimInfoListCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+
+<script type="text/javascript">
+
+    NumericAndDecimalValue('LimLimit');
+    NumericAndDecimalValue('LimBalance');
+    NumericAndDecimalValue('LoanAmounts');
+    NumericAndDecimalValue('InterestPersent');
+    NumericAndDecimalValue('InterestAmount');
+    NumericAndDecimalValue('AmountToBePaid');
+    NumericAndDecimalValue('OtherCharges');
+    NumericAndDecimalValue('AcceptanceCommission');
+    NumericAndDecimalValue('HandlingCharge');
+    NumericAndDecimalValue('TotalAmountToBePaid');
+    NumericAndDecimalValue('PaidAmount');
+    NumericAndDecimalValue('ExchangeRate');
+    NumericAndDecimalValue('ExchangeValue');
+    NumericAndDecimalValue('TotalCalcAmtToPaid');
+
+
+
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+    $("select").addClass("select");
+    $("#LimID").val("");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+
+    var changeStatus = 0;
+    $("#LCID").val('');
+
+    var saveStatus = 1;
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+
+
+
+
+    //------------------------------------------------ Interest Rate & Total Amount Calculation------------------------------------------------
+
+    function InterestAmountCalculation() {
+        if ($("#LoanAmounts").val() != "" && $("#InterestPersent").val() != "" && $("#ExchangeValue").val() != "") {
+            $("#InterestAmount").val(((($("#InterestPersent").val() - 0) * ($("#ExchangeValue").val() - 0)) / 100).toFixed(2));
+            $("#AmountToBePaid").val((($("#InterestAmount").val() - 0) + ($("#ExchangeValue").val() - 0)).toFixed(2));
+            TotalAmountCalcultaion()
+        }
+        else {
+            $("#InterestPersent").val("");
+            $("#InterestAmount").val("");
+            $("#AmountToBePaid").val("");
+            $("#TotalAmountToBePaid").val("");
+            $("#OtherCharges").val("");
+            $("#AcceptanceCommission").val("");
+            $("#HandlingCharge").val("");
+
+        }
+    }
+
+
+
+    //function InterestRateCalcultaion() {//InterestAmount
+
+    //    if ($("#LoanAmounts").val() != "" && $("#InterestAmount").val() != "" && $("#ExchangeValue").val() != "") {
+    //        $("#InterestPersent").val((((($("#ExchangeValue").val() - 0) * 100)) / $("#InterestAmount").val()).toFixed(2));
+    //       // $("#AmountToBePaid").val((($("#InterestAmount").val() - 0) + ($("#ExchangeValue").val() - 0)).toFixed(2));
+    //        //TotalAmountCalcultaion();
+    //    }
+    //    else {
+
+    //        $("#AmountToBePaid").val("");
+    //        $("#InterestPersent").val("");
+    //        $("#TotalAmountToBePaid").val("");
+    //        $("#OtherCharges").val("");
+    //        $("#AcceptanceCommission").val("");
+    //        $("#HandlingCharge").val("");
+
+    //    }
+    //}
+
+
+
+
+
+    function TotalAmountCalcultaion() {
+
+        if (($("#AmountToBePaid").val() != "") && ($("#LoanAmounts").val() != "")) {
+            ($("#TotalAmountToBePaid").val(((($("#AmountToBePaid").val()) - 0) + (($("#OtherCharges").val()) - 0) + (($("#AcceptanceCommission").val()) - 0) + (($("#HandlingCharge").val()) - 0)).toFixed(2)));
+
+        }
+
+        else if (($("#LoanAmounts").val() != ""))
+        {
+
+            ($("#TotalAmountToBePaid").val($("#LoanAmounts").val()))
+
+        }
+        else {
+            $("#InterestPersent").val("");
+            $("#InterestAmount").val("");
+            $("#OtherCharges").val("");
+            $("#AcceptanceCommission").val("");
+            $("#HandlingCharge").val("");
+
+        }
+        //ExchangeAmountCalcultaion();
+    }
+
+
+
+
+
+    function ExchangeAmountCalcultaion() {
+
+        if (($("#LoanAmounts").val() != "")) {
+            ($("#ExchangeValue").val(((($("#LoanAmounts").val()) - 0) * (($("#ExchangeRate").val()) - 0)).toFixed(2)));
+
+        }
+        else {
+
+            $("#ExchangeValue").val("");
+            $("#ExchangeRate").val("");
+        }
+    }
+
+
+
+    function CalculateInterestAmountOnAdjustmentDay() {
+        var days = 360;
+
+        if   (($("#InterestAmount").val() != "") && ($("#AdjustmentTime").val() != "")) {
+
+            $("#CalcInterestAmt").val((((($("#InterestAmount").val() - 0) * ($("#AdjustmentTime").val() - 0))) / days).toFixed(2));
+            CalculatedAmountToPaid();
+        }
+        else {
+
+            $("#AdjustmentTime").val("");
+            $("#InterestAmount").val("");
+        }
+    }
+
+
+
+    function CalculatedAmountToPaid() {
+
+        if (($("#AmountToBePaid").val() != "") && ($("#LoanAmounts").val() != "")) {
+            ($("#CalcAmtToPaid").val(((($("#ExchangeValue").val()) - 0) + (($("#CalcInterestAmt").val()) - 0)).toFixed(2)));
+
+            TotalCalculatedAmountToPaid();
+
+        }
+
+        else if (($("#CalcInterestAmt").val() != "")) {
+
+            ($("#CalcAmtToPaid").val($("#TotalAmountToBePaid").val()))
+
+        }
+        else {
+            $("#AdjustmentTime").val("");
+            $("#CalcAmtToPaid").val("");
+            $("#TotalAmountToBePaid").val("");
+        }
+    }
+
+
+    function TotalCalculatedAmountToPaid() {
+
+        if (($("#CalcAmtToPaid").val() != "")) {
+                ($("#TotalCalcAmtToPaid").val(((($("#CalcAmtToPaid").val()) - 0) + (($("#OtherCharges").val()) - 0) + (($("#AcceptanceCommission").val()) - 0) + (($("#HandlingCharge").val()) - 0)).toFixed(2)));
+                CalculatePaidAmount();
+        }
+
+        else if (($("#CalcInterestAmt").val() != "")) {
+
+            ($("#TotalCalcAmtToPaid").val($("#CalcAmtToPaid").val()))
+
+        }
+        else {
+            $("#AdjustmentTime").val("");
+            $("#CalcAmtToPaid").val("");
+            $("#TotalAmountToBePaid").val("");
+        }
+    }
+
+
+    function CalculatePaidAmount() {
+
+        if (($("#TotalCalcAmtToPaid").val() != "") && ($("#LimBalance").val() != "") && ($("#PaidAmount").val() != "")) {
+            ($("#TotalCalcAmtToPaid").val(((($("#TotalCalcAmtToPaid").val()) - 0) - (($("#PaidAmount").val()) - 0)).toFixed(2)));
+            ($("#LimBalance").val(((($("#LimBalance").val()) - 0) + (($("#PaidAmount").val()) - 0)).toFixed(2)));
+
+        }
+
+        else if (($("#CalcInterestAmt").val() != "")) {
+
+            ($("#TotalCalcAmtToPaid").val($("#TotalCalcAmtToPaid").val()))
+            ($("#LimBalance").val($("#LimBalance").val()))
+
+        }
+        else {
+            $("#PaidAmount").val("");
+            $("#LimBalance").val("");
+            $("#TotalAmountToBePaid").val("");
+        }
+    }
+
+
+    //function CalculateLimBalance() {
+
+    //    if (($("#LoanAmounts").val() != "") && ($("#LimLimit").val() != "") && (($("#LoanAmounts").val()) < ($("#LimLimit").val())))
+    //    {//LoanAmounts
+
+    //            //($("#LimBalance").val(((($("#LimLimit").val()) - 0) - (($("#LoanAmounts").val()) - 0)).toFixed(2)));
+    //            alert("Check Function");     
+    //    }
+    //    else
+    //    {
+    //        $("#LoanAmounts").val("");
+
+    //        alert("error");
+    //    }
+    //}
+
+
+
+    function CalculateLimBalance() {
+
+        if ((($("#LoanAmounts").val()) != "") && ($("#LimLimit").val() != "") && (($("#LoanAmounts").val()-0) < ($("#LimLimit").val())-0))
+        {
+                ($("#LimBalance").val(((($("#LimLimit").val()) - 0) - (($("#LoanAmounts").val()) - 0)).toFixed(2))); 
+        }
+
+        else
+        {
+            $('#MessageText').html("Opening A/C Liability should be less than LimLimit.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            $("#LoanAmounts").val("")
+        }
+
+
+
+        }
+
+
+    //------------------------------------------------ END of Interest Rate & Total Amount Calculation------------------------------------------------
+
+
+
+    // ##################### Opening Bank
+
+    var BankIDWindow = $('#BankIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1352px",
+        height: "auto",
+        title: "List Of LC Opening Bank",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var BankIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LCID",
+                fields: {
+                    LimBranchID: { editable: false, filterable: true },
+                    BankCode: { editable: false, filterable: true },
+                    BankName: { editable: false, filterable: true },
+                    BanchCode: { editable: false, filterable: true },
+                    BranchName: { editable: false, filterable: true },
+                    BankCode: { editable: false, filterable: true },
+                    BankCode: { editable: false, filterable: true },
+                    LCID: { editable: false, filterable: true},
+                    LimID: { editable: false, filterable: true, hidden: true },
+                    LimNo: { editable: false, filterable: true, hidden: true },
+                    LCNo: { editable: false, filterable: true },
+                    LimBalance: { editable: false, filterable: true },
+                    LimLimit: { editable: false, filterable: true },
+                    RecordStatus: { editable: false, filterable: true }
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BankIDGrid = $("#BankIDGrid").kendoGrid({
+        dataSource: BankIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+              { field: "BranchID", title: "BranchID", width: "80px", filterable: true, sortable: false, hidden: true },
+              { field: "BankCode", title: "Bank Code", filterable: true },
+              { field: "BankName", title: "Bank Name", filterable: true },
+              { field: "BanchCode", title: "Branch Code", filterable: true },
+              { field: "BranchName", title: "Branch Name", filterable: true },
+              { field: "LimID", title: "LimID", filterable: true, hidden:true },
+              { field: "LimNo", title: "LimNo", filterable: true, hidden: true },
+              { field: "LCNo", title: "L/C No.", filterable: true },
+              { field: "LimBalance", title: "LIMBalance", filterable: true, hidden: true },
+              { field: "LimLimit", title: "LIMLimit", filterable: true },
+              { field: "LCID", title: "LC ID", filterable: true , hidden:true},
+              { field: "RecordStatus", title: "Record Status", filterable: true, hidden: true }
+
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keypress(function (e) {
+        if ($("#BankCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetBankList", "LimInfo")',
+                    type: "GET",
+                    //data: { bankCategory: "BNK"},
+                    dataType: "JSON",
+                    success: function (data33) {
+                        console.log(data33);
+                        $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('BankIDGrid');
+
+                BankIDWindow.open();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnBankIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent('BankIDGrid');
+        BankIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnBankIDWindowCancel').click(function () {
+        BankIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#BankIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent('BankIDGrid');
+        BankIDWindow.close();
+    });
+
+
+    // Select Data through keypress From PopUp
+    $("#BankIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent('BankIDGrid');
+            BankIDWindow.close();
+        }
+        else if (keycode == '27') {
+            BankIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //$("#btnSearchGridSearch").click(function () {
+    //    GetSearchResult("SearchBankbyBankName", "LimInfo");
+    //});
+
+    //AutoComplete("GetAutoCompleteBankPopupData", "LimInfo");
+
+    //$("#txtSearchBank").keyup(function (event) {
+    //    if ($("#txtSearchBank").is(':focus')) {
+    //        var keycode = (event.keyCode ? event.keyCode : event.which);
+    //        if (keycode == '13') {
+    //            GetSearchResult("SearchBankbyBankName", "LimInfo");
+    //        }
+    //    }
+    //});
+
+
+    @*$("#btnSearchGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("BtnSearchBankByBankName", "LimInfo")',
+            type: 'GET',
+            data: { search: $("#txtSearchBank").val() },
+            success: function (data33) {
+                $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueOpeningBankGridEvent('BankIDGrid');
+                    BankIDWindow.close();
+                }
+            }
+        });
+    });
+
+
+    var dataSource6 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBankList", "LimInfo")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSearchBank").kendoAutoComplete({
+        dataSource: dataSource6,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtSearchBank").keyup(function (event) {
+        if ($("#txtSearchBank").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchBankbyBankName", "LimInfo")',
+                    type: 'GET',
+                    data: { search: $("#txtSearchBank").val() },
+                    success: function (data33) {
+                        $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueOpeningBankGridEvent('BankIDGrid');
+                            BankIDWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });*@
+
+
+    $("#btnOpeningGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("BtnSearchBankByBankName", "LimInfo")',
+            type: 'GET',
+            data: { search: $("#txtOpeningBank").val() },
+            success: function (data33) {
+                $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueOpeningBankGridEvent('BankIDGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBankList", "LimInfo")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtOpeningBank").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtOpeningBank").keyup(function (event) {
+        if ($("#txtOpeningBank").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchBankbyBankName", "LimInfo")',
+                    type: 'GET',
+                    data: { search: $("#txtOpeningBank").val() },
+                    success: function (data33) {
+                        $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueOpeningBankGridEvent('BankIDGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+
+
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        $("#LCID").val(selectedItem.LCID);
+        //$("#LimID").val("");
+        //$("#LimNo").val(selectedItem.LimNo);
+        $("#LimitCurrency").val(selectedItem.CurrencyName);
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+    //To clear operational/error message
+    ClearOperationalMessage();
+
+    //For removing operational & required message after triggering other event
+    ClearRequiredTextBoxRedColor();
+
+
+
+    // SAVE Data for LCM_LIM INFO
+    var obDataSet = {
+        "LimID": "",
+        "LimNo": "",
+        "LimDate": "",
+        "LimLimit": "",
+        "LimBalance": "",
+
+        "LimBranchID": "",
+        "LCID": "",
+        "LCNo": "",
+        "LoanAmount": "",
+
+        "InterestPersent": "",
+        "InterestAmount": "",
+        "AmountToBePaid": "",
+        "AdjustmentTime": "",
+        "OtherCharges": "",
+        "AcceptanceCommission": "",
+        "HandlingCharge": "",
+        "TotalAmountToBePaid": "",
+        "PaidAmount": "",
+        "LimCurrency": "",
+        "ExchangeCurrency": "",
+        "ExchangeRate": "",
+        "ExchangeValue": "",
+        "RecordStatus": "",
+        "BankID": "",
+        "BankCode": "",
+        "BankName": "",
+        "BranchID": "",
+        "BranchName": "",
+
+
+        "LCMarginTransfer": "",
+        "LimMarginTrans": "",
+        "LimMarginTransPercnt": "",
+        "InterestCalcDate": "",
+        "CalcInterestAmt": "",
+        "ExciseDuty": "",
+        "TransCash": "",
+        "CalcAmtToPaid": "",
+        "LimAdjustDr": "",
+        "LimAdjustCr": "",
+        "TotalCalcAmtToPaid": "",
+
+
+        "ApprovalAdvice": ""
+
+    };
+
+
+    function Save() {
+        saveStatus = 1;
+
+        CheckRequiredTextBoxMaxLength('BankCode', 30);
+
+
+
+
+        if (saveStatus == 1) {
+
+
+            obDataSet.LCID = $("#LCID").val();
+            obDataSet.LimID = $("#LimID").val();
+            obDataSet.LimNo = $("#LimNo").val();
+            obDataSet.LimDate = $("#LimDate").val();
+            obDataSet.LimLimit = $("#LimLimit").val();
+            obDataSet.LimBalance = $("#LimBalance").val();
+            obDataSet.LimBankID = $("#BankID").val();
+            obDataSet.LimBranchID = $("#BranchID").val();
+            obDataSet.LCNo = $("#LCNo").val(); //LCMarginCurrency
+            obDataSet.LoanAmount = $("#LoanAmounts").val();
+            obDataSet.InterestPersent = $("#InterestPersent").val();
+            obDataSet.InterestAmount = $("#InterestAmount").val();
+            obDataSet.AmountToBePaid = $("#AmountToBePaid").val();
+            obDataSet.AdjustmentTime = $("#AdjustmentTime").val();
+            obDataSet.OtherCharges = $("#OtherCharges").val();
+            obDataSet.AcceptanceCommission = $("#AcceptanceCommission").val();
+            obDataSet.HandlingCharge = $("#HandlingCharge").val();
+            obDataSet.TotalAmountToBePaid = $("#TotalAmountToBePaid").val();
+            obDataSet.PaidAmount = $("#PaidAmount").val();
+
+            obDataSet.LCMarginTransfer = $("#LCMarginTransfer").val();
+            obDataSet.LimMarginTrans = $("#LimMarginTrans").val();
+            obDataSet.LimMarginTransPercnt = $("#LimMarginTransPercnt").val();
+            obDataSet.InterestCalcDate = $("#InterestCalcDate").val();
+            obDataSet.CalcInterestAmt = $("#CalcInterestAmt").val();
+            obDataSet.ExciseDuty = $("#ExciseDuty").val();
+            obDataSet.TransCash = $("#TransCash").val();
+            obDataSet.CalcAmtToPaid = $("#CalcAmtToPaid").val();
+            obDataSet.LimAdjustDr = $("#LimAdjustDr").val();
+            obDataSet.LimAdjustCr = $("#LimAdjustCr").val();
+            obDataSet.TotalCalcAmtToPaid = $("#TotalCalcAmtToPaid").val();
+
+            obDataSet.LimCurrency = $("#LimCurrency").find('.select').val();
+            obDataSet.ExchangeCurrency = $("#ExchangeCurrency").find('.select').val();//.find('.select').val(data33.ExchangeCurrency);
+            obDataSet.ExchangeRate = $("#ExchangeRate").val();
+            obDataSet.ExchangeValue = $("#ExchangeValue").val();
+            obDataSet.RecordStatus = $("#RecordStatus").val();
+            obDataSet.Remarks = $("#Remarks").val();
+
+
+            if (obDataSet.LimID == "") {
+
+                // INSERT DATA
+                $("#divLoading").show()
+
+                $.ajax({
+                    type: "POST",
+
+                    url: '@Url.Action("Save", "LimInfo")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        //console.log(data);
+                        if (data.msg.Type == 2) {
+                            //$("#divLoading").hide();
+                            $("#LimID").val(data.LimID);
+                            $("#LimNo").val(data.LimNo);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                           //Reset();
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+
+                    complete: function(data) {
+                     $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // UPDATE DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "LimInfo")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+
+                            //$("#LimID").val(data.ReturnId);
+                            //$("#LimNo").val(data.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    failure: function (respnse) {
+
+                    }
+                });
+            }
+        }
+
+    }
+
+
+    //######################### End of Save Data ############################
+    function Reset() {
+
+        $('.Dropdown').val('');
+        $('.FormBody input[type=text]').val('');
+        // <input id="checkSelection" name="checkbox" type="checkbox" value="true" /> <label style="font-family:Constantia;font-size:x-small">Lock Selection</label>
+
+        $('.FormBody input[type=text]').val('');
+        $('.txtBox').val('');
+
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $("#Remarks").val("");
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        //$('input:checkbox[name=checkbox]').attr('checked', false);
+    }
+    //######################### Start Search Data  ############################
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetLcmLimInfo", "LimInfo", "LimBankID,LimBranchID,BankID,BranchID,LCID,LimID");//GetBankDebitVoucherInfo
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchLcmLimInfoByLCNo", "LimInfo");
+    });
+
+    AutoComplete("GetAutoCompleteData", "LimInfo");
+
+    $("#txtSearch").keyup(function (event) {
+        if ($("#txtSearch").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                GetSearchResult("SearchLcmLimInfoByLCNo", "LimInfo");
+            }
+        }
+    });
+
+
+    function ListOfValueSearchGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#LimID").val(selectedItem.LimID);
+        $.ajax({
+            url: '@Url.Action("GetLimInfoByLCID","LimInfo")',
+            type: 'GET',
+            data: { LimID: selectedItem.LimID },
+            success: function (data) {
+                $("#LimBranchID").val(data.LimBranchID);
+                $("#LimCurrency").val(data.LimCurrency);
+                $("#ExchangeCurrency").val(data.ExchangeCurrency);
+                $("#ExchangeRate").val(data.ExchangeRate);
+                $("#ExchangeValue").val(data.ExchangeValue);
+                $("#LoanAmounts").val(data.LoanAmount);
+                $("#InterestPersent").val(data.InterestPersent);
+                $("#InterestAmount").val(data.InterestAmount);
+                $("#AmountToBePaid").val(data.AmountToBePaid);
+                $("#AdjustmentTime").val(data.AdjustmentTime);
+                $("#OtherCharges").val(data.OtherCharges);
+                $("#AcceptanceCommission").val(data.AcceptanceCommission);
+                $("#TotalAmountToBePaid").val(data.TotalAmountToBePaid);
+                $("#HandlingCharge").val(data.HandlingCharge);
+                $("#PaidAmount").val(data.PaidAmount);
+
+                $("#LCMarginTransfer").val(data.LCMarginTransfer);
+                $("#LimMarginTrans").val(data.LimMarginTrans);
+                $("#LimMarginTransPercnt").val(data.LimMarginTransPercnt);
+                $("#InterestCalcDate").val(data.InterestCalcDate);
+                $("#CalcInterestAmt").val(data.CalcInterestAmt);
+                $("#ExciseDuty").val(data.ExciseDuty);
+                $("#TransCash").val(data.TransCash);
+                $("#CalcAmtToPaid").val(data.CalcAmtToPaid);
+                $("#LimAdjustDr").val(data.LimAdjustDr);
+                $("#LimAdjustCr").val(data.LimAdjustCr);
+                $("#TotalCalcAmtToPaid").val(data.TotalCalcAmtToPaid);
+
+                $("#RecordStatus").val(data.RecordStatus);
+                $("#Remarks").val(data.Remarks);
+
+                if (selectedItem.RecordStatus == "Not Confirmed") {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                }
+                else if (selectedItem.RecordStatus == "Checked") {
+                    $("#btnCheck").attr('disabled', 'disabled');
+                }
+                else if (selectedItem.RecordStatus == "Confirmed") {
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnCheck").attr('disabled', 'disabled');
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+                }
+                else {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').removeAttr('disabled');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    $("#btnConfirm").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ConfirmRecordStatus", "LimInfo")',
+            data: { limID: $("#LimID").val(), branchID: $("#BranchID").val() },
+            success: function (data) {
+                console.log(data);
+                $("#divLoading").hide();
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                $("#divLoading").hide();
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    function IsValidLimNo() {
+
+     if ($("#LimNo").val() != "") {
+            $.ajax({
+                url: '@Url.Action("IsAlreadyExist", "Utility")',
+                type: 'POST',
+                data: { table: "LCM_LimInfo", fld: "LimNo", val: $("#LimNo").val(), datatype: "str" },
+                success: function (data) {
+                    if (data == "True") {
+                        $('#MessageText').html("This Lim No. Already Exist");
+                        $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+                        $("#LimNo").val("");
+                        return false;
+                    }
+                    else {
+                        $('#MessageText').html("");
+
+                    }
+                }
+            });
+        }
+        return true;
+    }
+
+
+    //###################### DELETE #################
+    // Delete CnF Bill ID with data from Database.
+
+    var LimInfoDeleteWindow = $('#DeleteLimInfoListConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    $("#btnDelete").click(function () {
+        if ($("#LimID").val() != "") {
+            gridToDelete = "all";
+            LimInfoDeleteWindow.open();
+            LimInfoDeleteWindow.center();
+        } else if ($("#LimID").val() == "" && changeStatus == 1) {
+            $('#MessageText').html("The record you are trying to delete is not in the database.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+
+        }
+    });
+
+
+    $('#btnDeleteLimInfoListOK').click(function () {
+        if (gridToDelete == "all") {
+            if ($("#LimID").val() != "") {
+                var limID = $("#LimID").val();
+                $.ajax({
+                    url: '@Url.Action("DeleteLimInfoList", "LimInfo")',
+                    type: 'GET',
+                    data: ({ "limID": limID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                        LimInfoDeleteWindow.close();
+                    }
+                });
+            }
+            gridToDelete = "";
+            LimInfoDeleteWindow.close();
+        }
+    });
+    $("#btnDeleteLimInfoListCancel").click(function () {
+        LimInfoDeleteWindow.close();
+    });
+
+
+</script>

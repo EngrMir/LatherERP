@@ -1,0 +1,388 @@
+﻿@model ERP.EntitiesModel.OperationModel.PrqPurchaseYearTarget
+
+@{
+    ViewBag.Title = "Define Year Period";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/JSCustom.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+            </div>
+            <div id="ButtonPanel" class="col-lg-3 right">
+                <input type="button" id="btnReset" class="Button" value="Reset" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+<input type="hidden" id="SupplierAddressID" />
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Issue No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentDate" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Issue For</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="ddlApprovedStatus" class="txtBox">
+                    <option value="Chk">Approved</option>
+                    <option value="Nhk">Not Approved</option>
+                    <option value="Nhk">Pending</option>
+                </select>
+                @*@Html.DropDownList("Currency", new SelectList(ViewBag.ddlPaymentCurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+            <div class="col-lg-2">
+                <label>Issue From</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="ddlApprovedStatus" class="txtBox">
+                    <option value="Chk">Approved</option>
+                    <option value="Nhk">Not Approved</option>
+                    <option value="Nhk">Pending</option>
+                </select>
+                @*@Html.DropDownList("Currency", new SelectList(ViewBag.ddlPaymentCurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Issue Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentDate" class="txtBox datepicker" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Job Order No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PaymentDate" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Issue To</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="ddlApprovedStatus" class="txtBox">
+                    <option value="Chk">Approved</option>
+                    <option value="Nhk">Not Approved</option>
+                    <option value="Nhk">Pending</option>
+                </select>
+                @*@Html.DropDownList("Currency", new SelectList(ViewBag.ddlPaymentCurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+        </div>
+        <hr class="navbar-inverse" style="width: 100%;" />
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Sl No</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Supplier</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Challan No</label>
+            </div>
+            <div class="col-lg-1">
+                <label>S. Challan No</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Leather Status</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Item Type</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Size</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Pcs</label>
+            </div>
+            <div class="col-lg-1">
+                <label>side</label>
+            </div>
+            <div class="col-lg-1">
+                <label>Remarks</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+                @*@Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentTypeList, "ID", "Name"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+                @*@Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentTypeList, "ID", "Name"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+                @*@Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentTypeList, "ID", "Name"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+                @*@Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentTypeList, "ID", "Name"), "--Select--", new { @class = "txtBox" })*@
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="VatAmount" class="txtBox" name="" tabindex="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+        });
+    }); //End of Document.Ready()
+
+
+    // Declare Object
+    var PrqBillPaymentReferenceModel = { "PaymentID": "", "SupplierBillID": "", "SupplierBillRef": "", "RecordStatus": "" };
+    var PrqBillPaymentModel = {
+        "PaymentID": "", "PaymentDate": "", "SupplierID": "", "SupplierAddressID": "", "PurchaseYear": "", "PaymentType": "",
+        "PaymentMethod": "", "Currency": "", "PaymentDoc": "", "BillAmount": "", "VatPercentage": "", "VatAmount": "", "DeductAmount": "",
+        "PaymentAmount": "", "Remarks": "", "BillPaymentReferenceList": []
+    };
+    var saveStatus = 0;
+
+    function Save() {
+        saveStatus = 0;
+        ////Check Empty or Maximum Length in Roll
+        //CheckRequiredTextBoxMaxLength('YearStartDate', 10);
+
+        ////Check Maximum Length in Name
+        //CheckRequiredTextBoxMaxLength('YearEndDate', 10);
+
+        if (saveStatus == 0) {
+            PrqBillPaymentModel.PaymentDate = $('#PaymentDate').val();
+            PrqBillPaymentModel.SupplierID = $('#SupplierID').val();
+            PrqBillPaymentModel.SupplierAddressID = $('#SupplierAddressID').val();
+            PrqBillPaymentModel.PurchaseYear = $('#PurchaseYear').val();
+            PrqBillPaymentModel.PaymentType = $('#PaymentType').val();
+            PrqBillPaymentModel.PaymentMethod = $('#PaymentMethod').val();
+            PrqBillPaymentModel.Currency = $('#Currency').val();
+            PrqBillPaymentModel.PaymentDoc = $('#PaymentDoc').val();
+            PrqBillPaymentModel.BillAmount = $('#BillAmount').val();
+            PrqBillPaymentModel.VatPercentage = $('#VatPercentage').val();
+            PrqBillPaymentModel.VatAmount = $('#VatAmount').val();
+            PrqBillPaymentModel.DeductAmount = $('#DeductAmount').val();
+            PrqBillPaymentModel.PaymentAmount = $('#PaymentAmount').val();
+
+            var data = $("#rightListBox").text();
+            var datas = data.split(',');
+            PrqBillPaymentModel.BillPaymentReferenceList = [];
+            for (var i = 0; i < datas.length - 1; i++) {
+                var datass = datas[i].split('+');
+                if (datass.length > 0) {
+                    PrqBillPaymentReferenceModel.SupplierBillID = datass[1];
+                    PrqBillPaymentReferenceModel.SupplierBillRef = datass[0];
+                }
+                PrqBillPaymentModel.BillPaymentReferenceList.push(PrqBillPaymentReferenceModel);
+                PrqBillPaymentReferenceModel = { "PaymentID": "", "SupplierBillID": "", "SupplierBillRef": "", "RecordStatus": "" };
+            }
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("BillPayment", "BillPayment")',
+            data: JSON.stringify(PrqBillPaymentModel),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            cache: false,
+            success: function (respnse) {
+                if (respnse.Type == 2) {
+                    $('#MessageText').html(respnse.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else if (respnse.Type == 3) {
+                    $('#MessageText').html(respnse.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    $("#CrudStatus").val("2");
+                    PageDetailGridReload();
+                }
+                else {
+                    $('#MessageText').html(respnse.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            }
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierID").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        }
+    });
+
+    function getLeftChallanBoxList(supplierId) {
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({ supplierId: supplierId }),
+            url: '@Url.Action("GetBillRefList", "BillPayment")',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $('#leftListBox').empty();
+                $.each(data, function (key, value) {
+                    $('#leftListBox').append('<option value=' + value.Value + '>' + value.Text + '+' + value.Value + ',' + '</option>');
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $("#leftToRight").click(function () {
+        $("#leftListBox > option:selected").each(function () {
+            $(this).remove().appendTo("#rightListBox");
+        });
+    });
+
+    $("#rightToLeft").click(function () {
+        $("#rightListBox > option:selected").each(function () {
+            $(this).remove().appendTo("#leftListBox");
+        });
+    });
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: "/Purchase/GetSupplierList",
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "SupplierID", title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+              { field: "SupplierName", title: "Supplier Name", width: "60px" },
+              { field: "SupplierAddressID", hidden: true, width: "60px" },
+              { field: "Address", title: "Address", width: "60px" }
+        ]
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        //changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        var supplierId = $('#SupplierID').val();
+        getLeftChallanBoxList(supplierId);
+    }
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+</script>

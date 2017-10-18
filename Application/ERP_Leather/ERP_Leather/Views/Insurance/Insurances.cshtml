@@ -1,0 +1,638 @@
+﻿@{
+    ViewBag.Title = "Insurance Setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+
+<div class="row">
+    <input id="BankID" type="hidden" class="txtBox" />
+    <input id="BranchID" type="hidden" class="txtBox" />
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Insurance Comapny Code<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BankCode" class="txtBox SetFocus" name="BankCode" tabindex="1" placeholder="Auto" readonly style="width: 270px; text-align:center;font-weight:bold" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Insurance Comapny Name<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="BankName" class="txtBox" name="BankName" tabindex="2" style="width: 270px; text-align:center;font-weight:bold" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Insurance Comapny Category</label>
+            </div>
+            <div class="col-lg-4">
+                <select id="BankCategory" tabindex="5" class="txtBox" style="width: 270px; text-align:center;font-weight:bold">
+                    <option value="" style="display: none">.....Select.....</option>
+                    <option value="INC">Insurance</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Insurance Comapny Type</label>
+            </div>
+            <div class="col-lg-4">
+                <div id="divBankType">
+                    <select id="BankType" class="Dropdown" tabindex="4" style="width: 270px; text-align:center;font-weight:bold">
+                        <option value="" style="display: none;">.....Select.....</option>
+                        <option value="LOC">Local</option>
+                        <option value="FRN">Foreign </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label>Status</label>
+            </div>
+            <div class="col-lg-4">
+                <select id="IsActive" class="Dropdown" tabindex="5" style="width: 270px; text-align:center;font-weight:bold">
+                    <option value="" style="display: none;">.....Select.....</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+    </div>
+</div>
+
+
+<div id="DeleteInsuranceConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteInsuranceOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteInsuranceCancel" value="Cancel" />
+</div>
+
+<script>
+
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    var saveStatus = 1;
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        //************************** DROP DOWN FIELD FOR KENDO GRID ************************************//
+
+        var activeAgentDataSource = [{ text: "Active", value: "Active" }, { text: "Inactive", value: "Inactive" }];
+
+        function ddlActive(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 0;
+                    },
+                    dataSource: activeAgentDataSource
+                });
+        };
+
+        var insuranceCategoryDataSource = [{ text: "Insurance", value: "INC" }];
+
+        function ddlInsuranceCategory(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: insuranceCategoryDataSource
+                });
+        };
+
+        var insuranceTypeDataSource = [{ text: "Local", value: "LOC" }, { text: "Foreign", value: "FRN" }];
+
+        function ddlInsuranceType(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: insuranceTypeDataSource
+                });
+        };
+
+        //************************** END OF DROP DOWN  ************************************//
+
+
+        //************************** DEFINE DATA FOR INSURANCE IN KENDO GRID ************************************//
+
+        var branchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BranchID",
+                    fields: {
+                        BranchID: { editable: true },
+                        BanchCode: { editable: true },
+                        BranchName: { editable: true },
+                        BankID: { editable: true },
+                        BankCode: { editable: true },
+                        BankName: { editable: true },
+                        Address1: { editable: true },
+                        Address2: { editable: true },
+                        Address3: { editable: true },
+                        LCBalance: { editable: true },
+                        IsActive: { editable: true }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+        var grid = $("#PageDetailGrid").kendoGrid({
+            dataSource: branchGridDataSource,
+            pageable: true,
+            edit: function (e) {
+
+            },
+            editable: true,
+            selectable: "row",
+            scrollable: true,
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 200,
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetBranchList", "Insurance")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            toolbar: [
+                {
+                    text: "Add Insurance", className: "btnAddInsurance", imageClass: "k-icon k-add"
+                }
+            ],
+            columns:
+            [
+                { field: "BanchCode", title: "Branch Code", width: 125, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "BranchName", title: "Branch Name", width: 170, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Address1", title: "Address1", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Address2", title: "Address2", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Address3", title: "Address3", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Status", width: 100, editor: ddlActive, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: DeleteMasterGridItem }], title: "Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+
+        //***** ADD ROW IN INSURANCE GRID *****//
+
+        $(document).ready(function () {
+
+            function AddInsurance() {
+                var grid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+
+                var cell = $('#PageDetailGrid').find('tr.k-state-selected td:eq(0)');
+                $('#PageDetailGrid').data('kendoGrid').editCell(cell);
+            }
+            $(".btnAddInsurance").click(function (e) {
+                AddInsurance();
+            });
+
+            $('#PageDetailGrid').keyup(function (e) {
+                if (e.keyCode == 13) {
+                    AddInsurance();
+                }
+            });
+        });
+
+        //***** END OF ADD ROW IN INSURANCE GRID *****//
+
+
+
+        var DeleteFrom = 0;
+
+        function DeleteMasterGridItem(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                OpenConfirmationDialog();
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+
+            }
+            else {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select()));
+            if (changeStatus == 1) {
+                alert("HI");
+            }
+            else {
+
+                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+            }
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus LeatherTypeName textbox
+        $(".SetFocus").focus();
+
+
+
+
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready.
+
+
+
+    //********************** SAVE/UPDATE FUNCTION *******************//
+
+    var objInsurance =
+        {
+            "BankID": "",
+            "BankCode": "",
+            "BankName": "",
+            "BankCategory": "",
+            "BankType": "",
+            "IsActive": "",
+            "Branches": []
+        };
+
+    var objbranchInsurance =
+        {
+            "BranchID": "",
+            "BanchCode": "",
+            "BankID": "",
+            "BranchName": "",
+            "Address1": "",
+            "Address2": "",
+            "Address3": "",
+            "LCBalance": "",
+            "IsActive": ""
+
+
+        };
+
+
+    function Save() {
+
+
+        if (saveStatus == 1) {
+
+
+            // Check Maximum Length in BankName
+            CheckRequiredTextBoxMaxLength('BankName', 100);
+
+
+
+            objInsurance.BankID = $("#BankID").val();
+            objInsurance.BankCode = $("#BankCode").val();
+            objInsurance.BankName = $("#BankName").val();
+            objInsurance.BankType = $("#BankType").val();
+            objInsurance.BankCategory = $("#BankCategory").val();
+            objInsurance.IsActive = $("#IsActive").val();
+
+            var branchGrid = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var branchGridData = branchGrid.data();
+            for (var i = 0; i < branchGridData.length; i++) {
+                if (branchGridData[i].dirty) {
+                    objbranchInsurance.BankID = '';
+                    objbranchInsurance.BranchID = branchGridData[i].BranchID;
+                    objbranchInsurance.BanchCode = branchGridData[i].BanchCode;
+                    objbranchInsurance.BranchName = branchGridData[i].BranchName;
+                    objbranchInsurance.Address1 = branchGridData[i].Address1;
+                    objbranchInsurance.Address2 = branchGridData[i].Address2;
+                    objbranchInsurance.Address2 = branchGridData[i].Address3;
+                    objbranchInsurance.LCBalance = branchGridData[i].LCBalance;
+                    objbranchInsurance.IsActive = branchGridData[i].IsActive;
+
+                    objInsurance.Branches.push(objbranchInsurance);
+                    objbranchInsurance =
+                            {
+                                "BranchID": "",
+                                "BanchCode": "",
+                                "BankID": "",
+                                "BranchName": "",
+                                "Address1": "",
+                                "Address2": "",
+                                "Address3": "",
+                                "LCBalance": "",
+                                "IsActive": ""
+                            };
+                }
+            }
+
+            if (objInsurance.BankID == "") {
+
+                // INSERT DATA
+                $("#divLoading").show()
+
+                $.ajax({
+                    type: "POST",
+
+                    url: '@Url.Action("Insurances", "Insurance")',
+                    data: JSON.stringify(objInsurance),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        //console.log(data);
+                        if (data.msg.Type == 2) {
+                            //$("#divLoading").hide();
+                            $("#BankID").val(data.BankID);
+                            $("#BankCode").val(data.BankCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            //Reset();
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // UPDATE DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "Insurance")',
+                    data: JSON.stringify(objInsurance),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+
+                            $("#BankID").val(data.ReturnId);
+                            $("#BankCode").val(data.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    failure: function (respnse) {
+
+                    }
+                });
+            }
+
+        }
+    }
+
+    //********************** END OF SAVE/UPDATE FUNCTION *******************//
+
+
+
+    //********************** SEARCH START FUNCTION *******************//
+
+
+
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetInsuranceInfo", "Insurance", "BankID,BranchID,IsActive,BankType,BankCategory,BankCode,BankName");
+
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchInsuranceByInsuranceNo", "Insurance");
+    });
+
+    AutoComplete("GetAutoCompleteData", "Insurance");
+
+    $("#txtSearch").keyup(function (event) {
+        if ($("#txtSearch").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                GetSearchResult("SearchInsuranceByInsuranceNo", "Insurance");
+            }
+        }
+    });
+
+
+    function ListOfValueSearchGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        $("#BankID").val(selectedItem.BankID);
+        $("#BankCode").val(selectedItem.BankCode);
+        $("#InsuranceCode").val(selectedItem.InsuranceCode);
+        $("#BankName").val(selectedItem.BankName);
+        $("#InsuranceName").val(selectedItem.InsuranceName);
+        $("#InsuranceTypeName").val(selectedItem.InsuranceTypeName);
+        $("#InsuranceCategoryName").val(selectedItem.InsuranceCategoryName);
+        $("#IsActive").val(selectedItem.IsActive);
+
+        $.ajax({
+            url: '@Url.Action("GetInsuranceInfoByBankID", "Insurance")',
+            type: 'GET',
+            data: { bankId: selectedItem.BankID },
+            success: function (data) {
+                console.log(data);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.Branches);
+                changeStatus = 0;
+
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    //********************** END OF SEARCH FUNCTION *******************//
+
+    //########################################################## RESET FUNCTION ###############################################################//
+    function Reset() {
+
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data('');
+        $("#CheckComments").val('');
+        $("#ConfirmComments").val('');
+        $('.Dropdown').val('');
+        $('.FormBody input[type=text]').val('');
+        $('.txtBox').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+    }
+    //####################################################### END OF RESET FUNCTION #############################################################//
+
+
+        //############################################################### DELETE WET BLUE ITEM #############################################################
+
+    var InsuranceDeleteWindow = $('#DeleteInsuranceConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    $("#btnDelete").click(function () {
+        if ($("#BankID").val() != "") {
+            gridToDelete = "all";
+            InsuranceDeleteWindow.open();
+            InsuranceDeleteWindow.center();
+        } else if ($("#LimID").val() == "" && changeStatus == 1) {
+            $('#MessageText').html("The record you are trying to delete is not in the database.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+
+        }
+    });
+
+    $('#btnDeleteInsuranceOK').click(function () {
+
+        if (gridToDelete == "all") {
+        if ($("#BankID").val() != "") {
+                bankID = $("#BankID").val();
+                $.ajax({
+                    url: '@Url.Action("Delete", "Insurance")',
+                    type: 'GET',
+                    data: { bankID: bankID },
+                    success: function (data) {
+                        $("#divLoading").show();
+                        //console.log(data);
+                        if (data.Type == 2) {
+                            $('.FormBody input[type=text]').val('');
+                            $('.Dropdown').val('');
+                            $('.FormBody input[type=hidden]').val('');
+                            $('.FormBody input[type=number]').val('');
+                            $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                            $('#MessageText').html(data.Msg);
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.data("");
+                            Reset();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                       // alert("Error occured !!!");
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            gridToDelete = "";
+            InsuranceDeleteWindow.close();
+        }
+        });
+
+
+
+    $('#btnDeleteLimInfoListOK').click(function () {
+        if (gridToDelete == "all") {
+            if ($("#BankID").val() != "") {
+             var   bankID = $("#BankID").val();
+                $.ajax({
+                    url: '@Url.Action("Delete", "Insurance")',
+                    type: 'GET',
+                    data: ({ "bankID": bankID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                        InsuranceDeleteWindow.close();
+                    }
+                });
+            }
+            gridToDelete = "";
+            InsuranceDeleteWindow.close();
+        }
+    });
+
+    $("#btnDeleteInsuranceCancel").click(function () {
+        InsuranceDeleteWindow.close();
+    });
+        //############################################################### END OF DELETE WET BLUE ITEM #######################################################
+
+
+</script>
+

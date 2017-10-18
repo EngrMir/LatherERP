@@ -1,0 +1,808 @@
+﻿@{
+    ViewBag.Title = "Chemical Purchase Requisition Approval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                @*<input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" disabled="disabled" />*@
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:80px;" />
+                @*<input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" disabled="disabled" />*@
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Category</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionCategory" class="txtBox" name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-4"></div>
+            <div class="col-lg-2">
+                <label>Requisition No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionNo" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" />
+                <input type="hidden" id="RequisitionID" class="txtBox"  />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Type</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionType" class="txtBox" name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-4"></div>
+            <div class="col-lg-2">
+                <label>Requisition Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="RequisitionDate" class=" txtBox" name="" tabindex="" readonly="readonly" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Requisition Raised By</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="ReqRaisedByName" class="txtBox " name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-3">
+            </div>
+
+            <div class="col-lg-2">
+                <label>Required By </label>
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="RequiredByTime" class="txtBox" maxlength="3" name="" tabindex="" />
+            </div>
+            <div class="col-lg-1">
+                <label> Day's</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Supplier</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="SupplierCode" class="txtBox "   name="" tabindex="" readonly="readonly" />
+                <input type="hidden" id="SupplierID" class="txtBox ">
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="SupplierName" class="txtBox" name="" tabindex="" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-1">
+                <label>Requisition From</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="StoreName" class="txtBox " name="" tabindex="" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="PageDetailGrid"></div>
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            @*<div class="col-lg-2" style=" padding-right:0;">
+                <label style="">Approval Recommendation </label>
+            </div>
+            <div class="col-lg-4" style="padding-left:0; padding-right:0;">
+                <select class="txtBox" id="ApprovalAdvice">
+                    <option value="ATL">Advice to Take Loan</option>
+                    <option value="ATP">Advice to Purchase</option>
+                    <option value="RTP">Rejected Purchase</option>
+                    <option value="POR">Purchase by Other Requisition</option>
+                </select>
+            </div>*@
+            <div class="col-lg-1" style=" padding-right:0;">
+                <label style="">Approval Note</label>
+            </div>
+            <div class="col-lg-5" style="padding-left:0; padding-right:0;">
+                <textarea id="ApprovalComment" class="txtBox" tabindex="" style="float: left; "></textarea>
+            </div>
+            <div class="col-lg-1">
+                <input type="button" tabindex="" id="btnApprove" value="Approved" style="position: absolute; font-size: 12px; " />
+            </div>
+            <div class="col-lg-5">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ChemicalWindow" style="display: none;">
+    <div id="ChemicalWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ManufacturerSearchWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <div id="ManufacturerSearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 596px;">
+        <input type="button" id="btnManufacturerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnManufacturerWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var recordStatus = "APV";
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var dataitem = {};
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    
+    function isEditable(model) {
+        // default to editable if no IsEditable attribute
+        return !model.hasOwnProperty("SafetyStock") || model.IsEditable;
+    }
+
+    $(document).ready(function () {
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date()
+        });
+        ClearAllData();
+        CheckRecordStatusForButton("NCF");
+    }); //End of Document.Ready()
+    //--------------------------------------Start of defining Page Datail Datagrid--------------------------------------------------------
+
+
+
+    var gridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RequisitionItemID",
+                fields: {
+                    RequisitionItemID: { editable: true },
+                    //SupplierID: { editable: true },
+                    ItemID: { editable: false },
+                    ItemName: { editable: false },
+                    SafetyStock: { editable: false },
+                    PipelineQty: { editable: false },
+                    TotalQty: { editable: false },
+                    ReorderLevel: { editable: false },
+                    ProdReqQty: { editable: false },
+                    SizeID: { editable: true },
+                    SizeName: { editable: true },
+                    PackUnitID: { editable: true },
+                    PackUnitName: { editable: false },
+                    PackQty: { editable: true, type: "number", validation: { required: true, min: 0, max: 999999999999 } },
+                    RequisitionQty: { editable: false, type: "number", validation: { required: true, min: 0, max: 999999999999 } },
+                    UnitID: { editable: true },
+                    UnitName: { editable: false },
+                    ApproveQty: {
+                        eidtable: true, validation: {
+                            ApproveQtyValidation: function (input) {
+                                if (input.is("[name='GrossWeight']") && input.val() != "") {
+                                    input.attr("data-ApproveQtyValidation-msg", "Number should be a positive number");
+                                    return /^[0-9]/.test(input.val());
+                                }
+                                return true;
+                            }
+                        }
+                    },
+                    //ApproveQty: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 } },
+                    ApprovalState: { editable: true },
+                    //ApprovalStateID: { editable: true },
+                    ManufacturerID: { editable: true },
+                    ManufacturerName: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 50
+    });
+    var itemgrid = $("#PageDetailGrid").kendoGrid({
+        dataSource: gridDataSource,
+        pageable: true,
+        edit: function (e) {
+            $("[name='PackQty']", e.container).blur(function () {
+                var totalApproveQty = 0;
+                var grid = $("#PageDetailGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                if (grid.dataItem(row).PackQty != 0 && grid.dataItem(row).SizeID != 0) {
+                    totalApproveQty = grid.dataItem(row).PackQty * parseFloat(grid.dataItem(row).SizeName);
+                    grid.dataItem(row).ApproveQty = totalApproveQty;
+                }
+            });
+        },
+        save: function (e) {
+            setTimeout(function () { $("#totalGrossWeight").text(SumGrossWeight()); });
+        },
+        editable: {
+            "createAt": "bottom"
+        },
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 250,
+        columns: [
+            { field: "RequisitionItemID", hidden: true, },
+            { field: "ItemID", hidden: true },
+            { field: "ItemName", title: "Chemical Name", width: "60px", attributes: { "class": "ItemName", "placeholder": "optional", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SafetyStock", title: "Chemical Stock Qty", width: "60px", editable: false, filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "PipelineQty", title: "Pipeline Qty", width: "60px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "TotalQty", title: "Total Qty", width: "60px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ReorderLevel", title: "Re-Order Level", width: "60px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ProdReqQty", title: "Production Requisition Qty", width: "60px", filterable: false, attributes: { "class": "Readonly", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+            { field: "SizeID", hidden: true },
+            { field: "SizeName", title: "Pack Size", width: "60px", editor: ddlPackSize, filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+            { field: "PackUnitID", hidden: true },
+            { field: "PackUnitName", title: "Pack Size Unit", width: "60px", editor: ddlPackSizeUnit, filterable: false, sortable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "PackQty", title: "Pack Qty", editable: true, width: "50px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+            { field: "RequisitionQty", title: "Requisition Qty", editable: true, width: "60px", filterable: false, attributes: { "class": "txtBox", style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, footerTemplate: "Grand Total :" },
+
+            { field: "UnitID", hidden: true },
+            { field: "UnitName", title: "Unit", width: "50px", editor: ddlUnit, filterable: false, sortable: false, attributes: { style: "background-color: silver" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+            { field: "ApproveQty", title: "Approved Qty<span style='color:red'>*</span>",  width: "60px", filterable: false, attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, footerTemplate: "<span id='totalGrossWeight'>#=SumGrossWeight()#</span>" },
+            { field: "ApprovalState", title: "ApprovalState<span style='color:red'>*</span>", editable: true, width: "120px", editor: ddlApprovalRecomment, filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+
+            { field: "ManufacturerID", hidden: true },
+            { field: "ManufacturerName", hidden: true, title: "Manufacturer", filterable: false, width: "80px", attributes: { "class": "txtBox" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+
+    });
+
+    // Summation of Gross Weight
+    function SumGrossWeight() {
+        // assume this to be dynamically determined
+        var field = "ApproveQty";
+        // assume this to be dynamically determined
+        var dataSource = gridDataSource;
+        // some custom calc logic
+        var newValue = 0;
+        $.each(dataSource.data(), function (index, model) {
+            newValue += parseFloat(model.get(field));
+        });
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        return newValue.toFixed(2);
+    }
+
+
+
+    //--------------------------------------End of defining Datagrid--------------------------------------------------------
+
+
+    // ------------Start Grid Detail ddl List panel----------------
+
+    var ddlApprovalRecommentDataSource = [{ text: "Advice to Take Loan", value: "Advice to Take Loan" },
+        { text: "Advice to Purchase", value: "Advice to Purchase" },
+        { text: "Rejected Purchase", value: "Rejected Purchase" },
+        { text: "Purchase by Other Requisition", value: "Purchase by Other Requisition" }
+    ];
+
+    function ddlApprovalRecomment(container, options) {
+        $('<input id="ApprovalState" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    dataSource: ddlApprovalRecommentDataSource,
+                    change: function (e) {
+                        changeStatus = 1;
+                    },
+
+                });
+    };
+    // Data Source of ddlUnit
+    var ddlUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 50,
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllUnitForChemical", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+    function ddlUnit(container, options) {
+        $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlUnitDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("UnitName", dataItem.UnitName);
+                    options.model.set("UnitID", dataItem.UnitID);
+                },
+            });
+    }
+
+    // Data Source of ddlPackSize
+    var ddlPackSizeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SizeID",
+                fields: {
+                    SizeID: { editable: false },
+                    SizeName: { editable: false }
+                }
+            }
+        },
+        pageSize: 50,
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllPackSizeForChemical", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlPackSize(container, options) {
+        $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "SizeName",
+                    dataValueField: "SizeID",
+                    optionLabel: "Select",
+                    dataSource: ddlPackSizeDataSource,
+                    autoBind: false,
+                    change: function (e) {
+                        changeStatus = 1;
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("SizeName", dataItem.SizeName);
+                        options.model.set("SizeID", dataItem.SizeID);
+                    }
+                });
+    };
+
+
+    // Data Source of ddlPackSizeUnit
+    var ddlPackSizeUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PackUnitID",
+                fields: {
+                    PackUnitID: { editable: false },
+                    PackUnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 50,
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllPackUnitForChemical", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlPackSizeUnit(container, options) {
+        $('<input name="PackUnitID" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "PackUnitName",
+                dataValueField: "PackUnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlPackSizeUnitDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("PackUnitName", dataItem.PackUnitName);
+                    options.model.set("PackUnitID", dataItem.PackUnitID);
+                },
+            });
+    }
+
+
+    // ------------End Grid Detail ddl List panel----------------
+
+    
+
+    //--------------------------------------End of Defining Datasource & Dropdown--------------------------------------------
+
+
+//-------------------------------------------------Common Function--------------------------------------------------------
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function listOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function(e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $("#PageDetailGrid").on('input', function() {
+        changeStatus = 1;
+    });
+
+
+    var DetailItemModel = { "RequisitionItemID": "", "ApproveQty": "", "ApprovalState": "","SizeID": "",  "PackQty": "" };
+    var MasterDataModel = { "RequisitionID": "", "ApprovalAdvice": "", "ApprovalAdviceNote": "", "ChemPurcReqItems": [] };
+    var saveStatus = 1;
+
+
+    $("#btnApprove").click(function() {
+        $("#divLoading").show();
+  
+        MasterDataModel.RequisitionID = $('#RequisitionID').val();
+        MasterDataModel.ApprovalAdvice = $('#ApprovalAdvice').val();
+        MasterDataModel.ApprovalAdviceNote = $('#ApprovalComment').val();
+        var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var data = dataSource.data(); // Get Detail Grid Data
+        MasterDataModel.ChemPurcReqItems = [];
+        //if (dataSource.hasChanges) {
+        for (var i = 0; i <= data.length - 1; i++) {
+            if (data[i].ApprovalState != "") {
+                DetailItemModel.RequisitionItemID = data[i].RequisitionItemID;
+                DetailItemModel.SizeID = data[i].SizeID;
+                DetailItemModel.PackQty = data[i].PackQty;
+                DetailItemModel.ApproveQty = data[i].ApproveQty;
+                DetailItemModel.ApprovalState = data[i].ApprovalState;
+                MasterDataModel.ChemPurcReqItems.push(DetailItemModel);
+                DetailItemModel = { "RequisitionItemID": "", "ApproveQty": "", "ApprovalState": "", "SizeID": "", "PackQty": "" };
+            } else {
+
+                changeStatus = 0;
+                break;
+            }
+           }
+        if ($("#RequisitionID").val() != "") {
+            if (changeStatus == 1) {
+                //MasterDataModel.RequisitionID = $('#RequisitionID').val();
+                //MasterDataModel.ApprovalAdvice = $('#ApprovalAdvice').val();
+                //MasterDataModel.ApprovalAdviceNote = $('#ApprovalComment').val();
+                //var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                //var data = dataSource.data(); // Get Detail Grid Data
+                //MasterDataModel.ChemPurcReqItems = [];
+                //if (dataSource.hasChanges) {
+                //    for (var i = 0; i <= data.length - 1; i++) {
+
+                //        DetailItemModel.RequisitionItemID = data[i].RequisitionItemID;
+                //        DetailItemModel.ApproveQty = data[i].ApproveQty;
+                //        DetailItemModel.ApprovalState = data[i].ApprovalState;
+                //        MasterDataModel.ChemPurcReqItems.push(DetailItemModel);
+                //        DetailItemModel = { "RequisitionItemID": "", "ApproveQty": "", "ApprovalState": "" };
+                //    }
+                //}
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ApprovedData", "ChemPurcReq")',
+                dataType: 'JSON',
+                data: JSON.stringify({ model: MasterDataModel }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        CheckRecordStatusForButton("APV");
+                        $("#divLoading").hide();
+                        //ResetOnlyParentData();
+                        //ClearAllData();
+                    } else {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+                });
+            } else {
+                $("#divLoading").hide();
+                $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+            }
+
+        }
+        else {
+            $("#divLoading").hide();
+            $("#MessageText").html("Search first then approved.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+        
+
+    });
+
+
+
+    //-------------------------------------End Start CRUD Opreation--------------------------------------------------
+
+    //------------------------------------Start of Button Event----------------------------------------
+
+    function ClearAllData() {
+
+        // ClearOperationalMessage();
+        ResetOnlyParentData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+    }
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        CheckRecordStatusForButton("NCF");
+        ClearAllData();
+    });
+
+    // For Search button work
+
+    $("#btnSearch").click(function () {
+
+        ClearOperationalMessage();
+        $(".RequiredTextBox").css("border-color", "");
+        LoadSearchGrid();
+        SelectedItemOfListOfValue('SearchWindowGrid');
+        SearchWindow.open();
+
+    });
+
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RequisitionID",
+                fields: {
+                    RequisitionID: { editable: false },
+                    RequisitionNo: { editable: false },
+                    RequisitionCategory: { editable: false },
+                    RequisitionType: { editable: false },
+                    ReqRaisedOn: { editable: false },
+                    RequisitionFrom: { editable: false },
+                    StoreName: { editable: false },
+                    RequisitionTo: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    RequiredByTime: { editable: false },
+                    ReqRaisedBy: { editable: false },
+                    ReqRaisedByName: { editable: false },
+                    RecordStatus: { editable: false },
+                    ApprovalAdviceNote: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 400,
+        columns: [
+            { field: "RequisitionID", hidden: true,title: "Requisition ID", width: "30px" },
+            { field: "RequisitionNo", title: "Requisition No", width: "60px" },
+            { field: "RequisitionCategory", title: "Requisition Category", width: "60px" },
+            { field: "RequisitionType", title: "Requisition Type", width: "60px" },
+            { field: "ReqRaisedOn", title: "Requisition Date", width: "60px" },
+            { field: "RequisitionFrom", hidden: true },
+            { field: "StoreName", hidden: false, title: "Store Name", width: "80px" },
+            { field: "RequisitionTo", hidden: true },
+            { field: "SupplierCode", hidden: true },
+            { field: "SupplierName", hidden: false, title: "Supplier Name", width: "100px" },
+            { field: "RequiredByTime", hidden: true },
+            { field: "ReqRaisedBy", hidden: true },
+            { field: "ReqRaisedByName", hidden: true },
+            { field: "RecordStatus", title: "Record Status", width: "60px" },
+            { field: "ApprovalAdviceNote", hidden: true }
+            
+
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Chemical Purchase Requisition Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+
+
+    function LoadSearchGrid() {
+        $.ajax({
+            url: '@Url.Action("GetAllNcfChemPurcReqList", "ChemPurcReq")',
+            type: 'GET',
+            data: { pageMode: "APV" },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#RequisitionID").val(selectedItem.RequisitionID);
+        $("#RequisitionNo").val(selectedItem.RequisitionNo);
+        $("#RequisitionCategory").val(selectedItem.RequisitionCategory);
+        $("#RequisitionType").val(selectedItem.RequisitionType);
+        $("#RequisitionFrom").val(selectedItem.RequisitionFrom);
+        $("#StoreName").val(selectedItem.StoreName);
+        //Check
+        $("#RequisitionTo").val(selectedItem.RequisitionTo);
+
+        $("#SupplierID").val(selectedItem.RequisitionTo);
+        $("#SupplierCode").val(selectedItem.SupplierCode);
+
+        $("#SupplierName").val(selectedItem.SupplierName);
+
+        $("#RequiredByTime").val(selectedItem.RequiredByTime);
+
+        $("#RequisitionDate").val(selectedItem.ReqRaisedOn);
+        $("#ReqRaisedByName").val(selectedItem.ReqRaisedByName);
+        $("#ApprovalComment").val(selectedItem.ApprovalAdviceNote);
+        recordStatus = selectedItem.RecordStatus;
+        CheckRecordStatusForButton(recordStatus);
+        //ClearOperationalMessage();
+        $.ajax({
+            url: '@Url.Action("GetRequisitionItemList", "ChemPurcReq")',
+            type: 'GET',
+            data: { requisitionId: $("#RequisitionID").val() },
+            success: function (datasc) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(datasc);
+            }
+        });
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //------------------------------------End of Button Event----------------------------------------
+
+    // Click Save Chages Popup No Button
+    $("#btnSaveChangeWindowOk").click(function () {
+
+        ClearAllData();
+        CloseSaveChangesDialog();
+    });
+
+    // Click Save Chages Popup Cancel Button
+    $("#btnSaveChangeWindowCancel").click(function () {
+        CloseSaveChangesDialog();
+    });
+
+</script>

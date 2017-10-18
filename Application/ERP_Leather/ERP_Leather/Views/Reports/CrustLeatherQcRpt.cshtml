@@ -1,0 +1,576 @@
+﻿@{
+    ViewBag.Title = "Crust Leather QC Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("CrustLeatherQcRpt", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="FormHeader">
+        <div class="row">
+            <div id="FormTitlePannel" class="col-lg-5">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Crust Leather QC Report</div>
+            </div>
+            <div id="MessageText" class="col-lg-3">
+
+            </div>
+            <div class="col-lg-2" style="">
+                <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+                <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" id="btnShowReport" value="Show Report" style="position: absolute; right:110px;" />
+                <input type="button" id="btnReset" value="Reset" style="position: absolute; right: 50px;" />
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-5" style="padding-left: 0; padding-right: 0;">
+                @*<div id="ItemInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                        <div class="col-lg-3">
+                            <label style="">Requisition No</label>
+                        </div>
+                        <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                            <input type="text" id="RequisitionNo" class="txtBox" name="RequisitionNo" placeholder="Press F9" readonly="readonly" />
+                            <input type="hidden" id="RequisitionID" class="txtBox" name="RequisitionID" />
+                        </div>
+                    </div>*@
+                <div id="supplierInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Buyer/Party</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="BuyerCode" class="txtBox" name="BuyerCode" placeholder="Press F9" readonly="readonly" />
+                        <input type="text" id="BuyerName" name="BuyerName" class="txtBox" readonly="readonly" />
+                        <input type="hidden" id="BuyerID" class="txtBox" name="BuyerID" />
+                    </div>
+                </div>
+                <div id="ItemInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Buyer Order No</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="BuyerOrderNo" class="txtBox" name="BuyerOrderNo" placeholder="Press F9" readonly="readonly" />
+                        <input type="hidden" id="BuyerOrderID" class="txtBox" name="BuyerOrderID" />
+                    </div>
+                </div>
+                <div id="ItemInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Challan No</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="ArticleChallanNo" class="txtBox" name="ArticleChallanNo" placeholder="Press F9" readonly="readonly" />
+                        <input type="hidden" id="ArticleChallanID" class="txtBox" name="ArticleChallanID" />
+                    </div>
+                </div>
+                <div id="ItemInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Article Name</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="ArticleName" class="txtBox" name="ArticleName" placeholder="Press F9" readonly="readonly" />
+                        <input type="hidden" id="ArticleID" class="txtBox" name="ArticleID" />
+                    </div>
+                </div>
+                <div class="row col-lg-12" style="margin-bottom: 15px;">
+                    <div class="col-lg-3">
+                        <label style="">From Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="FromDate" name="FromDate" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <label style="padding-right: 0; padding-left: 0; margin-left: 50px;">To Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="ToDate" name="ToDate" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                @*<div class="row">
+                        <div class="col-lg-10 text-right">
+                            <label style="">Crust Leather Requisition Single Detail</label>
+                        </div>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="CrustLeatherRequisitionSingleDetail" name="ReportName" value="CrustLeatherRequisitionSingleDetail" checked="checked" />
+                        </div>
+                    </div>*@
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Crust Leather QC Detail</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="CrustLeatherQcDetail" name="ReportName" value="CrustLeatherQcDetail" checked="checked" />
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Buyer Wise Color Crust Leather Requisition</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="BuyerWiseColorCrustLeatherRequisition" name="ReportName" value="BuyerWiseColorCrustLeatherRequisition" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Article Wise Color Crust Leather Requisition</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ArticleWiseColorCrustLeatherRequisition" name="ReportName" value="ArticleWiseColorCrustLeatherRequisition" />
+                    </div>
+                </div>*@
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+}
+<div id="BuyerWindow" style="display: none;">
+    <div id="BuyerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ChallanWindow" style="display: none;">
+    <div id="ChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="BuyerOrderWindow" style="display: none;">
+    <div id="BuyerOrderWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+        });
+
+        var buyerGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BuyerID",
+                    fields: {
+                        BuyerID: { editable: false },
+                        BuyerCode: { editable: false },
+                        BuyerName: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("CrustBuyerList", "Utility")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var buyerGrid = $("#BuyerWindowGrid").kendoGrid({
+            dataSource: buyerGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "BuyerID", hidden: true, title: "Buyer ID", width: "60px", filterable: false, sortable: false },
+                  { field: "BuyerName", title: "Buyer Name", width: "120px" },
+                  { field: "BuyerCode", title: "Buyer Code", width: "60px" }
+            ]
+        });
+
+    });
+    var buyerWindow = $('#BuyerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Buyer",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#BuyerCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('BuyerWindowGrid');
+                buyerWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for Buyer window grid
+    $('#btnBuyerWindowOK').click(function () {
+        ListOfValueGridEvent('BuyerWindowGrid');
+        buyerWindow.close();
+    });
+    $('#btnBuyerWindowCancel').click(function () {
+        buyerWindow.close();
+    });
+    $("#BuyerWindow").dblclick(function () {
+        ListOfValueGridEvent('BuyerWindowGrid');
+        buyerWindow.close();
+    });
+    $("#BuyerWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('BuyerWindowGrid');
+            buyerWindow.close();
+
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            buyerWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    // ##################################### Chalan N0
+    $(document.body).keypress(function (e) {
+        if ($("#ArticleChallanNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ChallanWindowGrid');
+                ChallanWindow.open();
+            }
+        }
+    });
+
+    var ChallanWindow = $('#ChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Challan",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleChallanID",
+                fields: {
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ArticleName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("ArticleChallanList", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+        dataSource: ChallanGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ArticleChallanID", hidden: true, width: "60px" },
+              { field: "ArticleChallanNo", title: "Challan No", width: "60px" },
+              { field: "ArticleName", title: "Article Name", width: "80px" }
+        ]
+    });
+
+    //Handling button click for Challan window grid
+    $('#btnChallanWindowOK').click(function () {
+        ListOfValueGridEvent('ChallanWindowGrid');
+        ChallanWindow.close();
+    });
+
+    $('#btnChallanWindowCancel').click(function () {
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").dblclick(function () {
+        ListOfValueGridEvent('ChallanWindowGrid');
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('ChallanWindowGrid');
+            ChallanWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChallanWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    // ####################### Artical ###############################
+    $(document.body).keypress(function (e) {
+        if ($("#ArticleName").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ArticleWindowGrid');
+                ArticleWindow.open();
+            }
+        }
+    });
+
+    var ArticleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Article",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ArticleGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticalID",
+                fields: {
+                    ArticalID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("ArticleList", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+        dataSource: ArticleGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ArticleID", hidden:true, width: "60px" },
+              { field: "ArticleName", title: "Article Name", width: "80px" },
+              { field: "ArticleNo", title: "Article No", width: "60px" }
+        ]
+    });
+
+    //Handling button click for Article window grid
+    $('#btnArticleWindowOK').click(function () {
+        ListOfValueGridEvent('ArticleWindowGrid');
+        ArticleWindow.close();
+    });
+
+    $('#btnArticleWindowCancel').click(function () {
+        ArticleWindow.close();
+    });
+
+    $("#ArticleWindow").dblclick(function () {
+        ListOfValueGridEvent('ArticleWindowGrid');
+        ArticleWindow.close();
+    });
+
+    $("#ArticleWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('ArticleWindowGrid');
+            ArticleWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ArticleWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    // ####################### BuyerOrderNo ###############################
+    $(document.body).keypress(function (e) {
+        if ($("#BuyerOrderNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('BuyerOrderWindowGrid');
+                buyerOrderWindow.open();
+            }
+        }
+    });
+
+    var buyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "Buyer Order Search",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Buyer search window definition
+    var BuyerOrderSearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    OrderNo: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllBuyerOrder", "WetBlueIssue")',
+                type: 'GET',
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+    });
+    var buyerOrderGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+        dataSource: BuyerOrderSearchGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        scrollable: true,
+        height: 300,
+        columns: [
+            { field: "BuyerOrderID", hidden: true, title: "Order ID", width: "50px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align:left" } },
+            { field: "BuyerOrderNo", title: "Order No", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "OrderNo", title: " Buyer Order No", width: "80px", attributes: { "class": "Readonly" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    //Handling button click for Buyer Order window grid
+    $('#btnBuyerOrderWindowOK').click(function () {
+        ListOfValueGridEvent('BuyerOrderWindowGrid');
+        buyerOrderWindow.close();
+    });
+
+    $('#btnBuyerOrderWindowCancel').click(function () {
+        buyerOrderWindow.close();
+    });
+
+    $("#BuyerOrderWindow").dblclick(function () {
+        ListOfValueGridEvent('BuyerOrderWindowGrid');
+        buyerOrderWindow.close();
+    });
+
+    $("#BuyerOrderWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('BuyerOrderWindowGrid');
+            buyerOrderWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            buyerOrderWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //  End Buyer Order search window events End
+        /*----------------------------------------------- Reset --------------------------------------------*/
+
+        $("#btnReset").click(function () {
+            $("#FromDate").val("");
+            $("#ToDate").val("");
+            $(".txtBox").val("");
+        });
+
+
+
+        /*--------------------------------------------- Reset End ------------------------------------------*/
+
+</script>
+
+

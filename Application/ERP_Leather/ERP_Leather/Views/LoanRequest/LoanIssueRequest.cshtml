@@ -1,0 +1,1482 @@
+﻿@{
+    ViewBag.Title = "Loan Issue Request";
+    ViewBag.SearchTitle = "Loan Issue Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+<div class="row">
+    <div class="FormBody">
+     
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Request from Source</label>
+            </div>
+            <div class="col-lg-4">
+                <select id="ddSource">
+                    <option value="1">Supplier</option>
+                    <option value="2">Other Tannery</option>
+                    <option value="3">Local Agent</option>
+                </select>        
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-4">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Request From<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" value="" id="RequestID" name="RequestID" readonly="readonly" />             
+                <input type="hidden" id="RequestTo" class="" name="RequestTo" value="" readonly="readonly" />
+                <input type="text" id="SupplierID" class="SupplierID" style="width:80%" name="SupplierID" value="" readonly="readonly" placeholder="Press F9" />
+                @*@Html.Partial("~/Views/Common/_ddSupplier.cshtml")*@
+            </div>
+            <div class="col-lg-2">
+                <label>Request No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" readonly="readonly" id="RequestNo" name="RequestNo" value="" placeholder="Auto" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Request To<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                
+                <input type="hidden" id="RequestFrom" class="" name="RequestFrom" value="" readonly="readonly" />
+                <input type="text" id="ChemicalStoreName" class="" name="ChemicalStoreName" style="width:80%" value="" readonly="readonly" placeholder="Press F9" />
+                @Html.Partial("~/Views/Common/_ddStore.cshtml")
+                @*<input type="hidden" id="RequestTo" class="" name="RequestTo" value="" readonly="readonly" />
+                <input type="text" id="SupplierID" class="SupplierID" name="SupplierID" value="" readonly="readonly" placeholder="Press F9" />
+                @Html.Partial("~/Views/Common/_ddSupplier.cshtml")*@
+            </div>
+            <div class="col-lg-2">
+                <label>Return Method<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <select id="ReturnMethod">
+                    <option value="">-- Select One --</option>
+                    <option value="DTD">Dolar to Dolar</option>
+                    <option value="EOI">Exchange Other Item</option>
+                    <option value="ESI">Exchange Same Item</option>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="RequestDate" class="datePicker" name="RequestDate" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Expected Return Within<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ExpectetReturnTime" name="ExpectetReturnTime" onblur="return IsNumber('ExpectetReturnTime');" value="" placeholder="Days" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="ChemicalItemGrid">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Recommended By</label>
+            </div>
+            <div class="col-lg-4">
+                <button id="btnCheck" class="" name="btnCheck">Recommend</button><br />
+                <input type="text" id="CheckComments" class="col-lg-10" style="padding:2px" name="CheckComments" value="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Approve</label>
+            </div>
+            <div class="col-lg-4">
+                <button type="button" id="btnApprove" name="ApproveComments">Approve</button><br />
+                <input type="text" id="ApproveComments" class="col-lg-10" style="padding:2px" name="ApproveComments" value="" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Letter Format</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="LetterFormat" class="" name="LetterFormat" value="" />
+                <button id="btnPrintLetter" class="" name="btnPrintLetter">Print Letter</button>
+            </div>
+            <div class="col-lg-2">
+                <label>Print No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtPrintNo" class="" name="txtPrintNo" value="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Supplier2Window" style="display: none;">
+    <p>Supplier Name:<input type="text" id="txtSupplier2" style="width: 250px;" /><input type="button" id="btnSupplier2GridSearch" value="Search" /></p>
+
+    <div id="Supplier2WindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplier2WindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplier2WindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ChemicalWindow" style="display: none;">
+    <p>Chemical:<input type="text" id="txtChemical" style="width: 250px;" /><input type="button" id="btnChemicalGridSearch" value="Search" /></p>
+
+    <div id="ChemicalWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnSupplierGridSearch" value="Search" /></p>
+
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ LoanStock Grid Popup #######################*@
+<div id="LoanStockWindow" style="display: none;">
+    @*<p>LoanStock:<input type="text" id="txtLoanStock" style="width: 250px;" /><input type="button" id="btnLoanStockGridSearch" value="Search" /></p>*@
+
+    <div id="LoanStockWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLoanStockWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLoanStockWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+
+
+    $("select").addClass("select");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+
+    //function ListOfValueSupplierGridEvent(gridName) {
+    //    var grid = $('#' + gridName).data("kendoGrid");
+    //    var selectedItem = (grid.dataItem(grid.select()));
+    //    $("#RequestTo").val(selectedItem.SupplierID);
+    //    $("#ChemicalStoreName").val(selectedItem.StoreName);
+
+    //}
+
+    function ListOfValuSuppliereGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $('#SupplierID').val(selectedItem.SupplierName);
+        $('#RequestTo').val(selectedItem.SupplierID);
+    }
+    function ListOfValuSupplier2eGridEvent(gridName) {
+        var WindowGrid = $("#Supplier2WindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#ChemicalItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+        if (PageGridItem != null) {
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+            PageGridItem.set("RefSupplierName", WindowGridItem.SupplierName);
+            PageGridItem.set("SupplierID", WindowGridItem.SupplierID);
+        }
+    }
+
+    function ListOfValuChemicalGridEvent(gridName) {
+        var WindowGrid = $("#ChemicalWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#ChemicalItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+        if (PageGridItem != null) {
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+            PageGridItem.set("ItemName", WindowGridItem.ItemName);
+            PageGridItem.set("ItemID", WindowGridItem.ItemID);
+
+            PageGridItem.set("ItemID", WindowGridItem.ItemID);
+        }
+        ChemicalWindow.close();
+    }
+
+    var ChemicalSelectedList = {
+        "TransRequestItemID": "", "ItemID": "", "PackSize": "", "SizeUnit": "", "PackQty": "",
+        "RefItemID": "", "RefSupplierID": "", "ReferenceQty": "", "ReferenceUnit": ""
+    };
+
+    var obTRDataSet = {
+        "RequestID": "", "RequestType": "", "RequestFrom": "", "RequestTo": "", "RequestDate": "", "RequestNo": "", "RequestCode": "", "ReturnMethod": "",
+        "ExpectetReturnTime": "", "ToSource": "", "ChemicalSelectedList": []
+    };
+
+
+    function Save() {
+        ChemicalSelectedList = {
+            "TransRequestItemID": "", "ItemID": "", "PackSize": "", "SizeUnit": "", "PackQty": "",
+            "RefItemID": "", "RefSupplierID": "", "ReferenceQty": "", "ReferenceUnit": ""
+        };
+
+        obTRDataSet = {
+            "RequestID": "", "RequestType": "", "RequestFrom": "", "RequestTo": "", "RequestDate": "", "RequestNo": "", "RequestCode": "", "ReturnMethod": "",
+            "ExpectetReturnTime": "", "ToSource": "", "ChemicalSelectedList": []
+        };
+        saveStatus = 1;
+
+        CheckRequiredTextBoxMaxLength('ChemicalStoreName', 300);
+        CheckRequiredTextBoxMaxLength('SupplierID', 300);
+        CheckRequiredTextBoxMaxLength('RequestDate', 15);
+        CheckRequiredTextBoxMaxLength('ReturnMethod', 100);
+        CheckRequiredTextBoxMaxLength('ExpectetReturnTime', 30);
+        CheckRequiredTextBoxMaxLength('RequestDate', 15);
+
+
+        if (saveStatus == 1) {
+            obTRDataSet.RequestType = "LNIR";
+            obTRDataSet.RequestID = $("#RequestID").val();
+            obTRDataSet.RequestFrom = $("#RequestTo").val();
+            obTRDataSet.RequestTo = $("#RequestFrom").val();
+            obTRDataSet.RequestDate = $("#RequestDate").val();
+            obTRDataSet.ReturnMethod = $("#ReturnMethod").val();
+            obTRDataSet.ExpectetReturnTime = $("#ExpectetReturnTime").val();
+
+            if (($("#ddSource").val() - 0) == 1) {
+                obTRDataSet.ToSource = "SUP";
+            }
+            else if (($("#ddSource").val() - 0) == 3) {
+                obTRDataSet.ToSource = "LAG";
+            }
+            else {
+                obTRDataSet.ToSource = "STR";
+            }
+            var ChemicalItemGrid = $("#ChemicalItemGrid").data("kendoGrid").dataSource;
+            var requestItemData = ChemicalItemGrid.data();
+            for (var i = 0; i < requestItemData.length; i++) {
+                if (requestItemData[i]) {
+                    console.log(requestItemData[i]);
+                    ChemicalSelectedList.TransRequestItemID = requestItemData[i].TransRequestItemID;
+                    ChemicalSelectedList.ItemID = requestItemData[i].ItemID;
+                    ChemicalSelectedList.ItemName = requestItemData[i].ItemName;
+                    ChemicalSelectedList.PackSize = requestItemData[i].SizeID;
+                    ChemicalSelectedList.SizeUnit = requestItemData[i].SizeUnitID;
+                    ChemicalSelectedList.PackQty = requestItemData[i].PackQty;
+                    ChemicalSelectedList.ReferenceQty = requestItemData[i].ReferenceQty;
+                    ChemicalSelectedList.ReferenceUnit = requestItemData[i].ReferenceUnitID;
+                    ChemicalSelectedList.RefItemID = requestItemData[i].ItemID;
+                    ChemicalSelectedList.RefSupplierID = requestItemData[i].SupplierID;
+                    obTRDataSet.ChemicalSelectedList.push(ChemicalSelectedList);
+                    ChemicalSelectedList = {
+                        "TransRequestItemID": "", "ItemID": "", "PackSize": "", "SizeUnit": "", "PackQty": "",
+                        "RefItemID": "", "RefSupplierID": "", "ReferenceQty": "", "ReferenceUnit": ""
+                    };
+                }
+            }
+
+
+            $("#divLoading").show();
+            if ($("#RequestID").val() == "") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "LoanRequest")',
+                    data: JSON.stringify(obTRDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $("#RequestID").val(data.msg.ReturnId);
+                            $("#RequestNo").val(data.msg.ReturnCode);
+
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // Update
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "LoanRequest")',
+                    data: JSON.stringify(obTRDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $("#RequestID").val(data.msg.ReturnId);
+                            $("#RequestNo").val(data.msg.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+
+
+        }
+
+    }
+
+
+    var ChemicalItemFormatGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: true },
+                    TransRequestItemID: { editable: true },
+                    ItemName: { editable: true, defaultValue: 'Press F9', validation: { required: true } },
+                    PackSize: { editable: true, type: "number", defaultValue: '' },
+                    SizeID: { editable: true },
+                    SizeUnit: { editable: true, validation: { required: true } },
+                    ReferenceUnit: { editable: true },
+                    SizeUnitID: { editable: true },
+                    PackQty: { editable: true, type: "number", defaultValue: '' },
+                    ReferenceQty: { editable: true, type: "number", defaultValue: '' },
+                    ReferenceUnitID: { editable: true },
+                    ReferenceUnit: { editable: true },
+                    SupplierID: { editable: true },
+                    RefSupplierName: { editable: true, defaultValue: 'Press F9' },
+                    TransRequestItemID: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var grid = $("#ChemicalItemGrid").kendoGrid({
+        dataSource: ChemicalItemFormatGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        toolbar: ["create"],
+        filterable: true,
+        sortable: true,
+        edit: function (e) {
+
+            $("[name='PackQty']", e.container).blur(function () {
+                var grid = $("#ChemicalItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var qty = 0;
+                if ((grid.dataItem(row).PackQty - 0) != 0 && (grid.dataItem(row).PackSize - 0) >= 0) {
+
+                    qty = grid.dataItem(row).PackQty * grid.dataItem(row).PackSize;
+                    grid.dataItem(row).ReferenceQty = qty;
+                    e.model.set("ReferenceQty", qty.toFixed(2));
+                }
+                else {
+                    grid.dataItem(row).ReferenceQty = qty;
+                    e.model.set("ReferenceQty", qty.toFixed(2));
+                }
+            });
+
+            $("[name='PackSize']", e.container).blur(function () {
+                var grid = $("#ChemicalItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var qty = 0;
+                if ((grid.dataItem(row).PackQty - 0) != 0 && (grid.dataItem(row).PackSize - 0) >= 0) {
+
+                    qty = grid.dataItem(row).PackQty * grid.dataItem(row).PackSize;
+                    grid.dataItem(row).ReferenceQty = qty;
+                    e.model.set("ReferenceQty", qty.toFixed(2));
+                }
+                else {
+                    grid.dataItem(row).ReferenceQty = qty;
+                    e.model.set("ReferenceQty", qty.toFixed(2));
+                }
+            });
+
+        },
+        height: 250,
+        columns: [
+
+              { field: "ItemName", title: "Chemical Name", width: "60px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, attributes: { "class": "ChemicalItem" } },
+              { field: "PackSize", title: "Pack Size", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddPackSize },
+              { field: "SizeUnit", title: "SizeUnit", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddUnit },
+              { field: "PackQty", title: "PackQty", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ReferenceQty", title: "Req Qty", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ReferenceUnit", title: "RefUnit", width: "70px", width: "80px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" }, editor: ddUnit2 },
+              { field: "RefSupplierName", title: "SupplierName", width: "60px", attributes: { "class": "Supplier2" } },
+               { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteScheduleDate }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    }).data('kendoGrid');
+
+    function handleDeleteScheduleDate() {
+        deleteStatus = 3;
+        var grid1 = $("#ChemicalItemGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select()));
+        OpenConfirmationDialog();
+    };
+
+    $('#btnConfirmationOK').click(function () {
+        var grid1 = $("#ChemicalItemGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select()));
+        if (dataitem.TransRequestItemID == "") {
+            $("#MessageText").html("");
+            $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+        }
+        else {
+            if ($("#WBSelectionID").val() != "") {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteChemicalItem", "LoanRequest")',
+                    type: 'POST',
+                    data: JSON.stringify({ "ItemID": dataitem.TransRequestItemID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.Type == 0) {
+                            $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        }
+
+                        if (respnse.Type == 2) {
+                            $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            $('#MessageText').html(respnse.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+
+                        } else {
+                            $("#MessageText").html(respnse.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+                        }
+
+                    }
+                });
+            }
+            else {
+                $("#MessageText").html("");
+                $("#ChemicalItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+            }
+        }
+        CloseConfirmationDialog();
+    });
+
+    function ddPackSize(container, options) {
+        $('<input name="ddPackSize" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "SizeName",
+                    dataValueField: "SizeID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        //  options.model.set("UnitName", dataItem.UnitName);
+                        options.model.set("PackSize", dataItem.SizeName);
+                        options.model.set("SizeID", dataItem.SizeID);
+                        var cell = $('#ChemicalItemGrid').find('tbody tr:eq(0) td:eq(1)'); // or different cell
+                        $('#ChemicalItemGrid').data('kendoGrid').closeCell(cell);
+                        cell = $('#ChemicalItemGrid').find('tbody tr:eq(0) td:eq(2)'); // or different cell
+                        $('#ChemicalItemGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: ddSizeDataSet
+                });
+    };
+
+    var ddSizeDataSet = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SizeID",
+                fields: {
+                    SizeID: { editable: false },
+                    SizeName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                 url: '@Url.Action("GetSize", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    //####################### Supplier2 Start ###########
+    $(document).on('keyup', '.Supplier2', function (e) {
+        if (e.keyCode == 120) {
+            SelectedItemOfListOfValue('Supplier2WindowGrid');
+            Supplier2Window.open();
+        }
+    });
+
+    var Supplier2Window = $('#Supplier2Window').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Supplier2",
+        position: { top: 100, left: 300 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var Supplier2GridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalSupplier", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var Supplier2Grid = $("#Supplier2WindowGrid").kendoGrid({
+        dataSource: Supplier2GridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              //{ field: "SupplierID", title: "RefSupplierName No", width: "60px", filterable: false, sortable: false },
+              { field: "SupplierName", title: "Supplier Name", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+
+
+    //Handling button click for Supplier2 window grid
+    $('#btnSupplier2WindowOK').click(function () {
+        ListOfValuSupplier2eGridEvent('Supplier2WindowGrid');
+        Supplier2Window.close();
+    });
+
+    $('#btnSupplier2WindowCancel').click(function () {
+        Supplier2Window.close();
+    });
+
+    $("#Supplier2Window").dblclick(function () {
+        ListOfValuSupplier2eGridEvent('Supplier2WindowGrid');
+        Supplier2Window.close();
+    });
+
+    $("#Supplier2Window").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuSupplier2eGridEvent('Supplier2WindowGrid');
+            Supplier2Window.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            Supplier2Window.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnSupplier2GridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListSearchById", "RefSupplierName")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier2").val() },
+            success: function (data33) {
+                $("#Supplier2WindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    //SearchWindowEvents();
+                    ListOfValueGridEvent('Supplier2WindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtSupplier2").keyup(function (event) {
+        if ($("#txtSupplier2").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierListSearchById", "RefSupplierName")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier2").val() },
+                    success: function (data33) {
+                        $("#Supplier2WindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.Supplier2List);
+                        if (data33.Count == 1) {
+                            //SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceSupplier2 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "RefSupplierName")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSupplier2").kendoAutoComplete({
+        dataSource: dataSourceSupplier2,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+    //###################### RefSupplierName End ########
+
+    // #################### Chemical Name Start ############
+    $(document).on('keyup', '.ChemicalItem', function (e) {
+        if (e.keyCode == 120) {
+            SelectedItemOfListOfValue('ChemicalWindowGrid');
+            ChemicalWindow.open();
+        }
+    });
+
+    var ChemicalWindow = $('#ChemicalWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Chemical",
+        position: { top: 100, left: 300 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ChemicalGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: false },
+                    ItemName: { editable: false },
+                    HSCode: { editable: false },
+                    ItemCategory: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalList", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var ChemicalGrid = $("#ChemicalWindowGrid").kendoGrid({
+        dataSource: ChemicalGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        groupable: true,
+        columns: [
+              //{ field: "ItemID", title: "No", width: "60px", filterable: false, sortable: false },
+              { field: "ItemName", title: "Name", width: "60px" },
+              { field: "HSCode", title: "HS Code", width: "60px" }
+              //{ field: "ItemCategory", title: "Category", width: "60px" }
+        ]
+    });
+
+
+
+    //Handling button click for Chemical window grid
+    $('#btnChemicalWindowOK').click(function () {
+        ListOfValuChemicalGridEvent('ChemicalWindowGrid');
+        ChemicalWindow.close();
+    });
+
+    $('#btnChemicalWindowCancel').click(function () {
+        ChemicalWindow.close();
+    });
+
+    $("#ChemicalWindow").dblclick(function () {
+        ListOfValuChemicalGridEvent('ChemicalWindowGrid');
+        ChemicalWindow.close();
+    });
+
+    $("#ChemicalWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuChemicalGridEvent('ChemicalWindowGrid');
+            ChemicalWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChemicalWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnChemicalGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchChemicalByName", "LoanRequest")',
+            type: 'GET',
+            data: { search: $("#txtChemical").val() },
+            success: function (data33) {
+                $("#ChemicalWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    //SearchWindowEvents();
+                    ListOfValueGridEvent('ChemicalWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtChemical").keyup(function (event) {
+        if ($("#txtChemical").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchChemicalByName", "LoanRequest")',
+                    type: 'GET',
+                    data: { search: $("#txtChemical").val() },
+                    success: function (data33) {
+                        $("#ChemicalWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.Supplier2List);
+                        if (data33.Count == 1) {
+                            //SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceChemicalAuto = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCNoSearch", "LoanRequest")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtChemical").kendoAutoComplete({
+        dataSource: dataSourceChemicalAuto,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Chemical...",
+    });
+    //###################### Chemical End #############
+    var ddUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetUnit", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    var ddUnitDataSource2 = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30,
+        transport: {
+            read: {
+                url: '@Url.Action("GetUnit2", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddUnit(container, options) {
+        $('<input name="ddUnit" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "SizeUnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("SizeUnit", dataItem.UnitName);
+                        options.model.set("SizeUnitID", dataItem.UnitID);
+                        var cell = $('#ChemicalItemGrid').find('tbody tr:eq(0) td:eq(2)'); // or different cell
+                        $('#ChemicalItemGrid').data('kendoGrid').closeCell(cell);
+                        cell = $('#ChemicalItemGrid').find('tbody tr:eq(0) td:eq(3)'); // or different cell
+                        $('#ChemicalItemGrid').data('kendoGrid').editCell(cell);
+                    },
+                    dataSource: ddUnitDataSource
+                });
+    };
+
+    function ddUnit2(container, options) {
+        $('<input name="ddUnit2" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "UnitName",
+                    dataValueField: "SizeUnitID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ReferenceUnit", dataItem.UnitName);
+                        options.model.set("ReferenceUnitID", dataItem.UnitID);
+
+                        var cell = $('#ChemicalItemGrid').find('tbody tr:eq(0) td:eq(5)'); // or different cell
+                        $('#ChemicalItemGrid').data('kendoGrid').closeCell(cell);
+                        cell = $('#ChemicalItemGrid').find('tbody tr:eq(0) td:eq(6)'); // or different cell
+                        $('#ChemicalItemGrid').data('kendoGrid').editCell(cell);
+
+                    },
+                    dataSource: ddUnitDataSource2
+                });
+    };
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+    function ListOfValueStoreGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#ChemicalStoreName").val(selectedItem.StoreName);
+        $("#RequestFrom").val(selectedItem.StoreID);
+
+    }
+
+    //################## Search ###############
+    $("#btnSearch").click(function () {
+        SearchResult("GetLoanIssueRequestList", "LoanRequest", "RequestID,RequestFrom,RequestTo,ToSource");
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchLoanIssueRequest", "LoanRequest");
+    });
+
+    AutoComplete("GetAutoCompleteIssueData", "LoanRequest");
+
+    function ListOfValueSearchGridEvent(gridName) {
+        $('#btnDelete').attr('disabled', true);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $('#btnDelete').attr('disabled', false);
+        //$("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetLoanReceiveRequestByID", "LoanRequest")',
+            type: 'GET',
+            data: { RequestID: selectedItem.RequestID },
+            success: function (data) {
+                if (data.RecordStatus == "CHK" || data.RecordStatus == "CNF") {
+                    $("#btnApprove").css("display", "none");
+                }
+                $('#MessageText').html("");
+                if (selectedItem.RecordStatus == "CNF") {
+                    $('.FormBody').find('input, textarea, button, select').attr('disabled', 'disabled');
+                    $('#btnSubmit').attr('disabled', 'disabled');
+                }
+                else {
+                    $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                $("#RequestType").val(data.RequestType);
+                $("#RequestID").val(data.RequestID);
+                $("#ChemicalStoreName").val(data.RequestToName);
+                $("#SupplierID").val(data.RequestFromName);
+                console.log(data.FromSource);
+                if (data.FromSource == "SUP") {
+                    $("#ddSource").val("1");
+                }
+                else if (data.FromSource == "STR") {
+                    $("#ddSource").val("2");
+                }
+                else if (data.FromSource == "LAG") {
+                    $("#ddSource").val("3");
+                }
+                else {
+                    $("#ddSource").val("");
+                }
+
+                $("#RequestFrom").val(data.RequestTo);
+                $("#RequestTo").val(data.RequestFrom);
+                $("#RequestDate").val(data.RequestDate);
+                $("#ReturnMethod").val(data.ReturnMethod);
+                $("#ExpectetReturnTime").val(data.ExpectetReturnTime);
+                $("#RequestNo").val(data.RequestNo);
+                $("#CheckComments").val(data.CheckComments);
+                $("#ApproveComments").val(data.ApproveComments);
+
+                $("#ChemicalItemGrid").data("kendoGrid").dataSource.data(data.ChemicalSelectedList);
+
+                if (data.RecordStatus == "CNF") {
+                    $("#btnApprove").css("display", "none");
+                    $("#btnCheck").css("display", "none");
+                    $('#btnDelete').attr('disabled', 'disabled');
+                }
+                else if (data.RecordStatus == "CHK") {
+                    $("#btnCheck").css("display", "none");
+                    $("#btnApprove").css("display", "block");
+                    $('#btnDelete').attr('disabled', false);
+                }
+                else {
+                    $("#btnCheck").css("display", "block");
+                    $("#btnApprove").css("display", "block");
+                    $('#btnDelete').attr('disabled', false);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+
+    }
+
+    $("#btnCheck").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("CheckRecordStatus", "LoanRequest")',
+            type: 'POST',
+            data: { note: $("#CheckComments").val(), RequestID: $("#RequestID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnCheck").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+
+    $("#btnApprove").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("ConfirmRecordStatus", "LoanRequest")',
+            type: 'POST',
+            data: { note: $("#ApproveComments").val(), RequestID: $("#RequestID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnApprove").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    function CustomResetForm() {
+
+        $("#ChemicalItemGrid").data("kendoGrid").dataSource.data('');
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+
+    }
+
+    $("#btnReset").click(function () {
+        CustomResetForm();
+        $("#btnCheck").css("display", "block");
+        $("#btnApprove").css("display", "block");
+    });
+
+    // ############### Supplier
+    $(document.body).keypress(function (e) {
+        if ($(".SupplierID").is(":focus")) {
+            if (e.keyCode == 120) {
+                if (($("#ddSource").val() - 0) == 1) {
+                    SelectedItemOfListOfValue('SupplierWindowGrid');
+                    SupplierWindow.open();
+                }
+                else if (($("#ddSource").val() - 0) == 3) {
+                    SelectedItemOfListOfValue('SupplierWindowGrid');
+                    SupplierWindow.open();
+                }
+                else {
+                    SelectedItemOfListOfValue('LoanStockWindowGrid');
+                    LoanStockWindow.open();
+                }
+            }
+
+        }
+    });
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100, left: 300 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalSupplier", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+
+              { field: "SupplierName", title: "Supplier Name", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuSuppliereGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnSupplierGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                console.log(data33.SupplierList);
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    //SearchWindowEvents();
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            //SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceSupplier = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "Supplier")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSourceSupplier,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+
+    // ############## Stock
+    // ################ Stock Loan #####################################
+
+    //$(document.body).keypress(function (e) {
+    //    if ($("#SelectedBy").is(":focus")) {
+    //        if (e.keyCode == 120) {
+    //            SelectedItemOfListOfValue('LoanStockWindowGrid');
+    //            LoanStockWindow.open();
+    //        }
+    //    }
+    //});
+
+    var LoanStockWindow = $('#LoanStockWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LoanStock",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LoanStockGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "StoreID",
+                fields: {
+                    StoreID: { editable: false },
+                    StoreCode: { editable: false },
+                    ChemicalStoreName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetLoanStockInfo", "LoanRequest")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var LoanStockGrid = $("#LoanStockWindowGrid").kendoGrid({
+        dataSource: LoanStockGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+                { field: "StoreCode", title: "Store Code" },
+              { field: "ChemicalStoreName", title: "Store Name" }
+        ]
+    });
+
+    //Handling button click for LoanStock window grid
+    $('#btnLoanStockWindowOK').click(function () {
+        ListOfValuLoanStockeGridEvent('LoanStockWindowGrid');
+        LoanStockWindow.close();
+    });
+
+    $('#btnLoanStockWindowCancel').click(function () {
+        LoanStockWindow.close();
+    });
+
+    $("#LoanStockWindow").dblclick(function () {
+        ListOfValuLoanStockeGridEvent('LoanStockWindowGrid');
+        LoanStockWindow.close();
+    });
+
+    $("#LoanStockWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuLoanStockeGridEvent('LoanStockWindowGrid');
+            LoanStockWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            LoanStockWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnLoanStockGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchLoanStockByFirstName", "LoanRequest")',
+            type: 'GET',
+            data: { supplier: $("#txtLoanStock").val() },
+            success: function (data33) {
+                $("#LoanStockWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('LoanStockWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtLoanStock").keyup(function (event) {
+        if ($("#txtLoanStock").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLoanStockByFirstName", "LoanRequest")',
+                    type: 'GET',
+                    data: { search: $("#txtLoanStock").val() },
+                    success: function (data33) {
+                        $("#LoanStockWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        //console.log(data33.LoanStockList);
+                        if (data33.Count == 1) {
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var dataSourceLoanStock = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLoanStockAutocompleteData", "FinalGradeSelection")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtLoanStock").kendoAutoComplete({
+        dataSource: dataSourceLoanStock,
+        filter: "startswith",
+        placeholder: "Search LoanStock...",
+    });
+
+    function ListOfValuLoanStockeGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+        console.log(selectedItem);
+        $('#RequestTo').val(selectedItem.StoreID);
+        $('#SupplierID').val(selectedItem.ChemicalStoreName);
+    }
+
+    $("#ddSource").change(function () {
+        $('#SupplierID').val('');
+        $('#RequestTo').val('');
+    });
+
+    $("#btnDelete").click(function () {
+        var grid = $("#ChemicalItemGrid").data("kendoGrid");
+        var gradeGrid = $("#ChemicalItemGrid").data("kendoGrid").dataSource;
+        var gradeGridData = gradeGrid.data();
+        if (gradeGridData.length > 0) {
+            $("#MessageText").html("Please Delete All Chemical.");
+            $("#MessageText").css("color", "red");
+        }
+        else {
+            if ($("#RequestID").val() != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteLoanRequest", "LoanRequest")',
+                    type: 'GET',
+                    data: { id: $("#RequestID").val() },
+                    success: function (data) {
+                        //console.log(data);
+                        if (data.Type == 2) {
+                            $('.FormBody input[type=text]').val('');
+                            $('.FormBody input[type=hidden]').val('');
+                            $('.FormBody input[type=number]').val('');
+                            $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                            $('#MessageText').html(data.Msg);
+                            $("#ChemicalItemGrid").data("kendoGrid").dataSource.data("");
+                        }
+                        else {
+                            $('#MessageText').html('Confirmation faild due to communication error.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Confirmation faild due to communication error!!!");
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+        }
+    });
+
+</script>
+
+
+
+

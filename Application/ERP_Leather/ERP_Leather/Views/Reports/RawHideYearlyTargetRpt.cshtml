@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Raw Hide Yearly Target Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("RawHideYearlyTargetRpt", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{ <div class="row">
+        <div class="FormHeader">
+            @ViewBag.Message
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">Raw Hide Yearly Target Report</div>
+                </div>
+                <div id="MessageText" class="col-lg-3"></div>
+                <div class="col-lg-3">
+
+                    <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 7%; float: right;" tabindex="3" checked="checked" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> PDF</label>
+
+                    <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 7%; float: right;" tabindex="4" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> Excel</label>
+
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="ClearAll();" />
+
+                    <input type="submit" id="btnShowReport" class="Button" value="Show Report" style=" position: absolute; right: 100px;" />
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="FormBody">
+            <br />
+            <div class="row">
+                <div class="col-lg-6">
+                    <table class="table-condensed">
+                      
+                        <tr>
+                            <td>
+                                <label>Target Year</label>
+                            </td>
+                            <td>
+                                <input type="text" id="PurchaseYear" class="txtBox" name="PurchaseYear" placeholder="Enter Target Year" maxlength="4" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-6">
+                    <table class="table-condensed">
+                        <tr>
+                            <td>
+                                <label>Year Wise Target Datail </label>
+                            </td>
+                            <td>
+                                <input type="radio" id="YearWiseTargetDatail" name="ReportName" value="YearWiseTargetDatail" checked="checked" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Item Wise Target Summary  </label>
+                            </td>
+                            <td>
+                                <input type="radio" id="ItemWiseTargetSummary" name="ReportName" value="ItemWiseTargetSummary" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <br />
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    $("#btnReset").click(function () {
+        $(".txtBox").val("");
+    });
+
+</script>
+
+

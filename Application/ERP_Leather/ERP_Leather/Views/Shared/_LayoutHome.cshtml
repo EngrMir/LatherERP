@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_LayoutHome</title>
+    <link href="~/Content/layout.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="padding-left: 18px; padding-right: 20px;">
+    <div>
+        <div class="row" id="header">
+            <div class="col-md-12">
+                <div id="header-left" style="float: left">
+                </div>
+                <div id="header-right" style="float: right; margin-right: 10px; margin-top: 10px; text-align: right;">
+                    <p style="color: #ffffff;">
+                        Welcome,
+                        Mahin
+                    </p>
+                    <a href="#" style="color: #ffffff">Log out</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="main-content" class="row">
+            <div class="col-lg-3" id="menucontainer">
+                <div class="my-box">
+                    <div class="my-box-header">
+                        <p>
+                            Menu
+                        </p>
+
+                    </div>
+                    <div class="my-box-content">
+                        <div id="firstpane" class="menu_list">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9" id="maincontainer">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+    @*<div class="row" id="footer">
+            <div class="row" id="footer-left">
+            </div>
+        </div>*@
+</body>
+</html>

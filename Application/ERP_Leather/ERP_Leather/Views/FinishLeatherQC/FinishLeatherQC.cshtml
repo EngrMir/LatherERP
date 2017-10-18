@@ -1,0 +1,1599 @@
+﻿@{
+    ViewBag.Title = "Finish Leather Own QC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>QC No</label>
+            </div>
+            <div class="col-lg-2">
+                <input id="CrustLeatherQCID" type="hidden" class="txtBox" />
+                <input type="text" id="CrustLeatherQCNo" readonly="readonly" style="width: 100%;" class="txtBox ReadOnlyTextbox" name="No" tabindex="" placeholder="Auto" />
+            </div>
+            <div class="col-lg-2">
+                <label>QCTransactionOf<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="QCTransactionOf" class="txtBox" name="ArticleName" tabindex="" value="Own QC" readonly="readonly" />
+                @*<select id="QCTransactionOf" class="txtBox" tabindex="3">
+                        <option value="">--Select--</option>
+                        <option value="FOQC">Own QC</option>
+                        <option value="FBQC">Buyer QC</option>
+                    </select>*@
+            </div>
+            <div class="col-lg-2">
+                <label>QC Pass To<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("AfterQCIssueFloor", new SelectList(ViewBag.ddlBuyerQCStoreList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>QC Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CrustLeatherQCDate" class="datePicker" style="width: 100%;" name="CrustLeatherQCDate" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>QC From</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ProductionFloor", new SelectList(ViewBag.ddlFinishProductionFloorList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox" })
+            </div>
+
+            <div class="col-lg-2">
+                <label>QC Fail To<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("AfterQCIssueStore", new SelectList(ViewBag.ddlFinishStoreList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="plGrid" class="grdKendo"></div>
+        <div id="PageDetailGrid" style="margin-top: 10px;" class="grdKendo"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Confirmed By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Confirmed" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ConfirmWindow" style="display: none;">
+    <p><h5 style="color: red;">At First Save this Record.</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationClose" value="Close" />
+</div>
+
+<div id="QCByWindow" style="display: none;">
+    <div id="QCByWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnQCByWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnQCByWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="QCItemWindow" style="display: none;">
+    <div id="QCItemWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnQCItemWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnQCItemWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="GradeWindow" style="display: none;">
+    <div id="GradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="OnlyGradeWindow" style="display: none;">
+    <div id="OnlyGradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnOnlyGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnOnlyGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var saveStatus = 1;
+    var dataitem = {};
+
+    $(document).ready(function () {
+        $(".SetFocus").focus();
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date() // sets max date to Jan 1st, 2013
+        });
+
+        //$("#CrustLeatherQCDate").attr("readonly", true);
+
+        @*$("#QCTransactionOf").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetFinishIssueToList", "FinishLeatherQC")',
+                type: 'GET',
+                data: { QCTransactionOf: $("#QCTransactionOf").val() },
+                success: function (data33) {
+                    SetDropdownValue(data33, "AfterQCIssueFloor");
+                }
+            });
+        });*@
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        var plDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CLQCItemID",
+                    fields: {
+                        CLQCItemID: { editable: false },
+                        CrustLeatherQCRefID: { editable: false },
+                        CrustLeatherQCID: { editable: false },
+                        BuyerID: { editable: false },
+                        BuyerName: { editable: true, defaultValue: 'Press F9' },
+                        BuyerOrderID: { editable: false },
+                        BuyerOrderNo: { editable: false },
+                        ArticleID: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleChallanID: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false },
+                        LeatherStatusID: { editable: false },
+                        LeatherStatusName: { editable: false },
+                        ColorID: { editable: false },
+                        ArticleColorNo: { editable: false },
+                        ColorName: { editable: false }
+                        //,
+                        //ProductionPcs: { editable: false },
+                        //ProductionSide: { editable: false },
+                        //ProductionArea: { editable: false }
+                    }
+                }
+            }
+        });
+        var plgrid = $("#plGrid").kendoGrid({
+            dataSource: plDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "BuyerName"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add QC Item", className: "btnPlGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "CLQCItemID", hidden: true },
+                { field: "CrustLeatherQCRefID", hidden: true },
+                { field: "CrustLeatherQCID", hidden: true },
+                { field: "BuyerID", hidden: true },
+                { field: "BuyerName", title: "Party", filterable: false, width: "80px", attributes: { "class": "PartyInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "BuyerOrderID", hidden: true },
+                { field: "BuyerOrderNo", title: "Order", filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ArticleID", hidden: true },
+                { field: "ArticleName", title: "Article", filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ArticleNo", hidden: true },
+                { field: "ArticleChallanID", hidden: true },
+                { field: "ArticleChallanNo", title: "Challan No", filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ItemTypeID", hidden: true },
+                { field: "ItemTypeName", title: "Item Type", filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LeatherStatusID", hidden: true },
+                { field: "LeatherStatusName", title: "Leather Status", filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ColorID", hidden: true },
+                { field: "ArticleColorNo", title: "Color No", filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ColorName", title: "Color", filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ field: "ProductionPcs", hidden: true, title: "Production Pcs", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ field: "ProductionSide", hidden: true, title: "Production Side", editable: true, filterable: false, width: "50px", attributes: { "class": "ChemicalItem" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "ProductionArea", hidden: true, title: "Production Area", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteScheduleDate }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteScheduleDate() {
+            deleteStatus = 2;
+            var grid1 = $("#plGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $(".btnPlGrid").click(function () {
+            var supplieragentgrid = $("#plGrid").data("kendoGrid");
+            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        });
+
+        $("#plGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#plGrid").data("kendoGrid");
+                $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+            }
+        });
+
+        SelectedItemOfListOfValue('plGrid');
+
+        var itemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CLQCSelectionID",
+                    fields: {
+                        CLQCSelectionID: { editable: false },
+                        CLQCItemID: { editable: false },
+                        CrustLeatherQCRefID: { editable: false },
+                        CrustLeatherQCID: { editable: false },
+                        ShowGradeRange: { editable: false, defaultValue: 'Press F9' },
+                        ProductionPcs: { editable: false, defaultValue: 'Press F9' },
+                        ProductionSide: { editable: false },
+                        ProductionArea: { editable: false },
+                        //GradeID: { editable: true },
+                        //GradeName: { editable: true, defaultValue: 'Press F9' },
+                        GradeRange: { editable: true, defaultValue: '' },
+                        QCPassPcs: { editable: true, type: "number", defaultValue: '' },
+                        QCPassSide: { editable: true, type: "number", defaultValue: '' },
+                        QCPassArea: { editable: true, type: "number", defaultValue: '' },
+                        QCPassAreaUnit: { editable: true },
+                        QCPassAreaUnitName: { editable: true, defaultValue: 'SFT' },
+                        QCPassRemarks: { editable: true, type: "number", defaultValue: '' },
+                        QCFailPcs: { editable: true, type: "number", defaultValue: '' },
+                        QCFailSide: { editable: true, type: "number", defaultValue: '' },
+                        QCFailArea: { editable: true, type: "number", defaultValue: '' },
+                        QCFailAreaUnit: { editable: true },
+                        QCFailAreaUnitName: { editable: true, defaultValue: 'SFT' },
+                        QCFailRemarks: { editable: true }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+
+        var itemgrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: itemDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "ShowGradeRange"]').attr("readonly", true);
+                $('input[name = "ProductionPcs"]').attr("readonly", true);
+                $('input[name = "ProductionSide"]').attr("readonly", true);
+                $('input[name = "ProductionArea"]').attr("readonly", true);
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add Grade", className: "btnPageDetailGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            //height: 250,
+            columns: [
+                { field: "CLQCSelectionID", hidden: true },
+                { field: "CLQCItemID", hidden: true },
+                { field: "CrustLeatherQCRefID", hidden: true },
+                { field: "CrustLeatherQCID", hidden: true },
+                //{ field: "GradeID", hidden: true },
+                { field: "ShowGradeRange", title: "Grade Range", filterable: false, width: "80px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ProductionPcs", title: "Stock Pcs", editable: true, filterable: false, width: "75px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ProductionSide", title: "Stock Side", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ProductionArea", title: "Stock Area", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "GradeID", hidden: true },
+                //{ field: "GradeName", title: "Grade", filterable: false, width: "80px", attributes: { "class": "OnlyGradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "GradeRange", title: "Grade Range", filterable: false, width: "80px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "QCPassPcs", title: "Pass Pcs", editable: true, filterable: false, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCPassSide", title: "Pass Side", editable: true, filterable: false, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCPassArea", title: "Pass Area", editable: true, filterable: false, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCPassAreaUnit", hidden: true },
+                { field: "QCPassAreaUnitName", title: "Unit", editable: true, filterable: false, width: "75px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCPassRemarks", title: "Pass Remarks", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCFailPcs", title: "Fail Pcs", editable: true, filterable: false, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCFailSide", title: "Fail Side", editable: true, filterable: false, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCFailArea", title: "Fail Area", editable: true, filterable: false, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCFailAreaUnit", hidden: true },
+                { field: "QCFailAreaUnitName", title: "Unit", editable: true, filterable: false, width: "75px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "QCFailRemarks", title: "Fail Remarks", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteIssueItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        $(".btnPageDetailGrid").click(function (e) {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+            e.preventDefault();
+            //$("#PageDetailGrid tbody tr:first td:eq(0)").focus();
+        });
+
+        SelectedItemOfListOfValue('PageDetailGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteIssueItem() {
+            deleteStatus = 3;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationClose').click(function () {
+            CloseSaveChangesDialogOneButton();
+        });
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#CrustLeatherQCID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedCrustLeatherQC", "CrustLeatherQC")',
+                        type: 'POST',
+                        data: JSON.stringify({ "CrustLeatherQCID": $("#CrustLeatherQCID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                $("#MessageText").html("");
+                                ResetOnlyMasterPageData();
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                //$("#CrustLeatherQCNo").val("Auto Generated");
+                                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 2) {
+                if (dataitem.CLQCItemID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedCrustQCItem", "CrustLeatherQC")',
+                        type: 'POST',
+                        //data: JSON.stringify({ "CLQCItemID": dataitem.CLQCItemID, "RecordStatus": dataitem.RecordStatus }),
+                        data: JSON.stringify({ "CLQCItemID": dataitem.CLQCItemID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 3) {
+                if (dataitem.CLQCSelectionID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedQCSelection", "CrustLeatherQC")',
+                        type: 'POST',
+                        //data: JSON.stringify({ "CLQCSelectionID": dataitem.CLQCSelectionID, "RecordStatus": dataitem.RecordStatus }),
+                        data: JSON.stringify({ "CLQCSelectionID": dataitem.CLQCSelectionID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#CrustLeatherQCNo").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#CrustLeatherQCNo").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 4) { // Add Schedule
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                //ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#CrustLeatherQCNo").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#CrustLeatherQCID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedCrustLeatherQC", "CrustLeatherQC")',
+                            type: 'POST',
+                            data: JSON.stringify({ "CrustLeatherQCID": $("#CrustLeatherQCID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    CheckRecordStatusForButton("NCF");
+                                    $("#MessageText").html("");
+                                    ResetOnlyMasterPageData();
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                    //$("#CrustLeatherQCNo").val("Auto Generated");
+                                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 2) {
+                    if (dataitem.CLQCItemID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedCrustQCItem", "CrustLeatherQC")',
+                            type: 'POST',
+                            //data: JSON.stringify({ "CLQCItemID": dataitem.CLQCItemID, "RecordStatus": dataitem.RecordStatus }),
+                            data: JSON.stringify({ "CLQCItemID": dataitem.CLQCItemID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 3) {
+                    if (dataitem.CLQCSelectionID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedQCSelection", "CrustLeatherQC")',
+                            type: 'POST',
+                            //data: JSON.stringify({ "CLQCSelectionID": dataitem.CLQCSelectionID, "RecordStatus": dataitem.RecordStatus }),
+                            data: JSON.stringify({ "CLQCSelectionID": dataitem.CLQCSelectionID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+    }); //End of Document.Ready()
+
+    function SetDropdownValue(data, ddl) {
+        try {
+            if (data.length > 0) {
+                var options = new Array();
+                options.push('<option value="">-Select-</option>');
+                for (var i = 0; i < data.length; i++) {
+                    //push item from dataList with value and text
+                    options.push('<option value="' + data[i].StoreID + '">' + data[i].StoreName + '</option>');
+                }
+                $("#" + ddl).html(options.join(''));
+            } else {
+                $("#" + ddl).html('<option value="">-Select-</option>');
+                //$("#" + ddl).html('<option value="0">-Select-</option>');
+            }
+        } catch (err) {
+        }
+    }
+
+    /////////////////////Reset//////////////////
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            ResetOnlyMasterPageData();
+            $(".txtCommandBox").val("");
+            $(".txtBox").css("border-color", "");
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    ///////////////////////Dynamic DropDown in Item Griid//////////////////
+
+    var ddlUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveUnit", "CrustingProductionSchedule")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlUnit(container, options) {
+        $('<input id="UnitName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlUnitDataSource
+            });
+    };
+
+    /////////////Save//////////////////////////
+
+    // Declare Object
+    var PrdCrustLeatherQCItemModel = { "CLQCItemID": "", "CrustLeatherQCRefID": "", "CrustLeatherQCID": "", "CLProductionID": "", "ScheduleProductionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ChallaNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "ProductionPcs": "", "ProductionSide": "", "Productionrea": "", "CLQCPcs": "", "CLQCSide": "", "CLQCArea": "", "CLQCAreaUnit": "", "Remarks": "" };
+    var PrdCrustLeatherQCSelectionModel = { "CLQCSelectionID": "", "CLQCItemID": "", "CLSelectItemNo": "", "CrustLeatherQCRefID": "", "CrustLeatherQCID": "", "CLProductionID": "", "ProductionNo": "", "GradeID": "", "ProductionPcs": "", "ProductionSide": "", "ProductionArea": "", "ProductionAreaUnit": "", "QCPassPcs": "", "QCPassSide": "", "QCPassArea": "", "QCPassAreaUnit": "", "QCPassRemarks": "", "QCFailPcs": "", "QCFailSide": "", "QCFailArea": "", "QCFailAreaUnit": "", "QCFailRemarks": "" };
+    var PrdCrustLeatherQCModel = { "CrustLeatherQCID": "", "CrustLeatherQCNo": "", "CrustLeatherQCDate": "", "CrustLeatherQCBy": "", "QCComments": "", "ProductionFloor": "", "AfterQCIssueFloor": "", "IssueFloorQCLabel": "", "AfterQCIssueFloor": "", "IssueAfterQC": "", "QCTransactionOf": "", "PrdCrustLeatherQCItemList": [], "PrdCrustLeatherQCSelectionList": [] };
+
+    function Save() {
+        saveStatus = 1;
+        //Check Empty or Maximum Length in CrustLeatherQCDate
+        CheckRequiredTextBoxMaxLength('CrustLeatherQCDate', 10);
+        CheckRequiredTextBoxMaxLength('ProductionFloor', 10);
+        CheckRequiredTextBoxMaxLength('AfterQCIssueStore', 10);
+        CheckRequiredTextBoxMaxLength('AfterQCIssueFloor', 10);
+
+        if (saveStatus == 1) {
+            PrdCrustLeatherQCModel.CrustLeatherQCID = $('#CrustLeatherQCID').val();
+            PrdCrustLeatherQCModel.CrustLeatherQCNo = $('#CrustLeatherQCNo').val();
+            PrdCrustLeatherQCModel.CrustLeatherQCDate = $('#CrustLeatherQCDate').val();
+            PrdCrustLeatherQCModel.QCTransactionOf = $('#QCTransactionOf').val();
+            PrdCrustLeatherQCModel.ProductionFloor = $('#ProductionFloor').val();
+            PrdCrustLeatherQCModel.AfterQCIssueStore = $('#AfterQCIssueStore').val();
+            PrdCrustLeatherQCModel.AfterQCIssueFloor = $('#AfterQCIssueFloor').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCItemList = [];
+                PrdCrustLeatherQCItemModel.CLQCItemID = parentGridItem.CLQCItemID;
+                PrdCrustLeatherQCItemModel.CrustLeatherQCID = parentGridItem.CrustLeatherQCID;
+                PrdCrustLeatherQCItemModel.BuyerID = parentGridItem.BuyerID;
+                PrdCrustLeatherQCItemModel.BuyerOrderID = parentGridItem.BuyerOrderID;
+                PrdCrustLeatherQCItemModel.ArticleID = parentGridItem.ArticleID;
+                PrdCrustLeatherQCItemModel.ArticleNo = parentGridItem.ArticleNo;
+                PrdCrustLeatherQCItemModel.ArticleChallanID = parentGridItem.ArticleChallanID;
+                PrdCrustLeatherQCItemModel.ArticleChallanNo = parentGridItem.ArticleChallanNo;
+                PrdCrustLeatherQCItemModel.ArticleColorNo = parentGridItem.ArticleColorNo;
+                PrdCrustLeatherQCItemModel.ColorID = parentGridItem.ColorID;
+                PrdCrustLeatherQCItemModel.ProductionPcs = parentGridItem.ProductionPcs;
+                PrdCrustLeatherQCItemModel.ProductionSide = parentGridItem.ProductionSide;
+                PrdCrustLeatherQCItemModel.ProductionArea = parentGridItem.ProductionArea;
+                PrdCrustLeatherQCItemModel.ProductionAreaUnit = parentGridItem.ProductionAreaUnit;
+                PrdCrustLeatherQCItemModel.ItemTypeID = parentGridItem.ItemTypeID;
+                PrdCrustLeatherQCItemModel.LeatherStatusID = parentGridItem.LeatherStatusID;
+
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCItemList.push(PrdCrustLeatherQCItemModel);
+                PrdCrustLeatherQCItemModel = { "CLQCItemID": "", "CrustLeatherQCRefID": "", "CrustLeatherQCID": "", "CLProductionID": "", "ScheduleProductionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ChallaNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "ProductionPcs": "", "ProductionSide": "", "Productionrea": "", "CLQCPcs": "", "CLQCSide": "", "CLQCArea": "", "CLQCAreaUnit": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCSelectionList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    if (dataPeriodItem[j].dirty) {
+
+                        PrdCrustLeatherQCSelectionModel.CLQCSelectionID = dataPeriodItem[j].CLQCSelectionID;
+                        PrdCrustLeatherQCSelectionModel.CLQCItemID = dataPeriodItem[j].CLQCItemID;
+                        PrdCrustLeatherQCSelectionModel.CLSelectItemNo = dataPeriodItem[j].CLSelectItemNo;
+                        PrdCrustLeatherQCSelectionModel.CrustLeatherQCID = dataPeriodItem[j].CrustLeatherQCID;
+
+                        PrdCrustLeatherQCSelectionModel.GradeRange = dataPeriodItem[j].GradeRange;
+                        //PrdCrustLeatherQCSelectionModel.GradeID = dataPeriodItem[j].GradeID;
+
+                        PrdCrustLeatherQCSelectionModel.ProductionPcs = dataPeriodItem[j].ProductionPcs;
+                        PrdCrustLeatherQCSelectionModel.ProductionSide = dataPeriodItem[j].ProductionSide;
+                        PrdCrustLeatherQCSelectionModel.ProductionArea = dataPeriodItem[j].ProductionArea;
+
+                        PrdCrustLeatherQCSelectionModel.QCPassPcs = dataPeriodItem[j].QCPassPcs;
+                        PrdCrustLeatherQCSelectionModel.QCPassSide = dataPeriodItem[j].QCPassSide;
+                        PrdCrustLeatherQCSelectionModel.QCPassArea = dataPeriodItem[j].QCPassArea;
+                        PrdCrustLeatherQCSelectionModel.QCPassAreaUnitName = dataPeriodItem[j].QCPassAreaUnitName;
+                        PrdCrustLeatherQCSelectionModel.QCPassRemarks = dataPeriodItem[j].QCPassRemarks;
+
+                        PrdCrustLeatherQCSelectionModel.QCFailPcs = dataPeriodItem[j].QCFailPcs;
+                        PrdCrustLeatherQCSelectionModel.QCFailSide = dataPeriodItem[j].QCFailSide;
+                        PrdCrustLeatherQCSelectionModel.QCFailArea = dataPeriodItem[j].QCFailArea;
+                        PrdCrustLeatherQCSelectionModel.QCFailAreaUnitName = dataPeriodItem[j].QCFailAreaUnitName;
+                        PrdCrustLeatherQCSelectionModel.QCFailRemarks = dataPeriodItem[j].QCFailRemarks;
+
+                        PrdCrustLeatherQCModel.PrdCrustLeatherQCSelectionList.push(PrdCrustLeatherQCSelectionModel);
+                        PrdCrustLeatherQCSelectionModel = { "CLQCSelectionID": "", "CLQCItemID": "", "CLSelectItemNo": "", "CrustLeatherQCRefID": "", "CrustLeatherQCID": "", "CLProductionID": "", "ProductionNo": "", "GradeID": "", "ProductionPcs": "", "ProductionSide": "", "ProductionArea": "", "ProductionAreaUnit": "", "QCPassPcs": "", "QCPassSide": "", "QCPassArea": "", "QCPassAreaUnit": "", "QCPassRemarks": "", "QCFailPcs": "", "QCFailSide": "", "QCFailArea": "", "QCFailAreaUnit": "", "QCFailRemarks": "" };
+                    }
+                }
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("FinishLeatherQC", "FinishLeatherQC")',
+                    data: JSON.stringify(PrdCrustLeatherQCModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#CrustLeatherQCID").val(respnse.CrustLeatherQCID);
+                            $("#CrustLeatherQCNo").val(respnse.CrustLeatherQCNo);
+                            changeStatus = 0;
+
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "FinishLeatherQC")',
+                                type: 'GET',
+                                data: { "CrustLeatherQCID": $('#CrustLeatherQCID').val(), "StoreId": $("#ProductionFloor").val() },
+                                success: function (data) {
+                                    $("#plGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCItemList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCSelectionList);
+                                }
+                            });
+                            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                                this.element.find('tbody tr:first').addClass('k-state-selected');
+                            });
+                        } else if (respnse.msg.Type == 3) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#CrustLeatherQCID").val(respnse.CrustLeatherQCID);
+                            $("#CrustLeatherQCNo").val(respnse.CrustLeatherQCNo);
+                            changeStatus = 0;
+
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "FinishLeatherQC")',
+                                type: 'GET',
+                                data: { "CrustLeatherQCID": $('#CrustLeatherQCID').val(), "StoreId": $("#ProductionFloor").val() },
+                                success: function (data) {
+                                    $("#plGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCItemList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCSelectionList);
+                                }
+                            });
+                            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                                this.element.find('tbody tr:first').addClass('k-state-selected');
+                            });
+                        } else {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            PrdCrustLeatherQCModel = { "CrustLeatherQCID": "", "CrustLeatherQCNo": "", "CrustLeatherQCDate": "", "CrustLeatherQCBy": "", "QCComments": "", "ProductionFloor": "", "AfterQCIssueFloor": "", "IssueFloorQCLabel": "", "AfterQCIssueFloor": "", "IssueAfterQC": "", "QCTransactionOf": "", "PrdCrustLeatherQCItemList": [], "PrdCrustLeatherQCSelectionList": [] };
+        } else {
+            $("#MessageText").html("Please Enter the Proper Data.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+    }
+
+    /////////////////////Confirmed Chemical Item////////////////////
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            PrdCrustLeatherQCModel.CrustLeatherQCID = $('#CrustLeatherQCID').val();
+            PrdCrustLeatherQCModel.QCTransactionOf = $('#QCTransactionOf').val();
+            PrdCrustLeatherQCModel.ProductionFloor = $('#ProductionFloor').val();
+            PrdCrustLeatherQCModel.AfterQCIssueStore = $('#AfterQCIssueStore').val();
+            PrdCrustLeatherQCModel.AfterQCIssueFloor = $('#AfterQCIssueFloor').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCItemList = [];
+                PrdCrustLeatherQCItemModel.CLQCItemID = parentGridItem.CLQCItemID;
+                PrdCrustLeatherQCItemModel.CrustLeatherQCID = parentGridItem.CrustLeatherQCID;
+                PrdCrustLeatherQCItemModel.BuyerID = parentGridItem.BuyerID;
+                PrdCrustLeatherQCItemModel.BuyerOrderID = parentGridItem.BuyerOrderID;
+                PrdCrustLeatherQCItemModel.ArticleID = parentGridItem.ArticleID;
+                PrdCrustLeatherQCItemModel.ArticleNo = parentGridItem.ArticleNo;
+                PrdCrustLeatherQCItemModel.ArticleChallanID = parentGridItem.ArticleChallanID;
+                PrdCrustLeatherQCItemModel.ArticleChallanNo = parentGridItem.ArticleChallanNo;
+                PrdCrustLeatherQCItemModel.ArticleColorNo = parentGridItem.ArticleColorNo;
+                PrdCrustLeatherQCItemModel.ColorID = parentGridItem.ColorID;
+                PrdCrustLeatherQCItemModel.ProductionPcs = parentGridItem.ProductionPcs;
+                PrdCrustLeatherQCItemModel.ProductionSide = parentGridItem.ProductionSide;
+                PrdCrustLeatherQCItemModel.ProductionArea = parentGridItem.ProductionArea;
+                PrdCrustLeatherQCItemModel.ProductionAreaUnit = parentGridItem.ProductionAreaUnit;
+                PrdCrustLeatherQCItemModel.ItemTypeID = parentGridItem.ItemTypeID;
+                PrdCrustLeatherQCItemModel.LeatherStatusID = parentGridItem.LeatherStatusID;
+
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCItemList.push(PrdCrustLeatherQCItemModel);
+                PrdCrustLeatherQCItemModel = { "CLQCItemID": "", "CrustLeatherQCRefID": "", "CrustLeatherQCID": "", "CLProductionID": "", "ScheduleProductionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ChallaNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "ProductionPcs": "", "ProductionSide": "", "Productionrea": "", "CLQCPcs": "", "CLQCSide": "", "CLQCArea": "", "CLQCAreaUnit": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCSelectionList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+
+                    PrdCrustLeatherQCSelectionModel.CLQCSelectionID = dataPeriodItem[j].CLQCSelectionID;
+                    PrdCrustLeatherQCSelectionModel.CLQCItemID = dataPeriodItem[j].CLQCItemID;
+                    PrdCrustLeatherQCSelectionModel.CLSelectItemNo = dataPeriodItem[j].CLSelectItemNo;
+                    PrdCrustLeatherQCSelectionModel.CrustLeatherQCID = dataPeriodItem[j].CrustLeatherQCID;
+                    //PrdCrustLeatherQCSelectionModel.GradeID = dataPeriodItem[j].GradeID;
+
+                    PrdCrustLeatherQCSelectionModel.GradeRange = dataPeriodItem[j].GradeRange;
+
+                    PrdCrustLeatherQCSelectionModel.ProductionPcs = dataPeriodItem[j].ProductionPcs;
+                    PrdCrustLeatherQCSelectionModel.ProductionSide = dataPeriodItem[j].ProductionSide;
+                    PrdCrustLeatherQCSelectionModel.ProductionArea = dataPeriodItem[j].ProductionArea;
+
+                    PrdCrustLeatherQCSelectionModel.QCPassPcs = dataPeriodItem[j].QCPassPcs;
+                    PrdCrustLeatherQCSelectionModel.QCPassSide = dataPeriodItem[j].QCPassSide;
+                    PrdCrustLeatherQCSelectionModel.QCPassArea = dataPeriodItem[j].QCPassArea;
+                    PrdCrustLeatherQCSelectionModel.QCPassAreaUnitName = dataPeriodItem[j].QCPassAreaUnitName;
+                    PrdCrustLeatherQCSelectionModel.QCPassRemarks = dataPeriodItem[j].QCPassRemarks;
+
+                    PrdCrustLeatherQCSelectionModel.QCFailPcs = dataPeriodItem[j].QCFailPcs;
+                    PrdCrustLeatherQCSelectionModel.QCFailSide = dataPeriodItem[j].QCFailSide;
+                    PrdCrustLeatherQCSelectionModel.QCFailArea = dataPeriodItem[j].QCFailArea;
+                    PrdCrustLeatherQCSelectionModel.QCFailAreaUnitName = dataPeriodItem[j].QCFailAreaUnitName;
+                    PrdCrustLeatherQCSelectionModel.QCFailRemarks = dataPeriodItem[j].QCFailRemarks;
+
+                    PrdCrustLeatherQCModel.PrdCrustLeatherQCSelectionList.push(PrdCrustLeatherQCSelectionModel);
+                    PrdCrustLeatherQCSelectionModel = { "CLQCSelectionID": "", "CLQCItemID": "", "CLSelectItemNo": "", "CrustLeatherQCRefID": "", "CrustLeatherQCID": "", "CLProductionID": "", "ProductionNo": "", "GradeID": "", "ProductionPcs": "", "ProductionSide": "", "ProductionArea": "", "ProductionAreaUnit": "", "QCPassPcs": "", "QCPassSide": "", "QCPassArea": "", "QCPassAreaUnit": "", "QCPassRemarks": "", "QCFailPcs": "", "QCFailSide": "", "QCFailArea": "", "QCFailAreaUnit": "", "QCFailRemarks": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmedCrustQC", "FinishLeatherQC")',
+                data: JSON.stringify(PrdCrustLeatherQCModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            PrdCrustLeatherQCModel = { "CrustLeatherQCID": "", "CrustLeatherQCNo": "", "CrustLeatherQCDate": "", "CrustLeatherQCBy": "", "QCComments": "", "ProductionFloor": "", "AfterQCIssueFloor": "", "IssueFloorQCLabel": "", "AfterQCIssueFloor": "", "IssueAfterQC": "", "QCTransactionOf": "", "PrdCrustLeatherQCItemList": [], "PrdCrustLeatherQCSelectionList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            PrdCrustLeatherQCModel.CrustLeatherQCID = $('#CrustLeatherQCID').val();
+            PrdCrustLeatherQCModel.CrustLeatherQCNo = $('#CrustLeatherQCNo').val();
+            PrdCrustLeatherQCModel.ApproveComment = $('#ApproveComment').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                PrdCrustLeatherQCItemModel.PrdCrustLeatherQCItemList = [];
+                PrdCrustLeatherQCItemModel.ScheduleDateID = parentGridItem.ScheduleDateID;
+
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCItemList.push(PrdCrustLeatherQCItemModel);
+                PrdCrustLeatherQCItemModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PrdCrustLeatherQCModel.PrdCrustLeatherQCSelectionList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    PrdCrustLeatherQCSelectionModel.SdulItemColorID = dataPeriodItem[j].SdulItemColorID;
+
+                    PrdCrustLeatherQCModel.PrdCrustLeatherQCSelectionList.push(PrdCrustLeatherQCSelectionModel);
+                    PrdCrustLeatherQCSelectionModel = { "CrustSdulDrumID": "", "MachineID": "", "MachineNo": "", "SdulItemColorID": "", "ColorID": "", "GradeID": "", "DrumPcs": "", "DrumSide": "", "DrumArea": "", "AreaUnitName": "", "DrumWeight": "", "WeightUnitName": "", "Remark": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckedCrustProductionSchedule", "FinishLeatherQC")',
+                data: JSON.stringify(PrdCrustLeatherQCModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("NCF");
+                        $("#MessageText").html("");
+                        ResetOnlyMasterPageData();
+                        $(".txtCommandBox").val("");
+                        $(".txtBox").css("border-color", "");
+                        //$("#CrustLeatherQCNo").val("Auto Generated");
+                        $("#plGrid").data("kendoGrid").dataSource.data([]);
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            PrdCrustLeatherQCModel = { "CrustLeatherQCID": "", "CrustLeatherQCNo": "", "CrustLeatherQCDate": "", "CrustLeatherQCBy": "", "QCComments": "", "ProductionFloor": "", "AfterQCIssueFloor": "", "IssueFloorQCLabel": "", "AfterQCIssueFloor": "", "IssueAfterQC": "", "QCTransactionOf": "", "PrdCrustLeatherQCItemList": [], "PrdCrustLeatherQCSelectionList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    ////////////////////////Schedule Item///////////////////////////////////////////
+
+    $(document).on('keyup', '.PartyInfo', function (e) {
+        if (e.which == 120) {
+            QCItemInfo();
+            SelectedItemOfListOfValue('QCItemWindowGrid');
+            QCItemWindow.open(); //Open Popup
+            QCItemWindow.center();
+        }
+    });
+    function QCItemInfo() {
+        $.ajax({
+            url: '@Url.Action("GetQCScheduleItemInfo", "FinishLeatherQC")',
+            type: 'GET',
+            data: { "ProductionFloor": $("#ProductionFloor").val() },
+            success: function (response) {
+                $("#QCItemWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var QCItemWindow = $('#QCItemWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "QC Item Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var QCItemDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TransectionID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false },
+                    ColorID: { editable: false },
+                    ArticleColorNo: { editable: false },
+                    ColorName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var QCItemGrid = $("#QCItemWindowGrid").kendoGrid({
+        dataSource: QCItemDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerName", title: "Party", width: "60px" },
+              { field: "BuyerOrderID", hidden: true },
+              { field: "BuyerOrderNo", title: "Order", width: "60px" },
+              { field: "ArticleID", hidden: true },
+              { field: "ArticleNo", hidden: true },
+              { field: "ArticleName", title: "Article", width: "60px" },
+              { field: "ArticleChallanID", hidden: true },
+              { field: "ArticleChallanNo", title: "ChallanNo", width: "60px" },
+              { field: "ItemTypeID", hidden: true },
+              { field: "ItemTypeName", title: "Item Type", width: "60px" },
+              { field: "LeatherStatusID", hidden: true },
+              { field: "LeatherStatusName", title: "Leather Status", width: "60px" },
+              { field: "ColorID", hidden: true },
+              { field: "ArticleColorNo", title: "ColorNo", width: "60px" },
+              { field: "ColorName", title: "Color", width: "60px" }
+        ]
+    });
+
+    function QCItemWindowEvent() {
+        var WindowGrid = $("#QCItemWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $.ajax({
+            url: '@Url.Action("GetColorAndGradeList", "FinishLeatherQC")',
+            type: 'GET',
+            data: { "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": WindowGridItem.BuyerID, "BuyerOrderID": WindowGridItem.BuyerOrderID, "ArticleID": WindowGridItem.ArticleID, "ItemTypeID": WindowGridItem.ItemTypeID, "LeatherStatusID": WindowGridItem.LeatherStatusID, "ColorID": WindowGridItem.ColorID, "ArticleChallanID": WindowGridItem.ArticleChallanID },
+            //data: { "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": WindowGridItem.BuyerID, "BuyerOrderID": WindowGridItem.BuyerOrderID, "ArticleID": WindowGridItem.ArticleID, "ItemTypeID": WindowGridItem.ItemTypeID, "LeatherStatusID": WindowGridItem.LeatherStatusID, "ColorID": WindowGridItem.ColorID },
+            success: function (data) {
+                $("#plGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCItemList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCSelectionList);
+            }
+        });
+        changeStatus = 1;
+    };
+
+    $('#btnQCItemWindowOK').click(function () {
+        QCItemWindowEvent();
+        QCItemWindow.close();
+    });
+
+    $('#btnQCItemWindowCancel').click(function () {
+        QCItemWindow.close();
+    });
+
+    $("#QCItemWindow").dblclick(function () {
+        QCItemWindowEvent();
+        QCItemWindow.close();
+    });
+
+    $("#QCItemWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            QCItemWindowEvent();
+            QCItemWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            QCItemWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    ////////////////////Search Purchase Receive////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#MessageText").html("");
+            $(".txtBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CrustLeatherQCID",
+                fields: {
+                    CrustLeatherQCID: { editable: false },
+                    CrustLeatherQCNo: { editable: false },
+                    CrustLeatherQCDate: { editable: false },
+                    QCTransactionOf: { editable: false },
+                    QCTransactionOfName: { editable: false },
+                    ProductionFloor: { editable: false },
+                    ProductionFloorName: { editable: false },
+                    AfterQCIssueFloor: { editable: false },
+                    AfterQCIssueFloorName: { editable: false },
+                    AfterQCIssueStore: { editable: false },
+                    AfterQCIssueStoreName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "CrustLeatherQCID", hidden: true },
+            { field: "CrustLeatherQCNo", title: "QCNo", width: "60px" },
+            { field: "CrustLeatherQCDate", title: "QC Date", width: "60px" },
+            { field: "QCTransactionOf", hidden: true },
+            { field: "QCTransactionOfName", title: "QCTransactionOf", width: "60px" },
+            { field: "ProductionFloor", hidden: true },
+            { field: "ProductionFloorName", title: "QC From", width: "60px" },
+            { field: "AfterQCIssueFloor", hidden: true },
+            { field: "AfterQCIssueFloorName", title: "QC Pass To", width: "60px" },
+            { field: "AfterQCIssueStore", hidden: true },
+            { field: "AfterQCIssueStoreName", title: "QC Fail To", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Own QC Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetCrustLeatherQCInfo", "FinishLeatherQC")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#CrustLeatherQCID").val(selectedItem.CrustLeatherQCID);
+        $("#CrustLeatherQCNo").val(selectedItem.CrustLeatherQCNo);
+        $("#CrustLeatherQCDate").val(selectedItem.CrustLeatherQCDate);
+        $("#QCTransactionOf").val(selectedItem.QCTransactionOf);
+        $("#ProductionFloor").val(selectedItem.ProductionFloor);
+        $("#AfterQCIssueFloor").val(selectedItem.AfterQCIssueFloor);
+        $("#AfterQCIssueStore").val(selectedItem.AfterQCIssueStore);
+
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+
+        $.ajax({
+            url: '@Url.Action("GetAllGridList", "FinishLeatherQC")',
+            type: 'GET',
+            data: { "CrustLeatherQCID": selectedItem.CrustLeatherQCID, "StoreId": $("#ProductionFloor").val() },
+            success: function (data) {
+                $("#plGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCItemList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdCrustLeatherQCSelectionList);
+            }
+        });
+        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    /////////////////////////////////////////////
+
+
+    ////////////////////////Grade///////////////////////////////////////////
+
+    $(document).on('keyup', '.GradeInfo', function (e) {
+        if (e.which == 120) {
+            GetGradeInfo();
+            SelectedItemOfListOfValue('GradeWindowGrid');
+            GradeWindow.open(); //Open Popup
+            GradeWindow.center();
+        }
+    });
+
+    function GetGradeInfo() {
+        var WindowGrid = $("#QCItemWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+        $.ajax({
+            url: '@Url.Action("GetGradeInfoInFromQCStock", "FinishLeatherQC")',
+            type: 'GET',
+            data: { "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": WindowGridItem.BuyerID, "BuyerOrderID": WindowGridItem.BuyerOrderID, "ArticleID": WindowGridItem.ArticleID, "ItemTypeID": WindowGridItem.ItemTypeID, "LeatherStatusID": WindowGridItem.LeatherStatusID, "ColorID": WindowGridItem.ColorID, "ArticleChallanID": WindowGridItem.ArticleChallanID },
+            success: function (response) {
+                $("#GradeWindowGrid").data('kendoGrid').dataSource.data(response);
+            }
+        });
+    }
+
+    var GradeWindow = $('#GradeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Grade Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var GradeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    //GradeID: { editable: false },
+                    //GradeName: { editable: false },
+                    //Description: { editable: false }
+                    GradeRange: { editable: false },
+                    ProductionPcs: { editable: false },
+                    ProductionSide: { editable: false },
+                    ProductionArea: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var GradeGrid = $("#GradeWindowGrid").kendoGrid({
+        dataSource: GradeDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              //{ field: "GradeID", hidden: true },
+              //{ field: "GradeName", title: "Grade", width: "60px" },
+              //{ field: "Description", title: "Description", width: "60px" }
+              //{ field: "GradeID", hidden: true },
+              { field: "GradeRange", title: "Grade Range", width: "60px" },
+              { field: "ProductionPcs", title: "Stock Pcs", width: "60px" },
+              { field: "ProductionSide", title: "Stock Side", width: "60px" },
+              { field: "ProductionArea", title: "Stock Area", width: "60px" }
+        ]
+    });
+
+    function GradeWindowEvent() {
+        var WindowGrid = $("#GradeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("ShowGradeRange", WindowGridItem.GradeRange);
+        PageGridItem.set("ProductionPcs", WindowGridItem.ProductionPcs);
+        PageGridItem.set("ProductionSide", WindowGridItem.ProductionSide);
+        PageGridItem.set("ProductionArea", WindowGridItem.ProductionArea);
+        PageGridItem.set("AreaUnitName", "SFT");
+        //PageGridItem.set("WeightUnitName", "KG");
+
+        changeStatus = 1;
+    };
+
+    $('#btnGradeWindowOK').click(function () {
+        GradeWindowEvent();
+        GradeWindow.close();
+    });
+
+    $('#btnGradeWindowCancel').click(function () {
+        GradeWindow.close();
+    });
+
+    $("#GradeWindow").dblclick(function () {
+        GradeWindowEvent();
+        GradeWindow.close();
+    });
+
+    $("#GradeWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            GradeWindowEvent();
+            GradeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            GradeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////OnlyGrade///////////////////////////////////////////
+
+    $(document).on('keyup', '.OnlyGradeInfo', function (e) {
+        if (e.which == 120) {
+            GetOnlyGradeInfo();
+            SelectedItemOfListOfValue('OnlyGradeWindowGrid');
+            OnlyGradeWindow.open(); //Open Popup
+            OnlyGradeWindow.center();
+        }
+    });
+
+    function GetOnlyGradeInfo() {
+        $.ajax({
+            url: '@Url.Action("GetGradeInfoList", "Grade")',
+            type: 'GET',
+            success: function (response) {
+                $("#OnlyGradeWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    @*function GetOnlyGradeInfo() {
+        var WindowGrid = $("#QCItemWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+        $.ajax({
+            url: '@Url.Action("GetGradeInfoInProductionFloor", "FinishProductionSchedule")',
+            type: 'GET',
+            data: { "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": WindowGridItem.BuyerID, "BuyerOrderID": WindowGridItem.BuyerOrderID, "ArticleID": WindowGridItem.ArticleID, "ItemTypeID": WindowGridItem.ItemTypeID, "LeatherStatusID": WindowGridItem.LeatherStatusID, "ColorID": WindowGridItem.ColorID, "ArticleChallanID": WindowGridItem.ArticleChallanID },
+            //data: { "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": $("#BuyerID").val(), "BuyerOrderID": $("#BuyerOrderID").val(), "ArticleID": $("#ArticleID").val(), "ItemTypeID": $("#ItemTypeID").val(), "LeatherStatusID": $("#LeatherStatusID").val(), "ArticleChallanID": $("#ArticleChallanID").val(), },
+            success: function (response) {
+                $("#GradeWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }*@
+
+    var OnlyGradeWindow = $('#OnlyGradeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Grade Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var GradeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    GradeID: { editable: false },
+                    GradeName: { editable: false },
+                    Description: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var GradeGrid = $("#OnlyGradeWindowGrid").kendoGrid({
+        dataSource: GradeDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "GradeID", hidden: true },
+              { field: "GradeName", title: "Grade", width: "60px" },
+              { field: "Description", title: "Description", width: "60px" }
+        ]
+    });
+
+    function OnlyGradeWindowEvent() {
+        var WindowGrid = $("#OnlyGradeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("GradeID", WindowGridItem.GradeID);
+        PageGridItem.set("GradeName", WindowGridItem.GradeName);
+
+        changeStatus = 1;
+    };
+
+    $('#btnOnlyGradeWindowOK').click(function () {
+        OnlyGradeWindowEvent();
+        OnlyGradeWindow.close();
+    });
+
+    $('#btnOnlyGradeWindowCancel').click(function () {
+        OnlyGradeWindow.close();
+    });
+
+    $("#OnlyGradeWindow").dblclick(function () {
+        OnlyGradeWindowEvent();
+        OnlyGradeWindow.close();
+    });
+
+    $("#OnlyGradeWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            OnlyGradeWindowEvent();
+            OnlyGradeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            OnlyGradeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+</script>

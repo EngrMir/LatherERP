@@ -1,0 +1,172 @@
+﻿<!--   
+    ### ChemicalStoreName ID for Chemical List
+    ### 
+     ### Popup Windows Store Start ### -->
+<div id="StoreWindow" style="display: none;">
+    <p>
+        Search By Store Name <input type="text" id="txtStore" style="width: 250px;" placeholder="Search Store.." />
+        <input type="button" id="btnStoreGridSearch" value="Search" />
+    </p>
+
+    <div id="StoreGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnStoreWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnStoreWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows  End ### -->
+
+
+<script type="text/javascript">
+    // ############ Store for RequestFrom List F9 Functionality Start ##########
+    $(document.body).keypress(function (e) {
+        if ($("#ChemicalStoreName").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetStoreInfo", "LoanRequest")',
+                    data: { storeCategory: "Chemical" },
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#StoreGrid").data("kendoGrid").dataSource.data(data33);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('StoreGrid');
+                StoreWindow.open();
+            }
+        }
+    });
+
+    var StoreWindow = $('#StoreWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "70%",
+        height: "auto",
+        title: "List Of LCNo",
+        position: { top: 100, left: 200 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCLCNoDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "StoreID",
+                fields: {
+                    StoreID: { editable: false },
+                    StoreCode: { editable: false },
+                    ChemicalStoreName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var StoreGrid = $("#StoreGrid").kendoGrid({
+        dataSource: LCLCNoDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        groupable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            
+              { field: "StoreCode", title: "Store Code" },
+              { field: "StoreName", title: "Store Name" }
+        ]
+    });
+
+
+    $('#btnStoreWindowOK').click(function () {
+        ListOfValueStoreGridEvent('StoreGrid');
+        StoreWindow.close();
+    });
+
+    $('#btnStoreWindowCancel').click(function () {
+        StoreWindow.close();
+    });
+
+    $("#StoreWindow").dblclick(function () {
+        ListOfValueStoreGridEvent('StoreGrid');
+        StoreWindow.close();
+    });
+
+    $("#StoreWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueStoreGridEvent('StoreGrid');
+            StoreWindow.close();
+        }
+        else if (keycode == '27') {
+            StoreWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnStoreGridSearch").click(function () {
+
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '@Url.Action("SearchStoreByStore", "LoanRequest")',
+            type: 'GET',
+            data: { search: $("#txtStore").val() },
+            success: function (data33) {
+                $("#StoreGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueStoreGridEvent('StoreGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetStoreSearch", "LoanRequest")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtStore").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtStore").keyup(function (event) {
+        if ($("#txtStore").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("SearchStoreByStore", "LoanRequest")',
+                    type: 'GET',
+                    data: { search: $("#txtStore").val() },
+                    success: function (data33) {
+                        $("#StoreGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueStoreGridEvent('StoreGrid');
+                            SearchWindow.close();
+                        }
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+        }
+    });
+</script>

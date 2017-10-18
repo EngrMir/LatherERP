@@ -1,0 +1,398 @@
+﻿@model MenuItemVM
+@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@{
+    ViewBag.Title = "Menu Management";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Menu Setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Caption</label>
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.MenuItem.MenuID)
+                                    @Html.TextBoxFor(model => model.MenuItem.Caption, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Menu Level</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.MenuItem.MenuLevel, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Item Order</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.MenuItem.ItemOrder, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Module</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.ModuleList, Model.ModuleList, "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Parent</label>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.MenuItem.ParentID, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Screen</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownList("ScreenList", Enumerable.Empty<SelectListItem>(), "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Description</label>
+                                <div class="col-xs-8">
+                                    @Html.TextAreaFor(model => model.MenuItem.Description, new { @class = "form-control input-sm" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="col-xs-4 control-label">Has Child</label>
+                                    <div class="col-xs-8">
+                                        @Html.CheckBoxFor(model => model.MenuItem.HasChild)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="col-xs-4 control-label">Is Active</label>
+                                    <div class="col-xs-8">
+                                        @Html.CheckBoxFor(model => model.MenuItem.IsActive)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-lg-offset-10">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearMenuItemData();" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Menus
+            </div>
+
+            <div class="panel-body">
+                @(Html.Telerik().Grid<MenuItemView>()
+                    .BindTo(ViewBag.MenuItemList as List<MenuItemView>)
+                    .Name("gvMenuItemList")
+                    .DataKeys(keys => keys.Add(k => k.MenuID))
+                    .Filterable()
+                    .Columns(column =>
+                    {
+                        column.Bound(s => s.MenuID).Hidden().Template(@<input type="hidden" id="@item.MenuID" value="@item.MenuID" />);
+                        column.Bound(s => s.MenuID);
+                        column.Bound(s => s.Caption);
+                        column.Bound(s => s.MenuLevel);
+                        column.Bound(s => s.ItemOrder);
+                        column.Bound(s => s.ParentID);
+                        column.Bound(s => s.ScreenTitle);
+                        column.Bound(s => s.Description);
+                        column.Bound(s => s.HasChild).Template(@<text> @(item.HasChild ? Html.Label("Yes") : Html.Label("No"))</text>);
+                        column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>);
+                        column.Bound(s => s.SetOn);
+                        column.Bound(s => s.SetBy);
+                        column.Bound(s => s.MenuID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                    })
+                                                                    .Selectable()
+                                                                    .Pageable(pages => pages.PageSize(100))
+                                                                    .Scrollable(scroll => scroll.Height(300))
+                                                                    .Sortable()
+                                                                    .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    @Html.Partial("_ConfirmationView")
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+        $('#' + "ModuleList").change(function () {
+            var moduleid = $(this).val();
+            loadScreenDropdownList(moduleid);
+        });
+    });
+
+    function loadScreenDropdownList(moduleid) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetScreenList", "MenuItem")',
+            data: { moduleid: moduleid },
+            cache: false,
+            async: false,
+            dataType: 'json',
+            success: function (data) {
+                $('#ScreenList').get(0).options.length = 0;
+                $('#ScreenList').get(0).options[0] = new Option("--Select--", "0");
+                $.map(data, function (item) {
+                    $('#ScreenList').get(0).options[$('#ScreenList').get(0).options.length] = new Option(item.Text, item.Value);
+                });
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
+
+    function validatedMenuItem() {
+        if ($('#MenuItem_Caption').val() == "") {
+            showMessage('Menu Caption is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#MenuItem_MenuLevel').val() == "") {
+            showMessage('Menu Level is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#MenuItem_ItemOrder').val() == "") {
+            showMessage('Item Order is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#ModuleList').val() == "") {
+            showMessage('Module is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#ScreenList').val() == "") {
+            showMessage('Screen Level is required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+    $('#btnSave').click(function () {
+        if (validatedMenuItem()) {
+            var jsonObject = {
+                "MenuID": $('#MenuItem_MenuID').val(),
+                "Caption": $('#MenuItem_Caption').val(),
+                "MenuLevel": $('#MenuItem_MenuLevel').val(),
+                "ItemOrder": $('#MenuItem_ItemOrder').val(),
+                "Module": $('#ModuleList').val(),
+                "ScreenCode": $('#ScreenList').val(),
+                "ParentID": $('#MenuItem_ParentID').val(),
+                "HasChild": $('#MenuItem_HasChild').is(":checked"),
+                "Description": $('#MenuItem_Description').val(),
+                "IsActive": $('#MenuItem_IsActive').is(":checked")
+            };
+
+            var trNew = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "MenuItem")',
+                data: JSON.stringify({ menuItemView: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (data.ParentID) {
+                        data.ParentID = data.ParentID;
+                    } else {
+                        data.ParentID = "";
+                    }
+                    if (data.Description) {
+                        data.Description = data.Description;
+                    } else {
+                        data.Description = "";
+                    }
+                    trNew = "<tr>";
+                    trNew = trNew + "<td style='display:none'><input id='" + data.MenuID + "' type='hidden' value='" + data.MenuID + "'></td>";
+                    trNew = trNew + "<td>" + data.MenuID + "</td>";
+                    trNew = trNew + "<td>" + data.Caption + "</td>";
+                    trNew = trNew + "<td>" + data.MenuLevel + "</td>";
+                    trNew = trNew + "<td>" + data.ItemOrder + "</td>";
+                    trNew = trNew + "<td>" + data.ParentID + "</td>";
+                    trNew = trNew + "<td>" + $("#ScreenList option:selected").text() + "</td>";
+                    trNew = trNew + "<td>" + data.Description + "</td>";
+                    trNew = trNew + "<td>" + "<label for=\"\">";
+                    if (data.HasChild == true) {
+                        trNew = trNew + "Yes";
+                    } else {
+                        trNew = trNew + "No";
+                    }
+                    trNew = trNew + "</label> </td>";
+                    trNew = trNew + "<td>" + "<label for=\"\">";
+                    if (data.IsActive == true) {
+                        trNew = trNew + "Active";
+                    } else {
+                        trNew = trNew + "In-Active";
+                    }
+                    trNew = trNew + "</label> </td>";
+                    trNew = trNew + "<td>" + data.SetOn + "</td>";
+                    trNew = trNew + "<td>" + data.SetBy + "</td>";
+                    trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                    trNew = trNew + " </tr>";
+
+                    if ($("#hdnIsInsert").val() == "true") {
+                        $("#gvMenuItemList .t-grid-content tbody").prepend(trNew);
+                        $('#gvMenuItemList .t-grid-content tbody .t-no-data').remove();
+                    } else {
+                        var tr = $('#' + data.MenuID).parent().parent();
+                        tr.replaceWith(trNew);
+                    }
+                    showMessage('Saved successfully.', 'success', 'Success!');
+                    clearMenuItemData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+    $('#gvMenuItemList').delegate('a.btn-link', 'click', function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        editMenuItemData(id.trim());
+    });
+
+    $('#gvMenuItemList').delegate('a.btn-link-delete', 'click', function () {
+        var id = $(this).parent().parent().find("td:eq(1)").text();
+        $('#commonIdForDelete').val(id);
+        $('#myModal').modal('show');
+    });
+
+    function editMenuItemData(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetMenuItem", "MenuItem")',
+            data: { id: id },
+            cache: false,
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $('#ScreenList').get(0).options.length = 0;
+                $('#MenuItem_MenuID').val(data.MenuID);
+                $('#MenuItem_Caption').val(data.Caption);
+                $('#MenuItem_MenuLevel').val(data.MenuLevel);
+                $('#MenuItem_ItemOrder').val(data.ItemOrder);
+                $('#ModuleList').val(data.ScreenModuleID);
+                loadScreenDropdownList(data.ScreenModuleID);
+                $('#MenuItem_ParentID').val(data.ParentID);
+                $('#MenuItem_HasChild').prop("checked", data.HasChild);
+                $('#MenuItem_IsActive').prop("checked", data.IsActive);
+                $('#MenuItem_Description').val(data.Description);
+                $('#ScreenList').val(data.ScreenCode).attr("selected", "selected");
+                $("#hdnIsInsert").val(false);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+
+    }
+
+    function deleteItem(id) {
+        id = id.trim();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete", "MenuItem")',
+            data: { id: id },
+            cache: false,
+            success: function () {
+                var tr = $('#' + id).parent().parent();
+                tr.remove();
+                $("#myModal").modal('hide');
+                showMessage('Deleted successfully.', 'success', 'Success!');
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function clearMenuItemData() {
+        $('#MenuItem_MenuID').val("");
+        $('#MenuItem_Caption').val("");
+        $('#MenuItem_MenuLevel').val("");
+        $('#MenuItem_ItemOrder').val("");
+        $('#ModuleList').val("");
+        $('#ScreenList').val("");
+        $('#MenuItem_ParentID').val("");
+        $('#MenuItem_HasChild').is(":checked", false);
+        $('#MenuItem_Description').val("");
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+            {
+                'message': message,
+                'priority': priority,
+                'title': title
+            }
+        ]);
+    }
+
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

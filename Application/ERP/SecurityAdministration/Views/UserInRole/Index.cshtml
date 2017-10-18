@@ -1,0 +1,321 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model UserInRoleVM
+
+@{
+    ViewBag.Title = "User In Roles Management";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="4000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-custom">
+                <div class="panel-heading">
+                    User in Roles Setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">User ID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownList("ddlfUserList", (IEnumerable<SelectListItem>)ViewBag.UserListFor, "--Select--", new { @id = "ddlfUserList", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Role ID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.RoleList, Model.RoleList, "--Select--", new { @id = "ddlfRoleList", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Is Active</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.UserInRole.IsActive)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-lg-offset-3" style="padding-left: 100px;">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearRoleData();" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-custom">
+            <div class="panel-heading">
+                List of Mappings Between Users and Roles
+            </div>
+            <div class="panel panel-custom" style="margin: 10px;">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">User ID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownList("ddlfUserList", (IEnumerable<SelectListItem>)ViewBag.UserListFor, "--Select--", new { @id = "ddlfUserList", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">Role ID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.RoleList, Model.RoleList, "--Select--", new { @id = "ddlfRoleListFilter", @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            List of Users Privilege  
+                        </div>
+
+                        <div class="panel-body">
+                            @(Html.Telerik().Grid<UserInRoleView>()
+                                .BindTo(ViewBag.UserInRoleList as List<UserInRoleView>)
+                                .Name("gvUserInRoleList")
+                                .DataKeys(keys => keys.Add(k => k.UserID))
+                                .Filterable()
+                                .Columns(column =>
+                                {
+                                    column.Bound(s => s.UserID).Hidden().Template(@<input type="hidden" id="@item.UserID@item.RoleID" value="@item.UserID@item.RoleID" />);
+                                    column.Bound(s => s.UserID);
+                                    column.Bound(s => s.FullName);
+                                    column.Bound(s => s.RoleName);
+                                    column.Bound(s => s.RoleID).Hidden();
+                                    column.Bound(s => s.IsActive).Template(@<text> @(item.IsActive ? Html.Label("Active") : Html.Label("In-Active"))</text>);
+                                    column.Bound(s => s.SetOn);
+                                    column.Bound(s => s.SetByPerson);
+                                    column.Bound(s => s.UserID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                                })
+                                                    .Selectable()
+                                                    .Pageable(pages => pages.PageSize(50))
+                                                    .Scrollable(scroll => scroll.Height(300))
+                                                    .Sortable()
+                                                    .Footer(true)
+                            )
+                            <div style="clear: both; margin-bottom: 15px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="clear:both; margin-bottom: 70px;"></div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+        $('#ddlfUserList').attr("disabled", false);
+        $('#ddlfRoleList').attr("disabled", false);
+    });
+
+    function validatedRole() {
+        if ($('#UserInRole_UserID').val() == "") {
+            showMessage('Role ID is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#UserInRole_RoleID').val() == "") {
+            showMessage('Role Name is required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+    function clearRoleData() {
+        $('#ddlfUserList').val('');
+        $('#ddlfRoleList').val('');
+        $('#UserInRole_IsActive').prop('checked', false);
+        $("#hdnIsInsert").val(true);
+        $('#ddlfUserList').attr("disabled", false);
+        $('#ddlfRoleList').attr("disabled", false);
+    }
+
+    $("#btnSave").click(function () {
+        if (validatedRole()) {
+            var jsonObject = {
+                "UserID": $('#ddlfUserList').val(),
+                "RoleID": $('#ddlfRoleList').val(),
+                "IsActive": $('#UserInRole_IsActive').is(":checked")
+            };
+            var trNew = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "UserInRole")',
+                data: JSON.stringify({ userInRole: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                cache: false,
+                success: function (data) {
+                    if (data == 1) {
+                        showMessage('User already exists.', 'warning', 'Warning!');
+                    }
+                    if (data != '') {
+                        trNew = "<tr>";
+                        trNew = trNew + "<td  style='display:none;'><input id='" + data.UserID + "" + data.RoleID + "' type='hidden' value='" + data.UserID + "" + data.RoleID + "'></td>";
+                        trNew = trNew + "<td>" + data.UserID + "</td>";
+                        trNew = trNew + "<td>" + data.FullName + "</td>";
+                        trNew = trNew + "<td>" + data.RoleName + "</td>";
+                        trNew = trNew + "<td  style='display:none'>" + data.RoleID + "</td>";
+                        trNew = trNew + "<td>" + "<label for=\"\">";
+                        if ($('#UserInRole_IsActive').is(":checked") == true) {
+                            trNew = trNew + "Active";
+                        } else {
+                            trNew = trNew + "In-Active";
+                        }
+                        trNew = trNew + "</label> </td>";
+                        trNew = trNew + "<td>" + data.SetOn + "</td>";
+                        trNew = trNew + "<td>" + data.SetByPerson + "</td>";
+                        trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                        trNew = trNew + " </tr>";
+
+                        if ($("#hdnIsInsert").val() == "true") {
+                            $('#gvUserInRoleList .t-grid-content tbody').prepend(trNew);
+                        } else {
+                            var tr = $('#' + data.UserID + '' + data.RoleID).parent().parent();
+                            tr.replaceWith(trNew);
+                        }
+
+                        showMessage('Saved successfully.', 'success', 'Success!');
+                        clearRoleData();
+                    } else {
+                        showMessage('User with selected role already exists!', 'error', 'Error!');
+                        clearRoleData();
+                    }
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    });
+
+    $('#gvUserInRoleList').delegate('a.btn-link', 'click', function () {
+        var userId = $(this).parent().parent().find("td:eq(1)").text();
+        var roleId = $(this).parent().parent().find("td:eq(4)").text();
+        editRoleData(userId.trim(), roleId.trim());
+    });
+
+    $('#gvUserInRoleList').delegate('a.btn-link-delete', 'click', function () {
+        var userId = $(this).parent().parent().find("td:eq(1)").text();
+        var roleId = $(this).parent().parent().find("td:eq(4)").text();
+        deleteUserInRoleData(userId.trim(), roleId.trim());
+    });
+
+    function editRoleData(userId, roleId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRole", "UserInRole")',
+            data: { userID: userId, roleID: roleId },
+            cache: false,
+            dataTpye: "json",
+            success: function (data) {
+                $('#ddlfUserList').val(data.UserID);
+                $('#ddlfRoleList').val(data.RoleID);
+                $('#UserInRole_IsActive').prop('checked', data.IsActive);
+                $("#hdnIsInsert").val(false);
+                $('#ddlfUserList').attr("disabled", true);
+                $('#ddlfRoleList').attr("disabled", true);
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function deleteUserInRoleData(userId, roleId) {
+        if (confirm("Are you sure you want to delete this Role?")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "UserInRole")',
+                data: { userId: userId, roleId: roleId },
+                cache: false,
+                success: function () {
+                    $('#' + userId + '' + roleId).parent().parent().remove();
+                    showMessage('Deleted successfully.', 'success', 'Success!');
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    }
+
+    $('#ddlfUserListFilter').change(function () {
+        var userId = $(this).val();
+        var roleId = $('#ddlfRoleListFilter').val();
+        GetUserInRoleList(userId, roleId);
+    });
+
+    $('#ddlfRoleListFilter').change(function () {
+        var userId = $('#ddlfUserListFilter').val();
+        var roleId = $(this).val();
+        GetUserInRoleList(userId, roleId);
+    });
+
+    function GetUserInRoleList(userId, roleId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetUserInRoleList", "UserInRole")',
+            data: { userID: userId, roleID: roleId },
+            cache: false,
+            success: function (data) {
+                $("#gvUserInRoleList .t-grid-content tbody tr td").remove();
+                $.each(data, function (i, item) {
+                    var row = $("<tr><td  style='display:none;'><input id='" + userId + "" + roleId + "' type='hidden' value='" + userId + "" + roleId + "'></td></tr>");
+                    for (i in item) row.append($('<td>').text(item[i]));
+                    row.append($('<td><a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>'));
+                    $("#gvUserInRoleList .t-grid-content tbody").append(row);
+                });
+            },
+            error: function () {
+                showMessage('Connection error.', 'error', 'Error!');
+            }
+        });
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+          {
+              'message': message,
+              'priority': priority,
+              'title': title
+          }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

@@ -1,0 +1,1126 @@
+﻿@{
+    ViewBag.Title = "Delivery Challan";
+    ViewBag.SearchTitle = "LC NO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/Scripts/bootstrap.js"></script>
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+
+<div class="row">
+    <div class="FormBody">
+
+        <input type="hidden" id="DeliverChallanID" name="DeliverChallanID" value="" placeholder="" readonly="readonly" />
+        <input type="hidden" id="CIID" name="CIID" value="" placeholder="" readonly="readonly" />
+        <input type="hidden" id="PLID" name="PLID" value="" placeholder="" readonly="readonly" />
+
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="FormBody">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Delivery Challan No<span style='color:red'>*</span></label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="DeliverChallanNo" class="txtBox RequiredTextBox " name="DeliverChallanNo" maxlength="20" tabindex="1" style="width: 344px; text-align: center" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Delivery Challan Date</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="DeliverChallanDate" class="txtBox RequiredTextBox datePicker " name="DeliverChallanDate" maxlength="20" tabindex="2" style="width: 344px; text-align: center" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Truck No</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="TruckNo" class="txtBox RequiredTextBox " name="TruckNo" maxlength="20" tabindex="3" style="width: 344px; text-align: center" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="FormBody">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Delivery Challan Note</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <textarea id="DeliveryChallanNote" class="" name="DeliveryChallanNote" tabindex="4" style="width:344PX"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="FormBody">
+            <div id="PageDetailGrid" class="MainGrid"></div>
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Confirm Note</label>
+                </div>
+                <div class="col-lg-8">
+                    <textarea id="ConfirmNote" class="" name="ConfirmNote" style="width:380PX"></textarea>
+                    <input type="button" id="btnConfirm" class="" name="btnConfirm" value="Confirmed" />
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+
+<div id="CIWindow" style="display: none;">
+    <div id="CIWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnCIWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCIWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<div id="PLWindow" style="display: none;">
+    <div id="PLWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPLWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPLWindowOK" class="PopUpButton" value="OK" />
+</div>
+@*<div id="DeleteInsuranceConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteInsuranceOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteInsuranceCancel" value="Cancel" />
+</div>*@
+<div>
+    <div id="DeleteChallanConfirmWindow" style="display:none">
+        <input type="button" style="height:25PX;width:60PX;margin-left:50PX;float:left;" id="btnDeleteChallanOK" value="OK" />
+        <input type="button" style="height:25PX;width:50PX;float:left"id="btnDeleteChallanCancel" value=" Cancel" />
+    </div>
+</div>
+<div id="DeleteLimInfoListConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteLimInfoListOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteLimInfoListCancel" value="Cancel" />
+</div>
+
+<script type="text/javascript">
+
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+    $("select").addClass("select");
+    $("#LimID").val("");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+
+    var changeStatus = 0;
+    $("#DeliverChallanID").val('');
+
+    var saveStatus = 1;
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var deleteAllgridData = 0;
+
+
+
+    //************************** DEFINE DATA FOR INSURANCE IN KENDO GRID ************************************//
+
+    var branchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DeliverChallanID",
+                fields: {
+                    DeliverChallanID: { editable: true },
+                    DeliverChallanNo: { editable: true },
+                    CIID: { editable: true },
+                    PLID: { editable: true },
+                    CINo: { editable: true, defaultValue: 'PressF9' },
+                    PLNo: { editable: true, defaultValue: 'PressF9' },
+                    CIDate: { editable: true },
+                    PLDate: { editable: true },
+                    Remarks: { editable: true },
+                    IsActive: { editable: true }
+                }
+            }
+        },
+        pageSize: 50
+    });
+    var grid = $("#PageDetailGrid").kendoGrid({
+        dataSource: branchGridDataSource,
+        pageable: true,
+        edit: function (e) {
+
+        },
+        editable: true,
+        selectable: "row",
+        scrollable: true,
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 200,
+        pageSize: 10,
+        transport: {
+            read: {
+                url: '@Url.Action("GetBranchList", "Insurance")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        toolbar: [
+            {
+                text: "Add Invoice", className: "btnAddInsurance", imageClass: "k-icon k-add"
+            }
+        ],
+        columns:
+        [
+            { field: "CINo", title: "Commercial Invoice No",editable: true, width: 125, attributes: { "class": "CI" },  headerAttributes: { style: "font-weight: bold;font-size: 13px;" } },
+            { field: "CIDate", title: "Commercial Invoice Date", editable: true, format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, width: 120, attributes: { style: "background-color: silver" }, headerAttributes: { style: "font-weight: bold;font-size: 13px;" } },
+            { field: "PLNo", title: "Packing List No", width: 100, editable: true, attributes: { "class": "PL" }, headerAttributes: { style: "font-weight: bold;font-size: 13px;" } },
+            { field: "PLDate", title: "Packing List Date", width: 110, editable: true, format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, attributes: { style: "background-color: silver" }, headerAttributes: { style: "font-weight: bold;font-size: 13px;" } },
+            { field: "Remarks", title: "Remarks", width: 155, headerAttributes: { style: "font-weight: bold;font-size: 13px;" } },
+            { command: [{ name: "DeltedRow", text: "Delete", click: handleDelete }], title: "Delete", width: "80px", headerAttributes: { style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+
+
+    //************************* INSURANCE KENDO GRID RELATED FUNCTION *****************************//
+
+
+    // Display Date into kendo Grid Row
+    function dateTimeEditor(container, options) {
+        $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                .appendTo(container)
+                .kendoDatePicker({});
+    }
+
+
+
+
+
+    //***** ADD ROW IN Delivery Challan GRID *****//
+
+    $(document).ready(function () {
+
+        function AddInsurance() {
+            var grid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+
+            var cell = $('#PageDetailGrid').find('tr.k-state-selected td:eq(0)');
+            $('#PageDetailGrid').data('kendoGrid').editCell(cell);
+        }
+        $(".btnAddInsurance").click(function (e) {
+            AddInsurance();
+        });
+
+        $('#PageDetailGrid').keyup(function (e) {
+            if (e.keyCode == 13) {
+                AddInsurance();
+            }
+        });
+    });
+
+    //***** END OF ADD ROW IN INSURANCE GRID *****//
+
+
+
+    //*****  DELETE ROW FROM INSURANCE GRID *****//
+
+
+    //Handling Delete event for PageDeailsGrid row
+    function handleDelete(event) {
+        var gridBank = $("#PageDetailGrid").data("kendoGrid");
+        dataitem = (gridBank.dataItem(gridBank.select()));
+        //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+        if (changeStatus == 0) {
+            OpenConfirmationDialog();
+        }
+        else {
+            resetEditDeleteStatus = 3; //Delete Button
+            OpenSaveChangesDialog();
+        }
+    };
+
+
+
+    //Handling Yes button click for grid row deletion
+    $('#btnConfirmationOK').click(function () {
+        if (dataitem.DeliverChallanID == "") {
+            $.ajax({
+                url: '@Url.Action("DelBranch","Insurance")',
+                type: 'POST',
+                data: JSON.stringify({ "branchId": dataitem.BranchID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".txtBox").css("border-color", "");
+                        $("#IsActive").val("Active");
+                        $(".SetFocus").focus();
+                    } else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                }
+            });
+        } else {
+            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+        }
+
+        $(".txtBox").css("border-color", "");
+        CloseConfirmationDialog();
+    });
+
+
+
+    //Handling No button click for grid row deletion
+    $('#btnConfirmationCancel').click(function () {
+        dataitem = {};
+        CloseConfirmationDialog();
+    });
+
+    //***** END OF DELETE ROW FROM INSURANCE GRID *****//
+
+
+
+    //************** TO CLEAR OPERATIONAL ERROR MESSAGE FROM SCREEN ****************//
+    ClearOperationalMessage();
+
+
+
+    //************** FOR REMPVING OPERATIONAL & REQUIRED MESSAGE AFTER TRIGGERING OTHER EVENT ****************//
+    ClearRequiredTextBoxRedColor();
+
+
+
+    //************** TO CHECK UNSAVED DATA IN MASTER & DETAILS ****************//
+    CheckUnSavedMasterData();
+
+
+
+    //************** Focus BranchName textbox ****************//
+    $(".SetFocus").focus();
+
+    //************************************ END OF INSURANCE KENDO GRID RELATED FUNCTION ***********************************//
+
+
+
+    ///// // ######################### CI Grid PopUp Start #########################
+
+    var CIWindow = $('#CIWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1000px",
+        height: "auto",
+        title: "List Of CI",
+        position: { top: 100, left: 300 },
+        modal: true,
+        pageable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    var PLWindow = $('#PLWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1000px",
+        height: "auto",
+        title: "List Of PL",
+        position: { top: 100, left: 300 },
+        modal: true,
+        pageable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    $(document).on('keyup', '.CI', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('CIWindowGrid');
+            ListOfValueCIGridEventGradeInfo();
+            CIWindow.open(); //Open Popup
+            CIWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.PL', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('PLWindowGrid');
+            ListOfValuePLGridEventGradeInfo();
+            PLWindow.open(); //Open Popup
+            PLWindow.center();
+        }
+
+    });
+
+
+    function ListOfValueCIGridEventGradeInfo() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetCIList", "DeliveryChallan")',
+            type: 'GET',
+            //data: { "StoreID": $("#IssueFrom").val() },
+            success: function (data) {
+                $("#divLoading").hide();
+                console.log(data);
+                $("#CIWindowGrid").data("kendoGrid").dataSource.data(data);
+                $('#MessageText').html("");
+            },
+
+            error: function (data) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+
+        });
+
+    }
+
+
+
+    function ListOfValuePLGridEventGradeInfo() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetPLList", "DeliveryChallan")',
+            type: 'GET',
+            //data: { "StoreID": $("#IssueFrom").val() },
+            success: function (data) {
+                $("#divLoading").hide();
+                console.log(data);
+                $("#PLWindowGrid").data("kendoGrid").dataSource.data(data);
+                $('#MessageText').html("");
+            },
+
+            error: function (data) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+
+        });
+
+    }
+//**************************** COMMERCIAL INVOICE *********************************
+    var CIGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: true },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    CIAmount: { editable: true }
+                }
+            }
+        },
+
+        pageSize: 50
+
+    });
+
+    var GradeGrid = $("#CIWindowGrid").kendoGrid({
+        dataSource: CIGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "CIID", hidden: true },
+              { field: "CINo", title: "CI No", width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "CIDate", title: "CI Date", width: "80px", format: "{0:dd/MM/yyyy}",editor: dateTimeEditor, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "CIAmount", title: "CI Amount", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+
+    //**************************** END OF COMMERCIAL INVOICE *********************************
+
+
+
+
+    //**************************** PACKING LIST *********************************
+
+    var PLGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLID",
+                fields: {
+                    PLID: { editable: true },
+                    PLNo: { editable: false },
+                    PLDate: { editable: false },
+                }
+            }
+        },
+
+        pageSize: 50
+
+    });
+
+    var GradeGrid = $("#PLWindowGrid").kendoGrid({
+        dataSource: PLGridDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "PLID", hidden: true },
+              { field: "PLNo", title: "PL No", width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "PLDate", title: "PL Date", width: "80px", format: "{0:dd/MM/yyyy}",editor: dateTimeEditor, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+
+    //**************************** END OF PACKING LIST *********************************
+
+
+
+
+
+
+
+
+
+    //Handling button click for Grade Grid
+    function CIWindowEvent() {
+        var WindowGrid = $("#CIWindowGrid").data("kendoGrid");//CIWindowGrid
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '@Url.Action("GetWBGradeforGrid", "DeliveryChallan")',
+            type: 'GET',
+            data: { "IssueFrom": $('#IssueFrom').val()},
+            success: function (data) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+                $('#MessageText').html("");
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        PageGridItem.set("CIID", WindowGridItem.CIID);
+        PageGridItem.set("CINo", WindowGridItem.CINo);
+        PageGridItem.set("CIDate", WindowGridItem.CIDate);
+        PageGridItem.set("CIAmount", WindowGridItem.CIAmount);
+        PageGrid.editCell($("#PageDetailGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#PageDetailGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#PageDetailGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+
+
+
+
+
+    //Handling button click for Grade Grid
+    function PLWindowEvent() {
+        var WindowGrid = $("#PLWindowGrid").data("kendoGrid");//CIWindowGrid
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '@Url.Action("GetWBGradeforGrid", "DeliveryChallan")',
+            type: 'GET',
+            data: { "IssueFrom": $('#IssueFrom').val() },
+            success: function (data) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+                $('#MessageText').html("");
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        PageGridItem.set("PLID", WindowGridItem.PLID);
+        PageGridItem.set("PLNo", WindowGridItem.PLNo);
+        PageGridItem.set("PLDate", WindowGridItem.PLDate);
+        PageGrid.editCell($("#PageDetailGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#PageDetailGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#PageDetailGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+
+    $('#btnCIWindowOK').click(function () {
+        CIWindowEvent();
+        CIWindow.close();
+    });
+    $('#btnCIWindowCancel').click(function () {
+        CIWindow.close();
+    });
+    $("#CIWindow").dblclick(function () {
+        CIWindowEvent();
+        CIWindow.close();
+    });
+    $("#CIWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            CIWindowEvent();
+            CIWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            CIWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+
+    $('#btnPLWindowOK').click(function () {
+        PLWindowEvent();
+        PLWindow.close();
+    });
+    $('#btnPLWindowCancel').click(function () {
+        PLWindow.close();
+    });
+    $("#PLWindow").dblclick(function () {
+        PLWindowEvent();
+        PLWindow.close();
+    });
+    $("#PLWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PLWindowEvent();
+            PLWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PLWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    /////////// ######################### GradeGrid PopUp END ##############
+
+
+
+
+
+    //********************** SAVE/UPDATE FUNCTION *******************//
+
+    var objDeliverChallan =
+        {
+            "DeliverChallanID": "",
+            "DeliverChallanNo": "",
+            "DeliverChallanRef": "",
+            "DeliverChallanDate": "",
+            "TruckNo": "",
+            "DeliveryChallanNote": "",
+            "RecordStatus": "",
+            "expDeliveryChallanCIList": []
+        };
+
+    var objDeliverChallanCI =
+        {
+            "DeliverChallanID": "",
+            "CIID": "",
+            "PLID": "",
+            "RecordStatus": "",
+        };
+
+
+    function Save() {
+        saveStatus = 1;
+
+        if (saveStatus == 1) {
+
+
+            // Check Maximum Length in BankName
+            CheckRequiredTextBoxMaxLength('DeliverChallanNo', 100);
+
+
+
+            objDeliverChallan.DeliverChallanID = $("#DeliverChallanID").val();
+            objDeliverChallan.DeliverChallanNo = $("#DeliverChallanNo").val();
+            objDeliverChallan.DeliverChallanRef = $("#DeliverChallanRef").val();
+            objDeliverChallan.DeliverChallanDate = $("#DeliverChallanDate").val();
+            objDeliverChallan.TruckNo = $("#TruckNo").val();
+            objDeliverChallan.DeliveryChallanNote = $("#DeliveryChallanNote").val();
+            objDeliverChallan.RecordStatus = $("#RecordStatus").val();
+
+
+            var branchGrid = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var branchGridData = branchGrid.data();
+            for (var i = 0; i < branchGridData.length; i++) {
+                if (branchGridData[i].dirty) {
+                    objDeliverChallanCI.DeliverChallanID = '';
+                    objDeliverChallanCI.CIID = branchGridData[i].CIID;
+                    objDeliverChallanCI.PLID = branchGridData[i].PLID;
+
+                    objDeliverChallan.expDeliveryChallanCIList.push(objDeliverChallanCI);
+                    objDeliverChallanCI =
+                            {
+                                "DeliverChallanID": "",
+                                "CIID": "",
+                                "PLID": "",
+                                "RecordStatus": "",
+                            };
+                }
+            }
+
+            if (objDeliverChallan.DeliverChallanID == "") {
+
+                // INSERT DATA
+                $("#divLoading").show()
+
+                $.ajax({
+                    type: "POST",
+
+                    url: '@Url.Action("Save", "DeliveryChallan")',
+                    data: JSON.stringify(objDeliverChallan),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        //console.log(data);
+                        if (data.msg.Type == 2) {
+                            //$("#divLoading").hide();
+                            $("#DeliverChallanID").val(data.ReturnId);
+                            $("#DeliverChallanNo").val(data.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            //Reset();
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // UPDATE DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "DeliveryChallan")',
+                    data: JSON.stringify(objDeliverChallan),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+
+                            $("#DeliverChallanID").val(data.ReturnId);
+                            $("#DeliverChallanNo").val(data.ReturnCode);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    failure: function (respnse) {
+
+                    }
+                });
+            }
+
+        }
+    }
+
+    //********************** END OF SAVE/UPDATE FUNCTION *******************//
+
+
+
+    //********************** SEARCH START FUNCTION *******************//
+
+
+
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetInsuranceInfo", "DeliveryChallan", "DeliverChallanID,DeliveryChallanNote,CIID,PLID,CIAmount,CIDate,PLDate");
+
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchInsuranceInfoByBankCode", "DeliveryChallan");
+    });
+
+    AutoComplete("GetAutoCompleteData", "DeliveryChallan");
+
+
+
+
+    function ListOfValueSearchGridEvent(gridName) {
+        Reset();
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        $("#DeliverChallanID").val(selectedItem.DeliverChallanID);
+        $("#DeliverChallanNo").val(selectedItem.DeliverChallanNo);
+        $("#DeliverChallanDate").val(selectedItem.DeliverChallanDate);
+        $("#TruckNo").val(selectedItem.TruckNo);
+        $("#DeliveryChallanNote").val(selectedItem.DeliveryChallanNote);
+        $.ajax({
+            url: '@Url.Action("GetInsuranceInfoByBankID", "DeliveryChallan")',
+            type: 'GET',
+            data: { "DeliverChallanID": $('#DeliverChallanID').val() },
+            success: function (data) {
+
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+
+                if (selectedItem.RecordStatus == "Not Confirmed") {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                }
+                else if (selectedItem.RecordStatus == "Checked") {
+                    $("#btnCheck").attr('disabled', 'disabled');
+
+                }
+                    //else {
+                    //    $("#btnCheck").removeAttr('disabled');
+                    //}
+
+                else if (selectedItem.RecordStatus == "Confirmed") {
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnCheck").attr('disabled', 'disabled');
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+
+                }
+                else {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').removeAttr('disabled');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    //********************** END OF SEARCH FUNCTION *******************//
+
+
+    //########################################################## RESET FUNCTION ###############################################################//
+    function Reset() {
+
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data('');
+        $("#CheckComments").val('');
+        $("#ConfirmComments").val('');
+        $('.Dropdown').val('');
+        $('.FormBody input[type=text]').val('');
+        $('.txtBox').val('');
+        $('.textarea').val('');//DeliveryChallanNote
+        $("#DeliveryChallanNote").val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+    }
+    //####################################################### END OF RESET FUNCTION #############################################################//
+
+    $("#btnConfirm").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ConfirmRecordStatus", "DeliveryChallan")',
+            data: { deliverChallanID: $("#DeliverChallanID").val() },
+            success: function (data) {
+                console.log(data);
+                $("#divLoading").hide();
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                }
+
+                $("#RecordStatus").val(data.RecordStatus);
+                $("#Remarks").val(data.Remarks);
+
+                if (selectedItem.RecordStatus == "Not Confirmed") {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').attr('disabled', true);
+                }
+                else if (selectedItem.RecordStatus == "Checked") {
+                    $("#btnCheck").attr('disabled', 'disabled');
+
+                }
+
+                else if (selectedItem.RecordStatus == "Confirmed") {
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnCheck").attr('disabled', 'disabled');
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+
+                }
+                else {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').removeAttr('disabled');
+                }
+
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+    //############################################################### DELETE Delivery Challan Data #############################################################
+
+
+
+    var LimInfoDeleteWindow = $('#DeleteLimInfoListConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    $("#btnDelete").click(function () {
+        if ($("#DeliverChallanID").val() != "") {
+            gridToDelete = "all";
+            LimInfoDeleteWindow.open();
+            LimInfoDeleteWindow.center();
+        } else if ($("#DeliverChallanID").val() == "" && changeStatus == 1) {
+            $('#MessageText').html("The record you are trying to delete is not in the database.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+
+        }
+    });
+
+
+    $('#btnDeleteLimInfoListOK').click(function () {
+        if (gridToDelete == "all") {
+            if ($("#DeliverChallanID").val() != "") {
+                //var _bankLoanID = $("#BankLoanID").val();
+                $.ajax({
+                    url: '@Url.Action("Delete", "DeliveryChallan")',
+                    type: 'GET',
+                    data: ({ "deliverChallanID": $("#DeliverChallanID").val() }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.Type == 4) {
+                            $('#MessageText').html(response.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        } else {
+                            $("#MessageText").html(response.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                        LimInfoDeleteWindow.close();
+                    }
+                });
+            }
+            gridToDelete = "";
+            LimInfoDeleteWindow.close();
+        }
+    });
+    $("#btnDeleteLimInfoListCancel").click(function () {
+        LimInfoDeleteWindow.close();
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @*var InsuranceDeleteWindow = $('#DeleteInsuranceConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    $("#btnDelete").click(function () {
+        if ($("#DeliverChallanID").val() != "") {
+            gridToDelete = "all";
+            InsuranceDeleteWindow.open();
+            InsuranceDeleteWindow.center();
+        } else if ($("#DeliverChallanID").val() == "" && changeStatus == 1) {
+            $('#MessageText').html("The record you are trying to delete is not in the database.");
+            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+
+        }
+    });
+
+    $('#btnDeleteInsuranceOK').click(function () {
+
+        if (gridToDelete == "all") {
+            if ($("#DeliverChallanID").val() != "") {
+               // bankID = $("#DeliverChallanID").val();
+                $.ajax({
+                    url: '@Url.Action("Delete", "DeliveryChallan")',
+                    type: 'GET',
+                    data: { deliverChallanID: $("#DeliverChallanID").val() },
+                    success: function (data) {
+                        $("#divLoading").show();
+                        console.log(data);
+                        if (data.Type == 4) {
+                            $('.FormBody input[type=text]').val('');
+                            $('.Dropdown').val('');
+                            $('.FormBody input[type=hidden]').val('');
+                            $('.FormBody input[type=number]').val('');
+                            $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                            $('#MessageText').html(data.Msg);
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.data("");
+                            Reset();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr);
+                        console.log(status);
+                        console.log(error);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            gridToDelete = "";
+            InsuranceDeleteWindow.close();
+        }
+    });
+
+    $("#btnDeleteInsuranceCancel").click(function () {
+        InsuranceDeleteWindow.close();
+    });*@
+    //############################################################### END OF DELETE WET BLUE ITEM #######################################################
+
+
+
+
+    //############################################################### CONFIRM CnF Bill ###################################################
+
+
+
+</script>
+

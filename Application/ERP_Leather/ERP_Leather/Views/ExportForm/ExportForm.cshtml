@@ -1,0 +1,1692 @@
+﻿@{
+    ViewBag.Title = "Export Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Export Form</div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+            </div>
+            <div id="" class="col-lg-3">
+                <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 5px 0 5px 0;">
+    <div class="row">
+        <div class="col-lg-2" style="padding: 0 0 0 2px; margin-left: 20px;">
+            <label class="" style="">Dealer</label>
+            <input type="text" id="txtEFDealerId" hidden="hidden" class="txtField" />
+            <input type="text" id="txtEFDealerCode" class="txtField" tabindex="" placeholder="Press (F9)" style="width: 140px; margin-left: 11px;" readonly />
+
+        </div>
+        <div class="col-lg-3" style="padding: 0 0 0 0;">
+            <label class="" style="">Name</label>
+            <input type="text" id="txtEFDealerName" class="txtField" readonly="readonly" style="width: 230px; " />
+        </div>
+        <div class="col-lg-4">
+            <label class="" style="margin-left: 0px;">Address</label>
+            <input type="text" id="txtEFDealerAddress" class="txtField" readonly="readonly" style="width: 230px; " />
+        </div>
+    </div>
+
+    @*<div class="col-lg-6" style="padding: 0 0 0 0;">
+            <label class="" style="margin-left: 40px;">Address</label>
+            <input type="text" id="txtSBESuppAddId" class="txtField" style="display: none;" />
+            <input type="text" id="txtSBESuppAdd" readonly="readonly" class="txtField" style="width: 400px; " />
+        </div>*@
+</div>
+
+<div class="row FormBody" style="padding: 2px 5px 2px 5px; ">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="row">
+                <label style="margin-left: 15px;">Export No</label>
+                <input type="text" id="txtEFexportId" class="txtField" style="display: none;" />
+                <input type="text" id="txtEFexportNo" class="txtField" style="margin-left: 14px;" placeholder="" />
+            </div>
+
+        </div>
+        <div class="col-lg-4">
+            <label style="margin-right: 23px;">Exp Form Date</label>
+            <input type="text" id="txtEFExpFromDate" class="datePicker txtField" />
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-8">
+            <label>Ref Exp. No.</label>
+            <input type="text" id="txtEFRefExpNo1" class="txtField" />
+            <input type="text" id="txtEFRefExpNo2" class="txtField" style="width: 300px;" />
+            <input type="text" id="txtEFRefExpNo3" class=" txtField" style="width: 200px;" />
+        </div>
+
+        @*<div class="col-lg-4">
+                <input type="text" id="txtFBDPlDate" class=" txtField" />
+            </div>*@
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-lg-6">
+            <label>Commercial Invoice No</label>
+            <input type="text" id="txtEFCiId" class="txtField" style="display: none;" />
+            <input type="text" id="txtEFCiNo" class="txtField" style="margin-left: 13px; width: 200px; height: 24px;" placeholder="Press (F9)" readonly="readonly" />
+        </div>
+        <div class="col-lg-6">
+            <label>Packing List No</label>
+            <input type="text" id="txtEFPlId" class="txtField" style="display: none;" />
+            <input type="text" id="txtEFPlNo" class="txtField" style="margin-left: 25px; width: 200px; height: 24px;" placeholder="Press (F9)" readonly="readonly" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label>Commercial Invoice Date</label>
+            <input type="text" id="txtEFCiDate" class="txtField" style="width: 200px; height: 24px;" readonly="readonly" />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 12px;">Packing List Date</label>
+            <input type="text" id="txtEFPlDate" class="txtField" style=" width: 200px; height: 24px;" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row FormBody" style="padding: 2px 5px 2px 5px; ">
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 74px;">Commodity</label>
+            <input type="text" id="txtEFCommodity" class="txtField" style="width: 200px;" />
+            @*@Html.DropDownList("ddlEFCommodity", new SelectList(ViewBag.Comodity, "ComodityID", "ComodityName"),
+    "-- Select --", new { @class = "text-box dDown", @style = "width:  200px; height: 24px;" })*@
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 41px;">Delivery Terms</label>
+            <input type="text" id="txtEFDlvryTrms" class="txtField" style="width: 200px;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 42px;">Commodity Code</label>
+            <input type="text" id="txtEFCmdtyCode" class="txtField" style="width: 200px;" />
+            @*@Html.DropDownList("ddlEFCmdtyCode", new SelectList(ViewBag.Comodity, "ComodityID", "ComodityName"),
+            "-- Select --", new { @class = "text-box dDown", @style = "width:  200px; height: 24px;" })*@
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 54px;">Term of Sale</label>
+            <input type="text" id="txtEFTrmOfSal" class="txtField" style="width: 200px;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 27px;">Destination Country</label>
+            <input type="text" id="txtEFDestCntryId" class="txtField" style="display: none" />
+            <input type="text" id="txtEFDestCntryName" class="txtField" style="width: 200px; height: 24px;" placeholder="Press (F9)" readonly />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 25px;">Term Of Sale Date</label>
+            <input type="text" id="txtEFTrmOfSalDate" class="datePicker txtField" style="width: 200px;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 62px;">Country Code</label>
+            <input type="text" id="txtEFCntryCode" class="txtField" style="width: 200px; height: 24px;" readonly />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 76px;">Importer</label>
+            <input type="text" id="txtEFImporterId" class="txtField" style="display: none" />
+            <input type="text" id="txtEFImporterName" class="txtField" style="width: 200px; height: 24px;" placeholder="Press (F9)" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 47px;">Destination Port</label>
+            <input type="text" id="txtEFDstPortId" class="txtField" style="display: none" />
+            <input type="text" id="txtEFDstPortName" class="txtField" style="width: 200px; height: 24px;" placeholder="Press (F9)" readonly />
+        </div>
+        <div class="col-lg-6">
+            <label>Carrying Vessel Name</label>
+            <input type="text" id="txtEFCryngVslName" class="txtField" style="width: 200px;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 82px;">Port Code</label>
+            <input type="text" id="txtEFDstPortCode" class="txtField" style="width: 200px; height: 24px;" readonly />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 15px;">Carrying Vessel No.</label>
+            <input type="text" id="txtEFCryngVslNo" class="txtField" style="width: 200px;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 59px;">Pack Quantity</label>
+            <input type="text" id="txtEFPackQty" class="txtField" style="width: 200px;" />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 26px;">Export Bill Details</label>
+            <input type="text" id="txtEFXportBillDtl" class="txtField" style="width: 200px;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 34px;">Pack Quantity Unit</label>
+            @*<input type="text" id="txtEFPckQtyUnit" class="txtField" style="width: 200px;" />*@
+            @Html.DropDownList("ddlEFPckQtyUnit", new SelectList(ViewBag.PackUnitList, "UnitID", "UnitName"), "-- Select --", new { @class = "text-box dDown", @style = "width:  200px; height: 24px;" })
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 30px;">Port of Shipment</label>
+            <input type="text" id="txtEFPortOfShpmntId" class="txtField" style="display: none;" />
+            <input type="text" id="txtEFPortOfShpmntName" class="txtField" style="width: 200px; height: 24px;" placeholder="Press (F9)" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 27px;">Pack Quantity Code</label>
+            <input type="text" id="txtEFPckQtyCode" class="txtField" style="width: 200px;" />
+        </div>
+        <div class="col-lg-6">
+
+            <label style="margin-right: 22px;">Land Custom Port</label>
+            <input type="text" id="txtEFLndCstmPortId" class="txtField" style="display: none;" />
+            <input type="text" id="txtEFLndCstmPortName" class="txtField" style="width: 200px; height: 24px;" placeholder="Press (F9)" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 42px">Volume Qutantity</label>
+            <input type="text" id="txtEFVlumQty" class="txtField" style="width: 200px;" />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 43px;">Shipment Date</label>
+            <input type="text" id="txtEFShpmntDate" class="datePicker txtField" style="width: 200px;" />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 71px;">Volume Unit</label>
+            @*<input type="text" id="txtEFVlumUnit" class="txtField" style="width: 200px;" />*@
+            @Html.DropDownList("ddlEFVlumUnit", new SelectList(ViewBag.PackUnitList, "UnitID", "UnitName"), "-- Select --", new { @class = "text-box dDown", @style = "width:  200px; height: 24px;" })
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 76px;">Exporter</label>
+            <input type="text" id="txtEFXportrId" class="txtField" style="display: none;" />
+            <input type="text" id="txtEFXportrName" class="txtField" style="width: 200px; height: 24px;" placeholder="Press (F9)" readonly />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 18px;">Declared/PI Currency</label>
+            @*<input type="text" id="txtEFDclrdPiCurncy" class="txtField" style="width: 200px;" />*@
+            @Html.DropDownList("ddlEFDclrdPiCurncy", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "text-box dDown", @style = "width:  200px; height: 24px;" })
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 28px;">CCI & E's Reg No.</label>
+            <input type="text" id="txtEFCciRegNo" class="txtField" style="width: 200px;" />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 0;">Declared Currency Code</label>
+            <input type="text" id="txtEFDclrdCrncyCode" class="txtField" style="width: 200px;" />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 22px;">CCI & E's Reg Date</label>
+            <input type="text" id="txtEFCciRegDate" class="datePicker txtField" style="width: 200px; " />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 64px;">Invoice Value</label>
+            <input type="text" id="txtEFInvVal" class="txtField" style="width: 200px;" />
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 87px;">Sector</label>
+            <input type="text" id="txtEFSector" class="txtField" style="width: 200px;" />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label style="margin-right: 43px;">Invoice Currency</label>
+            @*<input type="text" id="txtEFInvCrncy" class="txtField" style="width: 200px;" />*@
+            @Html.DropDownList("ddlEFInvCrncy", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "text-box dDown", @style = "width:  200px; height: 24px;" })
+        </div>
+        <div class="col-lg-6">
+            <label style="margin-right: 55px;">Sector Code</label>
+            <input type="text" id="txtEFSectorCode" class="txtField" style="width: 200px;" />
+
+        </div>
+    </div>
+</div>
+<div class="row FormBody" style="padding: 2px 5px 2px 5px; ">
+
+    <div class="row">
+        <label class="" style="margin-left: 20px;">Check Note</label>
+        @*<textarea id="checkNote" class="col-lg-3 " style="margin-left: 20px;"></textarea>*@
+        <input type="text" id="checkNote" class="" style="width: 350px;" />
+        <input type="button" id="btnCheck" value="Check" style="margin-left: 20px;" />
+        <input type="button" id="btnConfirm" value="Confirm" style="margin-left: 5px;" />
+    </div>
+    <div class="row">
+
+    </div>
+    <div class="row">
+
+    </div>
+</div>
+
+@* ######################################## Hidden Windows ######################################## *@
+
+@* ********** Commercial Invoice Window ********** *@
+<div id="CommercialInvoiceWindow" style="display: none;">
+    <div class="row" style="width: 98%">
+        <label style="margin-left: 20px;">CI No.</label>
+        <input type="text" id="txtCommercialInvoice" style="width: 250px;" /><input type="button" id="btnCommercialInvoiceGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 290px;">
+        <div id="CommercialInvoiceWindowGrid" class="PopUpGrid" style="margin-left: 20px; ">
+        </div>
+    </div>
+    <div class="row" style="width: 98%;">
+        <input type="button" id="btnCommercialInvoiceWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnCommercialInvoiceWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Commercial Invoice Window End ********** *@
+
+@* ********** Packing List Window ********** *@
+<div id="PackingListWindow" style="display: none;">
+    <div class="row" style="width: 100%;">
+        <label style="margin-left: 20px;">PL No.</label>
+        <input type="text" id="txtPackingList" style="width: 250px;" /><input type="button" id="btnPackingListGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 290px;">
+        <div id="PackingListWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 98%;">
+        <input type="button" id="btnPackingListWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnPackingListWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Packing List Window End ********** *@
+
+@* ********** Freight Agent Window End ********** *@
+
+<div id="FreightAgentWindow" style="display: none;">
+    <div class="row" style="width: 100%;">
+        <label style="margin-left: 20px;">Freight Agent Name</label>
+        <input type="text" id="txtFreightAgent" style="width: 250px;" /><input type="button" id="btnFreightAgentGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%;">
+        <div id="FreightAgentWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 98%;">
+        <input type="button" id="btnFreightAgentWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnFreightAgentWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+
+@* ********** Freight Agent Window End ********** *@
+
+@* ********** Port Window ********** *@
+<div id="PortWindow" style="display: none;">
+    <div class="row" style="width: 100%;">
+        <label style="margin-left: 20px;">Port Name</label>
+        <input type="text" id="txtPort" style="width: 250px;" /><input type="button" id="btnPortGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 290px;">
+        <div id="PortWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 98%;">
+        <input type="button" id="btnPortWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnPortWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Port Window End ********** *@
+
+@* ********** Country Window ********** *@
+<div id="CountryWindow" style="display: none;">
+    <div class="row" style="width: 99%">
+        <label style="margin-left: 20px;">Country Name</label>
+        <input type="text" id="txtCountry" style="width: 250px;" /><input type="button" id="btnCountryGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="CountryWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%">
+        <input type="button" id="btnCountryWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnCountryWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Country Window End ********** *@
+
+@* ********** Buyer Window ********** *@
+<div id="BuyerWindow" style="display: none;">
+    <div class="row" style="width: 99%">
+        <label style="margin-left: 20px;">Buyer Name</label>
+        <input type="text" id="txtBuyer" style="width: 250px;" /><input type="button" id="btnBuyerGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="BuyerWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%">
+        <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Buyer Window End ********** *@
+
+@* ********** Branch Window ********** *@
+<div id="BranchWindow" style="display: none;">
+    <div class="row" style="width: 99%">
+        <label style="margin-left: 20px;">Branch Name</label>
+        <input type="text" id="txtBranch" style="width: 250px;" /><input type="button" id="btnBranchGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="BranchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%">
+        <input type="button" id="btnBranchWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBranchWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Branch Window End ********** *@
+
+@* ********** Export Form Documents Window ********** *@
+<div id="ExportFormWindow" style="display: none;">
+    <div class="row" style="width:99%">
+        <label style="margin-left: 20px;">Export Form No.</label>
+        <input type="text" id="txtFrghtBillDoc" style="width: 250px;" /><input type="button" id="btnExportFormGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="ExportFormWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%">
+        <input type="button" id="btnExportFormWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnExportFormDocWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Export Form Documents Window End ********** *@
+
+@* ********** Delete Confirmation Window ********** *@
+<div id="DeleteBillOfLadingConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOfLadingOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOfLadingCancel" value="Cancel" />
+</div>
+@* ********** Delete Confirmation Window End ********** *@
+
+@* ********** Save Change Window ********** *@
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:99%;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:99%;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+@* ********** Save Change Window End ********** *@
+
+@* ********** Wait Modal Window ********** *@
+<div id="divLoading" style="margin: 0; padding: 0; position: fixed; right: 0;
+    top: 0; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+@* ********** Wait Modal Window End ********** *@
+
+@* ######################################## Hidden Windows End ######################################## *@
+
+<script type="text/javascript">
+
+    // ######################################## Document Ready ######################################## //
+
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date()
+        });
+    });
+
+    // ######################################## Document Ready End ######################################## //
+
+    // ######################################## Grid And Window Declaration ######################################## //
+
+    // ************ Commercial Invoice Grid & Window Declaration ************ //
+
+    //Commercial Invoice Window
+    var CommercialInvoiceWindow = $('#CommercialInvoiceWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "420px",
+        title: "Commercial Invoice List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Commercial Invoice Grid Data Source
+    var CommercialInvoiceGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Commercial Invoice Grid
+    $("#CommercialInvoiceWindowGrid").kendoGrid({
+        dataSource: CommercialInvoiceGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "CINo", title: "CI No." },
+            { field: "CIDate", title: "Date" },
+            { field: "RecordStatus", title: "Record Status" }
+        ]
+    });
+
+    //Activate Commercial Invoice Window
+    $('#txtEFCiNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            GetComInv();
+            CommercialInvoiceWindow.open();
+            CommercialInvoiceWindow.center();
+        }
+    });
+
+    // ************ Commercial Invoice Grid & Window Declaration End ************ //
+
+    // ************ Packing List Grid & Window Declaration ************ //
+
+    //Packing List Window
+    var PackingListWindow = $('#PackingListWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "420px",
+        title: "Packing List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Packing List Grid Data Source
+    var PackingListGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLID",
+                fields: {
+                    PLID: { editable: false },
+                    PLNo: { editable: false },
+                    PLDate: { editable: false },
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Packing List Grid
+    $("#PackingListWindowGrid").kendoGrid({
+        dataSource: PackingListGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "PLNo", title: "PL No." },
+            { field: "PLDate", title: "Date" },
+            { field: "RecordStatus", title: "Record Status" }
+        ]
+    });
+
+    //Activate Packing List Window
+    $('#txtEFPlNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            GetPL();
+            PackingListWindow.open();
+            PackingListWindow.center();
+        }
+    });
+
+    // ************ Packing List Grid & Window Declaration End ************ //
+
+    // ************ Port Grid & Window Declaration ************ //
+
+    // Port Window
+    var PortWindow = $('#PortWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "Port Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // Port window grid data source
+    var PortWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PortID",
+                fields: {
+                    PortID: { editable: false },
+                    PortCode: { editable: false },
+                    PortName: { editable: false },
+                    PortAdress: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    // Port window grid
+    $("#PortWindowGrid").kendoGrid({
+        dataSource: PortWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "PortCode", title: "Code" },
+            { field: "PortName", title: "Name" },
+            { field: "PortAdress", title: "Address" }
+        ]
+    });
+
+    // Activation of PortSearchWindow
+    $("#txtEFDstPortName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFDstPortName").val("");
+            port = "";
+            port = "tsp";
+            GetPorts();
+            PortWindow.open();
+            PortWindow.center();
+        }
+    });
+
+    $("#txtEFPortOfShpmntName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFPortOfShpmntName").val("");
+            port = "";
+            port = "pos";
+            GetPorts();
+            PortWindow.open();
+            PortWindow.center();
+        }
+    });
+
+
+    $("#txtEFLndCstmPortName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFLndCstmPortName").val("");
+            port = "";
+            port = "lcp";
+            GetPorts();
+            PortWindow.open();
+            PortWindow.center();
+        }
+    });
+
+    // ************ Port Grid & Window Declaration End ************ //
+
+    // ************ Country Grid & Window Declaration ************ //
+
+    // Country Window
+    var CountryWindow = $('#CountryWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "Country Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // Port window grid data source
+    var CountryWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PortID",
+                fields: {
+                    CountryID: { editable: false },
+                    CountryCode: { editable: false },
+                    CountryName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    // Port window grid
+    $("#CountryWindowGrid").kendoGrid({
+        dataSource: CountryWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "CountryCode", title: "Code" },
+            { field: "CountryName", title: "Name" }
+        ]
+    });
+
+    // Activation of PortSearchWindow
+    $("#txtEFDestCntryName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFDestCntryName").val("");
+            GetCountries();
+            CountryWindow.open();
+            CountryWindow.center();
+        }
+    });
+
+    // ************ Country Grid & Window Declaration End ************ //
+
+    // ************ Buyer Grid & Window Declaration ************ //
+
+    // Buyer Window
+    var BuyerWindow = $('#BuyerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "Buyer List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // Buyer Window Grid Data Source
+    var BuyerWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerCode: { editable: false },
+                    BuyerName: { editable: false },
+                    Address: { editable: false },
+                    BuyerType: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    // Buyer Window Grid
+    $("#BuyerWindowGrid").kendoGrid({
+        dataSource: BuyerWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "BuyerName", title: "Name" },
+            { field: "BuyerCode", title: "Code" },
+            { field: "Address", title: "Address" },
+            { field: "BuyerType", title: "Type" }
+        ]
+    });
+
+    // Activation of Buyer Window
+    //$("#txtEFDealerCode").keyup(function (e) {
+    //    if (e.keyCode == 120) {
+    //        $("#txtEFDealerCode").val("");
+    //        byrSel = "";
+    //        byrSel = "del";
+    //        GetBuyer();
+    //        BuyerWindow.open();
+    //        BuyerWindow.center();
+    //    }
+    //});
+
+    $("#txtEFImporterName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFImporterName").val("");
+            byrSel = "";
+            byrSel = "imp";
+            GetBuyer();
+            BuyerWindow.title("Importer List");
+            $("#BuyerWindow").find("label").html("Importer Name");
+            BuyerWindow.open();
+            BuyerWindow.center();
+        }
+    });
+
+    $("#txtEFXportrName").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFXportrName").val("");
+            byrSel = "";
+            byrSel = "exp";
+            GetBuyer();
+            BuyerWindow.title("Exporter List");
+            $("#BuyerWindow").find("label").html("Exporter Name");
+            BuyerWindow.open();
+            BuyerWindow.center();
+        }
+    });
+
+    // ************ Buyer Grid & Window Declaration End ************ //
+
+    // ************ Branch Grid & Window Declaration ************ //
+
+    // Branch Window
+    var BranchWindow = $('#BranchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "Branch List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // Branch Window Grid Data Source
+    var BranchWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BranchID",
+                fields: {
+                    BranchID: { editable: false },
+                    BanchCode: { editable: false },
+                    BranchName: { editable: false },
+                    Address1: { editable: false },
+                    Address2: { editable: false },
+                    Address3: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    // Branch Window Grid
+    $("#BranchWindowGrid").kendoGrid({
+        dataSource: BranchWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "BranchName", title: "Name" },
+            { field: "BanchCode", title: "Code" },
+            { field: "Address1", title: "Address" },
+            { field: "Address2", title: "Type" }
+        ]
+    });
+
+
+    $("#txtEFDealerCode").keyup(function (e) {
+        if (e.keyCode == 120) {
+            $("#txtEFDealerCode").val("");
+
+            GetBranch();
+            BranchWindow.open();
+            BranchWindow.center();
+        }
+    });
+
+    // ************ Branch Grid & Window Declaration End ************ //
+
+    // ************ Export Form Grid & Window Declaration ************ //
+        
+    var ExportFormWindow = $('#ExportFormWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "Export form list",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // Export Form Window Grid Data Source
+    var ExportFormWindowGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ExportFormID",
+                fields: {
+                    ExportFormID: { editable: false },
+                    ExportFormNo: { editable: false },
+                    ExportFormDate4 : { editable: false },
+                    DealerName: { editable: false },
+                    CINo: { editable: false },
+                    PLNo: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    // Export Form Window Grid
+    $("#ExportFormWindowGrid").kendoGrid({
+        dataSource: ExportFormWindowGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "ExportFormNo", title: "Export Form No." },
+            { field: "DealerName", title: "Dealer Name" },
+            { field: "ExportFormDate4", title: "Date" },
+            { field: "CINo", title: "Commercial Invoice No." },
+            { field: "PLNo", title: "Packing List No." },
+            { field: "RecordStatus", title: "Status" }
+        ]
+    });
+
+
+    $("#btnSearch").click(function (e) {
+            GetExpFrm();
+            ExportFormWindow.open();
+            ExportFormWindow.center();
+    });
+
+    // ************ Export Form Grid & Window Declaration End ************ //
+
+    // ************ Save changes Window Declaration ************ //
+    
+    var SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "25%",
+        height: "auto",
+        title: "Save Changes",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Save changes Window Declaration End ************ //
+
+    // ######################################## Grid And Window Declaration End ######################################## //
+
+    // ######################################## Pop-Up Window Events ######################################## //
+
+    // ************ Commercial Invoice Window Pop-up events ************ //
+
+    function GetComInv() {
+        $.ajax({
+            url: '@Url.Action("GetComInv", "ExpBillOfLading")',
+            type: 'GET',
+            //data: ({  }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    CommercialInvoiceGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetCINo() {
+        var gridCiInv = $("#CommercialInvoiceWindowGrid").data("kendoGrid");
+        var selectedCiInv = (gridCiInv.dataItem(gridCiInv.select()));
+        $('#txtEFCiId').val(selectedCiInv.CIID);
+        $('#txtEFCiNo').val(selectedCiInv.CINo);
+        $('#txtEFCiDate').val(selectedCiInv.CIDate);
+        CommercialInvoiceWindow.close();
+    }
+
+    $('#btnCommercialInvoiceWindowOK').click(function () {
+        SetCINo();
+    });
+
+    $('#CommercialInvoiceWindowGrid').dblclick(function () {
+        SetCINo();
+    });
+
+    $('#CommercialInvoiceWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetCINo();
+        }
+    });
+
+    $('#btnCommercialInvoiceWindowCancel').click(function () {
+        CommercialInvoiceWindow.close();
+    });
+
+    // ************ Commercial Invoice Window Pop-up events End ************ //
+
+    // ************ Packing List Window Pop-up events ************ //
+
+    // Load Packing List Grid
+    function GetPL() {
+
+        if ($('#txtEFCiNo').val() == "") {
+            $.ajax({
+                url: '@Url.Action("GetPackingListA", "ExpBillOfLading")',
+                type: 'GET',
+                //data: ({  }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        PackingListGridDataSource.data(data);
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: '@Url.Action("GetPackingListB", "ExpBillOfLading")',
+                type: 'GET',
+                data: ({ ciid: $('#txtEFCiId').val() }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        PackingListGridDataSource.data(data);
+                    }
+                }
+            });
+        }
+    }
+
+    // Set Packing List Id & No.
+    function SetPLNo() {
+        var gridPL = $("#PackingListWindowGrid").data("kendoGrid");
+        var selectedPL = (gridPL.dataItem(gridPL.select()));
+        $('#txtEFPlId').val(selectedPL.PLID);
+        $('#txtEFPlNo').val(selectedPL.PLNo);
+        $('#txtEFPlDate').val(selectedPL.PLDate);
+        if ($('#txtEFCiNo').val() == "") {
+            $('#txtEFCiId').val(selectedPL.CIID);
+            $('#txtEFCiNo').val(selectedPL.CINo);
+            $('#txtEFCiDate').val(selectedPL.CIDate);
+        }
+        PackingListWindow.close();
+    }
+
+    $('#btnPackingListWindowOK').click(function () {
+        SetPLNo();
+    });
+
+    $('#PackingListWindowGrid').dblclick(function () {
+        SetPLNo();
+    });
+
+    $('#PackingListWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetPLNo();
+        }
+    });
+
+    $('#btnPackingListWindowCancel').click(function () {
+        PackingListWindow.close();
+    });
+
+    // ************ Packing List Window Pop-up events End ************ //
+
+    // ************ Port Window Pop-up events ************ //
+
+    function GetPorts() {
+        $.ajax({
+            url: '@Url.Action("GetPortInfo", "CommonChemical")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $("#PortWindowGrid").data("kendoGrid").dataSource.data(data);
+                    //PortWindowGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetPort() {
+        var portGrid = $("#PortWindowGrid").data("kendoGrid");
+        var selectedPort = (portGrid.dataItem(portGrid.select()));
+        if (port == "tsp") {
+            $("#txtEFDstPortId").val(selectedPort.PortID);
+            $("#txtEFDstPortCode").val(selectedPort.PortCode);
+            $("#txtEFDstPortName").val(selectedPort.PortName);
+            PortWindow.close();
+        }
+        if (port == "pos") {
+            $("#txtEFPortOfShpmntId").val(selectedPort.PortID);
+            $("#txtEFPortOfShpmntName").val(selectedPort.PortName);
+            PortWindow.close();
+        }
+        if (port == "lcp") {
+            $("#txtEFLndCstmPortId").val(selectedPort.PortID);
+            $("#txtEFLndCstmPortName").val(selectedPort.PortName);
+            PortWindow.close();
+        }
+    }
+
+    $("#btnPortWindowOK").click(function () {
+        SetPort();
+    });
+
+    $("#PortWindowGrid").dblclick(function () {
+        SetPort();
+    });
+
+    $("#PortWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetPort();
+        }
+    });
+
+    $("#btnPortWindowCancel").click(function () {
+        PortWindow.close();
+    });
+
+    // ************ Port Window Pop-up events End ************ //
+
+    // ************ Country Window Pop-up events ************ //
+
+    function GetCountries() {
+        $.ajax({
+            url: '@Url.Action("GetAllCountry", "CommonChemical")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $("#CountryWindowGrid").data("kendoGrid").dataSource.data(data);
+                    //PortWindowGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetCountry() {
+        var cntryGrid = $("#CountryWindowGrid").data("kendoGrid");
+        var selectedcntry = (cntryGrid.dataItem(cntryGrid.select()));
+
+        $("#txtEFDestCntryId").val(selectedcntry.CountryID);
+        $("#txtEFCntryCode").val(selectedcntry.CountryCode);
+        $("#txtEFDestCntryName").val(selectedcntry.CountryName);
+        CountryWindow.close();
+    }
+
+    $("#btnCountryWindowOK").click(function () {
+        SetCountry();
+    });
+
+    $("#CountryWindowGrid").dblclick(function () {
+        SetCountry();
+    });
+
+    $("#CountryWindowGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetCountry();
+        }
+    });
+
+    $("#btnCountryWindowCancel").click(function () {
+        CountryWindow.close();
+    });
+
+    // ************ Country Window Pop-up events End ************ //
+
+    // ************ Buyer Window Pop-up events ************ //
+
+    function GetBuyer() {
+        $.ajax({
+            url: '@Url.Action("GetAllBuyer", "CommonChemical")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#BuyerWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SetBuyer() {
+        var buyerGrid = $("#BuyerWindowGrid").data("kendoGrid");
+        var selectedBuyer = (buyerGrid.dataItem(buyerGrid.select()));
+        if (byrSel == "imp") {
+            $('#txtEFImporterId').val(selectedBuyer.BuyerID);
+            $('#txtEFImporterName').val(selectedBuyer.BuyerName);
+            BuyerWindow.close();
+        }
+        if (byrSel == "exp") {
+            $('#txtEFXportrId').val(selectedBuyer.BuyerID);
+            $('#txtEFXportrName').val(selectedBuyer.BuyerName);
+            BuyerWindow.close();
+        }
+        if (byrSel == "del") {
+            $('#txtEFDealerId').val(selectedBuyer.BuyerID);
+            $('#txtEFDealerCode').val(selectedBuyer.BuyerCode);
+            $('#txtEFDealerName').val(selectedBuyer.BuyerName);
+            $('#txtEFDealerAddress').val(selectedBuyer.Address);
+            BuyerWindow.close();
+        }
+    }
+
+    $('#btnBuyerWindowOK').click(function () {
+        SetBuyer();
+    });
+
+    $('#BuyerWindowGrid').dblclick(function () {
+        SetBuyer();
+    });
+
+    $('#BuyerWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetBuyer();
+        }
+    });
+
+    $('#btnBuyerWindowCancel').click(function () {
+        BuyerWindow.close();
+    });
+
+    // ************ Buyer Window Pop-up events End ************ //
+
+    // ************ Branch Window Pop-up events ************ //
+
+    function GetBranch() {
+        $.ajax({
+            url: '@Url.Action("GetAllBranches", "CommonChemical")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#BranchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SetBranch() {
+        var branchGrid = $("#BranchWindowGrid").data("kendoGrid");
+        var selectedBranch = (branchGrid.dataItem(branchGrid.select()));
+
+        $('#txtEFDealerId').val(selectedBranch.BranchID);
+        $('#txtEFDealerCode').val(selectedBranch.BanchCode);
+        $('#txtEFDealerName').val(selectedBranch.BranchName);
+        if (selectedBranch.Address1 != null) {
+            $('#txtEFDealerAddress').val(selectedBranch.Address1);
+        } else if (selectedBranch.Address2 != null) {
+            $('#txtEFDealerAddress').val(selectedBranch.Address2);
+        } else {
+            $('#txtEFDealerAddress').val(selectedBranch.Address3);
+        }
+
+        BranchWindow.close();
+
+    }
+
+    $('#btnBranchWindowOK').click(function () {
+        SetBranch();
+    });
+
+    $('#BranchWindowGrid').dblclick(function () {
+        SetBranch();
+    });
+
+    $('#BranchWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetBranch();
+        }
+    });
+
+    $('#btnBranchWindowCancel').click(function () {
+        BranchWindow.close();
+    });
+
+    // ************ Branch Window Pop-up events End ************ //
+
+    // ************ Export Form Window Pop-up events ************ //
+
+    function GetExpFrm() {
+        $.ajax({
+            url: '@Url.Action("GetExpFormList", "ExportForm")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                ExportFormWindowGridDataSource.data(data);
+            }
+        });
+    }
+
+    function SetExpFrm() {
+        var expFrmGrid = $("#ExportFormWindowGrid").data("kendoGrid");
+        var selectedExpFrm = (expFrmGrid.dataItem(expFrmGrid.select()));
+        $.ajax({
+            url: '@Url.Action("GetExportForm", "ExportForm")',
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            data: { id: selectedExpFrm.ExportFormID },
+            success: function (data) {
+                if (data != null) {
+                    $("#txtEFDealerId").val(data.DealerID);
+                    $("#txtEFDealerCode").val(data.DealerCode);
+                    $("#txtEFDealerName").val(data.DealerName);
+                    $("#txtEFDealerAddress").val(data.DealerAddress);
+                    $("#txtEFexportId").val(data.ExportFormID);
+                    $("#txtEFexportNo").val(data.ExportFormNo);
+                    $("#txtEFExpFromDate").val(data.ExportFormDate4);
+                    $("#txtEFRefExpNo1").val(data.ExportFormRef);
+                    $("#txtEFRefExpNo2").val(data.ExportFormRef1);
+                    $("#txtEFRefExpNo3").val(data.ExportFormRef2);
+                    $("#txtEFCiId").val(data.CIID);
+                    $("#txtEFCiNo").val(data.CINo);
+                    $("#txtEFCiDate").val(data.CIDate);
+                    $("#txtEFPlId").val(data.PLID);
+                    $("#txtEFPlNo").val(data.PLNo);
+                    $("#txtEFPlDate").val(data.PLDate);
+                    $("#txtEFCommodity").val(data.Comodity);
+                    $("#txtEFCmdtyCode").val(data.ComodityCode);
+                    $("#txtEFDestCntryId").val(data.DestinationCountry);
+                    $("#txtEFDestCntryName").val(data.DestinationCountryName);
+                    $("#txtEFCntryCode").val(data.CountryCode);
+                    $("#txtEFDstPortId").val(data.DestinationPort);
+                    $("#txtEFDstPortName").val(data.DestinationPortName);
+                    $("#txtEFDstPortCode").val(data.PortCode);
+                    $("#txtEFPackQty").val(data.PackQTy);
+                    $("#ddlEFPckQtyUnit").val(data.PackUnit);
+                    $("#txtEFPckQtyCode").val(data.PackUnitCode);
+                    $("#txtEFVlumQty").val(data.VolumeQty);
+                    $("#ddlEFVlumUnit").val(data.VolumeUnit);
+                    $("#ddlEFDclrdPiCurncy").val(data.DeclaredCurrency);
+                    $("#txtEFDclrdCrncyCode").val(data.DeclaredCurrencyCode);
+                    $("#txtEFInvVal").val(data.InvoiceValue);
+                    $("#ddlEFInvCrncy").val(data.InvoiceCurrency);
+                    $("#txtEFDlvryTrms").val(data.DeliveryTerm);
+                    $("#txtEFTrmOfSal").val(data.TermOfSaleNo);
+                    $("#txtEFTrmOfSalDate").val(data.TermSaleDate);
+                    $("#txtEFImporterId").val(data.Importer);
+                    $("#txtEFImporterName").val(data.ImporterName);
+                    $("#txtEFCryngVslName").val(data.CarryingVassal);
+                    //$("#txtEFCryngVslNo").val(data.ExportFormRef2);
+                    $("#txtEFXportBillDtl").val(data.ExportBillDtl);
+                    $("#txtEFPortOfShpmntId").val(data.PortOfShipment);
+                    $("#txtEFPortOfShpmntName").val(data.PortOfShipmentName);
+                    $("#txtEFLndCstmPortId").val(data.LandCustomPort);
+                    $("#txtEFLndCstmPortName").val(data.LandCustomPortName);
+                    $("#txtEFShpmntDate").val(data.ShipmentDate);
+                    $("#txtEFXportrId").val(data.Exporter);
+                    $("#txtEFXportrName").val(data.ExporterName);
+                    $("#txtEFCciRegNo").val(data.CCIESNo);
+                    $("#txtEFCciRegDate").val(data.CCIESDate);
+                    $("#txtEFSector").val(data.Sector);
+                    $("#txtEFSectorCode").val(data.SectorCode);
+                    recordStatus = data.RecordStatus;
+                    CheckRecordStatusForButton(recordStatus);
+                }
+
+            }
+        });
+        ExportFormWindow.close();
+    }
+
+    $('#btnExportFormDocWindowOK').click(function () {
+        SetExpFrm();
+    });
+
+    $('#ExportFormWindowGrid').dblclick(function () {
+        SetExpFrm();
+    });
+
+    $('#ExportFormWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetExpFrm();
+        }
+    });
+
+    $('#btnExportFormWindowCancel').click(function () {
+        ExportFormWindow.close();
+    });
+
+    // ************ Export Form Window Pop-up events End ************ //
+
+    // ######################################## Pop-Up Window Events End ######################################## //
+
+    // ######################################## Save and Update ######################################## //
+
+    function Save() {
+        var obj = new Object();
+
+        obj.DealerID = $("#txtEFDealerId").val();
+        obj.ExportFormID = $("#txtEFexportId").val();
+        obj.ExportFormNo = $("#txtEFexportNo").val();
+        obj.ExportFormRef = $("#txtEFRefExpNo1").val();
+        obj.ExportFormRef1 = $("#txtEFRefExpNo2").val();
+        obj.ExportFormRef2 = $("#txtEFRefExpNo3").val();
+        obj.ExportFormDate4 = $("#txtEFExpFromDate").val();
+        obj.LCID = $("#txtEFCiId").val();
+        obj.CIID = $("#txtEFCiId").val();
+        //obj.PIID = $("#txtEFCiId").val();
+        obj.PLID = $("#txtEFPlId").val();
+        obj.Comodity = $("#txtEFCommodity").val();
+        obj.ComodityCode = $("#txtEFCmdtyCode").val();
+        obj.DestinationCountry = $("#txtEFDestCntryId").val();
+        obj.CountryCode = $("#txtEFCntryCode").val();
+        obj.DestinationPort = $("#txtEFDstPortId").val();
+        obj.PortCode = $("#txtEFDstPortCode").val();
+        obj.PackQTy = $("#txtEFPackQty").val();
+        obj.PackUnit = $("#ddlEFPckQtyUnit").val();
+        obj.PackUnitCode = $("#txtEFPckQtyCode").val();
+        obj.VolumeQty = $("#txtEFVlumQty").val();
+        obj.VolumeUnit = $("#ddlEFVlumUnit").val();
+        obj.DeclaredCurrency = $("#ddlEFDclrdPiCurncy").val();
+        obj.InvoiceValue = $("#txtEFInvVal").val();
+        obj.InvoiceCurrency = $("#ddlEFInvCrncy").val();
+        obj.DeliveryTerm = $("#txtEFDlvryTrms").val();
+        obj.TermOfSaleNo = $("#txtEFTrmOfSal").val();
+        obj.TermSaleDate = $("#txtEFTrmOfSalDate").val();
+        obj.Importer = $("#txtEFImporterId").val();
+        obj.CarryingVassal = $("#txtEFCryngVslName").val();
+        obj.ExportBillDtl = $("#txtEFXportBillDtl").val();
+        obj.PortOfShipment = $("#txtEFPortOfShpmntId").val();
+        obj.LandCustomPort = $("#txtEFLndCstmPortId").val();
+        obj.ShipmentDate = $("#txtEFShpmntDate").val();
+        obj.Exporter = $("#txtEFXportrId").val();
+        obj.CCIESNo = $("#txtEFCciRegNo").val();
+        obj.CCIESDate = $("#txtEFCciRegDate").val();
+        obj.Sector = $("#txtEFSector").val();
+        obj.SectorCode = $("#txtEFSectorCode").val();
+        obj.RecordStatus = recordStatus;
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Save", "ExportForm")',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: obj }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Type == 2) {
+                    $("#txtEFexportId").val(response.ReturnId);
+                    $("#txtEFexportNo").val(response.ReturnCode);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                    //saveStatus = 1;
+                } else if (response.Type == 3) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    changeStatus = 0;
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnSave').click(function () {
+        if (changeStatus == 0) {
+            $('#MessageText').html("No changes to save.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Save();
+        }
+    });
+
+
+    // ######################################## Save and Update End ######################################## //
+
+    // ######################################## Confirm ######################################## //
+
+    function Confirm(id) {
+
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Confirm", "ExportForm")',
+            dataType: 'JSON',
+            data: JSON.stringify({ "id": id }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Type == 2) {
+                    $("#txtEFexportId").val(response.ReturnId);
+                    $("#txtEFexportNo").val(response.ReturnCode);
+                    //GetAndSetBillOfLading(response.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    //saveStatus = 1;
+                    recordStatus = "CNF";
+                    CheckRecordStatusForButton(recordStatus);
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnConfirm').click(function () {
+        if ($("#txtEFexportId").val() != "" && changeStatus != 1) {
+            Confirm($("#txtEFexportId").val());
+        } else {
+            $('#MessageText').html("Please save first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    });
+
+
+    // ######################################## Confirm End ######################################## //
+
+    // ######################################## Check ######################################## //
+
+    function Check(id) {
+        
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Check", "ExportForm")',
+            dataType: 'JSON',
+            data: JSON.stringify({ "id": id }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Type == 2) {
+                    $("#txtEFexportId").val(response.ReturnId);
+                    $("#txtEFexportNo").val(response.ReturnCode);
+                    //GetAndSetBillOfLading(response.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    //saveStatus = 1;
+                    recordStatus = "CHK";
+                    CheckRecordStatusForButton(recordStatus);
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnCheck').click(function () {
+        if ($("#txtEFexportId").val() != "" && changeStatus != 1) {
+            Check($("#txtEFexportId").val());
+        } else {
+            $('#MessageText').html("Please save first.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    });
+
+
+    // ######################################## Check End ######################################## //
+
+    // ######################################## Check ######################################## //
+
+    function Delete(id) {
+
+        $("#divLoading").show();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Delete", "ExportForm")',
+            dataType: 'JSON',
+            data: JSON.stringify({ id: id }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Type == 2) {
+                    
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    Reset();
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(response.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            },
+            error: function () {
+                $("#divLoading").hide();
+                $('#MessageText').html("");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        });
+    }
+
+    $('#btnDelete').click(function () {
+        Delete($("#txtEFexportId").val());
+    });
+
+
+    // ######################################## Check End ######################################## //
+
+
+    // ######################################## Variables Declaration ######################################## //
+    var del = "";
+    var changeStatus = 0;
+    var dataItem;
+    var saveStatus = 0;
+    var resetStatus = 0;
+    var formChangeReset = "";
+    var state = "";
+    var recordStatus = "";
+    var port = "";
+    var byrSel = "";
+    // ######################################## Variables Declaration End ######################################## //
+
+    $(".txtField").change(function () {
+        changeStatus = 1;
+    });
+
+    // ######################################## Reset ######################################## //
+
+    function Reset() {
+        del = "";
+        changeStatus = 0;
+        saveStatus = 0;
+        resetStatus = 0;
+        formChangeReset = "";
+        state = "";
+        recordStatus = "";
+        port = "";
+        byrSel = "";
+        $(".txtField").val("");
+        CheckRecordStatusForButton("");
+    }
+
+    $("#btnReset").click(function() {
+        if (changeStatus != 1) {
+            Reset();
+        } else {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        }
+    });
+
+    $("#btnSaveChangeWindowOk").click(function() {
+        Reset();
+        SaveChangeWindow.close();
+    });
+
+    $("#btnSaveChangeWindowCancel").click(function () {
+        SaveChangeWindow.close();
+    });
+
+    // ######################################## Reset End ######################################## //
+    ClearOperationalMessage();
+</script>
+
+

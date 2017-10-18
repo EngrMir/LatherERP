@@ -1,0 +1,3396 @@
+﻿@{
+    ViewBag.Title = "Crust Production Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="col-lg-12">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+<input id="RecordStatus" type="hidden" class="txtBox" />
+<div class="col-lg-4">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production Year<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                <input id="YearMonID" type="hidden" class="txtBox" />
+                <input type="text" id="ScheduleYear" class="txtBox SetFocus" name="ScheduleYear" placeholder="Type/Press F9" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production Month<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                <select id="ScheduleMonth" class="txtBox" tabindex="3">
+                    <option value="">--Select--</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production For</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" id="ScheduleFor" readonly="readonly" style="width: 100%;" class="ReadOnlyTextbox" name="ScheduleFor" tabindex="" value="Crust Production" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production Floor<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                @Html.DropDownList("ProductionFloor", new SelectList(ViewBag.ddlCrustProductionFloorList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-4">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Schedule No@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-6">
+                <input id="ScheduleID" type="hidden" class="txtBox txtSchedule" />
+                <input type="text" id="ScheduleNo" readonly="readonly" style="width: 100%;" class="txtBox txtSchedule ReadOnlyTextbox" name="ScheduleNo" tabindex="" placeholder="Auto" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Prepare Date<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" id="PrepareDate" class="txtBox datePicker txtSchedule" required="required" name="PrepareDate" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production Process<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                @Html.DropDownList("ProductionProcessID", new SelectList(ViewBag.ddlProcessList, "ProcessID", "ProcessName"), "--Select--", new { @class = "txtBox txtSchedule" })
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-lg-6">
+                    <label></label>
+                </div>
+                <div class="col-lg-6">
+                    <label></label>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-lg-6">
+                <label></label>
+            </div>
+            <div class="col-lg-6">
+                <input type="button" id="btnAddSchedule" class="Button" value="Add New" style="position:absolute; right:20px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-4">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production No</label>
+            </div>
+            <div class="col-lg-6">
+                <input id="ScheduleDateID" type="hidden" class="txtBox txtSchedule txtProduction" />
+                <input type="text" id="ProductionNo" readonly="readonly" style="width: 100%;" class="txtBox txtSchedule txtProduction ReadOnlyTextbox" name="ProductionNo" tabindex="" placeholder="Auto/Press F9" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production Start Date<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" id="ScheduleStartDate" class="txtBox datePicker txtSchedule txtProduction" required="required" name="ScheduleStartDate" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Production End Date<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" id="ScheduleEndDate" class="txtBox datePicker txtSchedule txtProduction" required="required" name="ScheduleEndDate" tabindex="" />
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-lg-6">
+                    <label>Production Status</label>
+                </div>
+                <div class="col-lg-6">
+                    <select id="ProductionStatus" class="txtBox txtSchedule txtProduction" tabindex="3">
+                        <option value="">--Select--</option>
+                        <option value="SCH">Schedule</option>
+                        <option value="ONG">On Going</option>
+                        <option value="POS">Postponed</option>
+                        <option value="CMP">Completed</option>
+                    </select>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-lg-11">
+                <label></label>
+                <input type="button" id="btnAddProduction" class="Button" value="Add New" style="position:absolute; right:20px;" />
+            </div>
+            @*<div class="col-lg-6">
+                    <input type="button" id="btnAddExecute" class="Button" value="Execute" style="position:absolute; right:20px;" />
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>SD Production No</label>
+            </div>
+            <div class="col-lg-2">
+                <input id="ScheduleItemID" type="hidden" class="txtBox txtSchedule txtProduction txtPartyOrder" />
+                <input type="text" id="ScheduleProductionNo" readonly="readonly" style="width: 100%;" class="txtBox txtSchedule txtProduction txtPartyOrder ReadOnlyTextbox" name="ScheduleProductionNo" tabindex="" placeholder="Auto/Press F9" />
+            </div>
+            <div class="col-lg-2">
+                <label>Article</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="ArticleID" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ArticleID" />
+                <input type="hidden" id="ArticleNo" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ArticleNo" />
+                <input type="text" id="ArticleName" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ArticleName" tabindex="" placeholder="Press F9" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Pcs</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="SchedulePcs" class="txtBox txtSchedule txtProduction txtPartyOrder" name="SchedulePcs" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Party@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerID" class="txtBox txtSchedule txtProduction txtPartyOrder" name="BuyerID" />
+                <input type="text" id="BuyerName" class="txtBox txtSchedule txtProduction txtPartyOrder" name="BuyerName" tabindex="" placeholder="Press F9" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Challan@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleChallanNo" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ArticleChallanNo" placeholder="Press F9" tabindex="" />
+                <input type="hidden" id="ArticleChallanID" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ArticleChallanID" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Side</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ScheduleSide" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ScheduleSide" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Order</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerOrderID" class="txtBox txtSchedule txtProduction txtPartyOrder" name="BuyerOrderID" />
+                <input type="hidden" id="BuyerOrderItemID" class="txtBox txtSchedule txtProduction txtPartyOrder" />
+                <input type="text" id="BuyerOrderNo" class="txtBox txtSchedule txtProduction txtPartyOrder" name="BuyerOrderNo" tabindex="" placeholder="Press F9" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Size</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="AvgSize" class="txtBox txtSchedule txtProduction txtPartyOrder" name="AvgSize" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Area</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ScheduleArea" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ScheduleArea" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Item Type<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ItemTypeID", new SelectList(ViewBag.ddlItemTypeList, "ItemTypeID", "ItemTypeName"), "--Select--", new { @class = "txtBox txtSchedule txtProduction txtPartyOrder" })
+            </div>
+            <div class="col-lg-2">
+                <label>Size Unit@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("AvgSizeUnit", new SelectList(ViewBag.ddlAvgSizeUnitList, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox txtSchedule txtProduction txtPartyOrder" })
+            </div>
+            <div class="col-lg-2">
+                <label>Area Unit</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ScheduleAreaUnit", new SelectList(ViewBag.ddlAvgSizeUnitList, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox txtSchedule txtProduction txtPartyOrder" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Leather Status<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("LeatherStatusID", new SelectList(ViewBag.ddlLeatherStatusList, "LeatherStatusID", "LeatherStatusName"), "--Select--", new { @class = "txtBox txtSchedule txtProduction txtPartyOrder" })
+            </div>
+            <div class="col-lg-2">
+                @*<label>Side Description</label>*@
+                <label>Pcs/Side</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="SideDescription" class="txtBox txtSchedule txtProduction txtPartyOrder" name="SideDescription" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Production Weight</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ScheduleWeight" class="txtBox txtSchedule txtProduction txtPartyOrder" name="ScheduleWeight" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Thickness@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Thickness" class="txtBox txtSchedule txtProduction txtPartyOrder" name="Thickness" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Selection Range</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="SelectionRange" class="txtBox txtSchedule txtProduction txtPartyOrder" name="SelectionRange" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Weight Unit</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ScheduleWeightUnit", new SelectList(ViewBag.ddlAvgSizeUnitList, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox txtSchedule txtProduction txtPartyOrder" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Thickness Unit</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ThicknessUnit", new SelectList(ViewBag.ddlThicknessUnitList, "UnitID", "UnitName"), "--Select--", new { @class = "txtBox txtSchedule txtProduction txtPartyOrder" })
+            </div>
+            <div class="col-lg-2">
+                <label>Tickness At@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="ThicknessAt" class="txtBox txtSchedule txtProduction txtPartyOrder" tabindex="3">
+                    <option value="">--Select--</option>
+                    <option value="After Shaving">After Shaving</option>
+                    <option value="After Finishing">After Finishing</option>
+                    <option value="Without Shaving">Without Shaving</option>
+                    <option value="Without Finishing">Without Finishing</option>
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <input type="button" id="btnAddPartyOrder" class="Button" value="Add New" style="position:absolute; right:20px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<input id="ColorID" type="hidden" class="txtBox" />
+
+<div class="col-lg-12">
+    <div class="FormBody">
+        <div id="plGrid" class="grdKendo"></div>
+        <div id="PageDetailGrid" style="margin-top: 10px;" class="grdKendo"></div>
+    </div>
+</div>
+
+<div class="col-lg-12">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session[" username"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Confirmed By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session[" username"]" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Confirmed" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ConfirmWindow" style="display: none;">
+    <p><h5 style="color: red;">At First Save this Record.</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationClose" value="Close" />
+</div>
+
+<div id="ExecuteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to Execute?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnExecuteConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnExecuteConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="MachineNoWindow" style="display: none;">
+    <div id="MachineNoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnMachineNoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnMachineNoWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="GradeWindow" style="display: none;">
+    <div id="GradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ColorWindow" style="display: none;">
+    <div id="ColorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnColorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnColorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="PartyWindow" style="display: none;">
+    <div id="PartyWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPartyWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPartyWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="PartyOrderWindow" style="display: none;">
+    <div id="PartyOrderWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPartyOrderWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPartyOrderWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="YearMonthWindow" style="display: none;">
+    <div id="YearMonthWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnYearMonthWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnYearMonthWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="YearMonthScheduleWindow" style="display: none;">
+    <div id="YearMonthScheduleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnYearMonthScheduleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnYearMonthScheduleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="YearMonthScheduleDateWindow" style="display: none;">
+    <div id="YearMonthScheduleDateWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnYearMonthScheduleDateWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnYearMonthScheduleDateWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="YearMonthSchedulePartyOrderWindow" style="display: none;">
+    <div id="YearMonthSchedulePartyOrderWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnYearMonthSchedulePartyOrderWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnYearMonthSchedulePartyOrderWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+@*############################ Challan Grid Popup #######################*@
+<div id="ChallanWindow" style="display: none;">
+    <div id="ChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var saveStatus = 1;
+    var resetSataus = 0;
+    var gridUnsaveData = 0;
+    //var selectedMasterGridRow = 0;
+    var dataitem = {};
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function () {
+                $("#divLoading").show();
+            },
+            complete: function () {
+                $("#divLoading").hide();
+            }
+        });
+        $(".SetFocus").focus();
+        OnlyNumericValue('ScheduleYear');
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+            //,
+            //max: new Date() // sets max date to Jan 1st, 2013
+        });
+
+        //$("#PrepareDate").attr("readonly", true);
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        var plDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SdulItemColorID",
+                    fields: {
+                        SdulItemColorID: { editable: false },
+                        ScheduleItemID: { editable: false },
+                        //GradeID: { editable: true },
+                        //GradeName: { editable: true, defaultValue: 'Press F9' },
+                        ColorID: { editable: true },
+                        ArticleColorNo: { editable: true },
+                        ColorName: { editable: true, defaultValue: 'Press F9' },
+                        ColorPCS: { editable: true, type: "number", defaultValue: '' },
+                        ColorSide: { editable: true, type: "number", defaultValue: '' },
+                        ColorArea: { editable: true, type: "number", defaultValue: '' },
+                        AreaUnit: { editable: true },
+                        AreaUnitName: { editable: true, defaultValue: 'SFT' },
+                        ColorWeight: { editable: true, type: "number", defaultValue: '' },
+                        WeightUnit: { editable: true },
+                        WeightUnitName: { editable: true, defaultValue: 'KG' },
+                        ProductionStatus: { editable: true, defaultValue: 'Schedule' },
+                        Remarks: { editable: true }
+                    }
+                }
+            }
+            @*,
+            pageSize: 30,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetLoanRequestInfoList", "CrustingProductionSchedule")", // at first data show
+                    type: "GET"
+                }
+            }*@
+        });
+        var plgrid = $("#plGrid").kendoGrid({
+            dataSource: plDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "GradeName"]').attr("readonly", true);
+                $('input[name = "ColorName"]').attr("readonly", true);
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add Color", className: "btnPlGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "SdulItemColorID", hidden: true },
+                { field: "ScheduleItemID", hidden: true },
+                { field: "ArticleColorNo", title: "ColorNo", filterable: false, width: "80px", attributes: { "class": "ColorInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ColorID", hidden: true },
+                { field: "ColorName", title: "Color", filterable: false, width: "80px", attributes: { "class": "ColorInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ field: "GradeID", hidden: true },
+                //{ field: "GradeName", title: "Grade", filterable: false, width: "80px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ColorPCS", title: "Pcs", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ColorSide", title: "Side", editable: true, filterable: false, width: "50px", attributes: { "class": "ChemicalItem" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ColorArea", title: "Area", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "AreaUnit", hidden: true },
+                { field: "AreaUnitName", title: "Unit", editable: true, filterable: false, width: "75px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ColorWeight", title: "Weight", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "WeightUnit", hidden: true },
+                { field: "WeightUnitName", title: "Unit", editable: true, filterable: false, width: "75px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ProductionStatus", title: "Status", editable: true, filterable: false, width: "75px", editor: ddlProductionStatus, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "Remarks", title: "Remarks", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { command: [{ name: "ExecuteRow", text: "Execute", click: handleExecuteScheduleDate }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Execute", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteScheduleDate }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteScheduleDate() {
+            deleteStatus = 2;
+            var grid1 = $("#plGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleExecuteScheduleDate() {
+            if (changeStatus == 0) {
+                OpenExecuteConfirmationDialog();
+            } else {
+                OpenSaveChangesDialogOneButton();
+            }
+        };
+
+        //Handling No button click for grid row deletion
+        $('#btnExecuteConfirmationCancel').click(function () {
+            CloseConfirmationExecuteDialog();
+        });
+
+
+        //Handling Delete event for PageDeailsGrid row
+        //function handleExecuteScheduleDate() {
+        //if (changeStatus == 0) {
+        //Handling Yes button click for grid row deletion
+        $('#btnExecuteConfirmationOK').click(function () {
+            PrdCrustYearMonth.ProductionFloor = $('#ProductionFloor').val();
+            PrdCrustYearMonth.BuyerID = $('#BuyerID').val();
+            PrdCrustYearMonth.BuyerOrderID = $('#BuyerOrderID').val();
+            PrdCrustYearMonth.ArticleID = $('#ArticleID').val();
+            PrdCrustYearMonth.ArticleChallanID = $('#ArticleChallanID').val();
+            PrdCrustYearMonth.ArticleChallanNo = $('#ArticleChallanNo').val();
+            //PrdCrustYearMonth.ArticleNo = $('#ArticleNo').val();
+            PrdCrustYearMonth.ItemTypeID = $('#ItemTypeID').val();
+            PrdCrustYearMonth.LeatherStatusID = $('#LeatherStatusID').val();
+            PrdCrustYearMonth.ProductionProcessID = $('#ProductionProcessID').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            //if ((parentGridItem.ScheduleDateID != '') && (parentGridItem.ProductionStatus == 'On Going')) {
+            if (parentGridItem.SdulItemColorID != '') {
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList = [];
+                PrdYearMonthCrustScheduleColorModel.SdulItemColorID = parentGridItem.SdulItemColorID;
+                PrdYearMonthCrustScheduleColorModel.ColorID = parentGridItem.ColorID;
+                PrdYearMonthCrustScheduleColorModel.ArticleColorNo = parentGridItem.ArticleColorNo;
+                PrdYearMonthCrustScheduleColorModel.ProductionStatus = parentGridItem.ProductionStatus;
+
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList.push(PrdYearMonthCrustScheduleColorModel);
+                PrdYearMonthCrustScheduleColorModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "ArticleColorNo": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+
+                    PrdYearMonthCrustScheduleDrumModel.GradeRange = dataPeriodItem[j].GradeRange;
+                    PrdYearMonthCrustScheduleDrumModel.DrumPcs = dataPeriodItem[j].DrumPcs;
+                    PrdYearMonthCrustScheduleDrumModel.DrumSide = dataPeriodItem[j].DrumSide;
+                    PrdYearMonthCrustScheduleDrumModel.DrumArea = dataPeriodItem[j].DrumArea;
+                    PrdYearMonthCrustScheduleDrumModel.AreaUnitName = dataPeriodItem[j].AreaUnitName;
+
+                    PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList.push(PrdYearMonthCrustScheduleDrumModel);
+                    PrdYearMonthCrustScheduleDrumModel = { "CrustSdulDrumID": "", "MachineID": "", "MachineNo": "", "SdulItemColorID": "", "ColorID": "", "GradeID": "", "DrumPcs": "", "DrumSide": "", "DrumArea": "", "AreaUnitName": "", "DrumWeight": "", "WeightUnitName": "", "Remark": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ExecuteCrustProductionSchedule", "CrustingProductionSchedule")',
+                data: JSON.stringify(PrdCrustYearMonth),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $.ajax({
+                            url: '@Url.Action("GetAllGridList", "CrustingProductionSchedule")',
+                            type: 'GET',
+                            data: { "ScheduleItemID": $('#ScheduleItemID').val() },
+                            success: function (data) {
+                                $("#plGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleColorList);
+                                //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleDrumList);
+                            }
+                        });
+                        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                            this.element.find('tbody tr:first').addClass('k-state-selected');
+                        });
+                    } else {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            PrdCrustYearMonth = { "YearMonID": "", "ScheduleYear": "", "ScheduleMonth": "", "ScheduleFor": "", "ProductionFloor": "", "Remarks": "", "ScheduleNo": "", "PrepareDate": "", "RecordStatus": "", "PrdYearMonthCrustScheduleColorList": [], "InvStoreTransChallanList": [], "PrdYearMonthCrustScheduleDrumList": [] };
+            CloseConfirmationExecuteDialog();
+            //} else {
+            //    OpenSaveChangesDialogOneButton();
+            //}
+        });
+
+
+        $(".btnPlGrid").click(function (e) {
+            var supplieragentgrid = $("#plGrid").data("kendoGrid");
+            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+            e.preventDefault();
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        });
+
+        //$("#plGrid").keyup(function (e) {
+        //    if (e.keyCode == 13) {
+        //        var supplieragentgrid = $("#plGrid").data("kendoGrid");
+        //        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+        //            this.element.find('tbody tr:first').addClass('k-state-selected');
+        //        });
+        //        supplieragentgrid.addRow();
+        //        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        //        e.preventDefault();
+        //    }
+        //});
+
+        SelectedItemOfListOfValue('plGrid');
+
+        $("#PageDetailGrid").on('input', function () {
+            gridUnsaveData = 1;
+        });
+
+        //To face child data into another grid for a grid row on click
+        $("#plGrid").on("click", "tr", function () {
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            $("#ColorID").val(parentGridItem.ColorID);
+            if (gridUnsaveData == 0) {
+                if (parentGridItem.SdulItemColorID != "") {
+                    $.ajax({
+                        url: '@Url.Action("YearMonthCrustScheduleDrumList", "CrustingProductionSchedule")',
+                        type: 'GET',
+                        //data: { "SdulItemColorID": parentGridItem.SdulItemColorID },
+                        data: { "SdulItemColorID": parentGridItem.SdulItemColorID, "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": $("#BuyerID").val(), "BuyerOrderID": $("#BuyerOrderID").val(), "ArticleID": $("#ArticleID").val(), "ItemTypeID": $("#ItemTypeID").val(), "LeatherStatusID": $("#LeatherStatusID").val() },
+                        //"ProductionFloor": $("#ProductionFloor").val(), "BuyerID": $("#BuyerID").val(), "BuyerOrderID": $("#BuyerOrderID").val(), "ArticleID": $("#ArticleID").val(), "ItemTypeID": $("#ItemTypeID").val(), "LeatherStatusID": $("#LeatherStatusID").val()
+                        success: function (response) {
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                        } //End of Success Call
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                }
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        var itemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CrustSdulDrumID",
+                    fields: {
+                        CrustSdulDrumID: { editable: false },
+                        SdulItemColorID: { editable: false },
+                        ScheduleItemID: { editable: false },
+                        ScheduleDateID: { editable: false },
+                        MachineID: { editable: true },
+                        MachineNo: { editable: true, defaultValue: 'Press F9' },
+                        //GradeID: { editable: true },
+                        GradeRange: { editable: true, defaultValue: '' },
+                        ColorID: { editable: true },
+                        ProductionPcs: { editable: true, type: "number", defaultValue: 'Press F9' },
+                        DrumPcs: { editable: true, type: "number", defaultValue: '' },
+                        DrumSide: { editable: true, type: "number", defaultValue: '' },
+                        DrumArea: { editable: true, type: "number", defaultValue: '' },
+                        AreaUnit: { editable: true },
+                        AreaUnitName: { editable: true, defaultValue: 'SFT' },
+                        DrumWeight: { editable: true, type: "number", defaultValue: '' },
+                        WeightUnit: { editable: true },
+                        WeightUnitName: { editable: true, defaultValue: 'KG' },
+                        Remarks: { editable: true }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+
+        var itemgrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: itemDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "MachineNo"]').attr("readonly", true);
+                $('input[name = "ProductionPcs"]').attr("readonly", true);
+                $('input[name = "ProductionSide"]').attr("readonly", true);
+                $('input[name = "ProductionArea"]').attr("readonly", true);
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            toolbar: [{ text: "Add Drum", className: "btnPageDetailGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            //height: 250,
+            columns: [
+                { field: "CrustSdulDrumID", hidden: true },
+                { field: "SdulItemColorID", hidden: true },
+                { field: "ScheduleItemID", hidden: true },
+                { field: "ScheduleDateID", hidden: true },
+                { field: "MachineID", hidden: true },
+                { field: "MachineNo", title: "Drum No", editable: true, filterable: false, width: "75px", attributes: { "class": "DrumNoInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "GradeID", hidden: true },
+                { field: "GradeRange", title: "Grade Range", filterable: false, width: "80px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ColorID", hidden: true },
+                //{ field: "ColorName", title: "Color", filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ProductionPcs", title: "Stock Pcs", editable: true, filterable: false, width: "75px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "DrumPcs", title: "Pcs", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ProductionSide", title: "Stock Side", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "DrumSide", title: "Side", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ProductionArea", title: "Stock Area", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "DrumArea", title: "Area", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "AreaUnit", hidden: true },
+                { field: "AreaUnitName", title: "Unit", editable: true, filterable: false, width: "75px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "DrumWeight", title: "Weight", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "WeightUnit", hidden: true },
+                { field: "WeightUnitName", title: "Unit", editable: true, filterable: false, width: "75px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "Remarks", title: "Remarks", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteIssueItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        $(".btnPageDetailGrid").click(function (e) {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+            e.preventDefault();
+            //$("#PageDetailGrid tbody tr:first td:eq(0)").focus();
+        });
+
+        //$("#PageDetailGrid").keyup(function (e) {
+        //    if (e.keyCode == 13) {
+        //        var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+        //        $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+        //            this.element.find('tbody tr:first').addClass('k-state-selected');
+        //        });
+        //        supplieragentgrid.addRow();
+        //        e.preventDefault();
+        //    }
+        //});
+        SelectedItemOfListOfValue('PageDetailGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteIssueItem() {
+            deleteStatus = 3;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationClose').click(function () {
+            CloseSaveChangesDialogOneButton();
+        });
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#ScheduleNo").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedCrustYearMonthSchedule", "CrustingProductionSchedule")',
+                        type: 'POST',
+                        data: JSON.stringify({ "YearMonID": $("#YearMonID").val(), "ScheduleID": $("#ScheduleID").val(), "ScheduleDateID": $("#ScheduleDateID").val(), "ScheduleItemID": $("#ScheduleItemID").val(), "RecordStatus": $('#RecordStatus').val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                $("#MessageText").html("");
+                                ResetOnlyMasterPageData();
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                //$("#ScheduleNo").val("Auto Generated");
+                                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 2) {
+                if (dataitem.SdulItemColorID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedCrustScheduleColor", "CrustingProductionSchedule")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SdulItemColorID": dataitem.SdulItemColorID, "RecordStatus": $('#RecordStatus').val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 3) {
+                if (dataitem.CrustSdulDrumID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedScheduleDrum", "CrustingProductionSchedule")',
+                        type: 'POST',
+                        data: JSON.stringify({ "CrustSdulDrumID": dataitem.CrustSdulDrumID, "RecordStatus": $('#RecordStatus').val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                if (resetSataus == 0) {
+                    CheckRecordStatusForButton("NCF");
+                    $("#MessageText").html("");
+                    ResetOnlyMasterPageData();
+                    $(".txtCommandBox").val("");
+                    $(".txtBox").css("border-color", "");
+                    //$("#ScheduleNo").val("Auto Generated");
+                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                    changeStatus = 0;
+                    gridUnsaveData = 0;
+                }
+                else if (resetSataus == 1) {
+                    $("#MessageText").html("");
+                    $(".txtSchedule").val("");
+                    $(".txtBox").css("border-color", "");
+                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                }
+                else if (resetSataus == 2) {
+                    $("#MessageText").html("");
+                    $(".txtProduction").val("");
+                    $(".txtBox").css("border-color", "");
+                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                }
+                else if (resetSataus == 3) {
+                    $("#MessageText").html("");
+                    $(".txtPartyOrder").val("");
+                    $(".txtBox").css("border-color", "");
+                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                }
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#ScheduleNo").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                gridUnsaveData = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 4) { // Add Schedule
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                //ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#ScheduleNo").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                gridUnsaveData = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#ScheduleNo").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedCrustYearMonthSchedule", "CrustingProductionSchedule")',
+                            type: 'POST',
+                            data: JSON.stringify({ "ScheduleNo": $("#ScheduleNo").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    CheckRecordStatusForButton("NCF");
+                                    $("#MessageText").html("");
+                                    ResetOnlyMasterPageData();
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                    //$("#ScheduleNo").val("Auto Generated");
+                                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 2) {
+                    if (dataitem.SdulItemColorID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedCrustScheduleColor", "CrustingProductionSchedule")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SdulItemColorID": dataitem.SdulItemColorID, "RecordStatus": dataitem.RecordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 3) {
+                    if (dataitem.CrustSdulDrumID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedScheduleDrum", "CrustingProductionSchedule")',
+                            type: 'POST',
+                            data: JSON.stringify({ "CrustSdulDrumID": dataitem.CrustSdulDrumID, "RecordStatus": dataitem.RecordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+    }); //End of Document.Ready()
+
+    /////////////////////Reset//////////////////
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            ResetOnlyMasterPageData();
+            $(".txtCommandBox").val("");
+            $(".txtBox").css("border-color", "");
+            gridUnsaveData = 0;
+            //$("#ScheduleNo").val("Auto Generated");
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    // Reset Data
+    $("#btnAddSchedule").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        resetSataus = 1;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            //CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            $(".txtSchedule").val("");
+            $(".txtBox").css("border-color", "");
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    // Reset Data
+    $("#btnAddProduction").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        resetSataus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            //CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            $(".txtProduction").val("");
+            $(".txtBox").css("border-color", "");
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    // Reset Data
+    $("#btnAddPartyOrder").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        resetSataus = 3;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            //CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            $(".txtPartyOrder").val("");
+            $(".txtBox").css("border-color", "");
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    ///////////////////////Dynamic DropDown in Item Griid//////////////////
+
+    var productionStatusDataSource = [{ text: "Schedule", value: "Schedule" }, { text: "On Going", value: "On Going" }, { text: "Postponed", value: "Postponed" }, { text: "Completed", value: "Completed" }];
+
+    function ddlProductionStatus(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                optionLabel: "Select",
+                autoBind: false,
+                //change: function () {
+                //    changeStatus = 1;
+                //},
+                dataSource: productionStatusDataSource
+            });
+    };
+
+    var ddlUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveUnit", "CrustingProductionSchedule")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlUnit(container, options) {
+        $('<input id="UnitName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlUnitDataSource
+            });
+    };
+
+    /////////////Save//////////////////////////
+
+    // Declare Object
+    var PrdYearMonthCrustScheduleItemModel = { "ScheduleItemID": "", "ScheduleProductionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ArticleChallanNo": "", "AvgSize": "", "Thickness": "", "ThicknessUnit": "", "ThicknessAt": "", "ItemTypeID": "", "LeatherTypeID": "", "SchedulePcs": "", "ScheduleSide": "", "ScheduleArea": "", "AreaUnit": "", "Remarks": "" };
+    var PrdYearMonthCrustScheduleColorModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "ArticleColorNo": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+    var PrdYearMonthCrustScheduleDrumModel = { "CrustSdulDrumID": "", "MachineID": "", "MachineNo": "", "SdulItemColorID": "", "ColorID": "", "GradeID": "", "DrumPcs": "", "DrumSide": "", "DrumArea": "", "AreaUnitName": "", "DrumWeight": "", "WeightUnitName": "", "Remark": "" };
+    var PrdCrustYearMonth = { "YearMonID": "", "ScheduleYear": "", "ScheduleMonth": "", "ScheduleFor": "", "ProductionFloor": "", "Remarks": "", "ScheduleID": "", "ScheduleNo": "", "PrepareDate": "", "ProductionProcessID": "", "SdulItemColorID": "", "ScheduleStartDate": "", "ScheduleEndDate": "", "ProductionStatus": "", "RecordStatus": "", "PrdYearMonthCrustScheduleColorList": [], "PrdYearMonthCrustScheduleDrumList": [] };
+
+    function Save() {
+        saveStatus = 1;
+        //Check Empty or Maximum Length in PrepareDate
+        CheckRequiredTextBoxMaxLength('ScheduleYear', 4);
+        //Check Empty or Maximum Length in TransactionFrom
+        CheckRequiredTextBoxMaxLength('ScheduleMonth', 2);
+
+        CheckRequiredTextBoxMaxLength('ProductionFloor', 10);
+
+        CheckRequiredTextBoxMaxLength('ProductionProcessID', 10);
+        CheckRequiredTextBoxMaxLength('PrepareDate', 10);
+        CheckRequiredTextBoxMaxLength('ScheduleStartDate', 10);
+        CheckRequiredTextBoxMaxLength('ScheduleEndDate', 10);
+
+        //CheckRequiredTextBoxMaxLength('ArticleName', 10);
+        //CheckRequiredTextBoxMaxLength('ArticleChallanNo', 10);
+        CheckRequiredTextBoxMaxLength('ArticleID', 10);
+        CheckRequiredTextBoxMaxLength('ArticleChallanID', 10);
+        CheckRequiredTextBoxMaxLength('ItemTypeID', 10);
+        CheckRequiredTextBoxMaxLength('LeatherStatusID', 10);
+
+        if (saveStatus == 1) {
+            PrdCrustYearMonth.YearMonID = $('#YearMonID').val();
+            PrdCrustYearMonth.ScheduleYear = $('#ScheduleYear').val();
+            PrdCrustYearMonth.ScheduleMonth = $('#ScheduleMonth').val();
+            //PrdCrustYearMonth.ScheduleFor = $('#ScheduleFor').val();
+            PrdCrustYearMonth.ProductionFloor = $('#ProductionFloor').val();
+            //PrdCrustYearMonth.ConcernStore = $('#ConcernStore').val();
+            PrdCrustYearMonth.Remarks = $('#Remarks').val();
+
+            PrdCrustYearMonth.ScheduleID = $('#ScheduleID').val();
+            PrdCrustYearMonth.ScheduleNo = $('#ScheduleNo').val();
+            PrdCrustYearMonth.PrepareDate = $('#PrepareDate').val();
+            PrdCrustYearMonth.ProductionProcessID = $('#ProductionProcessID').val();
+
+            PrdCrustYearMonth.ScheduleDateID = $('#ScheduleDateID').val();
+            PrdCrustYearMonth.ProductionNo = $('#ProductionNo').val();
+            PrdCrustYearMonth.ScheduleStartDate = $('#ScheduleStartDate').val();
+            PrdCrustYearMonth.ScheduleEndDate = $('#ScheduleEndDate').val();
+            PrdCrustYearMonth.ProductionStatus = $('#ProductionStatus').val();
+
+            PrdCrustYearMonth.PrdYearMonthCrustScheduleItemList = [];
+            PrdYearMonthCrustScheduleItemModel.ScheduleItemID = $('#ScheduleItemID').val();
+            PrdYearMonthCrustScheduleItemModel.ScheduleProductionNo = $('#ScheduleProductionNo').val();
+            PrdYearMonthCrustScheduleItemModel.BuyerID = $('#BuyerID').val();
+            PrdYearMonthCrustScheduleItemModel.BuyerOrderID = $('#BuyerOrderID').val();
+            PrdYearMonthCrustScheduleItemModel.ArticleID = $('#ArticleID').val();
+            PrdYearMonthCrustScheduleItemModel.ArticleNo = $('#ArticleNo').val();
+            PrdYearMonthCrustScheduleItemModel.ArticleChallanID = $('#ArticleChallanID').val();
+            PrdYearMonthCrustScheduleItemModel.ArticleChallanNo = $('#ArticleChallanNo').val();
+            PrdYearMonthCrustScheduleItemModel.AvgSize = $('#AvgSize').val();
+            PrdYearMonthCrustScheduleItemModel.AvgSizeUnit = $('#AvgSizeUnit').val();
+            PrdYearMonthCrustScheduleItemModel.SelectionRange = $('#SelectionRange').val();
+            PrdYearMonthCrustScheduleItemModel.SideDescription = $('#SideDescription').val();
+            PrdYearMonthCrustScheduleItemModel.Thickness = $('#Thickness').val();
+            PrdYearMonthCrustScheduleItemModel.ThicknessUnit = $('#ThicknessUnit').val();
+            PrdYearMonthCrustScheduleItemModel.ThicknessAt = $('#ThicknessAt').val();
+            PrdYearMonthCrustScheduleItemModel.ItemTypeID = $('#ItemTypeID').val();
+            PrdYearMonthCrustScheduleItemModel.LeatherStatusID = $('#LeatherStatusID').val();
+            PrdYearMonthCrustScheduleItemModel.SchedulePcs = $('#SchedulePcs').val();
+            PrdYearMonthCrustScheduleItemModel.ScheduleSide = $('#ScheduleSide').val();
+            PrdYearMonthCrustScheduleItemModel.ScheduleArea = $('#ScheduleArea').val();
+            PrdYearMonthCrustScheduleItemModel.ScheduleAreaUnit = $('#ScheduleAreaUnit').val();
+            PrdYearMonthCrustScheduleItemModel.ScheduleWeight = $('#ScheduleWeight').val();
+            PrdYearMonthCrustScheduleItemModel.ScheduleWeightUnit = $('#ScheduleWeightUnit').val();
+            PrdYearMonthCrustScheduleItemModel.Remarks = $('#Remarks').val();
+            PrdCrustYearMonth.PrdYearMonthCrustScheduleItemList.push(PrdYearMonthCrustScheduleItemModel);
+            PrdYearMonthCrustScheduleItemModel = { "ScheduleItemID": "", "ScheduleProductionNo": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ArticleChallanNo": "", "AvgSize": "", "Thickness": "", "ThicknessUnit": "", "ThicknessAt": "", "ItemTypeID": "", "LeatherTypeID": "", "SchedulePcs": "", "ScheduleSide": "", "ScheduleArea": "", "AreaUnit": "", "Remarks": "" };
+
+            //var parentGrid = $("#plGrid").data("kendoGrid");
+            //var parentGridRow = parentGrid.select();
+            //var parentGridItem = parentGrid.dataItem(parentGridRow);
+            ////if (parentGridItem != null) {
+
+            //    PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList = [];
+            //    PrdYearMonthCrustScheduleColorModel.SdulItemColorID = parentGridItem.SdulItemColorID;
+            //    PrdYearMonthCrustScheduleColorModel.ColorID = parentGridItem.ColorID;
+            //    PrdYearMonthCrustScheduleColorModel.GradeID = parentGridItem.GradeID;
+            //    PrdYearMonthCrustScheduleColorModel.ColorPCS = parentGridItem.ColorPCS;
+            //    PrdYearMonthCrustScheduleColorModel.ColorSide = parentGridItem.ColorSide;
+            //    PrdYearMonthCrustScheduleColorModel.ColorArea = parentGridItem.ColorArea;
+            //    PrdYearMonthCrustScheduleColorModel.AreaUnitName = parentGridItem.AreaUnitName;
+            //    PrdYearMonthCrustScheduleColorModel.ColorWeight = parentGridItem.ColorWeight;
+            //    PrdYearMonthCrustScheduleColorModel.WeightUnitName = parentGridItem.WeightUnitName;
+            //    //PrdYearMonthCrustScheduleColorModel.ProductionStatus = parentGridItem.ProductionStatus;
+            //    PrdYearMonthCrustScheduleColorModel.Remarks = parentGridItem.Remarks;
+
+            //    PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList.push(PrdYearMonthCrustScheduleColorModel);
+            //    PrdYearMonthCrustScheduleColorModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+
+            var parentGrid = $("#plGrid").data("kendoGrid").dataSource;
+            var parentGridItem = parentGrid.data(); // Get Detail Grid Data
+            PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList = [];
+            for (var i = 0; i <= parentGridItem.length - 1; i++) {
+
+                //if (parentGridItem != null) {
+
+                //PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList = [];
+                PrdYearMonthCrustScheduleColorModel.SdulItemColorID = parentGridItem[i].SdulItemColorID;
+                PrdYearMonthCrustScheduleColorModel.ColorID = parentGridItem[i].ColorID;
+                PrdYearMonthCrustScheduleColorModel.ArticleColorNo = parentGridItem[i].ArticleColorNo;
+
+                //PrdYearMonthCrustScheduleColorModel.GradeID = parentGridItem.GradeID;
+                PrdYearMonthCrustScheduleColorModel.ColorPCS = parentGridItem[i].ColorPCS;
+                PrdYearMonthCrustScheduleColorModel.ColorSide = parentGridItem[i].ColorSide;
+                PrdYearMonthCrustScheduleColorModel.ColorArea = parentGridItem[i].ColorArea;
+                PrdYearMonthCrustScheduleColorModel.AreaUnitName = parentGridItem[i].AreaUnitName;
+                PrdYearMonthCrustScheduleColorModel.ColorWeight = parentGridItem[i].ColorWeight;
+                PrdYearMonthCrustScheduleColorModel.WeightUnitName = parentGridItem[i].WeightUnitName;
+                //PrdYearMonthCrustScheduleColorModel.ProductionStatus = parentGridItem.ProductionStatus;
+                PrdYearMonthCrustScheduleColorModel.Remarks = parentGridItem[i].Remarks;
+
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList.push(PrdYearMonthCrustScheduleColorModel);
+                PrdYearMonthCrustScheduleColorModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "ArticleColorNo": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+            }
+
+            var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+            PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList = [];
+            for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                //if (dataPeriodItem[j].dirty) {
+                PrdYearMonthCrustScheduleDrumModel.CrustSdulDrumID = dataPeriodItem[j].CrustSdulDrumID;
+                //PrdYearMonthCrustScheduleDrumModel.ScheduleDateID = parentGridItem.ScheduleDateID;
+                //PrdYearMonthCrustScheduleDrumModel.ProductionNo = dataPeriodItem[j].ProductionNo;
+                PrdYearMonthCrustScheduleDrumModel.MachineID = dataPeriodItem[j].MachineID;
+                PrdYearMonthCrustScheduleDrumModel.MachineNo = dataPeriodItem[j].MachineNo;
+                PrdYearMonthCrustScheduleDrumModel.SdulItemColorID = dataPeriodItem[j].SdulItemColorID;
+                PrdYearMonthCrustScheduleDrumModel.ColorID = $('#ColorID').val(); //dataPeriodItem[j].ColorID;
+                //PrdYearMonthCrustScheduleDrumModel.GradeID = dataPeriodItem[j].GradeID;
+                PrdYearMonthCrustScheduleDrumModel.GradeRange = dataPeriodItem[j].GradeRange;
+                PrdYearMonthCrustScheduleDrumModel.DrumPcs = dataPeriodItem[j].DrumPcs;
+                PrdYearMonthCrustScheduleDrumModel.DrumSide = dataPeriodItem[j].DrumSide;
+                PrdYearMonthCrustScheduleDrumModel.DrumArea = dataPeriodItem[j].DrumArea;
+                PrdYearMonthCrustScheduleDrumModel.AreaUnitName = dataPeriodItem[j].AreaUnitName;
+                PrdYearMonthCrustScheduleDrumModel.DrumWeight = dataPeriodItem[j].DrumWeight;
+                PrdYearMonthCrustScheduleDrumModel.WeightUnitName = dataPeriodItem[j].WeightUnitName;
+                PrdYearMonthCrustScheduleDrumModel.Remarks = dataPeriodItem[j].Remarks;
+                //PrdYearMonthCrustScheduleDrumModel.ProductionWeight = dataPeriodItem[j].ProductionWeight;
+                //PrdYearMonthCrustScheduleDrumModel.UnitName = dataPeriodItem[j].UnitName;
+                //PrdYearMonthCrustScheduleDrumModel.Remark = dataPeriodItem[j].Remark;
+                //PrdYearMonthCrustScheduleDrumModel.PurchaseSign = dataPeriodItem[j].PurchaseSign;
+
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList.push(PrdYearMonthCrustScheduleDrumModel);
+                PrdYearMonthCrustScheduleDrumModel = { "CrustSdulDrumID": "", "MachineID": "", "MachineNo": "", "SdulItemColorID": "", "ColorID": "", "GradeID": "", "DrumPcs": "", "DrumSide": "", "DrumArea": "", "AreaUnitName": "", "DrumWeight": "", "WeightUnitName": "", "Remark": "" };
+                //}
+            }
+            //}
+            if (changeStatus == 1) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CrustingProductionSchedule", "CrustingProductionSchedule")',
+                    data: JSON.stringify(PrdCrustYearMonth),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#YearMonID").val(respnse.YearMonID);
+                            $("#ScheduleID").val(respnse.ScheduleID);
+                            $("#ScheduleNo").val(respnse.ScheduleNo);
+                            $("#ScheduleDateID").val(respnse.ScheduleDateID);
+                            $("#ProductionNo").val(respnse.ProductionNo);
+                            $("#ScheduleItemID").val(respnse.ScheduleItemID);
+                            $("#ScheduleProductionNo").val(respnse.ScheduleProductionNo);
+                            changeStatus = 0;
+                            gridUnsaveData = 0;
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "CrustingProductionSchedule")',
+                                type: 'GET',
+                                data: { "ScheduleItemID": $('#ScheduleItemID').val() },
+                                success: function (data) {
+                                    $("#plGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleColorList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleDrumList);
+                                }
+                            });
+
+                            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                                this.element.find('tbody tr:first').addClass('k-state-selected');
+                            });
+                        } else if (respnse.msg.Type == 3) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#YearMonID").val(respnse.YearMonID);
+                            $("#ScheduleID").val(respnse.ScheduleID);
+                            $("#ScheduleNo").val(respnse.ScheduleNo);
+                            $("#ScheduleDateID").val(respnse.ScheduleDateID);
+                            $("#ProductionNo").val(respnse.ProductionNo);
+                            $("#ScheduleItemID").val(respnse.ScheduleItemID);
+                            $("#ScheduleProductionNo").val(respnse.ScheduleProductionNo);
+                            changeStatus = 0;
+                            gridUnsaveData = 0;
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "CrustingProductionSchedule")',
+                                type: 'GET',
+                                data: { "ScheduleItemID": $('#ScheduleItemID').val() },
+                                success: function (data) {
+                                    $("#plGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleColorList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleDrumList);
+                                }
+                            });
+                            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                                this.element.find('tbody tr:first').addClass('k-state-selected');
+                            });
+                        } else {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            PrdCrustYearMonth = { "YearMonID": "", "ScheduleYear": "", "ScheduleMonth": "", "ScheduleFor": "", "ProductionFloor": "", "Remarks": "", "ScheduleNo": "", "PrepareDate": "", "RecordStatus": "", "PrdYearMonthCrustScheduleColorList": [], "InvStoreTransChallanList": [], "PrdYearMonthCrustScheduleDrumList": [] };
+        } else {
+            $("#MessageText").html("Please Enter the Proper Data.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+    }
+
+    /////////////////////Confirmed Chemical Item////////////////////
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            PrdCrustYearMonth.YearMonID = $('#YearMonID').val();
+            PrdCrustYearMonth.ScheduleNo = $('#ScheduleNo').val();
+            PrdCrustYearMonth.ApproveComment = $('#ApproveComment').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                PrdYearMonthCrustScheduleColorModel.PrdYearMonthCrustScheduleColorList = [];
+                PrdYearMonthCrustScheduleColorModel.ScheduleDateID = parentGridItem.ScheduleDateID;
+
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList.push(PrdYearMonthCrustScheduleColorModel);
+                PrdYearMonthCrustScheduleColorModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "ArticleColorNo": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    PrdYearMonthCrustScheduleDrumModel.SdulItemColorID = dataPeriodItem[j].SdulItemColorID;
+
+                    PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList.push(PrdYearMonthCrustScheduleDrumModel);
+                    PrdYearMonthCrustScheduleDrumModel = { "CrustSdulDrumID": "", "MachineID": "", "MachineNo": "", "SdulItemColorID": "", "ColorID": "", "GradeID": "", "DrumPcs": "", "DrumSide": "", "DrumArea": "", "AreaUnitName": "", "DrumWeight": "", "WeightUnitName": "", "Remark": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmedCrustProductionSchedule", "CrustingProductionSchedule")',
+                data: JSON.stringify(PrdCrustYearMonth),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#RecordStatus').html(respnse.RecordStatus);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            PrdCrustYearMonth = { "YearMonID": "", "ScheduleYear": "", "ScheduleMonth": "", "ScheduleFor": "", "ProductionFloor": "", "Remarks": "", "ScheduleNo": "", "PrepareDate": "", "RecordStatus": "", "PrdYearMonthCrustScheduleColorList": [], "InvStoreTransChallanList": [], "PrdYearMonthCrustScheduleDrumList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            PrdCrustYearMonth.YearMonID = $('#YearMonID').val();
+            PrdCrustYearMonth.ScheduleNo = $('#ScheduleNo').val();
+            PrdCrustYearMonth.ApproveComment = $('#ApproveComment').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                PrdYearMonthCrustScheduleColorModel.PrdYearMonthCrustScheduleColorList = [];
+                PrdYearMonthCrustScheduleColorModel.ScheduleDateID = parentGridItem.ScheduleDateID;
+
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleColorList.push(PrdYearMonthCrustScheduleColorModel);
+                PrdYearMonthCrustScheduleColorModel = { "SdulItemColorID": "", "ScheduleItemID": "", "ColorID": "", "GradeID": "", "ColorPCS": "", "ColorSide": "", "ColorArea": "", "AreaUnitName": "", "ColorWeight": "", "WeightUnitName": "", "RecordStatus": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    PrdYearMonthCrustScheduleDrumModel.SdulItemColorID = dataPeriodItem[j].SdulItemColorID;
+
+                    PrdCrustYearMonth.PrdYearMonthCrustScheduleDrumList.push(PrdYearMonthCrustScheduleDrumModel);
+                    PrdYearMonthCrustScheduleDrumModel = { "CrustSdulDrumID": "", "MachineID": "", "MachineNo": "", "SdulItemColorID": "", "ColorID": "", "GradeID": "", "DrumPcs": "", "DrumSide": "", "DrumArea": "", "AreaUnitName": "", "DrumWeight": "", "WeightUnitName": "", "Remark": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckedCrustProductionSchedule", "CrustingProductionSchedule")',
+                data: JSON.stringify(PrdCrustYearMonth),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("NCF");
+                        $("#MessageText").html("");
+                        ResetOnlyMasterPageData();
+                        $(".txtCommandBox").val("");
+                        $(".txtBox").css("border-color", "");
+                        //$("#ScheduleNo").val("Auto Generated");
+                        $("#plGrid").data("kendoGrid").dataSource.data([]);
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            PrdCrustYearMonth = { "YearMonID": "", "ScheduleYear": "", "ScheduleMonth": "", "ScheduleFor": "", "ProductionFloor": "", "Remarks": "", "ScheduleNo": "", "PrepareDate": "", "RecordStatus": "", "PrdYearMonthCrustScheduleColorList": [], "InvStoreTransChallanList": [], "PrdYearMonthCrustScheduleDrumList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+
+    //////////////////////////YearMonth////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#ScheduleYear").is(":focus")) {
+            if (e.which == 120) {
+                GetYearMonthInfo();
+                SelectedItemOfListOfValue('YearMonthWindowGrid');
+                YearMonthWindow.open(); //Open Popup
+                YearMonthWindow.center();
+            }
+        }
+    });
+
+    function GetYearMonthInfo() {
+        $.ajax({
+            url: '@Url.Action("GetCrustYearMonthSchedule", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#YearMonthWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var YearMonthWindow = $('#YearMonthWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Year Month Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var YearMonthDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "YearMonID",
+                fields: {
+                    YearMonID: { editable: false },
+                    ScheduleYear: { editable: false },
+                    ScheduleMonth: { editable: false },
+                    ScheduleMonthName: { editable: false },
+                    ScheduleFor: { editable: false },
+                    ScheduleForName: { editable: false },
+                    ProductionFloor: { editable: false },
+                    ProductionFloorName: { editable: false },
+                    ScheduleID: { editable: false },
+                    ScheduleNo: { editable: false },
+                    PrepareDate: { editable: false },
+                    ProductionProcessID: { editable: false },
+                    ProcessName: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var YearMonthGrid = $("#YearMonthWindowGrid").kendoGrid({
+        dataSource: YearMonthDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "YearMonID", hidden: true },
+              { field: "ScheduleYear", title: "Year", filterable: { extra: false, operators: { string: { startswith: "Starts with", contains: "Contains" } } }, width: "60px" },
+              { field: "ScheduleMonth", hidden: true },
+              { field: "ScheduleMonthName", title: "Month", filterable: { extra: false, operators: { string: { startswith: "Starts with", contains: "Contains" } } }, width: "60px" },
+              { field: "ScheduleFor", hidden: true },
+              { field: "ScheduleForName", hidden: true },
+              { field: "ProductionFloor", hidden: true },
+              { field: "ProductionFloorName", title: "ProductionFloor", filterable: { extra: false, operators: { string: { startswith: "Starts with", contains: "Contains" } } }, width: "60px" },
+              { field: "ScheduleID", hidden: true },
+              { field: "ScheduleNo", title: "ScheduleNo", filterable: true, width: "60px" },
+              { field: "PrepareDate", title: "Prepare Date", filterable: true, width: "60px" },
+              { field: "ProductionProcessID", hidden: true },
+              { field: "ProcessName", title: "Production Process", filterable: true, width: "60px" },
+              { field: "RecordStatus", hidden: true }
+        ]
+    });
+
+    function YearMonthWindowEvent() {
+        var WindowGrid = $("#YearMonthWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#YearMonID").val(WindowGridItem.YearMonID);
+        $("#ScheduleYear").val(WindowGridItem.ScheduleYear);
+        $("#ScheduleMonth").val(WindowGridItem.ScheduleMonth);
+        $("#ScheduleFor").val(WindowGridItem.ScheduleForName);
+        $("#ProductionFloor").val(WindowGridItem.ProductionFloor);
+        $("#ScheduleID").val(WindowGridItem.ScheduleID);
+        $("#ScheduleNo").val(WindowGridItem.ScheduleNo);
+        $("#PrepareDate").val(WindowGridItem.PrepareDate);
+        //$("#ScheduleFor").val(WindowGridItem.ScheduleForName);
+        $("#ProductionProcessID").val(WindowGridItem.ProductionProcessID);
+        $("#RecordStatus").val(WindowGridItem.RecordStatus);
+        //CheckRecordStatusForButton(WindowGridItem.RecordStatus);
+        //changeStatus = 1;
+        //ClearRequiredTextBoxRedColor();
+    };
+
+    $('#btnYearMonthWindowOK').click(function () {
+        YearMonthWindowEvent();
+        YearMonthWindow.close();
+    });
+
+    $('#btnYearMonthWindowCancel').click(function () {
+        YearMonthWindow.close();
+    });
+
+    $("#YearMonthWindow").dblclick(function () {
+        YearMonthWindowEvent();
+        YearMonthWindow.close();
+    });
+
+    $("#YearMonthWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            YearMonthWindowEvent();
+            YearMonthWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            YearMonthWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////YearMonthSchedule ///////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#ScheduleNo123").is(":focus")) {//Unused
+            if (e.which == 120) {
+                GetYearMonthScheduleInfo();
+                SelectedItemOfListOfValue('YearMonthScheduleWindowGrid');
+                YearMonthScheduleWindow.open(); //Open Popup
+                YearMonthScheduleWindow.center();
+            }
+        }
+    });
+
+    function GetYearMonthScheduleInfo() {
+        $.ajax({
+            url: '@Url.Action("GetYearMonthScheduleList", "CrustingProductionSchedule")',
+            type: 'GET',
+            data: { "YearMonID": $("#YearMonID").val() },
+            success: function (response) {
+                $("#YearMonthScheduleWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var YearMonthScheduleWindow = $('#YearMonthScheduleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Year Month Schedule Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var YearMonthScheduleDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ScheduleID",
+                fields: {
+                    ScheduleID: { editable: false },
+                    ScheduleNo: { editable: false },
+                    PrepareDate: { editable: false },
+                    ProductionProcessID: { editable: false },
+                    ProcessName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var YearMonthScheduleGrid = $("#YearMonthScheduleWindowGrid").kendoGrid({
+        dataSource: YearMonthScheduleDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+            { field: "ScheduleID", hidden: true },
+              { field: "ScheduleNo", title: "ScheduleNo", width: "60px" },
+              { field: "PrepareDate", title: "Prepare Date", width: "60px" },
+              { field: "ProductionProcessID", hidden: true },
+              { field: "ProcessName", title: "Process", width: "60px" }
+        ]
+    });
+
+    function YearMonthScheduleWindowEvent() {
+        var WindowGrid = $("#YearMonthScheduleWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#ScheduleID").val(WindowGridItem.ScheduleID);
+        $("#ScheduleNo").val(WindowGridItem.ScheduleNo);
+        $("#PrepareDate").val(WindowGridItem.PrepareDate);
+        $("#ProductionProcessID").val(WindowGridItem.ProductionProcessID);
+
+        //changeStatus = 1;
+    };
+
+    $('#btnYearMonthScheduleWindowOK').click(function () {
+        YearMonthScheduleWindowEvent();
+        YearMonthScheduleWindow.close();
+    });
+
+    $('#btnYearMonthScheduleWindowCancel').click(function () {
+        YearMonthScheduleWindow.close();
+    });
+
+    $("#YearMonthScheduleWindow").dblclick(function () {
+        YearMonthScheduleWindowEvent();
+        YearMonthScheduleWindow.close();
+    });
+
+    $("#YearMonthScheduleWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            YearMonthScheduleWindowEvent();
+            YearMonthScheduleWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            YearMonthScheduleWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////YearMonthScheduleDate///////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#ProductionNo").is(":focus")) {
+            if (e.which == 120) {
+                GetYearMonthScheduleDateInfo();
+                SelectedItemOfListOfValue('YearMonthScheduleDateWindowGrid');
+                YearMonthScheduleDateWindow.open(); //Open Popup
+                YearMonthScheduleDateWindow.center();
+            }
+        }
+    });
+
+    function GetYearMonthScheduleDateInfo() {
+        $.ajax({
+            url: '@Url.Action("GetYearMonthScheduleDateInfo", "CrustingProductionSchedule")',
+            type: 'GET',
+            data: { "ScheduleID": $("#ScheduleID").val() },
+            success: function (response) {
+                $("#YearMonthScheduleDateWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var YearMonthScheduleDateWindow = $('#YearMonthScheduleDateWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Year Month Schedule Date Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var YearMonthScheduleDateDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ScheduleDateID",
+                fields: {
+                    ScheduleDateID: { editable: false },
+                    ProductionNo: { editable: false },
+                    ScheduleStartDate: { editable: false },
+                    ScheduleEndDate: { editable: false },
+                    ProductionStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var YearMonthScheduleDateGrid = $("#YearMonthScheduleDateWindowGrid").kendoGrid({
+        dataSource: YearMonthScheduleDateDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "ScheduleDateID", hidden: true },
+              { field: "ProductionNo", title: "ProductionNo", width: "60px" },
+              { field: "ScheduleStartDate", title: "ScheduleStartDate", width: "60px" },
+              { field: "ScheduleEndDate", title: "ScheduleEndDate", width: "60px" },
+              { field: "ProductionStatus", hidden: true, title: "ProductionStatus", width: "60px" }
+        ]
+    });
+
+    function YearMonthScheduleDateWindowEvent() {
+        var WindowGrid = $("#YearMonthScheduleDateWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#ScheduleDateID").val(WindowGridItem.ScheduleDateID);
+        $("#ProductionNo").val(WindowGridItem.ProductionNo);
+        $("#ScheduleStartDate").val(WindowGridItem.ScheduleStartDate);
+        $("#ScheduleEndDate").val(WindowGridItem.ScheduleEndDate);
+        $("#ProductionStatus").val(WindowGridItem.ProductionStatus);
+
+        @*$.ajax({
+            url: '@Url.Action("GetScheduleItemInfo", "CrustingProductionSchedule")',
+            data: { "ScheduleDateID": $("#ScheduleDateID").val() },
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                $("#ScheduleItemID").val(response[0].ScheduleItemID);
+                $("#ScheduleProductionNo").val(response[0].ScheduleProductionNo);
+                $("#BuyerID").val(response[0].BuyerID);
+                $("#BuyerName").val(response[0].BuyerName);
+                $("#BuyerOrderID").val(response[0].BuyerOrderID);
+                $("#BuyerOrderNo").val(response[0].BuyerOrderNo);
+                $("#ArticleID").val(response[0].ArticleID);
+                $("#ArticleName").val(response[0].ArticleName);
+                $("#ArticleNo").val(response[0].ArticleNo);
+                $("#ArticleChallanNo").val(response[0].ArticleChallanNo);
+                $("#ArticleName").val(response[0].ArticleName);
+                $("#AvgSize").val(response[0].AvgSize);
+                $("#AvgSizeUnit").val(response[0].AvgSizeUnit);
+                $("#SideDescription").val(response[0].SideDescription);
+                $("#SelectionRange").val(response[0].SelectionRange);
+                $("#Thickness").val(response[0].Thickness);
+                $("#ThicknessUnit").val(response[0].ThicknessUnit);
+                $("#ThicknessAt").val(response[0].ThicknessAt);
+                $("#ItemTypeID").val(response[0].ItemTypeID);
+                $("#LeatherStatusID").val(response[0].LeatherStatusID);
+                $("#plGrid").data("kendoGrid").dataSource.data(response[0].PrdYearMonthCrustScheduleColorList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(response[0].PrdYearMonthCrustScheduleDrumList);
+            }
+        });*@
+
+        //changeStatus = 1;
+    };
+
+    $('#btnYearMonthScheduleDateWindowOK').click(function () {
+        YearMonthScheduleDateWindowEvent();
+        YearMonthScheduleDateWindow.close();
+    });
+
+    $('#btnYearMonthScheduleDateWindowCancel').click(function () {
+        YearMonthScheduleDateWindow.close();
+    });
+
+    $("#YearMonthScheduleDateWindow").dblclick(function () {
+        YearMonthScheduleDateWindowEvent();
+        YearMonthScheduleDateWindow.close();
+    });
+
+    $("#YearMonthScheduleDateWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            YearMonthScheduleDateWindowEvent();
+            YearMonthScheduleDateWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            YearMonthScheduleDateWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    ////////////////////////YearMonthSchedulePartyOrderWindow ///////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#ScheduleProductionNo").is(":focus")) {
+            if (e.which == 120) {
+                GetYearMonthSchedulePartyOrderInfo();
+                SelectedItemOfListOfValue('YearMonthSchedulePartyOrderWindowGrid');
+                YearMonthSchedulePartyOrderWindow.open(); //Open Popup
+                YearMonthSchedulePartyOrderWindow.center();
+            }
+        }
+    });
+
+    function GetYearMonthSchedulePartyOrderInfo() {
+        $.ajax({
+            url: '@Url.Action("GetScheduleItemInfo", "CrustingProductionSchedule")',
+            data: { "ScheduleDateID": $("#ScheduleDateID").val() },
+            type: 'GET',
+            success: function (response) {
+                $("#YearMonthSchedulePartyOrderWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var YearMonthSchedulePartyOrderWindow = $('#YearMonthSchedulePartyOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Party Order Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PartyOrderDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    ScheduleItemID: { editable: false },
+                    ScheduleProductionNo: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    BuyerOrderDate: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    AvgSize: { editable: false },
+                    AvgSizeUnit: { editable: false },
+                    AvgSizeUnitName: { editable: false },
+                    SideDescription: { editable: false },
+                    SelectionRange: { editable: false },
+                    Thickness: { editable: false },
+                    ThicknessUnit: { editable: false },
+                    ThicknessUnitName: { editable: false },
+                    ThicknessAt: { editable: false },
+                    SchedulePcs: { editable: false },
+                    ScheduleSide: { editable: false },
+                    ScheduleArea: { editable: false },
+                    ScheduleAreaUnit: { editable: false },
+                    ScheduleWeight: { editable: false },
+                    ScheduleWeightUnit: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var PartyOrderGrid = $("#YearMonthSchedulePartyOrderWindowGrid").kendoGrid({
+        dataSource: PartyOrderDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+                   { field: "ScheduleItemID", hidden: true },
+                  { field: "ScheduleProductionNo", title: "Production No", filterable: false, width: "100px" },
+                  { field: "BuyerName", title: "Buyer", filterable: false, width: "60px" },
+                  { field: "BuyerID", hidden: true },
+                  { field: "BuyerOrderID", hidden: true },
+                  { field: "BuyerOrderNo", title: "Order No", filterable: false, width: "60px" },
+                  { field: "BuyerOrderDate", title: "Order Date", filterable: false, width: "60px" },
+                  { field: "ArticleID", hidden: true },
+                  { field: "ArticleNo", hidden: true },
+                  { field: "ArticleName", title: "Article", filterable: false, width: "60px" },
+                  { field: "ArticleChallanID", hidden: true },
+                  { field: "ArticleChallanNo", title: "ChallanNo", filterable: false, width: "60px" },
+                  { field: "AvgSize", title: "Size", filterable: false, width: "60px" },
+                  { field: "AvgSizeUnit", hidden: true },
+                  { field: "AvgSizeUnitName", hidden: true, title: "Unit", filterable: false, width: "60px" },
+                  { field: "SideDescription", title: "Side", filterable: false, width: "60px" },
+                  { field: "SelectionRange", title: "Selection Range", filterable: false, width: "60px" },
+                  { field: "Thickness", title: "Thickness", filterable: false, width: "60px" },
+                  { field: "ThicknessUnit", hidden: true },
+                  { field: "ThicknessUnitName", hidden: true, title: "Unit", filterable: false, width: "60px" },
+                  { field: "ThicknessAt", title: "Thickness At", filterable: false, width: "60px" },
+                  { field: "SchedulePcs", hidden: true },
+                  { field: "ScheduleSide", hidden: true },
+                  { field: "ScheduleArea", hidden: true },
+                  { field: "ScheduleAreaUnit", hidden: true },
+                  { field: "ScheduleWeight", hidden: true },
+                  { field: "ScheduleWeightUnit", hidden: true }
+        ]
+    });
+
+    function YearMonthSchedulePartyOrderWindowEvent() {
+        var WindowGrid = $("#YearMonthSchedulePartyOrderWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#ScheduleItemID").val(WindowGridItem.ScheduleItemID);
+        $("#ScheduleProductionNo").val(WindowGridItem.ScheduleProductionNo);
+        $("#BuyerID").val(WindowGridItem.BuyerID);
+        $("#BuyerName").val(WindowGridItem.BuyerName);
+        $("#BuyerOrderID").val(WindowGridItem.BuyerOrderID);
+        $("#BuyerOrderNo").val(WindowGridItem.BuyerOrderNo);
+        $("#ArticleID").val(WindowGridItem.ArticleID);
+        $("#ArticleNo").val(WindowGridItem.ArticleNo);
+        $("#ArticleChallanID").val(WindowGridItem.ArticleChallanID);
+        $("#ArticleChallanNo").val(WindowGridItem.ArticleChallanNo);
+        $("#ArticleName").val(WindowGridItem.ArticleName);
+        $("#AvgSize").val(WindowGridItem.AvgSize);
+        $("#AvgSizeUnit").val(WindowGridItem.AvgSizeUnit);
+        $("#SideDescription").val(WindowGridItem.SideDescription);
+        $("#SelectionRange").val(WindowGridItem.SelectionRange);
+        $("#Thickness").val(WindowGridItem.Thickness);
+        $("#ThicknessUnit").val(WindowGridItem.ThicknessUnit);
+        $("#ThicknessAt").val(WindowGridItem.ThicknessAt);
+        $("#ItemTypeID").val(WindowGridItem.ItemTypeID);
+        $("#LeatherStatusID").val(WindowGridItem.LeatherStatusID);
+        //$("#BuyerName").val(WindowGridItem.BuyerName);
+        $("#SchedulePcs").val(WindowGridItem.SchedulePcs);
+        $("#ScheduleSide").val(WindowGridItem.ScheduleSide);
+        $("#ScheduleArea").val(WindowGridItem.ScheduleArea);
+        $("#ScheduleAreaUnit").val(WindowGridItem.ScheduleAreaUnit);
+        $("#ScheduleWeight").val(WindowGridItem.ScheduleWeight);
+        $("#ScheduleWeightUnit").val(WindowGridItem.ScheduleWeightUnit);
+        $.ajax({
+            url: '@Url.Action("GetAllGridList", "CrustingProductionSchedule")',
+            type: 'GET',
+            data: { "ScheduleItemID": $('#ScheduleItemID').val() },
+            success: function (data) {
+                $("#plGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleColorList);
+                //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrdYearMonthCrustScheduleDrumList);
+            }
+        });
+        //changeStatus = 1;
+        $("#divLoading").hide();
+    };
+
+    $('#btnYearMonthSchedulePartyOrderWindowOK').click(function () {
+        YearMonthSchedulePartyOrderWindowEvent();
+        YearMonthSchedulePartyOrderWindow.close();
+    });
+
+    $('#btnYearMonthSchedulePartyOrderWindowCancel').click(function () {
+        YearMonthSchedulePartyOrderWindow.close();
+    });
+
+    $("#YearMonthSchedulePartyOrderWindow").dblclick(function () {
+        YearMonthSchedulePartyOrderWindowEvent();
+        YearMonthSchedulePartyOrderWindow.close();
+    });
+
+    $("#YearMonthSchedulePartyOrderWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            YearMonthSchedulePartyOrderWindowEvent();
+            YearMonthSchedulePartyOrderWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            YearMonthSchedulePartyOrderWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //////////////////////////Machine/////////////////////////////////////////
+
+    $(document).on('keyup', '.DrumNoInfo', function (e) {
+        if (e.which == 120) {
+            GetMachineNoInfo();
+            SelectedItemOfListOfValue('MachineNoWindowGrid');
+            MachineNoWindow.open(); //Open Popup
+            MachineNoWindow.center();
+        }
+    });
+
+    function GetMachineNoInfo() {
+        $.ajax({
+            url: '@Url.Action("GetMachineNoInfo", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#MachineNoWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var MachineNoWindow = $('#MachineNoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Machine Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var MachineNoDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MachineID",
+                fields: {
+                    MachineID: { editable: false },
+                    MachineNo: { editable: false },
+                    MachineName: { editable: false },
+                    MachineTypeName: { editable: false },
+                    MachineCategoryName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var MachineNoGrid = $("#MachineNoWindowGrid").kendoGrid({
+        dataSource: MachineNoDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "MachineID", hidden: true },
+              { field: "MachineNo", title: "MachineNo", width: "60px" },
+              { field: "MachineName", title: "MachineName", width: "60px" },
+              { field: "MachineTypeName", title: "MachineType", width: "60px" },
+              { field: "MachineCategoryName", title: "MachineCategory", width: "60px" }
+        ]
+    });
+
+    function MachineNoWindowEvent() {
+        var WindowGrid = $("#MachineNoWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("MachineID", WindowGridItem.MachineID);
+        PageGridItem.set("MachineNo", WindowGridItem.MachineNo);
+
+        gridUnsaveData = 1;
+        changeStatus = 1;
+    };
+
+    $('#btnMachineNoWindowOK').click(function () {
+        MachineNoWindowEvent();
+        MachineNoWindow.close();
+    });
+
+    $('#btnMachineNoWindowCancel').click(function () {
+        MachineNoWindow.close();
+    });
+
+    $("#MachineNoWindow").dblclick(function () {
+        MachineNoWindowEvent();
+        MachineNoWindow.close();
+    });
+
+    $("#MachineNoWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            MachineNoWindowEvent();
+            MachineNoWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            MachineNoWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    ////////////////////////Grade///////////////////////////////////////////
+
+    $(document).on('keyup', '.GradeInfo', function (e) {
+        if (e.which == 120) {
+            GetGradeInfo();
+            SelectedItemOfListOfValue('GradeWindowGrid');
+            GradeWindow.open(); //Open Popup
+            GradeWindow.center();
+        }
+    });
+
+    function GetGradeInfo() {
+        $.ajax({
+            url: '@Url.Action("GetGradeInfoInProductionFloor", "CrustingProductionSchedule")',
+            type: 'GET',
+            data: { "ProductionFloor": $("#ProductionFloor").val(), "BuyerID": $("#BuyerID").val(), "BuyerOrderID": $("#BuyerOrderID").val(), "ArticleID": $("#ArticleID").val(), "ItemTypeID": $("#ItemTypeID").val(), "LeatherStatusID": $("#LeatherStatusID").val(), "ArticleChallanID": $("#ArticleChallanID").val(), },
+            success: function (response) {
+                $("#GradeWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var GradeWindow = $('#GradeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Grade Range Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var GradeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    //GradeID: { editable: false },
+                    GradeRange: { editable: false },
+                    ProductionPcs: { editable: false },
+                    ProductionSide: { editable: false },
+                    ProductionArea: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var GradeGrid = $("#GradeWindowGrid").kendoGrid({
+        dataSource: GradeDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              //{ field: "GradeID", hidden: true },
+              { field: "GradeRange", title: "Grade Range", width: "60px" },
+              { field: "ProductionPcs", title: "Stock Pcs", width: "60px" },
+              { field: "ProductionSide", title: "Stock Side", width: "60px" },
+              { field: "ProductionArea", title: "Stock Area", width: "60px" }
+        ]
+    });
+
+    function GradeWindowEvent() {
+        var WindowGrid = $("#GradeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        //PageGridItem.set("GradeID", WindowGridItem.GradeID);
+        //PageGridItem.set("GradeName", WindowGridItem.GradeName);
+        PageGridItem.set("GradeRange", WindowGridItem.GradeRange);
+        PageGridItem.set("ProductionPcs", WindowGridItem.ProductionPcs);
+        PageGridItem.set("ProductionSide", WindowGridItem.ProductionSide);
+        PageGridItem.set("ProductionArea", WindowGridItem.ProductionArea);
+        PageGridItem.set("AreaUnitName", "SFT");
+        PageGridItem.set("WeightUnitName", "KG");
+        //PageGridItem.set("ProductionArea", WindowGridItem.ProductionArea);
+
+        gridUnsaveData = 1;
+        changeStatus = 1;
+    };
+
+    $('#btnGradeWindowOK').click(function () {
+        GradeWindowEvent();
+        GradeWindow.close();
+    });
+
+    $('#btnGradeWindowCancel').click(function () {
+        GradeWindow.close();
+    });
+
+    $("#GradeWindow").dblclick(function () {
+        GradeWindowEvent();
+        GradeWindow.close();
+    });
+
+    $("#GradeWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            GradeWindowEvent();
+            GradeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            GradeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////Color///////////////////////////////////////////
+
+    $(document).on('keyup', '.ColorInfo', function (e) {
+        if (e.which == 120) {
+            GetColorInfo();
+            SelectedItemOfListOfValue('ColorWindowGrid');
+            ColorWindow.open(); //Open Popup
+            ColorWindow.center();
+        }
+    });
+
+    function GetColorInfo() {
+        $.ajax({
+            url: '@Url.Action("GetColorInfo", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#ColorWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var ColorWindow = $('#ColorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Color Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ColorDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ColorID",
+                fields: {
+                    ColorID: { editable: false },
+                    ColorCode: { editable: false },
+                    ColorName: { editable: false }
+                }
+            }
+        },
+        pageSize: 15
+    });
+
+    var ColorGrid = $("#ColorWindowGrid").kendoGrid({
+        dataSource: ColorDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: "320px",
+        width: "500px",
+        //autoBind: false,
+        columns: [
+              { field: "ColorID", hidden: true },
+              { field: "ColorName", title: "Color Name", width: "60px" },
+              { field: "ColorCode", title: "Color Code", width: "60px" }
+        ]
+    });
+
+    function ColorWindowEvent() {
+        var WindowGrid = $("#ColorWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#plGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("ColorID", WindowGridItem.ColorID);
+        PageGridItem.set("ColorName", WindowGridItem.ColorName);
+        $("#ColorID").val(WindowGridItem.ColorID);
+        changeStatus = 1;
+    };
+
+    $('#btnColorWindowOK').click(function () {
+        ColorWindowEvent();
+        ColorWindow.close();
+    });
+
+    $('#btnColorWindowCancel').click(function () {
+        ColorWindow.close();
+    });
+
+    $("#ColorWindow").dblclick(function () {
+        ColorWindowEvent();
+        ColorWindow.close();
+    });
+
+    $("#ColorWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ColorWindowEvent();
+            ColorWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ColorWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //////////////////////////Buyer/Party////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#BuyerName").is(":focus")) {
+            if (e.which == 120) {
+                GetPartyInfo();
+                SelectedItemOfListOfValue('PartyWindowGrid');
+                PartyWindow.open(); //Open Popup
+                PartyWindow.center();
+            }
+        }
+    });
+
+    function GetPartyInfo() {
+        $.ajax({
+            url: '@Url.Action("GetAllActiveBuyerByCategory", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#PartyWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var PartyWindow = $('#PartyWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Party Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PartyDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerCode: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCategory: { editable: false },
+                    BuyerType: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var PartyGrid = $("#PartyWindowGrid").kendoGrid({
+        dataSource: PartyDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerCode", title: "Code", width: "60px" },
+              { field: "BuyerName", title: "Buyer", width: "60px" },
+              { field: "BuyerCategory", title: "Category", width: "60px" },
+              { field: "BuyerType", title: "Type", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" }
+        ]
+    });
+
+    function PartyWindowEvent() {
+        var WindowGrid = $("#PartyWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+        $("#BuyerID").val(WindowGridItem.BuyerID);
+        $("#BuyerCode").val(WindowGridItem.BuyerCode);
+        $("#BuyerName").val(WindowGridItem.BuyerName);
+
+        changeStatus = 1;
+    };
+
+    $('#btnPartyWindowOK').click(function () {
+        PartyWindowEvent();
+        PartyWindow.close();
+    });
+
+    $('#btnPartyWindowCancel').click(function () {
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").dblclick(function () {
+        PartyWindowEvent();
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PartyWindowEvent();
+            PartyWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PartyWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    ////////////////////////Buyer/Party Order ///////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#BuyerOrderNo").is(":focus")) {
+            if (e.which == 120) {
+                GetPartyOrderInfo();
+                SelectedItemOfListOfValue('PartyOrderWindowGrid');
+                PartyOrderWindow.open(); //Open Popup
+                PartyOrderWindow.center();
+            }
+        }
+    });
+
+    function GetPartyOrderInfo() {
+        $.ajax({
+            url: '@Url.Action("GetBuyerOrderList", "WBRequisitionForCrusting")',
+            type: 'GET',
+            data: { "_BuyerID": $("#BuyerID").val() },
+            success: function (response) {
+                $("#PartyOrderWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var PartyOrderWindow = $('#PartyOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Party Order Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PartyOrderDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    BuyerOrderDate: { editable: false },
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    AvgSize: { editable: false },
+                    AvgSizeUnit: { editable: false },
+                    AvgSizeUnitName: { editable: false },
+                    SideDescription: { editable: false },
+                    SelectionRange: { editable: false },
+                    Thickness: { editable: false },
+                    ThicknessUnit: { editable: false },
+                    ThicknessUnitName: { editable: false },
+                    ThicknessAt: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var PartyOrderGrid = $("#PartyOrderWindowGrid").kendoGrid({
+        dataSource: PartyOrderDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+                  { field: "BuyerOrderID", hidden: true },
+                  { field: "BuyerOrderNo", title: "Order No", filterable: false, width: "60px" },
+                  { field: "BuyerOrderDate", title: "Order Date", filterable: false, width: "60px" },
+                  { field: "ArticleID", hidden: true },
+                  { field: "ArticleNo", hidden: true },
+                  { field: "ArticleName", title: "Article", filterable: false, width: "60px" },
+                  { field: "AvgSize", title: "Size", filterable: false, width: "60px" },
+                  { field: "AvgSizeUnit", hidden: true },
+                  { field: "AvgSizeUnitName", title: "Unit", filterable: false, width: "60px" },
+                  { field: "SideDescription", title: "Side", filterable: false, width: "60px" },
+                  { field: "SelectionRange", title: "Selection Range", filterable: false, width: "60px" },
+                  { field: "Thickness", title: "Thickness", filterable: false, width: "60px" },
+                  { field: "ThicknessUnit", hidden: true },
+                  { field: "ThicknessUnitName", title: "Unit", filterable: false, width: "60px" },
+                  { field: "ThicknessAt", title: "Thickness At", filterable: false, width: "60px" }
+        ]
+    });
+
+    function PartyOrderWindowEvent() {
+        var WindowGrid = $("#PartyOrderWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#BuyerOrderID").val(WindowGridItem.BuyerOrderID);
+        $("#BuyerOrderNo").val(WindowGridItem.BuyerOrderNo);
+        $("#ArticleID").val(WindowGridItem.ArticleID);
+        $("#ArticleNo").val(WindowGridItem.ArticleNo);
+        $("#ArticleChallanID").val(WindowGridItem.ArticleChallanID);
+        $("#ArticleChallanNo").val(WindowGridItem.ArticleChallanNo);
+        $("#ArticleName").val(WindowGridItem.ArticleName);
+        $("#AvgSize").val(WindowGridItem.AvgSize);
+        $("#AvgSizeUnit").val(WindowGridItem.AvgSizeUnit);
+        $("#SideDescription").val(WindowGridItem.SideDescription);
+        $("#SelectionRange").val(WindowGridItem.SelectionRange);
+        $("#Thickness").val(WindowGridItem.Thickness);
+        $("#ThicknessUnit").val(WindowGridItem.ThicknessUnit);
+        $("#ThicknessAt").val(WindowGridItem.ThicknessAt);
+        $("#ItemTypeID").val(WindowGridItem.ItemTypeID);
+        $("#LeatherStatusID").val(WindowGridItem.LeatherStatusID);
+        $("#BuyerOrderItemID").val(WindowGridItem.BuyerOrderItemID);
+        //$("#BuyerName").val(WindowGridItem.BuyerName);
+        $.ajax({
+            url: '@Url.Action("GetColorListForOrderItem", "CrustingProductionSchedule")',
+            data: ({ "_BuyerOrderItemID": WindowGridItem.BuyerOrderItemID }),
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                $("#plGrid").data("kendoGrid").dataSource.data(response);
+            }
+        });
+        changeStatus = 1;
+    };
+
+    $('#btnPartyOrderWindowOK').click(function () {
+        PartyOrderWindowEvent();
+        PartyOrderWindow.close();
+    });
+
+    $('#btnPartyOrderWindowCancel').click(function () {
+        PartyOrderWindow.close();
+    });
+
+    $("#PartyOrderWindow").dblclick(function () {
+        PartyOrderWindowEvent();
+        PartyOrderWindow.close();
+    });
+
+    $("#PartyOrderWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PartyOrderWindowEvent();
+            PartyOrderWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PartyOrderWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////Article///////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#ArticleName").is(":focus")) {
+            if (e.which == 120) {
+                GetArticleInfo();
+                SelectedItemOfListOfValue('ArticleWindowGrid');
+                ArticleWindow.open(); //Open Popup
+                ArticleWindow.center();
+            }
+        }
+    });
+
+    function GetArticleInfo() {
+        $.ajax({
+            url: '@Url.Action("GetArticleInfo", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#ArticleWindowGrid").data('kendoGrid').dataSource.data(response);
+
+            } //End of success call
+        });
+    }
+
+    var ArticleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Article Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ArticleDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleID",
+                fields: {
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleColor: { editable: false },
+                    ColorName: { editable: false },
+                    ArticleChallanNo: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+        dataSource: ArticleDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "ArticleID", hidden: true },
+              { field: "ArticleName", title: "Article Name", width: "60px" },
+              { field: "ArticleNo", title: "Article No", width: "60px" },
+              { field: "ArticleColor", hidden: true },
+              { field: "ColorName", title: "Color", width: "60px" },
+              { field: "ArticleChallanNo", title: "Challan No", width: "60px" }
+        ]
+    });
+
+    function ArticleWindowEvent() {
+        var WindowGrid = $("#ArticleWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#ArticleID").val(WindowGridItem.ArticleID);
+        $("#ArticleNo").val(WindowGridItem.ArticleNo);
+        $("#ArticleName").val(WindowGridItem.ArticleName);
+
+        changeStatus = 1;
+    };
+
+    $('#btnArticleWindowOK').click(function () {
+        ArticleWindowEvent();
+        ArticleWindow.close();
+    });
+
+    $('#btnArticleWindowCancel').click(function () {
+        ArticleWindow.close();
+    });
+
+    $("#ArticleWindow").dblclick(function () {
+        ArticleWindowEvent();
+        ArticleWindow.close();
+    });
+
+    $("#ArticleWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ArticleWindowEvent();
+            ArticleWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ArticleWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    ////////////////////Search Purchase Receive////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#MessageText").html("");
+            $(".txtBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetCrustYearMonthSchedule", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#SearchWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Year Month & Schedule Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "YearMonID",
+                fields: {
+                    YearMonID: { editable: false },
+                    ScheduleYear: { editable: false },
+                    ScheduleMonth: { editable: false },
+                    ScheduleMonthName: { editable: false },
+                    ScheduleFor: { editable: false },
+                    ScheduleForName: { editable: false },
+                    ProductionFloor: { editable: false },
+                    ProductionFloorName: { editable: false },
+                    ScheduleID: { editable: false },
+                    ScheduleNo: { editable: false },
+                    PrepareDate: { editable: false },
+                    ProductionProcessID: { editable: false },
+                    ProcessName: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: YearMonthDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "YearMonID", hidden: true },
+              { field: "ScheduleYear", title: "Year", filterable: { extra: false, operators: { string: { startswith: "Starts with", contains: "Contains" } } }, width: "60px" },
+              { field: "ScheduleMonth", hidden: true },
+              { field: "ScheduleMonthName", title: "Month", filterable: { extra: false, operators: { string: { startswith: "Starts with", contains: "Contains" } } }, width: "60px" },
+              { field: "ScheduleFor", hidden: true },
+              { field: "ScheduleForName", hidden: true },
+              { field: "ProductionFloor", hidden: true },
+              { field: "ProductionFloorName", title: "ProductionFloor", filterable: { extra: false, operators: { string: { startswith: "Starts with", contains: "Contains" } } }, width: "60px" },
+              { field: "ScheduleID", hidden: true },
+              { field: "ScheduleNo", title: "ScheduleNo", filterable: false, width: "60px" },
+              { field: "PrepareDate", title: "Prepare Date", filterable: false, width: "60px" },
+              { field: "ProductionProcessID", hidden: true },
+              { field: "ProcessName", title: "Production Process", filterable: false, width: "60px" },
+              { field: "RecordStatus", hidden: true }
+        ]
+    });
+
+    function SearchWindowEvents() {
+        var WindowGrid = $("#SearchWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#YearMonID").val(WindowGridItem.YearMonID);
+        $("#ScheduleYear").val(WindowGridItem.ScheduleYear);
+        $("#ScheduleMonth").val(WindowGridItem.ScheduleMonth);
+        $("#ScheduleFor").val(WindowGridItem.ScheduleForName);
+        $("#ProductionFloor").val(WindowGridItem.ProductionFloor);
+        $("#ScheduleID").val(WindowGridItem.ScheduleID);
+        $("#ScheduleNo").val(WindowGridItem.ScheduleNo);
+        $("#PrepareDate").val(WindowGridItem.PrepareDate);
+        //$("#ScheduleFor").val(WindowGridItem.ScheduleForName);
+        $("#ProductionProcessID").val(WindowGridItem.ProductionProcessID);
+        $("#RecordStatus").val(WindowGridItem.RecordStatus);
+        //CheckRecordStatusForButton(WindowGridItem.RecordStatus);
+        //changeStatus = 1;
+    };
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //########################### ChallanGrid Popup Value #############################
+
+    //########################### ChallanGrid Popup Value #############################
+
+    $(document.body).keypress(function (e) {
+        if ($("#ArticleChallanNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                ChallanInfo();
+                SelectedItemOfListOfValue('ChallanWindowGrid');
+                ChallanWindow.open();
+            }
+        }
+    });
+
+    var ChallanWindow = $('#ChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Challan",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleChallanID",
+                fields: {
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    AvgSize: { editable: false },
+                    AvgSizeUnit: { editable: false },
+                    AvgSizeUnitName: { editable: false },
+                    SelectionRange: { editable: false },
+                    SideDescription: { editable: false },
+                    Thickness: { editable: false },
+                    ThicknessUnit: { editable: false },
+                    ThicknessUnitName: { editable: false },
+                    ThicknessAt: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+
+    function ChallanInfo() {
+        $.ajax({
+            url: '@Url.Action("GetChallanInfo", "FinishProductionSchedule")',
+            type: 'GET',
+            data: { "buyerID": $("#BuyerID").val(), "articleID": $("#ArticleID").val() },
+            success: function (response) {
+                $("#ChallanWindowGrid").data('kendoGrid').dataSource.data(response);
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+        dataSource: ChallanGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ArticleChallanID", hidden: true },
+              { field: "ArticleChallanNo", title: "Challan No", width: "60px" },
+              { field: "AvgSize", title: "SizeRange", width: "60px" },
+              { field: "AvgSizeUnit", hidden: true },
+              { field: "AvgSizeUnitName", title: "SizeUnit", width: "60px" },
+              { field: "SelectionRange", title: "SelectionRange", width: "60px" },
+              { field: "SideDescription", title: "Pcs/Side", width: "60px" },
+              { field: "Thickness", title: "ThicknessRange", width: "60px" },
+              { field: "ThicknessUnit", hidden: true },
+              { field: "ThicknessUnitName", title: "ThicknessUnit", width: "60px" },
+              { field: "ThicknessAt", title: "ThicknessAt", width: "60px" }
+        ]
+    });
+
+    //Handling button click for Challan window grid
+    $('#btnChallanWindowOK').click(function () {
+        ListOfValuChallaneGridEvent('ChallanWindowGrid');
+        ChallanWindow.close();
+    });
+
+    $('#btnChallanWindowCancel').click(function () {
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").dblclick(function () {
+        ListOfValuChallaneGridEvent('ChallanWindowGrid');
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuChallaneGridEvent('ChallanWindowGrid');
+            ChallanWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChallanWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    function ListOfValuChallaneGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+        $("#ArticleChallanID").val(selectedItem.ArticleChallanID);
+        $("#ArticleChallanNo").val(selectedItem.ArticleChallanNo);
+        $("#AvgSize").val(selectedItem.AvgSize);
+        $("#AvgSizeUnit").val(selectedItem.AvgSizeUnit);
+        $("#SelectionRange").val(selectedItem.SelectionRange);
+        $("#SideDescription").val(selectedItem.SideDescription);
+        $("#Thickness").val(selectedItem.Thickness);
+        $("#ThicknessUnit").val(selectedItem.ThicknessUnit);
+        $("#ThicknessAt").val(selectedItem.ThicknessAt);
+
+        //$("#plGrid").data("kendoGrid").dataSource.data(response[0].PrdYearMonthCrustScheduleColorList);
+
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+
+        $.ajax({
+            url: '@Url.Action("GetColorListAccordingToArticleChallan", "CrustingProductionSchedule")',
+            data: { "_BuyerOrderItemID": $("#BuyerOrderItemID").val(), "_ArticleChallanID": selectedItem.ArticleChallanID },
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                $("#plGrid").data("kendoGrid").dataSource.data(response);
+            }
+        });
+    }
+
+    @*$(document.body).keypress(function (e) {
+        if ($("#ArticleChallanNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                ChallanInfo();
+                SelectedItemOfListOfValue('ChallanWindowGrid');
+                ChallanWindow.open();
+            }
+        }
+    });
+
+    var ChallanWindow = $('#ChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Challan",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleChallanID",
+                fields: {
+                    ArticleChallanID: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ChallanNote: { editable: false },
+                    PreparationDate: { editable: false },
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+
+    function ChallanInfo() {
+        $.ajax({
+            url: '@Url.Action("GetChallanInfo", "WBRequisitionForCrusting")',
+            type: 'GET',
+            data: { "buyerID": $("#BuyerID").val(), "articleID": $("#ArticleID").val() },
+            success: function (response) {
+                $("#ChallanWindowGrid").data('kendoGrid').dataSource.data(response);
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+        dataSource: ChallanGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ArticleChallanID", hidden: true },
+              { field: "ArticleChallanNo", title: "Challan No", width: "60px" },
+              { field: "ChallanNote", title: "ChallanNote", width: "60px" },
+              { field: "PreparationDate", title: "PreparationDate", width: "60px" }
+        ]
+    });
+
+    //Handling button click for Challan window grid
+    $('#btnChallanWindowOK').click(function () {
+        ListOfValuChallaneGridEvent('ChallanWindowGrid');
+        ChallanWindow.close();
+    });
+
+    $('#btnChallanWindowCancel').click(function () {
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").dblclick(function () {
+        ListOfValuChallaneGridEvent('ChallanWindowGrid');
+        ChallanWindow.close();
+    });
+
+    $("#ChallanWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuChallaneGridEvent('ChallanWindowGrid');
+            ChallanWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChallanWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    function ListOfValuChallaneGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetColorListAccordingToArticleChallan", "CrustingProductionSchedule")',
+            data: { "_BuyerOrderItemID": $("#BuyerOrderItemID").val(), "_ArticleChallanID": selectedItem.ArticleChallanID },
+            type: 'GET',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                $("#plGrid").data("kendoGrid").dataSource.data(response);
+            }
+        });
+    }*@
+
+</script>

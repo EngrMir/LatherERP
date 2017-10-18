@@ -1,0 +1,489 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTiltle</title>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position: absolute; right: 75px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<input id="BranchID" type="hidden" class="txtBox" />
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Banch Code<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BanchCode" class="txtBox SetFocus" name="BanchCode" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>LC Margin</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LCMargin" class="txtBox" name="LCMargin" tabindex="4" />
+            </div>
+            <div class="col-lg-2">
+                <label>LIM Balance</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LIMBalance" class="txtBox" name="LIMBalance" tabindex="4" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Branch Name<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BranchName" class="txtBox" name="BranchName" tabindex="2" />
+            </div>
+            <div class="col-lg-2">
+                <label>LC Margin Used</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LCMarginUsed" class="txtBox" name="LCMarginUsed" tabindex="5" />
+            </div>
+            <div class="col-lg-2">
+                <label>Address1</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Address1" class="txtBox" name="Address1" tabindex="5" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bank Name<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("BankID", new SelectList(ViewBag.ddlBankNameList, "BankID", "BankName"), "--Select--", new { @class = "txtBox", @tabindex = "7" })
+            </div>
+            <div class="col-lg-2">
+                <label>LC Margin Balance</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LCMarginBalance" class="txtBox" name="LCMarginBalance" tabindex="5" />
+            </div>
+            <div class="col-lg-2">
+                <label>Address2</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Address2" class="txtBox" name="Address2" tabindex="5" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LC Limit</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LCLimit" class="txtBox" name="BranchName" tabindex="2" />
+            </div>
+            <div class="col-lg-2">
+                <label>Branch Swift Code</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BranchSwiftCode" class="txtBox" name="BranchSwiftCode" tabindex="5" />
+            </div>
+            <div class="col-lg-2">
+                <label>Address3</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Address3" class="txtBox" name="Address3" tabindex="5" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LC Opened</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LCOpened" class="txtBox" name="BranchName" tabindex="2" />
+            </div>
+            <div class="col-lg-2">
+                <label>LIM Limit</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LIMLimit" class="txtBox" name="LIMLimit" tabindex="5" />
+            </div>
+            <div class="col-lg-2">
+                <label>Status</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="IsActive" class="txtBox" tabindex="9">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LC Balance</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LCBalance" class="txtBox" name="LCBalance" tabindex="5" />
+            </div>
+            <div class="col-lg-2">
+                <label>LIMTaken</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="LIMTaken" class="txtBox" name="LIMTaken" tabindex="6" />
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="MainGrid"></div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        //To Define Data Branch for Kendo Grid
+        NumericAndDecimalValue('LCLimit');
+        NumericAndDecimalValue('LCOpened');
+        NumericAndDecimalValue('LCBalance');
+        NumericAndDecimalValue('LCMargin');
+        NumericAndDecimalValue('LCMarginUsed');
+        NumericAndDecimalValue('LCMarginBalance');
+        NumericAndDecimalValue('LIMLimit');
+        NumericAndDecimalValue('LIMTaken');
+        NumericAndDecimalValue('LIMBalance');
+
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "BranchID",
+                    fields: {
+                        BranchID: { editable: false },
+                        BanchCode: { editable: false },
+                        BranchName: { editable: false },
+                        BankName: { editable: false },
+                        BankID: { editable: false },
+                        LCLimit: { editable: false },
+                        Address1: { editable: false },
+                        Address2: { editable: false },
+                        Address3: { editable: false },
+                        LCOpened: { editable: false },
+                        LCBalance: { editable: false },
+                        LCMargin: { editable: false },
+                        LCMarginUsed: { editable: false },
+                        LCMarginBalance: { editable: false },
+                        LIMLimit: { editable: false },
+                        LIMTaken: { editable: false },
+                        LIMBalance: { editable: false },
+                        IsActive: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetBranchList", "Branch")', // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Branch Kendo Grid
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            scrollable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            toolbar: [{
+                text: "Add Branch",
+                className: "btnAddBranchGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                { field: "BranchID", hidden: true },
+                { field: "BanchCode", title: "Code", width: 40, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "BranchName", title: "Name", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "BankID", hidden: true },
+                { field: "BankName", title: "Bank", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCLimit", title: "LCLimit", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCOpened", title: "LCOpened", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCBalance", title: "LCBalance", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCMargin", title: "LCMargin", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCMarginUsed", title: "MarginUsed", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCMarginBalance", title: "MarginBalance", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "BranchSwiftCode", title: "SwiftCode", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LIMLimit", title: "LIMLimit", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LIMTaken", title: "LIMTaken", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LIMBalance", title: "LIMBalance", filterable: false, width: 90, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Address1", title: "Address1", filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Address2", hidden: true },// title: "Address2", filterable: false, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Address3", hidden: true },// title: "Address3", filterable: true, width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "IsActive", title: "Status", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "Branch")',
+                type: 'POST',
+                data: JSON.stringify({ "BranchID": dataitem.BranchID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".txtBox").css("border-color", "");
+                        $("#IsActive").val("Active");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                }
+            });
+            $(".txtBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus BranchName textbox
+        $(".SetFocus").focus();
+
+        // Edit Button in Grid
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                $(".txtBox").css("border-color", "");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+            }
+        };
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".txtBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#IsActive").val("Active");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".txtBox").css("border-color", "");
+                SetMasterData(dataitem);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "Branch")',
+                    type: 'POST',
+                    data: JSON.stringify({ "BranchID": dataitem.BranchID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".txtBox").css("border-color", "");
+                            $("#IsActive").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".txtBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var modelSysSource = { "BranchID": "", "BanchCode": "", "BankID": "", "Address1": "", "Address2": "", "Address3": "", "LCLimit": "", "LCOpened": "", "LCBalance": "", "LCMargin": "", "LCMarginUsed": "", "BranchSwiftCode": "", "LIMLimit": "", "LIMTaken": "", "LIMBalance": "", "IsActive": "" };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        // Check Empty or Maximum Length in BanchCode
+        CheckRequiredTextBoxMaxLength('BanchCode', 30);
+        // Check Empty or Maximum Length in BranchName
+        CheckRequiredTextBoxMaxLength('BranchName', 100);
+        // Check Empty or Maximum Length in BankName
+        CheckRequiredTextBoxMaxLength('BankID', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            modelSysSource.BranchID = $("#BranchID").val();
+            modelSysSource.BanchCode = $("#BanchCode").val();
+            modelSysSource.BranchName = $("#BranchName").val();
+            modelSysSource.BankID = $("#BankID").val();
+            modelSysSource.Address1 = $("#Address1").val();
+            modelSysSource.Address2 = $("#Address2").val();
+            modelSysSource.Address3 = $("#Address3").val();
+            modelSysSource.LCLimit = $("#LCLimit").val();
+            modelSysSource.LCOpened = $("#LCOpened").val();
+            modelSysSource.LCBalance = $("#LCBalance").val();
+            modelSysSource.LCMargin = $("#LCMargin").val();
+            modelSysSource.LCMarginUsed = $("#LCMarginUsed").val();
+            modelSysSource.LCMarginBalance = $("#LCMarginBalance").val();
+            modelSysSource.BranchSwiftCode = $("#BranchSwiftCode").val();
+            modelSysSource.LIMLimit = $("#LIMLimit").val();
+            modelSysSource.LIMTaken = $("#LIMTaken").val();
+            modelSysSource.LIMBalance = $("#LIMBalance").val();
+            modelSysSource.IsActive = $("#IsActive option:selected").val();
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("Branch", "Branch")',
+                    data: JSON.stringify(modelSysSource),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#BranchID').val(response.BranchID);
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $("#MessageText").html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#BranchName").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".txtBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#IsActive").val("Active");
+        }
+    });
+</script>

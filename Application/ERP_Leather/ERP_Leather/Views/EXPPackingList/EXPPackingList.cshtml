@@ -1,0 +1,2537 @@
+﻿@{
+    ViewBag.Title = "Paking List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTiltle</title>
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Paking List No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="PLID" class="txtBox" />
+                <input type="hidden" id="RecordStatus" class="txtBox" />
+                <input type="text" id="PLNo" readonly="readonly" style="width: 100%;" class="txtBox" name="PLNo" tabindex="" placeholder="Auto" />
+            </div>
+            <div class="col-lg-2">
+                <label>Bales No/s</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BalesNo" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Total Pcs</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="TotalPcs" class="txtBox" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Paking Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLDate" class="datePicker txtBox" required />
+            </div>
+            <div class="col-lg-2">
+                <label>Total Bales</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BaleQty" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Total Side</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="TotalSide" class="txtBox" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>CI No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="CIID" class="txtBox" />
+                <input type="text" id="CINo" style="width: 100%;" class="txtBox" name="CINo" tabindex="" readonly="readonly" placeholder="Press F9" />
+            </div>
+            <div class="col-lg-2">
+                <label>Marks</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLMarks" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Qty In SFT</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="FootCIQty" class="txtBox" name="FootCIQty" tabindex="" onblur="SumofCIAmount();" />
+                @*<input type="text" id="FootCIQty" class="txtBox" />*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>CI Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CIDate" class="txtBox" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>Notes</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLNote" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Qty In SMT</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="MeterCIQty" class="txtBox" name="MeterCIQty" tabindex="" onblur="SumofCISMTAmount();" />
+                @*<input type="text" id="MeterCIQty" class="txtBox" />*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Net Weight</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLNetWeight" class="txtBox" style="width: 50%;" />
+                @Html.DropDownList("NetWeightUnit", new SelectList(ViewBag.ddlUnitList, "UnitID", "UnitName"), "KG", new { @class = "text-box dDown", @style = "width: 42%;" })
+            </div>
+            <div class="col-lg-2">
+                <label>Gross Weight</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLGrossWeight" class="txtBox" style="width: 50%;" />
+                @Html.DropDownList("GrossWeightUnit", new SelectList(ViewBag.ddlUnitList, "UnitID", "UnitName"), "KG", new { @class = "text-box dDown", @style = "width: 42%;" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Buyer</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="CIPIID" name="CIPIID" class="txtBox txtPIBox" />
+                <input type="hidden" id="BuyerID" name="BuyerID" class="txtBox txtPIBox" />
+                <input type="text" id="BuyerName" readonly="readonly" style="width: 100%;" class="txtBox txtPIBox" name="BuyerName" tabindex="" placeholder="Press F9" />
+            </div>
+            @*<div class="col-lg-1">
+                    <input type="button" id="btnSearchPI" class="Button" value="PI For Update" />
+                </div>*@
+            <div class="col-lg-2">
+                <label>PI Pcs@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLPIPcs" style="width: 100%;" class="txtBox txtPIBox" name="PLPIPcs" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>PI Qty in SFT</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="FootPLPIQty" class="txtBox txtPIBox" name="FootPLPIQty" tabindex="" onblur="SumofPIAmount();" />
+                @*<input type="text" id="FootPLPIQty" style="width: 100%;" class="txtBox txtPIBox" name="FootPLPIQty" tabindex="" />*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>PI No<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="PLPIID" name="PLPIID" class="txtBox txtPIBox" />
+                <input type="hidden" id="PIID" name="PIID" class="txtBox txtPIBox" />
+                <input type="text" id="PINo" readonly="readonly" style="width: 100%;" class="txtBox txtPIBox" name="PINo" tabindex="" placeholder="F9 For Entry" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>PI Side</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLPISide" style="width: 100%;" class="txtBox txtPIBox" name="PLPISide" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>PI Qty in SMT</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="MeterPLPIQty" class="txtBox txtPIBox" name="MeterPLPIQty" tabindex="" onblur="SumofPISMTAmount();" />
+                @*<input type="text" id="MeterPLPIQty" style="width: 100%;" class="txtBox txtPIBox" name="MeterPLPIQty" tabindex="" />*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Buyer Order</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerOrderID" name="BuyerOrderID" class="txtBox txtPIBox" />
+                <input type="text" id="BuyerOrderNo" readonly="readonly" style="width: 100%;" class="txtBox txtPIBox" name="BuyerOrderNo" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Net Weight</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLPINetWeight" class="txtBox" style="width: 50%;" />
+                @Html.DropDownList("PLPINetWeightUnit", new SelectList(ViewBag.ddlUnitList, "UnitID", "UnitName"), "KG", new { @class = "text-box dDown", @style = "width: 42%;" })
+            </div>
+            <div class="col-lg-2">
+                <label>Gross Weight</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PLPIGrossWeight" class="txtBox" style="width: 50%;" />
+                @Html.DropDownList("PLPIGrossWeightUnit", new SelectList(ViewBag.ddlUnitList, "UnitID", "UnitName"), "KG", new { @class = "text-box dDown", @style = "width: 42%;" })
+            </div>
+            @*<div class="col-lg-2">
+                    <input type="button" id="btnSearchPI" class="Button" value="Search PI" />
+                </div>
+                <div class="col-lg-2">
+                    <input type="button" id="btnAddPI" class="Button" value="Add New PI" style="position:absolute; right:20px;" />
+                </div>*@
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>LC No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="LCID" name="LCID" class="txtBox txtPIBox" />
+                <input type="text" id="LCNo" readonly="readonly" style="width: 100%;" class="txtBox txtPIBox" name="LCNo" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnSearchPI" class="Button" value="Search PI" />
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnAddPI" class="Button" value="Add New PI" style="position:absolute; right:20px;" />
+            </div>
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="plGrid" class="grdKendo"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label style="float: right;margin-right: 3%;">Excel File:</label>
+            </div>
+            <div class="col-lg-2">
+                <div>
+                    <input name="files" id="files" type="file" class="txtBox" />
+                </div>
+            </div>
+            @*<div class="col-lg-2">
+                    <input type="button" id="btnRead" name="btnRead" class="Button" value="Upload" />
+
+                </div>*@
+            @*<div class="col-lg-1" style="margin-right: 4%;">
+                    <input type="text" id="txtTotalQuantitySFT" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 5%;">
+                    <input type="text" id="txtTotalQuantityNetWightSFT" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 3%;">
+                    <input type="text" id="txtTotalQuantitySMT" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 3%;">
+                    <input type="text" id="txtTotalQuantityNetWightSMT" readonly="readonly" class="txtBox" />
+                </div>*@
+        </div>
+        @*<input type="file" name="file" id="file" />
+            <input type="button" id="btnRead" name="btnRead" class="clickClass" value="submit" />*@
+
+        <div id="PageDetailGrid" class="grdKendo"></div>
+        @*<div class="row">
+                <div class="col-lg-3">
+                    <label style="float: right;">Total</label>
+                </div>
+                <div class="col-lg-1" style="margin-right: 3%;">
+                    <input type="text" id="txtTotalPcs" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 3%;">
+                    <input type="text" id="txtTotalSide" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 4%;">
+                    <input type="text" id="txtTotalQuantitySFT" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 5%;">
+                    <input type="text" id="txtTotalQuantityNetWightSFT" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 3%;">
+                    <input type="text" id="txtTotalQuantitySMT" readonly="readonly" class="txtBox" />
+                </div>
+                <div class="col-lg-1" style="margin-right: 3%;">
+                    <input type="text" id="txtTotalQuantityNetWightSMT" readonly="readonly" class="txtBox" />
+                </div>
+            </div>*@
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session[" username"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Confirmed By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session[" username"]" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Confirmed" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ConfirmWindow" style="display: none;">
+    <p><h5 style="color: red;">At First Save this Record.</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationClose" value="Close" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindowPI" style="display: none;">
+    <div id="SearchWindowPIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowPICancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowPIOK" class="PopUpButton" value="OK" />
+</div>
+<div id="PackingListCI" style="display: none;">
+    <div id="PackingListCIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPackingListCICancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPackingListCIOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="PackingListCIPI" style="display: none;">
+    <div id="PackingListCIPIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPackingListCIPICancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPackingListCIPIOK" class="PopUpButton" value="OK" />
+</div>
+
+@*<div id="PartyWindow" style="display: none;">
+        <div id="PartyWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnPartyWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnPartyWindowOK" class="PopUpButton" value="OK" />
+    </div>
+
+    <div id="PartyOrderWindow" style="display: none;">
+        <div id="PartyOrderWindowGrid" class="PopUpGrid">
+        </div>
+        <input type="button" id="btnPartyOrderWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnPartyOrderWindowOK" class="PopUpButton" value="OK" />
+    </div>*@
+
+<div id="PartyWindow" style="display: none;">
+    <div id="PartyWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPartyWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPartyWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="GradeWindow" style="display: none;">
+    <div id="GradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var saveStatus = 1;
+    var dataitem = {};
+    var PIAmount = 0;
+    var CIAmount = 0;
+
+    $(document).ready(function () {
+
+        $.ajaxSetup({
+            beforeSend: function () {
+                $("#divLoading").show();
+            },
+            complete: function () {
+                $("#divLoading").hide();
+            }
+        });
+
+        //OnlyNumericValue('CINo');
+        NumericAndDecimalValue('BaleQty');
+
+        NumericAndDecimalValue('TotalPcs');
+        NumericAndDecimalValue('TotalSide');
+
+        NumericAndDecimalValue('MeterCIQty');
+        NumericAndDecimalValue('FootCIQty');
+
+        NumericAndDecimalValue('PLNetWeight');
+        NumericAndDecimalValue('PLGrossWeight');
+
+        ////////////////
+        NumericAndDecimalValue('PLPIPcs');
+        NumericAndDecimalValue('PLPISide');
+
+        NumericAndDecimalValue('MeterPLPIQty');
+        NumericAndDecimalValue('FootPLPIQty');
+
+        NumericAndDecimalValue('PLPINetWeight');
+        NumericAndDecimalValue('PLPIGrossWeight');
+
+        $(".SetFocus").focus();
+        //OnlyNumericValue('CINo');
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date() // sets max date to Jan 1st, 2013
+        });
+
+        $("#PrepareDate").attr("readonly", true);
+
+        $("#datePicker").click(function () {
+            changeStatus = 1;
+        });
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        var plDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PLPIItemColorID",
+                    fields: {
+                        PLPIItemColorID: { editable: false },
+                        PLPIID: { editable: false },
+                        Commodity: { editable: false },
+                        ArticleID: { editable: false },
+                        ArticleName: { editable: false },
+                        ArticleNo: { editable: false },
+                        HSCode: { editable: false },
+                        //ItemTypeID: { editable: true },
+                        //LeatherTypeID: { editable: false },
+                        //LeatherStatusID: { editable: false },
+                        //MaterialNo: { editable: false },
+                        AvgSize: { editable: true },
+                        AvgSizeUnit: { editable: false },
+                        AvgSizeUnitName: { editable: false },
+                        SideDescription: { editable: false },
+                        SelectionRange: { editable: true },
+                        Thickness: { editable: false },
+                        ThicknessUnit: { editable: false },
+                        ThicknessUnitName: { editable: false },
+                        ThicknessAt: { editable: false },
+                        //MeterCIQty: { editable: false },
+                        //MeterUnitPrice: { editable: false },
+                        //MeterTotalPrice: { editable: false },
+                        //FootCIQty: { editable: false },
+                        //FootUnitPrice: { editable: false },
+                        //FootTotalPrice: { editable: false },
+                        //PackQty: { editable: false },
+                        //PackUnit: { editable: false },
+                        ColorID: { editable: false },
+                        ColorName: { editable: false }
+                    }
+                }
+            }
+        });
+        var plgrid = $("#plGrid").kendoGrid({
+            dataSource: plDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            //toolbar: [{ text: "Add Schedule Date", className: "btnPlGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "PLPIItemColorID", hidden: true },
+                { field: "PLPIID", hidden: true },
+                { field: "Commodity", title: "Commodity", filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ArticleID", hidden: true },
+                { field: "ArticleName", title: "Article", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ArticleNo", hidden: true },
+                { field: "MaterialNo", hidden: true },
+                { field: "AvgSize", title: "Size", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "AvgSizeUnit", hidden: true },
+                { field: "AvgSizeUnitName", title: "Unit", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "SideDescription", title: "Pcs/Side", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "SelectionRange", title: "Range", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "Thickness", title: "Thickness", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ThicknessUnit", hidden: true },
+                { field: "ThicknessUnitName", title: "Unit", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ThicknessAt", hidden: true, title: "ThicknessAt", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "MeterUnitPrice", hidden: true },
+                //{ field: "MeterTotalPrice", hidden: true },
+                //{ field: "FootCIQty", hidden: true },
+                //{ field: "FootTotalPrice", hidden: true },
+                //{ field: "PackQty", hidden: true },
+                //{ field: "PackUnit", hidden: true },
+                { field: "ColorID", hidden: true },
+                { field: "ColorName", title: "Color", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "RecordStatus", hidden: true },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteScheduleDate }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteScheduleDate() {
+            deleteStatus = 2;
+            var grid1 = $("#plGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        SelectedItemOfListOfValue('plGrid');
+
+        //To face child data into another grid for a grid row on click
+        $("#plGrid").on("click", "tr", function () {
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            CheckRecordStatusForButton(parentGridItem.RecordStatus);
+            if (parentGridItem.PLPIItemColorID != "") {
+                $.ajax({
+                    url: '@Url.Action("GetExpPLPIItemColorBaleList", "EXPPackingList")',
+                    type: 'GET',
+                    data: { "PLPIItemColorID": parentGridItem.PLPIItemColorID },
+                    success: function (response) {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                        //$("#divLoading").hide();
+                    } //End of Success Call
+                });
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("GetExpPIItemColorList", "EXPCI")',
+                    type: 'GET',
+                    data: { "PIItemID": parentGridItem.PIItemID },
+                    success: function (response) {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                    } //End of Success Call
+                });
+                //$("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        var itemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PLPIItemColorBaleID",
+                    fields: {
+                        PLPIItemColorBaleID: { editable: false },
+                        PLPIItemColorBaleNo: { editable: true },
+                        PLPIItemColorID: { editable: false },
+                        GradeID: { editable: true },
+                        GradeName: { editable: true, defaultValue: 'Press F9' },
+                        PcsInBale: { editable: true, type: "number", defaultValue: '' },
+                        SideInBale: { editable: true, type: "number", defaultValue: '' },
+                        FootPLPIBaleQty: { editable: true, type: "number", defaultValue: '' },
+                        PLPIBaleNetWeight: { editable: true, type: "number", defaultValue: '' },
+                        NetWeightUnit: { editable: true },
+                        MeterPLPIBaleQty: { editable: true, type: "number", defaultValue: '' },
+                        PLPIBGrossaleWeight: { editable: true, type: "number", defaultValue: '' },
+                        GrossBaleWeightUnit: { editable: true },
+                        GrossBaleWeightUnitName: { editable: true },
+                        //MeterUnitPrice: { editable: true },
+                        //MeterTotalPrice: { editable: true },
+                        //FootColorQty: { editable: true },
+                        //FootUnitPrice: { editable: true },
+                        //FootTotalPrice: { editable: true },
+                        //PackQty: { editable: false },
+                        //PackUnit: { editable: false },
+                        Remarks: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+
+        var itemgrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: itemDataSource,
+            pageable: true,
+            edit: function (e) {
+                $('input[name = "GradeName"]').attr("readonly", true);
+                $('input[name = "MeterPLPIBaleQty"]').attr("readonly", true);
+                //$('input[name = "PLPIBGrossaleWeight"]').attr("readonly", true);
+                //$('input[name = "MeterUnitPrice"]').attr("readonly", true);
+                //$('input[name = "MeterTotalPrice"]').attr("readonly", true);
+                $("[name='FootPLPIBaleQty']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    //e.model.set("FootTotalPrice", (grid.dataItem(row).FootColorQty * grid.dataItem(row).FootUnitPrice).toFixed(4));
+                    e.model.set("MeterPLPIBaleQty", (grid.dataItem(row).FootPLPIBaleQty * 0.0929).toFixed(2));
+                    //e.model.set("MeterUnitPrice", (grid.dataItem(row).FootUnitPrice / 0.3048).toFixed(4));
+                    //e.model.set("MeterTotalPrice", (grid.dataItem(row).MeterColorQty * grid.dataItem(row).MeterUnitPrice).toFixed(4));
+                    //var colorTotalAmount = 0;
+                    //var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                    //var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                    //for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    //    if (dataPeriodItem[j].FootTotalPrice != null) {
+                    //        colorTotalAmount = parseFloat(colorTotalAmount) + parseFloat(dataPeriodItem[j].FootTotalPrice);
+                    //    }
+                    //}
+                    //$("#colorTotalAmount").val(colorTotalAmount);
+                    //PIAmount = PIAmount + colorTotalAmount;
+                    //CIAmount = CIAmount + PIAmount;
+                    //$("#PIAmount").val(PIAmount);
+                    //$("#CIAmount").val(CIAmount);
+                });
+            },
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Color Grade", className: "btnPageDetailGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            //height: 250,
+            columns: [
+                { field: "PLPIItemColorBaleID", hidden: true, },
+                { field: "PLPIItemColorID", hidden: true, },
+                { field: "PLPIItemColorBaleNo", title: "BaleNo", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "GradeID", hidden: true },
+                { field: "GradeName", title: "Grade", editable: true, filterable: false, width: "50px", attributes: { "class": "GradeInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "PcsInBale", title: "Pcs", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "SideInBale", title: "Side", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "FootPLPIBaleQty", title: "Quantity(SFT)", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "MeterPLPIBaleQty", title: "Quantity(SMT)", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "PLPIBaleNetWeight", title: "Net Weight", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "PLPIBGrossaleWeight", title: "Gross Weight", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "GrossBaleWeightUnit", hidden: true },
+                { field: "GrossBaleWeightUnitName", hidden: true, title: "WeightUnit", editable: true, filterable: false, editor: ddlLeatherUnit, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteIssueItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        SelectedItemOfListOfValue('PageDetailGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteIssueItem() {
+            deleteStatus = 3;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $(".btnPageDetailGrid").click(function (e) {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+            e.preventDefault();
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+                e.preventDefault();
+            }
+        });
+
+        SelectedItemOfListOfValue('plGrid');
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationClose').click(function () {
+            CloseSaveChangesDialogOneButton();
+        });
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#PLID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedPackingList", "EXPPackingList")',
+                        type: 'POST',
+                        data: JSON.stringify({ "PLID": $("#PLID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                $("#MessageText").html("");
+                                ResetOnlyMasterPageData();
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                //$("#PLPIItemColorID").val("Auto Generated");
+                                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 2) {
+                if (dataitem.PLPIItemColorID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedEXPPLPIItemColor", "EXPPackingList")',
+                        type: 'POST',
+                        data: JSON.stringify({ "PLPIItemColorID": dataitem.PLPIItemColorID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 3) {
+                if (dataitem.PLPIItemColorBaleID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedEXPPLPIItemColorBale", "EXPPackingList")',
+                        type: 'POST',
+                        data: JSON.stringify({ "PLPIItemColorBaleID": dataitem.PLPIItemColorBaleID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#PLPIItemColorID").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#PLPIItemColorID").val("Auto Generated");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPackingListInfo();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 4) { // Add Schedule
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                $(".txtCommandBox").val("");
+                $("#PLPIID").val("");
+                $("#PLPIItemColorID").val("");
+                $(".txtPIBox").val("");
+                $(".txtBox").css("border-color", "");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#PLID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedPackingList", "EXPPackingList")',
+                            type: 'POST',
+                            data: JSON.stringify({ "PLID": $("#PLID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    CheckRecordStatusForButton("NCF");
+                                    $("#MessageText").html("");
+                                    ResetOnlyMasterPageData();
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                    //$("#PLPIItemColorID").val("Auto Generated");
+                                    $("#plGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 2) {
+                    if (dataitem.PLPIItemColorID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedEXPPLPIItemColor", "EXPPackingList")',
+                            type: 'POST',
+                            //data: JSON.stringify({ "PLPIItemColorID": dataitem.PLPIItemColorID, "RecordStatus": dataitem.RecordStatus }),
+                            data: JSON.stringify({ "PLPIItemColorID": dataitem.PLPIItemColorID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 3) {
+                    if (dataitem.PLPIItemColorBaleID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedEXPPLPIItemColorBale", "EXPPackingList")',
+                            type: 'POST',
+                            data: JSON.stringify({ "PLPIItemColorBaleID": dataitem.PLPIItemColorBaleID }),
+                            //data: JSON.stringify({ "PLPIItemColorBaleID": dataitem.PLPIItemColorBaleID, "RecordStatus": dataitem.RecordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+    }); //End of Document.Ready()
+
+    /////////////////////Reset//////////////////
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            $("#files").html("");
+            ResetOnlyMasterPageData();
+            $(".txtCommandBox").val("");
+            $(".txtBox").css("border-color", "");
+            //$("#PLPIItemColorID").val("Auto Generated");
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    // Reset Data
+    $("#btnAddPI").click(function () {
+        resetEditDeleteStatus = 4; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            if ($("#RecordStatus").val("NCF")) {
+                //CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                $("#PLPIID").val("");
+                $("#PLPIItemColorID").val("");
+                $(".txtPIBox").val("");
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+            }
+        }
+    });
+
+
+    //To Define Data Source for InfoFor Kendo Grid
+    var ddlChemicalUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllLeatherUnit", "Unit")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlLeatherUnit(container, options) {
+        $('<input id="UnitName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlChemicalUnitDataSource
+            });
+    };
+
+
+    /////////////Save//////////////////////////
+
+    // Declare Object
+    var EXPPLPIModel = { "PLPIID": "", "CIID": "", "PIID": "", "LCID": "", "PIStatus": "", "PIAmount": "", "PICurrency": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "RecordStatus": "", "Remarks": "" };
+    var EXPPLPIItemColorModel = { "PLPIItemColorID": "", "PLPIID": "", "Commodity": "", "ArticleID": "", "ArticleNo": "", "MeterColorQty": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "MaterialNo": "", "AvgSize": "", "AvgSizeUnit": "", "SideDescription": "", "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessAt": "", "MeterCIQty": "", "MeterUnitPrice": "", "MeterTotalPrice": "", "FootCIQty": "", "FootUnitPrice": "", "FootTotalPrice": "", "PackQty": "", "PackUnit": "", "RecordStatus": "", "Remarks": "" };
+    var EXPPLPIItemColorBaleModel = { "PLPIItemColorBaleID": "", "PLPIItemColorID": "", "MaterialNo": "", "ColorID": "", "AvgSize": "", "AvgSizeUnit": "", "SideDescription": "", "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessAt": "", "MeterCIQty": "", "MeterUnitPrice": "", "MeterTotalPrice": "", "FootCIQty": "", "FootUnitPrice": "", "FootTotalPrice": "", "PackQty": "", "PackUnit": "", "RecordStatus": "", "Remarks": "" };
+    var EXPPackingListModel = { "CIID": "", "CINo": "", "CIDate": "", "CIType": "", "CIAmount": "", "Remarks": "", "PLPIItemColorID": "", "PrepareDate": "", "RecordStatus": "", "EXPPLPIItemColorList": [], "InvStoreTransChallanList": [], "EXPPLPIItemColorBaleList": [] };
+
+    function Save() {
+        saveStatus = 1;
+
+        //Check Empty or Maximum Length in PINo
+        CheckRequiredTextBoxMaxLength('PINo', 30);
+        //Check Empty or Maximum Length in PLDate
+        CheckRequiredTextBoxMaxLength('PLDate', 10);
+        ////Check Empty or Maximum Length in CIAmount
+        //CheckRequiredTextBoxMaxLength('CIAmount', 10);
+        ////Check Empty or Maximum Length in CICurrency
+        //CheckRequiredTextBoxMaxLength('CICurrency', 10);
+        ////Check Empty or Maximum Length in PrepareDate
+        //CheckRequiredTextBoxMaxLength('PrepareDate', 10);
+        ////Check Empty or Maximum Length in ProductionProcessID
+        //CheckRequiredTextBoxMaxLength('ProductionProcessID', 10);
+
+        if (saveStatus == 1) {
+            EXPPackingListModel.PLID = $('#PLID').val();
+            EXPPackingListModel.PLNo = $('#PLNo').val();
+            EXPPackingListModel.PLDate = $('#PLDate').val();
+            EXPPackingListModel.CIID = $('#CIID').val();
+            EXPPackingListModel.BalesNo = $('#BalesNo').val();
+            EXPPackingListModel.BaleQty = $('#BaleQty').val();
+            EXPPackingListModel.TotalPcs = $('#TotalPcs').val();
+            EXPPackingListModel.TotalSide = $('#TotalSide').val();
+            EXPPackingListModel.MeterCIQty = $('#MeterCIQty').val();
+            EXPPackingListModel.FootCIQty = $('#FootCIQty').val();
+            EXPPackingListModel.PLNetWeight = $('#PLNetWeight').val();
+            EXPPackingListModel.NetWeightUnit = $('#NetWeightUnit').val();
+            EXPPackingListModel.PLGrossWeight = $('#PLGrossWeight').val();
+            EXPPackingListModel.GrossWeightUnit = $('#GrossWeightUnit').val();
+            EXPPackingListModel.PLMarks = $('#PLMarks').val();
+            EXPPackingListModel.PLNote = $('#PLNote').val();
+
+            EXPPackingListModel.EXPPLPIList = [];
+            EXPPLPIModel.PLPIID = $('#PLPIID').val();
+            EXPPLPIModel.PLID = $('#PLID').val();
+            EXPPLPIModel.PIID = $('#PIID').val();
+            EXPPLPIModel.LCID = $('#LCID').val();
+            EXPPLPIModel.BuyerOrderID = $('#BuyerOrderID').val();
+
+            EXPPLPIModel.PLPIPcs = $('#PLPIPcs').val();
+            EXPPLPIModel.PLPISide = $('#PLPISide').val();
+
+            EXPPLPIModel.MeterPLPIQty = $('#MeterPLPIQty').val();
+            EXPPLPIModel.FootPLPIQty = $('#FootPLPIQty').val();
+            EXPPLPIModel.PLPINetWeight = $('#PLPINetWeight').val();
+            EXPPLPIModel.PLPINetWeightUnit = $('#PLPINetWeightUnit').val();
+            EXPPLPIModel.PLPIGrossWeight = $('#PLPIGrossWeight').val();
+            EXPPLPIModel.PLPIGrossWeightUnit = $('#PLPIGrossWeightUnit').val();
+
+            EXPPackingListModel.EXPPLPIList.push(EXPPLPIModel);
+            EXPPLPIModel = { "PLPIID": "", "CIID": "", "PIID": "", "LCID": "", "PIStatus": "", "PIAmount": "", "PICurrency": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "RecordStatus": "", "Remarks": "" };
+
+            var grid33 = $("#plGrid").data("kendoGrid");
+            dataitem33 = (grid33.dataItem(grid33.select())); //Selected Row
+
+            var parentGrid = $("#plGrid").data("kendoGrid").dataSource;
+            var parentGridItem = parentGrid.data(); // Get Detail Grid Data
+            EXPPackingListModel.EXPPLPIItemColorList = [];
+            for (var i = 0; i <= parentGridItem.length - 1; i++) {
+                EXPPLPIItemColorModel.PLPIItemColorID = parentGridItem[i].PLPIItemColorID;
+                EXPPLPIItemColorModel.PLPIID = parentGridItem[i].PLPIID;
+                EXPPLPIItemColorModel.Commodity = parentGridItem[i].Commodity;
+                EXPPLPIItemColorModel.ArticleID = parentGridItem[i].ArticleID;
+                EXPPLPIItemColorModel.ArticleNo = parentGridItem[i].ArticleNo;
+                EXPPLPIItemColorModel.ItemTypeID = parentGridItem[i].ItemTypeID;
+                EXPPLPIItemColorModel.LeatherTypeID = parentGridItem[i].LeatherTypeID;
+                EXPPLPIItemColorModel.LeatherStatusID = parentGridItem[i].LeatherStatusID;
+                EXPPLPIItemColorModel.MaterialNo = parentGridItem[i].MaterialNo;
+                EXPPLPIItemColorModel.AvgSize = parentGridItem[i].AvgSize;
+                EXPPLPIItemColorModel.AvgSizeUnit = parentGridItem[i].AvgSizeUnit;
+                EXPPLPIItemColorModel.SideDescription = parentGridItem[i].SideDescription;
+                EXPPLPIItemColorModel.SelectionRange = parentGridItem[i].SelectionRange;
+                EXPPLPIItemColorModel.Thickness = parentGridItem[i].Thickness;
+                EXPPLPIItemColorModel.ThicknessUnit = parentGridItem[i].ThicknessUnit;
+                EXPPLPIItemColorModel.ThicknessAt = parentGridItem[i].ThicknessAt;
+                EXPPLPIItemColorModel.MeterCIQty = parentGridItem[i].MeterCIQty;
+                EXPPLPIItemColorModel.MeterUnitPrice = parentGridItem[i].MeterUnitPrice;
+                EXPPLPIItemColorModel.MeterTotalPrice = parentGridItem[i].MeterColorQty;
+                EXPPLPIItemColorModel.FootCIQty = parentGridItem[i].MeterTotalPrice;
+                EXPPLPIItemColorModel.FootUnitPrice = parentGridItem[i].FootUnitPrice;
+                EXPPLPIItemColorModel.FootTotalPrice = parentGridItem[i].FootTotalPrice;
+                EXPPLPIItemColorModel.ColorID = parentGridItem[i].ColorID;
+                //EXPPLPIItemColorModel.PackUnit = parentGridItem[i].PackUnit;
+                EXPPLPIItemColorModel.PackQty = parentGridItem[i].PackQty;
+                EXPPLPIItemColorModel.PackUnit = parentGridItem[i].PackUnit;
+                EXPPLPIItemColorModel.Remarks = parentGridItem[i].Remarks;
+
+                EXPPackingListModel.EXPPLPIItemColorList.push(EXPPLPIItemColorModel);
+                EXPPLPIItemColorModel = { "PLPIItemColorID": "", "PLPIID": "", "Commodity": "", "ArticleID": "", "ArticleNo": "", "MeterColorQty": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "MaterialNo": "", "AvgSize": "", "AvgSizeUnit": "", "SideDescription": "", "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessAt": "", "MeterCIQty": "", "MeterUnitPrice": "", "MeterTotalPrice": "", "FootCIQty": "", "FootUnitPrice": "", "FootTotalPrice": "", "PackQty": "", "PackUnit": "", "RecordStatus": "", "Remarks": "" };
+            }
+            var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+            EXPPackingListModel.EXPPLPIItemColorBaleList = [];
+            for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                //if (dataPeriodItem[j].dirty) {
+                EXPPLPIItemColorBaleModel.PLPIItemColorBaleID = dataPeriodItem[j].PLPIItemColorBaleID;
+                EXPPLPIItemColorBaleModel.PLPIItemColorBaleNo = dataPeriodItem[j].PLPIItemColorBaleNo;
+                EXPPLPIItemColorBaleModel.GradeID = dataPeriodItem[j].GradeID;
+                EXPPLPIItemColorBaleModel.GradeName = dataPeriodItem[j].GradeName;
+                EXPPLPIItemColorBaleModel.PcsInBale = dataPeriodItem[j].PcsInBale;
+                EXPPLPIItemColorBaleModel.SideInBale = dataPeriodItem[j].SideInBale;
+                EXPPLPIItemColorBaleModel.MeterPLPIBaleQty = dataPeriodItem[j].MeterPLPIBaleQty;
+                EXPPLPIItemColorBaleModel.FootPLPIBaleQty = dataPeriodItem[j].FootPLPIBaleQty;
+                EXPPLPIItemColorBaleModel.PLPIBaleNetWeight = dataPeriodItem[j].PLPIBaleNetWeight;
+                EXPPLPIItemColorBaleModel.PLPIBGrossaleWeight = dataPeriodItem[j].PLPIBGrossaleWeight;
+                EXPPLPIItemColorBaleModel.GrossBaleWeightUnitName = dataPeriodItem[j].GrossBaleWeightUnitName;
+                EXPPLPIItemColorBaleModel.Remarks = dataPeriodItem[j].Remarks;
+                EXPPLPIItemColorBaleModel.ArticleID = dataitem33.ArticleID;
+                EXPPLPIItemColorBaleModel.ColorID = dataitem33.ColorID;
+
+                EXPPackingListModel.EXPPLPIItemColorBaleList.push(EXPPLPIItemColorBaleModel);
+                EXPPLPIItemColorBaleModel = { "PLPIItemColorBaleID": "", "PLPIItemColorID": "", "MaterialNo": "", "ColorID": "", "AvgSize": "", "AvgSizeUnit": "", "SideDescription": "", "SelectionRange": "", "Thickness": "", "ThicknessUnit": "", "ThicknessAt": "", "MeterCIQty": "", "MeterUnitPrice": "", "MeterTotalPrice": "", "FootCIQty": "", "FootUnitPrice": "", "FootTotalPrice": "", "PackQty": "", "PackUnit": "", "RecordStatus": "", "Remarks": "" };
+                //}
+            }
+            //}
+            if (changeStatus == 1) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EXPPackingList", "EXPPackingList")',
+                    data: JSON.stringify(EXPPackingListModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PLID").val(respnse.PLID);
+                            $("#PLNo").val(respnse.PLNo);
+                            $("#PLPIID").val(respnse.PLPIID);
+                            //$("#PLPIItemColorID").val(respnse.PLPIItemColorID);
+                            changeStatus = 0;
+
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "EXPPackingList")',
+                                type: 'GET',
+                                data: { "PLPIID": respnse.PLPIID },
+                                success: function (data) {
+                                    $("#plGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorBaleList);
+                                }
+                            });
+                            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                                this.element.find('tbody tr:first').addClass('k-state-selected');
+                            });
+                        } else if (respnse.msg.Type == 3) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PLID").val(respnse.PLID);
+                            $("#PLNo").val(respnse.PLNo);
+                            $("#PLPIID").val(respnse.PLPIID);
+                            //$("#PLPIItemColorID").val(respnse.PLPIItemColorID);
+                            changeStatus = 0;
+
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "EXPPackingList")',
+                                type: 'GET',
+                                data: { "PLPIID": $("#PLPIID").val() },
+                                success: function (data) {
+                                    $("#plGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorBaleList);
+                                }
+                            });
+                            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                                this.element.find('tbody tr:first').addClass('k-state-selected');
+                            });
+                        } else {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            EXPPackingListModel = { "CIID": "", "CINo": "", "CIDate": "", "CIType": "", "CIAmount": "", "Remarks": "", "PLPIItemColorID": "", "PrepareDate": "", "RecordStatus": "", "EXPPLPIItemColorList": [], "InvStoreTransChallanList": [], "EXPPLPIItemColorBaleList": [] };
+        } else {
+            $("#MessageText").html("Please Enter the Proper Data.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+    }
+
+    /////////////////////Confirmed Chemical Item////////////////////
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            EXPPackingListModel.PLID = $('#PLID').val();
+            EXPPackingListModel.PLPIItemColorID = $('#PLPIItemColorID').val();
+            EXPPackingListModel.ApproveComment = $('#ApproveComment').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                EXPPLPIItemColorModel.EXPPLPIItemColorList = [];
+                EXPPLPIItemColorModel.PLPIItemColorID = parentGridItem.PLPIItemColorID;
+
+                EXPPackingListModel.EXPPLPIItemColorList.push(EXPPLPIItemColorModel);
+                EXPPLPIItemColorModel = { "PLPIItemColorID": "", "PLPIID": "", "Commodity": "", "ArticleID": "", "ArticleNo": "", "MeterColorQty": "", "MeterTotalPrice": "", "FootUnitPrice": "", "MaterialNo": "", "AvgSizeUnit": "", "RecordStatus": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                EXPPackingListModel.EXPPLPIItemColorBaleList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    EXPPLPIItemColorBaleModel.PLPIItemColorBaleID = dataPeriodItem[j].PLPIItemColorBaleID;
+
+                    EXPPackingListModel.EXPPLPIItemColorBaleList.push(EXPPLPIItemColorBaleModel);
+                    EXPPLPIItemColorBaleModel = { "PLPIItemColorBaleID": "", "PLPIItemColorID": "", "Commodity": "", "ColorID": "", "AvgSizeUnit": "", "Thickness": "", "MeterColorQty": "", "MeterTotalPrice": "", "FootUnitPrice": "", "PackQty": "", "PackUnit": "", "Remarks": "", "WeightUnit": "", "RecordStatus": "", "SideDescription": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmedEXPPackingList", "EXPPackingList")',
+                data: JSON.stringify(EXPPackingListModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        //$("#MessageText").html("");
+                        //ResetOnlyMasterPageData();
+                        //$(".txtCommandBox").val("");
+                        //$(".txtBox").css("border-color", "");
+                        ////$("#PLPIItemColorID").val("Auto Generated");
+                        //$("#plGrid").data("kendoGrid").dataSource.data([]);
+                        //$("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            EXPPackingListModel = { "CIID": "", "CINo": "", "CIDate": "", "CIType": "", "CIAmount": "", "Remarks": "", "PLPIItemColorID": "", "PrepareDate": "", "RecordStatus": "", "EXPPLPIItemColorList": [], "InvStoreTransChallanList": [], "EXPPLPIItemColorBaleList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            EXPPackingListModel.CIID = $('#CIID').val();
+            EXPPackingListModel.PLPIID = $('#PLPIID').val();
+            EXPPackingListModel.ApproveComment = $('#ApproveComment').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                EXPPLPIItemColorModel.EXPPLPIItemColorList = [];
+                EXPPLPIItemColorModel.PLPIItemColorID = parentGridItem.PLPIItemColorID;
+
+                EXPPackingListModel.EXPPLPIItemColorList.push(EXPPLPIItemColorModel);
+                EXPPLPIItemColorModel = { "PLPIItemColorID": "", "PLPIID": "", "Commodity": "", "ArticleID": "", "ArticleNo": "", "MeterColorQty": "", "MeterTotalPrice": "", "FootUnitPrice": "", "MaterialNo": "", "AvgSizeUnit": "", "RecordStatus": "", "Remarks": "" };
+
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                EXPPackingListModel.EXPPLPIItemColorBaleList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    EXPPLPIItemColorBaleModel.PLPIItemColorBaleID = dataPeriodItem[j].PLPIItemColorBaleID;
+
+                    EXPPackingListModel.EXPPLPIItemColorBaleList.push(EXPPLPIItemColorBaleModel);
+                    EXPPLPIItemColorBaleModel = { "PLPIItemColorBaleID": "", "PLPIItemColorID": "", "Commodity": "", "ColorID": "", "AvgSizeUnit": "", "Thickness": "", "MeterColorQty": "", "MeterTotalPrice": "", "FootUnitPrice": "", "PackQty": "", "PackUnit": "", "Remarks": "", "WeightUnit": "", "RecordStatus": "", "SideDescription": "" };
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckedWetBlueProductionSchedule", "EXPPackingList")',
+                data: JSON.stringify(EXPPackingListModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("NCF");
+                        $("#MessageText").html("");
+                        ResetOnlyMasterPageData();
+                        $(".txtCommandBox").val("");
+                        $(".txtBox").css("border-color", "");
+                        //$("#PLPIItemColorID").val("Auto Generated");
+                        $("#plGrid").data("kendoGrid").dataSource.data([]);
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            EXPPackingListModel = { "CIID": "", "CINo": "", "CIDate": "", "CIType": "", "CIAmount": "", "Remarks": "", "PLPIItemColorID": "", "PrepareDate": "", "RecordStatus": "", "EXPPLPIItemColorList": [], "InvStoreTransChallanList": [], "EXPPLPIItemColorBaleList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Checked.");
+        }
+    });
+
+    /////////////////////Confirmed Chemical Item////////////////////
+
+    $("#btnScheduleClosed").click(function () {
+        if (changeStatus == 0) {
+
+            EXPPackingListModel.PLPIItemColorID = $('#PLPIItemColorID').val();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("WetBlueProductionScheduleClosed", "EXPPackingList")',
+                data: JSON.stringify({ PLPIItemColorID: $("#PLPIItemColorID").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("NCF");
+                        $("#MessageText").html("");
+                        ResetOnlyMasterPageData();
+                        $(".txtCommandBox").val("");
+                        $(".txtBox").css("border-color", "");
+                        //$("#PLPIItemColorID").val("Auto Generated");
+                        $("#plGrid").data("kendoGrid").dataSource.data([]);
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            EXPPackingListModel = { "CIID": "", "CINo": "", "CIDate": "", "CIType": "", "CIAmount": "", "Remarks": "", "PLPIItemColorID": "", "PrepareDate": "", "RecordStatus": "", "EXPPLPIItemColorList": [], "InvStoreTransChallanList": [], "EXPPLPIItemColorBaleList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    ////////////////////Search Purchase Receive////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#MessageText").html("");
+            $(".txtBox").css("border-color", "");
+            GetPackingListInfo();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLID",
+                fields: {
+                    PLID: { editable: false },
+                    PLNo: { editable: false },
+                    PLDate: { editable: false },
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    BalesNo: { editable: false },
+                    MeterCIQty: { editable: false },
+                    FootCIQty: { editable: false },
+                    TotalSide: { editable: false },
+                    PLNetWeight: { editable: false },
+                    NetWeightUnit: { editable: false },
+                    PLGrossWeight: { editable: false },
+                    GrossWeightUnit: { editable: false },
+                    PLMarks: { editable: false },
+                    PLNote: { editable: false },
+                    RecordStatus: { editable: false },
+                    RecordStatusName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "PLID", hidden: true },
+            { field: "PLNo", title: "PLNo", width: "60px" },
+            { field: "PLDate", title: "PLDate", width: "60px" },
+            { field: "CIID", hidden: true },
+            { field: "CINo", title: "CIRefNo", width: "60px" },
+            { field: "CIDate", hidden: true },
+            { field: "BalesNo", title: "BalesNo", width: "60px" },
+            { field: "BaleQty", title: "BaleQty", width: "60px" },
+            { field: "TotalPcs", title: "TotalPcs", width: "60px" },
+            { field: "TotalSide", title: "TotalSide", width: "60px" },
+            { field: "MeterCIQty", hidden: true },
+            { field: "FootCIQty", hidden: true },
+            { field: "PLNetWeight", hidden: true },
+            { field: "NetWeightUnit", hidden: true },
+            { field: "PLGrossWeight", hidden: true },
+            { field: "GrossWeightUnit", hidden: true },
+            { field: "PLMarks", hidden: true },
+            { field: "BalesNo", hidden: true },
+            { field: "PLNote", hidden: true },
+            { field: "RecordStatus", hidden: true },
+            { field: "RecordStatusName", title: "Status", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Packing List Info.",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPackingListInfo() {
+        $.ajax({
+            url: '@Url.Action("GetPackingListInformation", "EXPPackingList")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#PLID").val(selectedItem.PLID);
+        $("#PLNo").val(selectedItem.PLNo);
+        $("#PLDate").val(selectedItem.PLDate);
+
+        $("#CIID").val(selectedItem.CIID);
+        $("#CINo").val(selectedItem.CINo);
+        $("#CIDate").val(selectedItem.CIDate);
+
+        $("#BalesNo").val(selectedItem.BalesNo);
+        $("#BaleQty").val(selectedItem.BaleQty);
+        $("#TotalPcs").val(selectedItem.TotalPcs);
+        $("#TotalSide").val(selectedItem.TotalSide);
+
+        $("#FootCIQty").val(selectedItem.FootCIQty);
+        $("#MeterCIQty").val(selectedItem.MeterCIQty);
+
+        $("#PLNetWeight").val(selectedItem.PLNetWeight);
+        $("#NetWeightUnit").val(selectedItem.NetWeightUnit);
+        $("#PLGrossWeight").val(selectedItem.PLGrossWeight);
+        $("#GrossWeightUnit").val(selectedItem.GrossWeightUnit);
+
+        $("#PLMarks").val(selectedItem.PLMarks);
+        $("#PLNote").val(selectedItem.PLNote);
+
+        $("#RecordStatus").val(selectedItem.RecordStatus);
+
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    /////////////////////////////////////////////
+
+    ////////////////////Search CI PI Information////////////////
+
+    $("#btnSearchPI").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#MessageText").html("");
+            $(".txtBox").css("border-color", "");
+            GetPLPIInformation();
+            SelectedItemOfListOfValue('SearchWindowPIGrid');
+            SearchWindowPI.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLPIID",
+                fields: {
+                    PLPIID: { editable: false },
+                    PLID: { editable: false },
+
+                    PIID: { editable: false },
+                    PINo: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+
+                    PLPIPcs: { editable: false },
+                    PLPISide: { editable: false },
+
+                    MeterPLPIQty: { editable: false },
+                    FootPLPIQty: { editable: false },
+                    PLPINetWeight: { editable: false },
+                    PLPINetWeightUnit: { editable: false },
+                    PLPIGrossWeight: { editable: false },
+                    PLPIGrossWeightUnit: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowPIGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "PLPIID", hidden: true },
+            { field: "PLID", hidden: true },
+            { field: "PIID", hidden: true },
+            { field: "PINo", title: "PINo", width: "60px" },
+            { field: "BuyerID", hidden: true },
+            { field: "BuyerName", title: "Buyer", width: "60px" },
+            { field: "BuyerOrderID", hidden: true },
+            { field: "PLPIPcs", hidden: true },
+            { field: "PLPISide", hidden: true },
+            { field: "BuyerOrderNo", title: "BuyerOrderNo", width: "60px" },
+
+            { field: "LCID", hidden: true },
+            { field: "LCNo", title: "LCNo", width: "60px" },
+
+            { field: "MeterPLPIQty", hidden: true },
+            { field: "FootPLPIQty", hidden: true, title: "PISFTQty", width: "60px" },
+            { field: "PLPINetWeight", title: "PIWeight", width: "60px" },
+            { field: "PLPINetWeightUnit", hidden: true, title: "PLPINetWeightUnit", width: "60px" },
+            { field: "PLPIGrossWeight", title: "PIGrossWeight", width: "60px" },
+            { field: "PLPIGrossWeightUnit", hidden: true, title: "PLPIGrossWeightUnit", width: "60px" },
+            { field: "RecordStatus", hidden: true }
+        ]
+    });
+
+    var SearchWindowPI = $('#SearchWindowPI').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "CI PI Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPLPIInformation() {
+        $.ajax({
+            url: '@Url.Action("GetPLPIInformation", "EXPPackingList")',
+            type: 'GET',
+            data: { "PLID": $("#PLID").val() },
+            success: function (data) {
+                $("#SearchWindowPIGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowPIEvents() {
+        var grid = $("#SearchWindowPIGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#PLPIID").val(selectedItem.PLPIID);
+        $("#PLID").val(selectedItem.PLID);
+
+        $("#PIID").val(selectedItem.PIID);
+        $("#PINo").val(selectedItem.PINo);
+        $("#BuyerID").val(selectedItem.BuyerID);
+        $("#BuyerName").val(selectedItem.BuyerName);
+        $("#BuyerOrderID").val(selectedItem.BuyerOrderID);
+        $("#BuyerOrderNo").val(selectedItem.BuyerOrderNo);
+
+        $("#LCID").val(selectedItem.LCID);
+        $("#LCNo").val(selectedItem.LCNo);
+
+        $("#PLPIPcs").val(selectedItem.PLPIPcs);
+        $("#PLPISide").val(selectedItem.PLPISide);
+
+        $("#MeterPLPIQty").val(selectedItem.MeterPLPIQty);
+        $("#FootPLPIQty").val(selectedItem.FootPLPIQty);
+        $("#PLPINetWeight").val(selectedItem.PLPINetWeight);
+        $("#PLPINetWeightUnit").val(selectedItem.PLPINetWeightUnit);
+        $("#PLPIGrossWeight").val(selectedItem.PLPIGrossWeight);
+        $("#PLPIGrossWeightUnit").val(selectedItem.PLPIGrossWeightUnit);
+
+        //$("#RecordStatus").val(selectedItem.RecordStatus);
+
+        //CheckRecordStatusForButton(selectedItem.RecordStatus);
+
+        $.ajax({
+            url: '@Url.Action("GetAllGridList", "EXPPackingList")',
+            type: 'GET',
+            data: { "PLPIID": selectedItem.PLPIID },
+            success: function (data) {
+                $("#plGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorBaleList);
+            }
+        });
+        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSearchWindowPIOK').click(function () {
+        SearchWindowPIEvents();
+        SearchWindowPI.close();
+    });
+    $('#btnSearchWindowPICancel').click(function () {
+        SearchWindowPI.close();
+    });
+    $("#SearchWindowPI").dblclick(function () {
+        SearchWindowPIEvents();
+        SearchWindowPI.close();
+    });
+    $("#SearchWindowPI").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowPIEvents();
+            SearchWindowPI.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindowPI.close();
+        }
+        event.stopPropagation();
+    });
+
+    /////////////////////////////////////////////
+
+
+    ////////////////////Search CI Information////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#CINo").is(":focus")) {
+            if (e.which == 120) {
+                //GetPartyInfo();
+                //SelectedItemOfListOfValue('PartyWindowGrid');
+                //PartyWindow.open(); //Open Popup
+                GetCIInformation();
+                SelectedItemOfListOfValue('PackingListCIGrid');
+                PackingListCI.open();
+                PackingListCI.center();
+            }
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLPIID",
+                fields: {
+
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIRefNo: { editable: false },
+                    CIDate: { editable: false },
+                    CIType: { editable: false },
+                    CIAmount: { editable: false },
+                    CICurrency: { editable: false },
+                    ExchangeCurrency: { editable: false },
+                    ExchangeRate: { editable: false },
+                    ExchangeValue: { editable: false },
+                    CINote: { editable: false },
+                    ExportNo: { editable: false },
+                    ExportDate: { editable: false },
+                    OnAccountRiskOf: { editable: false },
+                    NotifyParty: { editable: false },
+                    ShipmentFrom: { editable: false },
+                    BalesNo: { editable: false },
+                    DrawnUnder: { editable: false },
+                    PaymentTerms: { editable: false },
+                    MarksAndNumber: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#PackingListCIGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "CIID", hidden: true },
+            { field: "CINo", hidden: true, title: "CINo", width: "60px" },
+            { field: "CIRefNo", title: "CINo", width: "60px" },
+            { field: "CIDate", title: "CIDate", width: "60px" },
+            { field: "CIType", hidden: true },
+            { field: "CIAmount", hidden: true },
+            { field: "CICurrency", hidden: true },
+            { field: "ExchangeCurrency", hidden: true },
+            { field: "ExchangeValue", hidden: true },
+            { field: "ExchangeRate", hidden: true },
+            { field: "ExportNo", title: "ExportNo", width: "60px" },
+            { field: "ExportDate", title: "ExportDate", width: "60px" },
+            { field: "OnAccountRiskOf", hidden: true },
+            { field: "NotifyParty", hidden: true },
+            { field: "ShipmentFrom", hidden: true },
+            { field: "BalesNo", hidden: true },
+            { field: "DrawnUnder", hidden: true },
+            { field: "MarksAndNumber", title: "MarksAndNumber", width: "60px" },
+            { field: "CINote", title: "Note", width: "60px" },
+            { field: "RecordStatus", hidden: true }
+        ]
+    });
+
+    var PackingListCI = $('#PackingListCI').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "CI Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetCIInformation() {
+        $.ajax({
+            url: '@Url.Action("GetCIInformation", "EXPCI")',
+            type: 'GET',
+            success: function (data) {
+                $("#PackingListCIGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function PackingListCIEvents() {
+        var grid = $("#PackingListCIGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        $("#CIID").val(selectedItem.CIID);
+        $("#CINo").val(selectedItem.CIRefNo);
+        $("#CIDate").val(selectedItem.CIDate);
+        //$("#CIType").val(selectedItem.CIType);
+        //$("#CIAmount").val(selectedItem.CIAmount);
+        //$("#CICurrency").val(selectedItem.CICurrency);
+        //$("#ExchangeCurrency").val(selectedItem.ExchangeCurrency);
+        //$("#ExchangeRate").val(selectedItem.ExchangeRate);
+        //$("#ExchangeValue").val(selectedItem.ExchangeValue);
+        //$("#CINote").val(selectedItem.CINote);
+        //$("#ExportNo").val(selectedItem.ExportNo);
+        //$("#ExportDate").val(selectedItem.ExportDate);
+        //$("#OnAccountRiskOf").val(selectedItem.OnAccountRiskOf);
+        //$("#NotifyParty").val(selectedItem.NotifyParty);
+        //$("#ShipmentFrom").val(selectedItem.ShipmentFrom);
+        //$("#BalesNo").val(selectedItem.BalesNo);
+        //$("#DrawnUnder").val(selectedItem.DrawnUnder);
+        //$("#PaymentTerms").val(selectedItem.PaymentTerms);
+        $("#PLMarks").val(selectedItem.MarksAndNumber);
+        $("#PLNote").val(selectedItem.CINote);
+
+        //CheckRecordStatusForButton(selectedItem.RecordStatus);
+
+        @*$.ajax({
+            url: '@Url.Action("GetAllGridList", "EXPCI")',
+            type: 'GET',
+            data: { "PLPIItemColorID": selectedItem.PLPIItemColorID },
+            success: function (data) {
+                $("#plGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorBaleList);
+            }
+        });
+        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });*@
+    }
+
+    $('#btnPackingListCIOK').click(function () {
+        PackingListCIEvents();
+        PackingListCI.close();
+    });
+    $('#btnPackingListCICancel').click(function () {
+        PackingListCI.close();
+    });
+    $("#PackingListCI").dblclick(function () {
+        PackingListCIEvents();
+        PackingListCI.close();
+    });
+    $("#PackingListCI").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PackingListCIEvents();
+            PackingListCI.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PackingListCI.close();
+        }
+        event.stopPropagation();
+    });
+
+    /////////////////////////////////////////////
+
+
+    //////////////////////////Buyer/Party////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#BuyerName").is(":focus")) {
+            if (e.which == 120) {
+                GetPartyInfo();
+                SelectedItemOfListOfValue('PartyWindowGrid');
+                PartyWindow.open(); //Open Popup
+                PartyWindow.center();
+            }
+        }
+    });
+
+    function GetPartyInfo() {
+        $.ajax({
+            url: '@Url.Action("GetBuyerList", "EXPCI")',
+            type: 'GET',
+            success: function (response) {
+                $("#PartyWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var PartyWindow = $('#PartyWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Party Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PartyDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCategory: { editable: false },
+                    BuyerType: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var PartyGrid = $("#PartyWindowGrid").kendoGrid({
+        dataSource: PartyDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerName", title: "Buyer", width: "60px" },
+              { field: "BuyerCategory", title: "Category", width: "60px" },
+              { field: "BuyerType", title: "Type", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" }
+        ]
+    });
+
+    function PartyWindowEvent() {
+        var WindowGrid = $("#PartyWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+        $("#BuyerID").val(WindowGridItem.BuyerID);
+        $("#BuyerCode").val(WindowGridItem.BuyerCode);
+        $("#BuyerName").val(WindowGridItem.BuyerName);
+
+        changeStatus = 1;
+    };
+
+    $('#btnPartyWindowOK').click(function () {
+        PartyWindowEvent();
+        PartyWindow.close();
+    });
+
+    $('#btnPartyWindowCancel').click(function () {
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").dblclick(function () {
+        PartyWindowEvent();
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PartyWindowEvent();
+            PartyWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PartyWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    ////////////////////Search CI PI Information////////////////
+
+    //$("#btnSearchPI").click(function () {
+    //    resetEditDeleteStatus = 2;
+    //    // When Chages Data
+    //    if (changeStatus == 1)
+    //        OpenSaveChangesDialog();
+    //        // When no Chages Data
+    //    else {
+    //        $("#MessageText").html("");
+    //        $(".txtBox").css("border-color", "");
+    //        GetCIPIInformation();
+    //        SelectedItemOfListOfValue('PackingListCIPIGrid');
+    //        PackingListCIPI.open();
+    //    }
+    //});
+
+    $(document.body).keyup(function (e) {
+        if ($("#PINo").is(":focus")) {
+            if (e.which == 120) {
+                //GetPartyInfo();
+                //SelectedItemOfListOfValue('PartyWindowGrid');
+                //PartyWindow.open(); //Open Popup
+                GetCIPIInformation();
+                SelectedItemOfListOfValue('PackingListCIPIGrid');
+                PackingListCIPI.open();
+                PackingListCIPI.center();
+            }
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIPIID",
+                fields: {
+                    PLPIID: { editable: false },
+                    CIID: { editable: false },
+                    PIID: { editable: false },
+                    LCNo: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    LCID: { editable: false },
+                    PINo: { editable: false },
+                    PIStatus: { editable: false },
+                    PIAmount: { editable: false },
+                    PICurrency: { editable: false },
+                    ExchangeCurrency: { editable: false },
+                    ExchangeRate: { editable: false },
+                    ExchangeValue: { editable: false },
+                    RecordStatus: { editable: false },
+                    Remarks: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#PackingListCIPIGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "CIPIID", hidden: true },
+            { field: "CIID", hidden: true },
+            { field: "PIID", hidden: true },
+            { field: "PINo", title: "PINo", width: "60px" },
+            { field: "BuyerID", hidden: true },
+            { field: "BuyerName", title: "Buyer", width: "60px" },
+            { field: "BuyerOrderID", hidden: true },
+            { field: "BuyerOrderNo", title: "BuyerOrderNo", width: "60px" },
+            { field: "LCID", hidden: true },
+            { field: "LCNo", title: "LCNo", width: "60px" },
+            { field: "PICurrency", hidden: true },
+            { field: "ExchangeCurrency", hidden: true },
+            { field: "ExchangeValue", hidden: true },
+            { field: "ExchangeRate", hidden: true },
+            { field: "Remarks", hidden: true },
+            { field: "RecordStatus", hidden: true }
+        ]
+    });
+
+    var PackingListCIPI = $('#PackingListCIPI').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "CI PI Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetCIPIInformation() {
+        if ($("#CIID").val() != "") {
+            $.ajax({
+                url: '@Url.Action("GetCIPIInformation", "EXPCI")',
+                type: 'GET',
+                data: { "CIID": $("#CIID").val() },
+                success: function (data) {
+                    $("#PackingListCIPIGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("GetExpPIList", "EXPCI")',
+                type: 'GET',
+                data: { "_BuyerID": $("#BuyerID").val() },
+                success: function (response) {
+                    $("#PackingListCIPIGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        }
+    }
+
+    function PackingListCIPIEvents() {
+        var grid = $("#PackingListCIPIGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        //$("#PLPIID").val(selectedItem.PLPIID);
+        //$("#CIID").val(selectedItem.CIID);
+        $("#PIID").val(selectedItem.PIID);
+        $("#LCID").val(selectedItem.LCID);
+        //$("#PIStatus").val(selectedItem.PIStatus);
+        //$("#PIAmount").val(selectedItem.PIAmount);
+        //$("#PICurrency").val(selectedItem.PICurrency);
+        //$("#ExchangeCurrency").val(selectedItem.ExchangeCurrency);
+        //$("#ExchangeRate").val(selectedItem.ExchangeRate);
+        //$("#ExchangeValue").val(selectedItem.ExchangeValue);
+        //$("#Remarks").val(selectedItem.Remarks);
+
+        //$("#CINo").val(selectedItem.CINo);
+        $("#PINo").val(selectedItem.PINo);
+        $("#LCNo").val(selectedItem.LCNo);
+        $("#BuyerOrderID").val(selectedItem.BuyerOrderID);
+        $("#BuyerOrderNo").val(selectedItem.BuyerOrderNo);
+
+        changeStatus = 1;
+        //$("#BuyerID").val(selectedItem.BuyerID);
+        //$("#BuyerName").val(selectedItem.BuyerName);
+
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+
+        if (selectedItem.CIPIID != "") {
+            $.ajax({
+                url: '@Url.Action("GetCIPIColorInformation", "EXPPackingList")',
+                type: 'GET',
+                data: { "CIPIID": selectedItem.CIPIID },
+                success: function (data) {
+                    $("#plGrid").data("kendoGrid").dataSource.data(data);
+                    //$("#plGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorList);
+                    //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorBaleList);
+                }
+            });
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("GetPIColorInformation", "EXPPackingList")',
+                type: 'GET',
+                data: { "PIID": selectedItem.PIID },
+                success: function (data) {
+                    $("#plGrid").data("kendoGrid").dataSource.data(data);
+                    //$("#plGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorList);
+                    //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPPLPIItemColorBaleList);
+                }
+            });
+        }
+        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnPackingListCIPIOK').click(function () {
+        PackingListCIPIEvents();
+        PackingListCIPI.close();
+    });
+    $('#btnPackingListCIPICancel').click(function () {
+        PackingListCIPI.close();
+    });
+    $("#PackingListCIPI").dblclick(function () {
+        PackingListCIPIEvents();
+        PackingListCIPI.close();
+    });
+    $("#PackingListCIPI").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PackingListCIPIEvents();
+            PackingListCIPI.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PackingListCIPI.close();
+        }
+        event.stopPropagation();
+    });
+
+    /////////////////////////////////////////////
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    ////////////////////////Grade///////////////////////////////////////////
+
+    $(document).on('keyup', '.GradeInfo', function (e) {
+        if (e.which == 120) {
+            GetGradeInfo();
+            SelectedItemOfListOfValue('GradeWindowGrid');
+            GradeWindow.open(); //Open Popup
+            GradeWindow.center();
+        }
+    });
+
+    function GetGradeInfo() {
+        $.ajax({
+            url: '@Url.Action("GetGradeInfo", "CrustingProductionSchedule")',
+            type: 'GET',
+            success: function (response) {
+                $("#GradeWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var GradeWindow = $('#GradeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Grade Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var GradeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    GradeID: { editable: false },
+                    GradeName: { editable: false },
+                    Description: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var GradeGrid = $("#GradeWindowGrid").kendoGrid({
+        dataSource: GradeDataSource,
+        pageable: true,
+        groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "GradeID", hidden: true },
+              { field: "GradeName", title: "Grade", width: "60px" },
+              { field: "Description", title: "Description", width: "60px" }
+        ]
+    });
+
+    function GradeWindowEvent() {
+        var WindowGrid = $("#GradeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("GradeID", WindowGridItem.GradeID);
+        PageGridItem.set("GradeName", WindowGridItem.GradeName);
+
+        changeStatus = 1;
+    };
+
+    $('#btnGradeWindowOK').click(function () {
+        GradeWindowEvent();
+        GradeWindow.close();
+    });
+
+    $('#btnGradeWindowCancel').click(function () {
+        GradeWindow.close();
+    });
+
+    $("#GradeWindow").dblclick(function () {
+        GradeWindowEvent();
+        GradeWindow.close();
+    });
+
+    $("#GradeWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            GradeWindowEvent();
+            GradeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            GradeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    //############## Code Block By Shalim Ahmed (10.05.2015) #############
+    @*$("#btnRead").click(function () {
+        $.ajax({
+            url: '@Url.Action("LoadExcelFile", "EXPPackingList")',
+            type: 'GET',
+            data: { "fileName": $("#txtUploadFile").val() },
+            success: function (response) {
+                $("#PageDetailGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    });*@
+
+    //$('#txtUploadFile').on('change', function (e) {
+    //    var files = e.target.files;
+    //    if (files.length > 0) {
+    //        if (window.FormData !== undefined) {
+    //            var data = new FormData();
+    //            for (var x = 0; x < files.length; x++) {
+    //                data.append("file" + x, files[x]);
+    //            }
+
+    //            $.ajax({
+    //                type: "POST",
+    //                url: '/MyController/UploadFile?id=' + myID,
+    //                contentType: false,
+    //                processData: false,
+    //                data: data,
+    //                success: function (result) {
+    //                    console.log(result);
+    //                },
+    //                error: function (xhr, status, p3, p4) {
+    //                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+    //                    if (xhr.responseText && xhr.responseText[0] == "{")
+    //                        err = JSON.parse(xhr.responseText).Message;
+    //                    console.log(err);
+    //                }
+    //            });
+    //        } else {
+    //            alert("This browser doesn't support HTML5 file uploads!");
+    //        }
+    //    }
+    //});
+    ///////////////////////////////////////////////////////////////////////////////
+
+
+    function SumofCIAmount() {
+        var sum = (($("#FootCIQty").val() - 0));// + ($("#CommissionAmt").val() - 0) + ($("#PostageAmt").val() - 0) + ($("#SwiftCharge").val() - 0) + ($("#SourceTaxAmt").val() - 0) + ($("#VatAmt").val() - 0) + ($("#StationaryExpense").val() - 0) + ($("#OtherCost").val() - 0));
+        if (isNaN(sum)) {
+            $("#MeterCIQty").val('');
+        }
+        else {
+            if ((($("#FootCIQty").val() - 0) * 0.0929).toFixed(2) > 0) {
+                $("#MeterCIQty").val((($("#FootCIQty").val() - 0) * 0.0929).toFixed(2));
+            }
+        }
+        return true;
+    }
+
+    function SumofCISMTAmount() {
+        var sum = (($("#MeterCIQty").val() - 0));
+        if (isNaN(sum)) {
+            $("#FootCIQty").val('');
+        }
+        else {
+            if ((($("#MeterCIQty").val() - 0) / 0.0929).toFixed(2) > 0) {
+                $("#FootCIQty").val((($("#MeterCIQty").val() - 0) / 0.0929).toFixed(2));
+            }
+        }
+        return true;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    function SumofPIAmount() {
+        var sum = (($("#FootPLPIQty").val() - 0));// + ($("#CommissionAmt").val() - 0) + ($("#PostageAmt").val() - 0) + ($("#SwiftCharge").val() - 0) + ($("#SourceTaxAmt").val() - 0) + ($("#VatAmt").val() - 0) + ($("#StationaryExpense").val() - 0) + ($("#OtherCost").val() - 0));
+        if (isNaN(sum)) {
+            $("#MeterPLPIQty").val('');
+        }
+        else {
+            if ((($("#FootPLPIQty").val() - 0) * 0.0929).toFixed(2) > 0) {
+                $("#MeterPLPIQty").val((($("#FootPLPIQty").val() - 0) * 0.0929).toFixed(2));
+            }
+        }
+        return true;
+    }
+
+    function SumofPISMTAmount() {
+        var sum = (($("#MeterPLPIQty").val() - 0));
+        if (isNaN(sum)) {
+            $("#FootPLPIQty").val('');
+        }
+        else {
+            if ((($("#MeterPLPIQty").val() - 0) / 0.0929).toFixed(2) > 0) {
+                $("#FootPLPIQty").val((($("#MeterPLPIQty").val() - 0) / 0.0929).toFixed(2));
+            }
+        }
+        return true;
+    }
+
+</script>
+
+
+<script>
+
+    function onSelect(e) {
+        //  kendoConsole.log("Select :: " + getFileInfo(e));
+    }
+
+    function onUpload(e) {
+        //  kendoConsole.log("Upload :: " + getFileInfo(e));
+    }
+
+    function onSuccess(e) {
+        $.ajax({
+            url: '@Url.Action("LoadExcelFile", "EXPPackingList")',
+            type: 'GET',
+            data: { "fileName": $("#files").val() },
+            success: function (response) {
+                changeStatus = 1;
+                $("#PageDetailGrid").data('kendoGrid').dataSource.data(response);
+                //$('#MessageText').html(response.msg.Msg);
+                //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                //}
+            } //End of success call
+        });
+        //   kendoConsole.log("Success (" + e.operation + ") :: " + getFileInfo(e));
+    }
+
+    function onError(e) {
+        //$('#MessageText').html(respnse.msg.Msg);
+        //alert(e.Msg);
+    }
+
+    function onComplete(e) {
+        // kendoConsole.log("Complete");
+    }
+
+    function onCancel(e) {
+        //  kendoConsole.log("Cancel :: " + getFileInfo(e));
+    }
+
+    function onRemove(e) {
+        // kendoConsole.log("Remove :: " + getFileInfo(e));
+    }
+
+    function onProgress(e) {
+        //kendoConsole.log("Upload progress :: " + e.percentComplete + "% :: " + getFileInfo(e));
+    }
+
+    $(document).ready(function () {
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: "UploadFile",
+                removeUrl: "Remove",
+                autoUpload: true
+            },
+            cancel: onCancel,
+            complete: onComplete,
+            error: onError,
+            progress: onProgress,
+            remove: onRemove,
+            select: onSelect,
+            success: onSuccess,
+            upload: onUpload
+        });
+    });
+</script>

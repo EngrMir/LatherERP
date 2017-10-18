@@ -1,0 +1,1135 @@
+﻿@{
+    ViewBag.Title = "Transport Challan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Transport Challan</div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+            </div>
+            <div id="" class="col-lg-3">
+                <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row FormBody" style="min-height: 75px;">
+    <div class="col-lg-6">
+        <div class="row">
+            <label>Transport Challan No</label>
+            <input type="text" id="txtTCTransChlnId" class="txtField" style="display: none;" />
+            <input type="text" id="txtTCTransChlnNo" class="txtField" style="margin-left: 13px;" />
+        </div>
+        <div class="row">
+            <label>Ref Challan No</label>
+            <input type="text" id="txtTCRefChlnNo" class="txtField" style="margin-left: 49px;" />
+        </div>
+        <div class="row">
+            <label>Transport Challan Date</label>
+            <input type="text" id="txtTCTransChlnDate" class="datePicker txtField" />
+        </div>
+        <div class="row">
+            <label>Delivery Challan No</label>
+            <input type="text" id="txtTCDlvryChlnId" class="txtField" style="display: none;" />
+            <input type="text" id="txtTCDlvryChlnNo" class="txtField" style="margin-left: 23px;" placeholder="(Press F9)" />
+        </div>
+        <div class="row">
+            <label>Transport Challan Note</label>
+            <input type="text" id="txtTCTransChlnNote" class="txtField" style="width: 300px;" />
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="row">
+            <label>Sender</label>
+            <input type="text" id="txtTCSender" class="txtField" style="margin-left: 38px; width: 300px;" placeholder="Name" />
+        </div>
+        <div class="row">
+            <input type="text" id="txtTCSenderAddress" class="txtField" style="margin-left: 82px; width: 300px" placeholder="Address" />
+        </div>
+        <div class="row">
+            <label>Receiver</label>
+            <input type="text" id="txtTCReceiver" class="txtField" style="margin-left: 29px; width: 300px;" placeholder="Name" />
+        </div>
+        <div class="row">
+            <input type="text" id="txtTCReceiverAddress" class="txtField" style="margin-left: 82px; width: 300px;" placeholder="Address" />
+        </div>
+        <div class="row">
+            <label>Delivery From</label>
+            <input type="text" id="txtTCDlvryFrm" class="txtField" style=" width: 300px;" />
+        </div>
+        <div class="row">
+            <label>Delivery To</label>
+            <input type="text" id="txtTCDlvryTo" class="txtField" style="margin-left: 18px; width: 300px;" />
+        </div>
+    </div>
+</div>
+
+<div class="row FormBody" style="min-height: 75px;">
+    <div class="row" style="margin-top: -10px; padding: 0 0 0 0;">
+        <div id="transportChallanCIGrid" style="padding: 0 0 0 0; width: 1221px; margin-left: 5px;">
+
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <label style="margin-left: 20px;">Confirm Note</label>
+        <input type="text" id="txtTCCnfrmNote" class="" style="width: 300px;" />
+        <input type="button" id="btnConfirm" value="Confirm" />
+    </div>
+</div>
+
+@* ######################################## Hidden Windows ######################################## *@
+
+@* ********** Delete Confirmation Window ********** *@
+<div id="DeleteBillOfLadingConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOfLadingOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOfLadingCancel" value="Cancel" />
+</div>
+@* ********** Delete Confirmation Window End ********** *@
+
+@* ********** Save Change Window ********** *@
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+@* ********** Save Change Window End ********** *@
+
+@* ********** Commercial Invoice Window ********** *@
+<div id="CommercialInvoiceWindow" style="display: none;">
+    @*<div class="row" style="width: 100%;">
+            <label style="margin-left: 20px;">CI No.</label>
+            <input type="text" id="txtCommercialInvoice" style="width: 250px;" /><input type="button" id="btnCommercialInvoiceGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+        </div>*@
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="CommercialInvoiceWindowGrid" class="PopUpGrid" style="margin-left: 20px; ">
+        </div>
+    </div>
+    <div class="row" style="width: 98%;">
+        <input type="button" id="btnCommercialInvoiceWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnCommercialInvoiceWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Commercial Invoice Window End ********** *@
+
+@* ********** Packing List Window ********** *@
+<div id="PackingListWindow" style="display: none;">
+    @*<div class="row" style="width: 100%; height: 15%;">
+            <label style="margin-left: 20px;">PL No.</label>
+            <input type="text" id="txtPackingList" style="width: 250px;" /><input type="button" id="btnPackingListGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+        </div>*@
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="PackingListWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 98%; ">
+        <input type="button" id="btnPackingListWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnPackingListWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Packing List Window End ********** *@
+
+@* ********** Delivery Challan Window ********** *@
+<div id="DeliveryChallanWindow" style="display: none;">
+    @*<div class="row" style="width: 100%; height: 15%;">
+            <label style="margin-left: 20px;">PL No.</label>
+            <input type="text" id="txtPackingList" style="width: 250px;" /><input type="button" id="btnPackingListGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+        </div>*@
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="DeliveryChallanWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 98%; ">
+        <input type="button" id="btnDeliveryChallanWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnDeliveryChallanWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Delivery Challant Window End ********** *@
+
+@* ********** Transport Challan Window ********** *@
+<div id="TransportChallanWindow" style="display: none;">
+    @*<div class="row" style="width: 100%; height: 15%;">
+            <label style="margin-left: 20px;">PL No.</label>
+            <input type="text" id="txtPackingList" style="width: 250px;" /><input type="button" id="btnPackingListGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+        </div>*@
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="TransportChallanWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 98%; ">
+        <input type="button" id="btnTransportChallanWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnTransportChallanWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Delivery Challant Window End ********** *@
+
+@* ********** Wait Modal Window ********** *@
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+@* ********** Wait Modal Window End ********** *@
+
+@* ######################################## Hidden Windows End ######################################## *@
+
+<script type="text/javascript">
+
+    // ######################################## Document Ready ######################################## //
+
+    $(document).ready(function () {
+        $("#txtTCTransChlnDate").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            max: new Date()
+        });
+        function addItem() {
+            //var grid = $("#transportChallanCIGrid").data("kendoGrid");
+            ////var ds = billOfLadingContainerGridDatasource.data();
+            //$("#transportChallanCIGrid").data().kendoGrid.bind('dataBound', function (e) {
+            //    var ds = TransportChallanCIGridDataSource.data();
+            //    this.element.find('tbody tr:eq(' + (ds.length - 1) + ')').addClass('k-state-selected');
+            //    //this.element.find('tbody tr:eq(' + (ds.length - 1) + ') td:eq(2)').addClass('k-state-focus');
+            //});
+            //grid.addRow();
+            ////var cell = $('#billOfLadingContainerGrid').find('tbody tr:eq(' + (ds.length - 1) + ') td:eq(2)');
+            ////$('#billOfLadingContainerGrid').data('kendoGrid').editCell(cell);
+            var grid = $("#transportChallanCIGrid").data("kendoGrid");
+            $("#transportChallanCIGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            setTimeout(function () {
+                $("#transportChallanCIGrid tbody tr:first td:eq(0)").focus();
+            }, 1);
+        }
+
+        $(".btnAddChallanCI").click(function (e) {
+
+            addItem();
+        });
+
+        $("#transportChallanCIGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                addItem();
+            }
+        });
+
+    });
+
+
+
+    // ######################################## Document Ready End ######################################## //
+
+    // ######################################## Grid And Window Declaration ######################################## //
+
+    // ************ Transport ChallanCI Grid & Window Declaration ************ //
+
+    //Transport ChallanCI Grid Data Source
+    var TransportChallanCIGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TransportChallanID",
+                fields: {
+                    TransportChallanID: { editable: true },
+                    CIID: { editable: true },
+                    CINo: { editable: true },
+                    CIDate: { editable: true },
+                    PLID: { editable: true },
+                    PLNo: { editable: true },
+                    PLDate: { eidtable: true }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Transport ChallanCI Grid
+    $("#transportChallanCIGrid").kendoGrid({
+        dataSource: TransportChallanCIGridDataSource,
+        pageable: true,
+        edit: function (e) {
+
+            $("[name='CINo']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    GetComInv();
+                    CommercialInvoiceWindow.open();
+                    CommercialInvoiceWindow.center();
+
+                }
+            });
+
+            $("[name='PLNo']", e.container).keyup(function (event) {
+                if (event.keyCode == 120) {
+                    GetPL();
+                    PackingListWindow.open();
+                    PackingListWindow.center();
+
+                }
+            });
+        },
+        save: function (e) {
+
+        },
+        editable: {
+            //"mode": "inline",
+            "createAt": "bottom"
+        },
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 220,
+        toolbar: [
+            {
+                text: "Add Challan CI",
+                className: "btnAddChallanCI",
+                imageClass: "k-icon k-add"
+            }
+        ],
+        columns: [
+            { field: "CINo", title: "CI No." },
+            { field: "CIDate", title: "CI Date" },
+            { field: "PLNo", title: "PL No." },
+            { field: "PLDate", title: "PL Date" },
+            { command: [{ name: "DeletedRow", text: "Delete", click: handleDeleteTrnsChlnCi }], title: "Delete" }
+        ]
+    });
+
+    // ************ Commercial Invoice Grid & Window Declaration End ************ //
+
+    // ************ Commercial Invoice Grid & Window Declaration ************ //
+
+    //Commercial Invoice Window
+    var CommercialInvoiceWindow = $('#CommercialInvoiceWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "70%",
+        height: "65%",
+        title: "Commercial Invoice List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Commercial Invoice Grid Data Source
+    var CommercialInvoiceGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Commercial Invoice Grid
+    $("#CommercialInvoiceWindowGrid").kendoGrid({
+        dataSource: CommercialInvoiceGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "CINo", title: "CI No." },
+            { field: "CIDate", title: "Date" },
+            { field: "RecordStatus", title: "Record Status" }
+        ]
+    });
+
+    //Activate Commercial Invoice Window
+    $('#txtEBOLCiNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            GetComInv();
+            CommercialInvoiceWindow.open();
+            CommercialInvoiceWindow.center();
+        }
+    });
+
+    // ************ Commercial Invoice Grid & Window Declaration End ************ //
+
+    // ************ Packing List Grid & Window Declaration ************ //
+
+    //Packing List Window
+    var PackingListWindow = $('#PackingListWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "70%",
+        height: "65%",
+        title: "Packing List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Packing List Grid Data Source
+    var PackingListGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLID",
+                fields: {
+                    PLID: { editable: false },
+                    PLNo: { editable: false },
+                    PLDate: { editable: false },
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Packing List Grid
+    $("#PackingListWindowGrid").kendoGrid({
+        dataSource: PackingListGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "PLNo", title: "PL No." },
+            { field: "PLDate", title: "Date" },
+            { field: "RecordStatus", title: "Record Status" }
+        ]
+    });
+
+    //Activate Packing List Window
+    $('#txtEBOLPlNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            GetPL();
+            PackingListWindow.open();
+            PackingListWindow.center();
+        }
+    });
+
+    // ************ Packing List Grid & Window Declaration End ************ //
+
+    // ************ Delivery Challan Grid & Window Declaration ************ //
+
+    //Delivery Challan Window
+    var DeliveryChallanWindow = $('#DeliveryChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "70%",
+        height: "65%",
+        title: "Packing List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Delivery Challan Grid Data Source
+    var DeliveryChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DeliverChallanID",
+                fields: {
+                    DeliverChallanID: { editable: false },
+                    DeliverChallanNo: { editable: false },
+                    DeliverChallanRef: { editable: false },
+                    DeliverChallanDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Delivery Challan Grid
+    $("#DeliveryChallanWindowGrid").kendoGrid({
+        dataSource: DeliveryChallanGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "DeliverChallanNo", title: "Challan No." },
+            { field: "DeliverChallanDate", title: "Date" },
+            { field: "RecordStatus", title: "Record Status" }
+        ]
+    });
+
+    //Activate Delivery Challan Window
+    $('#txtTCDlvryChlnNo').keyup(function (e) {
+        if (e.keyCode == 120) {
+            GetDlvryChln();
+            DeliveryChallanWindow.open();
+            DeliveryChallanWindow.center();
+        }
+    });
+
+    // ************ Delivery Challan Grid & Window Declaration End ************ //
+
+    // ************ Transport Challan Grid & Window Declaration ************ //
+
+    //Transport Challan Window
+    var TransportChallanWindow = $('#TransportChallanWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "70%",
+        height: "65%",
+        title: "Packing List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Transport Challan Grid Data Source
+    var TransportChallanGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TransportChallanID",
+                fields: {
+                    TransportChallanID: { editable: false },
+                    TransportChallanNo: { editable: false },
+                    TransportChallanRef: { editable: false },
+                    TransportChallanDate: { editable: false },
+                    RecordStatus: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Transport Challan Grid
+    $("#TransportChallanWindowGrid").kendoGrid({
+        dataSource: TransportChallanGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "TransportChallanNo", title: "Challan No." },
+            { field: "TransportChallanDate", title: "Date" },
+            { field: "RecordStatus", title: "Record Status" }
+        ]
+    });
+
+    //Activate Transporty Challan Window
+    $('#btnSearch').click(function (e) {
+
+        GetTransChln();
+        TransportChallanWindow.open();
+        TransportChallanWindow.center();
+
+    });
+
+    // ************ Transport Challan Grid & Window Declaration End ************ //
+
+    // ************ Save Changes Window Declaration End ************ //
+
+    SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Reset Data",
+        position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // ************ Save Changes Window Declaration End ************ //
+
+    // ************ Delete Confirmation Window Declaration ************ //
+
+    var DeleteWindow = $('#DeleteBillOfLadingConfirmWindow').kendoWindow({
+        width: "300px",
+        padding: "0px 0px 0px 100px",
+        title: "Do You Want To Delete This Record?",
+        visible: false,
+        modal: true,
+        draggable: true
+        //position: { top: 300, left: 400 }
+    }).data('kendoWindow');
+
+    // ************ Delete Confirmation Window Declaration End ************ //
+
+    // ######################################## Grid And Window Declaration End ######################################## //
+
+    // ######################################## Pop-Up Window Events ######################################## //
+
+    // ************ Commercial Invoice Window Pop-up events ************ //
+
+    function GetComInv() {
+        $.ajax({
+            url: '@Url.Action("GetComInv", "ExpBillOfLading")',
+            type: 'GET',
+            //data: ({  }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    CommercialInvoiceGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetCINo() {
+        var grid = $("#transportChallanCIGrid").data("kendoGrid");
+        var selected = (grid.dataItem(grid.select()));
+        var gridCiInv = $("#CommercialInvoiceWindowGrid").data("kendoGrid");
+        var selectedCiInv = (gridCiInv.dataItem(gridCiInv.select()));
+        selected.set("CIID", selectedCiInv.CIID);
+        selected.set("CINo", selectedCiInv.CINo);
+        selected.set("CIDate", selectedCiInv.CIDate);
+        CommercialInvoiceWindow.close();
+    }
+
+    $('#btnCommercialInvoiceWindowOK').click(function () {
+        SetCINo();
+    });
+
+    $('#CommercialInvoiceWindowGrid').dblclick(function () {
+        SetCINo();
+    });
+
+    $('#CommercialInvoiceWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetCINo();
+        }
+    });
+
+    $('#btnCommercialInvoiceWindowCancel').click(function () {
+        CommercialInvoiceWindow.close();
+    });
+
+    // ************ Commercial Invoice Window Pop-up events End ************ //
+
+    // ************ Packing List Window Pop-up events ************ //
+
+    // Load Packing List Grid
+    function GetPL() {
+        var grid = $("#transportChallanCIGrid").data("kendoGrid");
+        var selected = (grid.dataItem(grid.select()));
+        if (selected == null) {
+            $('#MessageText').html("A row in transport challan grid must be selected.");
+            $("#MessageText").css(
+                { 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else if (selected.CIID == "") {
+            $.ajax({
+                url: '@Url.Action("GetPackingListA", "ExpBillOfLading")',
+                type: 'GET',
+                //data: ({  }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        PackingListGridDataSource.data(data);
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: '@Url.Action("GetPackingListB", "ExpBillOfLading")',
+                type: 'GET',
+                data: ({ ciid: selected.CIID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        PackingListGridDataSource.data(data);
+                    }
+                }
+            });
+        }
+    }
+
+    // Set Packing List Id & No.
+    function SetPLNo() {
+        var grid = $("#transportChallanCIGrid").data("kendoGrid");
+        var selected = (grid.dataItem(grid.select()));
+        var gridPL = $("#PackingListWindowGrid").data("kendoGrid");
+        var selectedPL = (gridPL.dataItem(gridPL.select()));
+
+        selected.set("PLID", selectedPL.PLID);
+        selected.set("PLNo", selectedPL.PLNo);
+        selected.set("PLDate", selectedPL.PLDate);
+        if (selected.CIID == "") {
+            selected.set("CIID", selectedPL.CIID);
+            selected.set("CINo", selectedPL.CINo);
+            selected.set("CIDate", selectedPL.CIDate);
+        }
+        PackingListWindow.close();
+    }
+
+    $('#btnPackingListWindowOK').click(function () {
+        SetPLNo();
+    });
+
+    $('#PackingListWindowGrid').dblclick(function () {
+        SetPLNo();
+    });
+
+    $('#PackingListWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetPLNo();
+        }
+    });
+
+    $('#btnPackingListWindowCancel').click(function () {
+        PackingListWindow.close();
+    });
+
+    // ************ Packing List Window Pop-up events End ************ //
+
+    // ************ Delivery Challan Window Pop-up events ************ //
+
+    function GetDlvryChln() {
+        $.ajax({
+            url: '@Url.Action("GetDlvryChln", "TransportChallan")',
+            type: 'GET',
+            //data: ({  }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    DeliveryChallanGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetDlvryChln() {
+        var grid = $("#DeliveryChallanWindowGrid").data("kendoGrid");
+        var selected = (grid.dataItem(grid.select()));
+        $("#txtTCDlvryChlnId").val(selected.DeliverChallanID);
+        $("#txtTCDlvryChlnNo").val(selected.DeliverChallanNo);
+        DeliveryChallanWindow.close();
+    }
+
+    $('#btnDeliveryChallanWindowOK').click(function () {
+        SetDlvryChln();
+    });
+
+    $('#DeliveryChallanWindowGrid').dblclick(function () {
+        SetDlvryChln();
+    });
+
+    $('#DeliveryChallanWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            SetDlvryChln();
+        }
+    });
+
+    $('#btnDeliveryChallanWindowCancel').click(function () {
+        DeliveryChallanWindow.close();
+    });
+
+    // ************ Delivery Challan Window Pop-up events End ************ //
+
+    // ************ Transport Challan Window Pop-up events ************ //
+
+    function GetTransChln() {
+        $.ajax({
+            url: '@Url.Action("GetTransChln", "TransportChallan")',
+            type: 'GET',
+            //data: ({  }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    TransportChallanGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetTransChln(id) {
+
+        $.ajax({
+            url: '@Url.Action("GetTransChlnById", "TransportChallan")',
+            type: 'GET',
+            data: ({ "id": id }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    $("#txtTCTransChlnId").val(data.TransportChallanID);
+                    $("#txtTCTransChlnNo").val(data.TransportChallanNo);
+                    $("#txtTCRefChlnNo").val(data.TransportChallanRef);
+                    $("#txtTCTransChlnDate").val(data.TransportChallanDate);
+                    $("#txtTCTransChlnNote").val(data.TransportChallanNote);
+                    $("#txtTCDlvryChlnId").val(data.DeliverChallanID);
+                    $("#txtTCDlvryChlnNo").val(data.DeliverChallanNo);
+                    $("#txtTCSender").val(data.Sender);
+                    $("#txtTCSenderAddress").val(data.SenderAddress);
+                    $("#txtTCReceiver").val(data.Receiver);
+                    $("#txtTCReceiverAddress").val(data.ReceverAddress);
+                    $("#txtTCDlvryFrm").val(data.DeliveryFrom);
+                    $("#txtTCDlvryTo").val(data.DEliveryTo);
+                    $("#txtTCCnfrmNote").val(data.ConfirmNote);
+                    recordStatus = data.RecordStatus;
+                    CheckRecordStatusForButton(recordStatus);
+                    TransportChallanCIGridDataSource.data(data.ChallanCis);
+                }
+            }
+        });
+        TransportChallanWindow.close();
+    }
+
+    $('#btnTransportChallanWindowOK').click(function () {
+        var grid = $("#TransportChallanWindowGrid").data("kendoGrid");
+        var selected = (grid.dataItem(grid.select()));
+        SetTransChln(selected.TransportChallanID);
+    });
+
+    $('#TransportChallanWindowGrid').dblclick(function () {
+        var grid = $("#TransportChallanWindowGrid").data("kendoGrid");
+        var selected = (grid.dataItem(grid.select()));
+        SetTransChln(selected.TransportChallanID);
+    });
+
+    $('#TransportChallanWindowGrid').keyup(function (e) {
+        if (e.keyCode == 13) {
+            var grid = $("#TransportChallanWindowGrid").data("kendoGrid");
+            var selected = (grid.dataItem(grid.select()));
+            SetTransChln(selected.TransportChallanID);
+        }
+    });
+
+    $('#btnTransportChallanWindowCancel').click(function () {
+        TransportChallanWindow.close();
+    });
+
+    // ************ Transport Challan Window Pop-up events End ************ //
+
+
+    // ######################################## Pop-Up Window Events End ######################################## //
+
+    // ######################################## Save and Update ######################################## //
+
+    function Save() {
+
+        var obj = new Object();
+        obj.TransportChallanID = $("#txtTCTransChlnId").val();
+        obj.TransportChallanNo = $("#txtTCTransChlnNo").val();
+        obj.TransportChallanRef = $("#txtTCRefChlnNo").val();
+        obj.TransportChallanDate = $("#txtTCTransChlnDate").val();
+        obj.TransportChallanNote = $("#txtTCTransChlnNote").val();
+        obj.DeliverChallanID = $("#txtTCDlvryChlnId").val();
+        obj.Sender = $("#txtTCSender").val();
+        obj.SenderAddress = $("#txtTCSenderAddress").val();
+        obj.Receiver = $("#txtTCReceiver").val();
+        obj.ReceverAddress = $("#txtTCReceiverAddress").val();
+        obj.DeliveryFrom = $("#txtTCDlvryFrm").val();
+        obj.DEliveryTo = $("#txtTCDlvryTo").val();
+        obj.RecordStatus = recordStatus;
+        obj.ChallanCis = [];
+
+        var trnsChln = TransportChallanCIGridDataSource.data();
+        if (trnsChln != null) {
+            for (var i = 0; i < trnsChln.length; i++) {
+                var obj2 = new Object();
+                obj2.TransportChallanID = $("#txtTCTransChlnId").val();
+                obj2.CIID = trnsChln[i].CIID;
+                obj2.PLID = trnsChln[i].PLID;
+                obj2.DeliverChallanID = $("#txtTCDlvryChlnId").val();
+                obj2.RecordStatus = recordStatus;
+                obj.ChallanCis.push(obj2);
+            }
+        }
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("Save","TransportChallan")',
+            type: 'POST',
+            dataType: 'JSON',
+            data: JSON.stringify({ model: obj }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#txtTCTransChlnId").val(data.ReturnId);
+                    $("#txtTCTransChlnNo").val(data.ReturnCode);
+                    SetTransChln(data.ReturnId);
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+
+                } else if (data.Type == 3) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                } else {
+
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css(
+                        { 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+
+            }
+        });
+    }
+
+    $("#btnSave").click(function () {
+        ChangeInGrid(TransportChallanCIGridDataSource);
+        if (changeStatus == 0) {
+            $('#MessageText').html("No changes to save.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        } else {
+            Save();
+        }
+    });
+
+    // ######################################## Save and Update End ######################################## //
+
+    // ######################################## Confirm ######################################## //
+
+    function Confirm() {
+        var id = $("#txtTCTransChlnId").val();
+        var comnt = $("#txtTCCnfrmNote").val();
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("Confirm", "TransportChallan")',
+            type: 'POST',
+            dataType: 'JSON',
+            data: JSON.stringify({ id: id, note: comnt }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Type == 2) {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    saveStatus = 1;
+                    changeStatus = 0;
+                    recordStatus = "CNF";
+                    CheckRecordStatusForButton(recordStatus);
+                } else {
+                    $("#divLoading").hide();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            }
+        });
+    }
+
+    $("#btnConfirm").click(function () {
+        if ($("#txtTCTransChlnId").val() != "" && changeStatus != 1) {
+            Confirm();
+        } else {
+            $('#MessageText').html("Please save first to continue.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    });
+
+    // ######################################## Confirm End ######################################## //
+
+    // ######################################## Delete ######################################## //
+
+    function handleDeleteTrnsChlnCi() {
+        if (recordStatus != "CNF") {
+            del = "cont";
+            DeleteWindow.open();
+            DeleteWindow.center();
+            var grid = $("#transportChallanCIGrid").data("kendoGrid");
+            dataItem = {};
+            dataItem = (grid.dataItem(grid.select())); //Selected Row
+        }
+    };
+
+    function Delete(id) {
+        if (id != "") {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("Delete", "TransportChallan")',
+                type: 'GET',
+                data: ({ "id": id }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 4) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css(
+                            { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        reset();
+                    } else {
+                        $("#divLoading").hide();
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css(
+                            { "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Unknown error occured please try again.");
+                    $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        }
+    }
+
+    function DeleteCi(id, id2) {
+        if (id != "") {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("DeleteTrnsChlnCi", "TransportChallan")',
+                type: 'GET',
+                data: ({ "id": id, "id2": id2 }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Type == 4) {
+                        $("#divLoading").hide();
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css(
+                        { 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        $("#transportChallanCIGrid").data("kendoGrid").dataSource.remove(dataItem);
+                    } else {
+                        $("#divLoading").hide();
+                        $("#MessageText").html(response.Msg);
+                        $("#MessageText").css(
+                        { "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Unknown error occured please try again.");
+                    $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+            });
+        } else {
+            $("#transportChallanCIGrid").data("kendoGrid").dataSource.remove(dataItem);
+        }
+    }
+
+    $('#btnDelete').click(function () {
+        if ($('#txtSBEBillId').val() != "") {
+            del = "all";
+            DeleteWindow.open();
+            DeleteWindow.center();
+        } else {
+            $("#MessageText").html("This record has not been saved yet.");
+            $("#MessageText").css({ "color": "red", 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+        }
+    });
+
+    $('#btnDeleteBillOfLadingOK').click(function () {
+        var id = "";
+        var id2 = "";
+        if (del == "all") {
+            id = $('#txtTCTransChlnId').val();
+            Delete(id);
+            DeleteWindow.close();
+        } else if (del == "cont") {
+            id = dataItem.TransportChallanID;
+            id2 = dataItem.CIID;
+            DeleteCi(id, id2);
+            DeleteWindow.close();
+        }
+
+    });
+
+    $('#btnDeleteBillOfLadingCancel').click(function () {
+        DeleteWindow.close();
+    });
+
+    // ######################################## Delete End ######################################## //
+
+    // ######################################## Variables ######################################## //
+
+    var recordStatus;
+    var changeStatus;
+    var dataItem;
+    var del;
+    var port = "";
+    var savCngVal = "";
+    var saveStatus = 0;
+
+    // ######################################## Variables End ######################################## //
+
+    // ######################################## Detect Changes ######################################## //
+    $(".txtField").change(function (e) {
+        changeStatus = 1;
+    });
+    function ChangeInGrid(ds) {
+        //var ds = commercialInvoiceItemGridDataSource;
+        var dirty = false;
+
+        $.each(ds._data, function () {
+            if (this.dirty == true) {
+                changeStatus = 1;
+                dirty = true;
+            }
+        });
+        if (ds._destroyed.length > 0) {
+            dirty = true;
+            changeStatus = 1;
+        }
+        return dirty;
+    }
+    // ######################################## Detect Changes End ######################################## //
+
+    // ######################################## Reset ######################################## //
+
+    function reset() {
+        recordStatus = "";
+        changeStatus = 0;
+        dataItem = {};
+
+
+        CheckRecordStatusForButton(recordStatus);
+        $(".txtField").val("");
+        $("#txtTCCnfrmNote").val("");
+        $("#transportChallanCIGrid").data('kendoGrid').dataSource.data([]);
+        $('#txtTCTransChlnNo').css({ 'box-shadow': 'none' });
+        //$('#GridName').data('kendoGrid').dataSource.read();
+    }
+
+    $("#btnReset").click(function () {
+        savCngVal = "reset";
+        if (changeStatus == 1) {
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            reset();
+        }
+    });
+
+    $("#btnSaveChangeWindowOk").click(function () {
+        reset();
+        SaveChangeWindow.close();
+    });
+
+    $("#btnSaveChangeWindowCancel").click(function () {
+
+        SaveChangeWindow.close();
+    });
+
+    ClearOperationalMessage();
+    // ######################################## Reset End ######################################## //
+
+</script>

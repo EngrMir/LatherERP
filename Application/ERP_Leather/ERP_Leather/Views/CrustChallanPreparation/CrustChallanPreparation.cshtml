@@ -1,0 +1,1449 @@
+﻿@{
+    ViewBag.Title = "Crust Challan Preparation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>ChallanNo<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="ArticleChallanID" class="txtBox" style="width:60PX;" />
+                <input type="text" id="ArticleChallanNo" class="txtBox" style="width:175PX;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Party<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerID" class="txtBox" style="width:60PX;" />
+                <input type="text" id="BuyerCode" readonly="readonly" class="txtBox" style="width:60PX;" placeholder="Press F9" />
+                <input type="text" id="BuyerName" readonly="readonly" class="txtBox" style="width:102PX;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Preparation Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PreparationDate" class="datePicker" style="width:150PX;" />
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Article<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleName" readonly="readonly" class="txtBox RequiredTextBox" placeholder="Press F9" />
+                <input type="hidden" id="ArticleID" class="txtBox" />
+            </div>
+            <div class="col-lg-2">
+                <label>Article Quantity</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleArea" class="txtBox RequiredTextBox" style="width:100PX;" />
+                <input type="text" id="ArticleAreaUnit" class="RequiredTextBox" value="SFT" readonly="readonly" style="width:60PX;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Article Note</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ArticleNote" class="txtBox RequiredTextBox" />
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Challan Note</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ChallanNote" class="txtBox RequiredTextBox" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnAddNewYearMonth" class="Button" value="Inherit From Other Challan" />
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+            <div class="col-lg-2">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div id="ArticleGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div id="ColorGrid"></div>
+    </div>
+
+    <input type="hidden" id="RecordStatus" class="txtBox" />
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Confirm Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="ConfirmNote" class="txtBox" name="" tabindex=""></textarea>
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="ColorWindow" style="display: none;">
+    <div id="ColorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnColorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnColorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="BuyerWindow" style="display: none;">
+    <div id="BuyerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+    $(document).ready(function () {
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        var ddlUnitDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnit", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnit(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlUnitDataSource
+                    });
+        };
+
+
+        var ddlUnitDataSourceForThickness = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetCategoryWiseUnit", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: { "_UnitCategory": "Thickness" }
+                }
+            }
+        });
+
+        function ddlUnitForThickness(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlUnitDataSourceForThickness
+                    });
+        };
+
+        var ddlItemTypeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemTypeID",
+                    fields: {
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllItemType", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlItemType(container, options) {
+            $('<input name="ItemTypeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "ItemTypeName",
+                        dataValueField: "ItemTypeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlItemTypeDataSource
+                    });
+        };
+
+
+
+        var ddlLeatherStatusDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LeatherStatusID",
+                    fields: {
+                        LeatherStatusID: { editable: false },
+                        LeatherStatusName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllLeatherStatus", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlLeatherStatus(container, options) {
+            $('<input name="LeatherStatusID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "LeatherStatusName",
+                        dataValueField: "LeatherStatusName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlLeatherStatusDataSource
+                    });
+        };
+
+
+        var ddlThicknessAtDataSource = [{ text: "After Shaving", value: "After Shaving" }, { text: "After Finishing", value: "After Finishing" }];
+
+        function ddlThicknessAt(container, options) {
+            $('<input id="ThicknessAt" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        optionLabel: "Select",
+                        change: function (e) {
+                            changeStatus = 1;
+                        },
+                        dataSource: ddlThicknessAtDataSource
+                    });
+        };
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var ArticleGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleChallanDtlID",
+                    fields: {
+                        ArticleChallanDtlID: { editable: true },
+                        ArticleChallanID: { editable: true },
+                        SizeRange: { editable: true },
+                        SizeRangeUnit: { editable: true },
+                        SizeRangeUnitName: { editable: true, defaultValue: 'SFT' },
+                        PcsSideDescription: { editable: true },
+                        GradeRange: { editable: true },
+                        RequiredPercentage: { editable: true },
+                        ThicknessRange: { editable: true },
+                        ThicknessUnit: { editable: true },
+                        ThicknessUnitName: { editable: true, defaultValue: 'MM' },
+                        ThicknessAt: { editable: true, defaultValue: 'After Shaving' },
+                        Remarks: { editable: true }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var ArticleGrid = $("#ArticleGrid").kendoGrid({
+            dataSource: ArticleGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 250,
+            toolbar: [{
+                text: "Add New Item",
+                className: "btnArticleGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                    //{ field: "RequisitionItemID", title: "Item ID", width: "60px", sortable: false, filterable: false },
+                    { field: "SizeRange", title: "Size", width: "80px" },
+                    { field: "SizeRangeUnitName", title: "Unit", width: "60px", editor: ddlUnit },
+                    { field: "PcsSideDescription", title: "PCs/Side", width: "60px" },
+                    { field: "GradeRange", title: "Selection Range", width: "60px", },
+                    { field: "RequiredPercentage", title: "Required Percentage", width: "100px" },
+                    { field: "ThicknessRange", title: "Thickness Range", width: "60px" },
+                    { field: "ThicknessUnitName", title: "Thickness Unit", width: "50px", filterable: false, editor: ddlUnitForThickness },
+                    { field: "ThicknessAt", title: "Thickness At", width: "50px", filterable: false, editor: ddlThicknessAt },
+                    { field: "Remarks", title: "Remarks", width: "70px", filterable: false },
+
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 70 }
+            ]
+
+        }).data('kendoGrid');
+
+
+        var ColorGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleChallanIDColor",
+                    fields: {
+                        ArticleChallanIDColor: { editable: false },
+                        ArticleChallanID: { editable: false },
+                        ArticleColorNo: { editable: true },
+                        ArticleColor: { editable: true },
+                        ArticleColorName: { editable: true, defaultValue: 'Press F9' },
+                        ArticleColorArea: { editable: true, type: "number", validation: { required: false, min: 1, max: 999999999999 } },
+                        QuantityDescription: { editable: true },
+                        ColorAreaUnit: { editable: true },
+                        ColorAreaUnitName: { editable: true, defaultValue: 'SFT' },
+                        RemarkDate: { editable: true },
+                        Remarks: { editable: true }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var ColorGrid = $("#ColorGrid").kendoGrid({
+            dataSource: ColorGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            edit: function (e) {
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            height: 300,
+            toolbar: [{
+                text: "Add New Color",
+                className: "btnColorGrid",
+                imageClass: "k-icon k-add"
+            }],
+            columns: [
+                //{ field: "ArticleChallanIDColor", title: "ArticleChallanIDColor", width: "60px", sortable: false },
+                //{ field: "ArticleChallanID", title: "ArticleChallanID", width: "60px", sortable: false },
+                  { field: "ArticleColorNo", title: "Color No.", width: "60px", sortable: false },
+                  { field: "ArticleColorName", title: "Color Name", width: "80px", attributes: { "Class": "ArticleColorName" } },
+                  { field: "ArticleColorArea", format: "{0:n2}", title: "Quantity", width: "60px" },
+                  { field: "QuantityDescription", title: "Quantity Description", width: "60px" },
+                  { field: "ColorAreaUnitName", title: "Unit", width: "60px", editor: ddlUnit },
+                  { field: "RemarkDate", title: "Remark Date", width: "60px", format: "{0:dd/MM/yyyy}", editor: dateTimeEditor },
+                  { field: "Remarks", title: "Remarks", width: "60px" },
+                  { command: [{ name: "DeltedRow", text: "Delete", click: DeleteColor }], title: "Action", width: 50 }
+            ]
+        }).data('kendoGrid');
+
+
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleChallanID",
+                    fields: {
+                        ArticleChallanID: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                        BuyerID: { editable: false },
+                        BuyerCode: { editable: false },
+                        BuyerName: { editable: false },
+                        ArticleID: { editable: false },
+                        ArticleName: { editable: false },
+                        PreparationDate: { editable: false },
+                        RecordStatus: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSearchInformation", "CrustChallanPreparation")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        var searchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ArticleChallanNo", title: "Article Challan No", width: "60px" },
+                  { field: "BuyerName", title: "Party", width: "60px" },
+                  { field: "ArticleName", title: "Article Name", width: "60px" },
+                  { field: "PreparationDate", title: "Preparation Date", width: "60px" },
+                  { field: "RecordStatus", title: "Record Status", width: "70px" }
+            ]
+        });
+
+
+
+        var ColorWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ColorID",
+                    fields: {
+                        ColorID: { editable: false },
+                        ColorCode: { editable: false },
+                        ColorName: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveColor", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ColorWindowGrid = $("#ColorWindowGrid").kendoGrid({
+            dataSource: ColorWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "ColorCode", title: "Color Code", width: "60px" },
+                  { field: "ColorName", title: "Color Name", width: "60px" }
+            ]
+        });
+
+        var ArticleWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleID",
+                    fields: {
+                        ArticleID: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleName: { editable: false },
+                        //ArticleChallanNo: { editable: false },
+                        ArticleColor: { editable: false },
+                        ColorName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveArticle", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ArticleWindowGrid = $("#ArticleWindowGrid").kendoGrid({
+            dataSource: ArticleWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "ArticleNo", title: "Article Number", width: "60px" },
+                  { field: "ArticleName", title: "Article Name", width: "60px" },
+                  //{ field: "ArticleChallanNo", title: "Article Challan", width: "60px" },
+                  { field: "ColorName", title: "Article Color", width: "60px" }
+            ]
+        });
+
+
+        var BuyerWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BuyerID",
+                    fields: {
+                        BuyerID: { editable: false },
+                        BuyerCode: { editable: false },
+                        BuyerName: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllActiveBuyer", "WBRequisitionForCrusting")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var BuyerWindowGrid = $("#BuyerWindowGrid").kendoGrid({
+            dataSource: BuyerWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            groupable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  { field: "BuyerCode", title: "Buyer Code", width: "60px" },
+                  { field: "BuyerName", title: "Buyer Name", width: "60px" }
+            ]
+        });
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+
+        $(document).on('keyup', '.ArticleColorName', function (e) {
+            if (e.which == 120) {
+                SelectedItemOfListOfValue('ColorWindowGrid');
+                ColorWindow.open(); //Open Popup
+                ColorWindow.center();
+            }
+        });
+        $(document.body).keyup(function (e) {
+
+            if ($("#ArticleName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('ArticleWindowGrid');
+                    ArticleWindow.open(); //Open Popup
+                    ArticleWindow.center();
+                }
+            }
+            else if ($("#BuyerCode").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('BuyerWindowGrid');
+                    BuyerWindow.open(); //Open Popup
+                    BuyerWindow.center();
+                }
+            }
+        });
+
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var searchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Purchase List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ColorWindow = $('#ColorWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Color",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ArticleWindow = $('#ArticleWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Article",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BuyerWindow = $('#BuyerWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Buyer",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            //max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date(),
+                        change: function () {
+                            changeStatus = 1;
+                        }
+                    });
+        }
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            ListOfValueGridEvent('SearchWindowGrid');
+
+
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            PageStatus = selectedItem.RecordStatus;
+            CheckRecordStatusForButton(PageStatus);
+            $("#btnSave").removeAttr("disabled");
+
+            $.ajax({
+                url: '@Url.Action("GetChallanDetails", "CrustChallanPreparation")',
+                data: ({ "_ArticleChallanID": $("#ArticleChallanID").val() }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#ArticleGrid").data("kendoGrid").dataSource.data(response.DetailList);
+                    $("#ColorGrid").data("kendoGrid").dataSource.data(response.ColorList);
+                    changeStatus = 0;
+
+                }
+            });
+        }
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            searchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            searchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            searchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                searchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                searchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        function ColorWindowEvent() {
+            var WindowGrid = $("#ColorWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#ColorGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            PageGridItem.set("ArticleColor", WindowGridItem.ColorID);
+            PageGridItem.set("ArticleColorName", WindowGridItem.ColorName);
+            changeStatus = 1;
+
+        };
+        $('#btnColorWindowOK').click(function () {
+            ColorWindowEvent();
+            ColorWindow.close();
+        });
+        $('#btnColorWindowCancel').click(function () {
+            ColorWindow.close();
+        });
+        $("#ColorWindow").dblclick(function () {
+            ColorWindowEvent();
+            ColorWindow.close();
+        });
+        $("#ColorWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ColorWindowEvent();
+                ColorWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ColorWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $('#btnArticleWindowOK').click(function () {
+            ListOfValueGridEvent('ArticleWindowGrid');
+            ArticleWindow.close();
+        });
+        $('#btnArticleWindowCancel').click(function () {
+            ArticleWindow.close();
+        });
+        $("#ArticleWindow").dblclick(function () {
+            ListOfValueGridEvent('ArticleWindowGrid');
+            ArticleWindow.close();
+        });
+        $("#ArticleWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('ArticleWindowGrid');
+                ArticleWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ArticleWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $('#btnBuyerWindowOK').click(function () {
+            ListOfValueGridEvent('BuyerWindowGrid');
+            BuyerWindow.close();
+        });
+        $('#btnBuyerWindowCancel').click(function () {
+            BuyerWindow.close();
+        });
+        $("#BuyerWindow").dblclick(function () {
+            ListOfValueGridEvent('BuyerWindowGrid');
+            BuyerWindow.close();
+        });
+        $("#BuyerWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('BuyerWindowGrid');
+                BuyerWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BuyerWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                ItemGridchangeStatus = 0;
+                $("#ArticleGrid").data('kendoGrid').dataSource.data([]);
+                $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ResetOnlyMasterPageData();
+                ItemGridchangeStatus = 0;
+                $("#ColorGrid").data('kendoGrid').dataSource.data([]);
+                $("#ArticleGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                searchWindow.open();
+            }
+            else if (resetEditStatus == 4) // For Color Delete
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 3) // For Item Delete
+            {
+                DeleteFrom = 2;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Purchase Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmArticleChallan", "CrustChallanPreparation")',
+                type: 'GET',
+                data: { "_ArticleChallanID": $("#ArticleChallanID").val(), "_ConfirmNote": $("#ConfirmNote").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Confirmation Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+                        changeStatus = 0;
+                        $("#btnSave").removeAttr("disabled");
+
+                        //$("#ChallanGrid").data('kendoGrid').dataSource.data([]);
+                        //$("#ItemGrid").data('kendoGrid').dataSource.data([]);
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        $("#ArticleGrid").on('input', function () {
+            changeStatus = 1;
+        });
+        $("#ColorGrid").on('input', function () {
+            changeStatus = 1;
+        });
+
+        $("#ArticleGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#ArticleGrid").data("kendoGrid");
+                $("#ArticleGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+            }
+        });
+
+        $(".btnArticleGrid").click(function (e) {
+
+            var grid = $("#ArticleGrid").data("kendoGrid");
+            $("#ArticleGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            e.preventDefault();
+        });
+
+        $("#ColorGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var ChildGrid = $("#ColorGrid").data("kendoGrid");
+                $("#ColorGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                ChildGrid.addRow();
+
+            }
+        });
+
+        $(".btnColorGrid").click(function (e) {
+            var ChildGrid = $("#ColorGrid").data("kendoGrid");
+            $("#ColorGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            ChildGrid.addRow();
+            e.preventDefault();
+        });
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+
+
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+        var DeleteFrom = 0;
+        function DeleteColor(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                dataitem = ColorGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 4;
+                dataitem = ColorGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+
+        };
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                dataitem = ArticleGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 2;
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = ItemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                //dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                //dataitem = itemGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // Color Delete
+            {
+                if (dataitem.ArticleChallanIDColor == 0) {
+                    $("#ColorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteColorItem", "CrustChallanPreparation")',
+                        type: 'GET',
+                        data: { "_ArticleChallanIDColor": dataitem.ArticleChallanIDColor, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#ColorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            else if (DeleteFrom == 2) // Challan Delete
+            {
+                if (dataitem.ArticleChallanDtlID == 0) {
+                        $("#ArticleGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $('#MessageText').html("Delete Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                    else {
+                        $.ajax({
+                            url: '@Url.Action("DeleteArticleDetail", "CrustChallanPreparation")',
+                            type: 'GET',
+                            data: { "_ArticleChallanDtlID": dataitem.ArticleChallanDtlID, "_PageStatus": PageStatus },
+                            success: function (response) {
+
+                                if (response.Msg == "Success") {
+                                    $('#MessageText').html("Delete Successful");
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                    $("#ArticleGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                }
+                                else if (response.Msg == "Fail") {
+                                    $('#MessageText').html("Delete Failed");
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                }
+                                else if (response.Msg == "CNF") {
+                                    $('#MessageText').html("Confirmed record can not be deleted.");
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                }
+
+                            } //End of success call
+                        });
+                    }
+            }
+
+            else if (DeleteFrom == 3) //Purchase Delete
+            {
+                var ArticleGridDataSource = $("#ArticleGrid").data("kendoGrid").dataSource;
+                var ArticleGridData = ArticleGridDataSource.data();
+
+                var ColorGridDataSource = $("#ColorGrid").data("kendoGrid").dataSource;
+                var ColorGridData = ColorGridDataSource.data();
+
+
+                if (ArticleGridData.length > 0) {
+                    $('#MessageText').html("Article Details Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else if (ColorGridData.length > 0) {
+                    $('#MessageText').html("Color Details Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteChallan", "CrustChallanPreparation")',
+                        type: 'GET',
+                        data: { "_ArticleChallanID": $("#ArticleChallanID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+    var ArticleDetailList = {
+        "ArticleChallanDtlID": "", "ArticleChallanID": "", "SizeRange": "", "SizeRangeUnitName": "", "PcsSideDescription": "", "GradeRange": "", "ThicknessRange": "",
+        "ThicknessUnitName": "", "ThicknessAt": "", "RequiredPercentage": "", "Remarks": "" };
+
+    var ColorList = {
+        "ArticleChallanIDColor": "", "ArticleChallanID": "", "ArticleColorNo": "", "ArticleColor": "", "ArticleColorArea": "", "ColorAreaUnitName": "",
+        "QuantityDescription": "", "RemarkDate": "", "Remarks": ""
+    };
+
+    var FinalObject = {
+        "ArticleChallanID": "", "ArticleChallanNo": "", "ChallanNote": "", "PreparationDate": "", "BuyerID": "", "ArticleID": "", "ConfirmNote": "",
+        "ArticleArea": "", "AreaUnit": "", "ArticleNote": "", "ArticleDetailList": [], "ColorList": []
+    };
+
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('ArticleChallanNo', 100);
+        CheckRequiredTextBoxMaxLength('BuyerCode', 200);
+        CheckRequiredTextBoxMaxLength('ArticleName', 100);
+
+        var ColorGridDataSource = $("#ColorGrid").data("kendoGrid").dataSource;
+        var ColorGridData = ColorGridDataSource.data();
+
+        if (saveStatus == 1) {
+            FinalObject.ArticleChallanID = $("#ArticleChallanID").val();
+            FinalObject.ArticleChallanNo = $("#ArticleChallanNo").val();
+            FinalObject.ChallanNote = $("#ChallanNote").val();
+
+            FinalObject.PreparationDate = $("#PreparationDate").val();
+            FinalObject.BuyerID = $("#BuyerID").val();
+            FinalObject.ArticleID = $("#ArticleID").val();
+
+            FinalObject.ArticleArea = $("#ArticleArea").val();
+            FinalObject.AreaUnit = $("#AreaUnit").val();
+            FinalObject.ArticleNote = $("#ArticleNote").val();
+            FinalObject.ConfirmNote = $("#ConfirmNote").val();
+
+
+
+            var ArticleGridDataSource = $("#ArticleGrid").data("kendoGrid").dataSource;
+            var ArticleGridData = ArticleGridDataSource.data();
+
+            for (i = ArticleGridData.length - 1; i >= 0; i--) {
+                //if (ArticleGridData[i].dirty) {
+                    ArticleDetailList.ArticleChallanDtlID = ArticleGridData[i].ArticleChallanDtlID;
+                    ArticleDetailList.ArticleChallanID = $("#ArticleChallanID").val(); // Form Data
+                    
+                    ArticleDetailList.SizeRange = ArticleGridData[i].SizeRange;
+                    ArticleDetailList.SizeRangeUnitName = ArticleGridData[i].SizeRangeUnitName;
+                    ArticleDetailList.PcsSideDescription = ArticleGridData[i].PcsSideDescription;
+                    ArticleDetailList.GradeRange = ArticleGridData[i].GradeRange;
+
+                    ArticleDetailList.ThicknessRange = ArticleGridData[i].ThicknessRange;
+                    ArticleDetailList.ThicknessUnitName = ArticleGridData[i].ThicknessUnitName; 
+                    ArticleDetailList.ThicknessAt = ArticleGridData[i].ThicknessAt;
+                    ArticleDetailList.RequiredPercentage = ArticleGridData[i].RequiredPercentage;
+                    ArticleDetailList.Remarks = ArticleGridData[i].Remarks;
+
+                    FinalObject.ArticleDetailList.push(ArticleDetailList);
+                    ArticleDetailList = {
+                        "ArticleChallanDtlID": "", "ArticleChallanID": "", "SizeRange": "", "SizeRangeUnit": "", "PcsSideDescription": "", "GradeRange": "", "ThicknessRange": "",
+                        "ThicknessUnit": "", "ThicknessAt": "", "RequiredPercentage": "", "Remarks": ""
+                    };
+                //}
+            }
+
+            var ColorGridDataSource = $("#ColorGrid").data("kendoGrid").dataSource;
+            var ColorGridData = ColorGridDataSource.data();
+
+            for (var i = ColorGridData.length - 1; i >= 0; i--) {
+                ColorList.ArticleChallanIDColor = ColorGridData[i].ArticleChallanIDColor;
+                ColorList.ArticleChallanID = $("#ArticleChallanID").val();
+
+                ColorList.ArticleColorNo = ColorGridData[i].ArticleColorNo;
+                ColorList.ArticleColor = ColorGridData[i].ArticleColor;
+                ColorList.ArticleColorArea = ColorGridData[i].ArticleColorArea;
+
+                ColorList.ColorAreaUnitName = ColorGridData[i].ColorAreaUnitName;
+                ColorList.QuantityDescription = ColorGridData[i].QuantityDescription;
+                ColorList.RemarkDate = ColorGridData[i].RemarkDate; // Have to carry Name
+                ColorList.Remarks = ColorGridData[i].Remarks;
+
+                FinalObject.ColorList.push(ColorList);
+                ColorList = {
+                    "ArticleChallanIDColor": "", "ArticleChallanID": "", "ArticleColorNo": "", "ArticleColor": "", "ArticleColorArea": "", "ColorAreaUnit": "",
+                    "QuantityDescription": "", "RemarkDate": "", "Remarks": ""
+                };
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("CrustChallanPreparation", "CrustChallanPreparation")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#divLoading").show();
+                    },
+                    complete: function () {
+                        $("#divLoading").hide();
+                    },
+                    success: function (response) {
+                        if (response.Msg.Type == 2) {
+
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#ArticleChallanID").val(response.ArticleChallanID);
+                            $("#ColorGrid").data('kendoGrid').dataSource.data(response.ColorList);
+                            $("#ArticleGrid").data('kendoGrid').dataSource.data(response.DetailList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                        }
+                        else if (response.Msg.Type == 3) {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#ColorGrid").data('kendoGrid').dataSource.data(response.ColorList);
+                            $("#ArticleGrid").data('kendoGrid').dataSource.data(response.DetailList);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                }); //End of ajax call
+            }
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+
+        }
+        else {
+            $("#MessageText").html("Please Enter the Required Data Properly.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        FinalObject = {
+            "ArticleChallanID": "", "ArticleChallanNo": "", "ChallanNote": "", "PreparationDate": "", "BuyerID": "", "ArticleID": "",
+            "ArticleArea": "", "AreaUnit": "", "ArticleNote": "", "ArticleDetailList": [], "ColorList": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>

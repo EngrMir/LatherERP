@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "FinalGradeSelectionByGrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .select {
+        min-width: 240px;
+    }
+
+    label {
+        padding-left: 10px;
+    }
+</style>
+
+@using (Html.BeginForm("FinalGradeSelectionByGrade", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            @ViewBag.Message
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">Item and Grade Wise Selection Report</div>
+                </div>
+                <div class="col-lg-3">
+                    <label id="MessageText"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 7%; float: right;" tabindex="3" checked="checked" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> PDF</label>
+                    <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 7%; float: right;" tabindex="4" />
+                    <label style="font-size: small; float: right; font-weight: bold; color: #00688B;"> Excel</label>
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="ClearAll();" />
+                    <input type="submit" id="btnSubmit" class="Button" value="Show Report" onclick="return CheckValue();" style="position: absolute; right: 100px;" />
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="FormBody">
+            <br />
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Grade:</label>
+                </div>
+                <div class="col-lg-3">
+                    @Html.DropDownList("GradeID", "-- Select One --")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Item Type:</label>
+                </div>
+                <div class="col-lg-3">
+                    @Html.DropDownList("ItemTypeID", "-- Select One --")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Date Range:</label>
+                </div>
+                <div class="col-lg-3">
+                    <table class="table-condensed">
+                        <tr>
+                            <td><strong> From Date:</strong> </td>
+                            <td><input type="text" id="dateFrom" class="datePicker" name="dateFrom" tabindex="" /></td>
+                        </tr>
+                        <tr>
+                            <td><strong>To Date:</strong></td>
+                            <td><input type="text" id="dateTo" class="datePicker" name="dateTo" tabindex="" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>          
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Grade Range:</label>
+                </div>
+                <div class="col-lg-4">
+                    @Html.DropDownList("GradeRangeID", "-- Select One --")
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    var rptSelectionList = {  "SupllierId": "", "DateFrom": "", "DateTo": "" };
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+                    close: {
+                        effects: "fadeOut zoom:out",
+                        duration: 300
+                    },
+                    open: {
+                        effects: "fadeIn zoom:in",
+                        duration: 300
+                    }
+                }
+    });
+
+    $('#dateFrom').change(function () {
+        var start = $('#dateFrom').val();
+        var end = $('#dateTo').val();
+
+        if ($.datepicker.parseDate('dd/mm/yy', start) > $.datepicker.parseDate('dd/mm/yy', end)) {
+            $("#MessageText").html("From Date should be less than To Date.");
+            $("#MessageText").css("color", "red");
+            $('#dateFrom').val(end);
+        }
+        else {
+            $("#MessageText").html("");
+        }
+       
+    });
+
+    $("#ItemTypeID").change(function () {
+        $("#GradeID").val("");
+    });
+    $("#GradeID").change(function () {
+        $("#ItemTypeID").val("");
+    });
+    //$("#GradeRangeID").change(function () {
+    //    $("#GradeID").val("");
+    //});
+    
+    function CheckValue() {
+
+    }
+
+</script>
+

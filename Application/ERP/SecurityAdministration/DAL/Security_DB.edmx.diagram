@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2368f9a91f71488d82a393de65ad13be" Name="Diagram1" ZoomLevel="93">
+        <EntityTypeShape EntityType="BLC_DEVModel.AccessLog" Width="1.5" PointX="5.25" PointY="17.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.AdditionalOperationPermission" Width="1.5" PointX="8.25" PointY="9.125" />
+        <EntityTypeShape EntityType="BLC_DEVModel.AdditionalOperationPermissionsAudit" Width="1.5" PointX="7.75" PointY="1.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.AdditionalScreenPermission" Width="1.5" PointX="5.25" PointY="5.125" />
+        <EntityTypeShape EntityType="BLC_DEVModel.AdditionalScreenPermissionsAudit" Width="1.5" PointX="9.75" PointY="1.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.ApplicationPolicy" Width="1.5" PointX="3.75" PointY="25.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.ApplicationPoliciesAudit" Width="1.5" PointX="10.75" PointY="5.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.Application" Width="1.5" PointX="1.5" PointY="14.125" />
+        <EntityTypeShape EntityType="BLC_DEVModel.Designation" Width="1.5" PointX="0.75" PointY="9.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.Module" Width="1.5" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="BLC_DEVModel.Role" Width="1.5" PointX="3" PointY="18" />
+        <EntityTypeShape EntityType="BLC_DEVModel.RolesAudit" Width="1.5" PointX="10.75" PointY="9.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.RoleWiseOperationPermission" Width="1.5" PointX="8.25" PointY="15.875" />
+        <EntityTypeShape EntityType="BLC_DEVModel.RoleWiseOperationPermissionsAudit" Width="1.5" PointX="11.75" PointY="1.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.RoleWiseScreenPermission" Width="1.5" PointX="8.25" PointY="5.625" />
+        <EntityTypeShape EntityType="BLC_DEVModel.RoleWiseScreenPermissionsAudit" Width="1.5" PointX="12.75" PointY="5.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.ScreenOperation" Width="1.5" PointX="6" PointY="13" />
+        <EntityTypeShape EntityType="BLC_DEVModel.ScreenOperationsAudit" Width="1.5" PointX="12.75" PointY="9.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.Screen" Width="1.5" PointX="3" PointY="2.5" />
+        <EntityTypeShape EntityType="BLC_DEVModel.UserCredentialInformation" Width="1.5" PointX="5.25" PointY="21.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.UserCredentialInformationAudit" Width="1.5" PointX="10.75" PointY="13.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.UserInRole" Width="1.5" PointX="5.25" PointY="9.375" />
+        <EntityTypeShape EntityType="BLC_DEVModel.UserInRolesAudit" Width="1.5" PointX="12.75" PointY="13.25" />
+        <EntityTypeShape EntityType="BLC_DEVModel.User" Width="1.5" PointX="3" PointY="7.75" />
+        <AssociationConnector Association="BLC_DEVModel.FK_AccessLog_Users" />
+        <AssociationConnector Association="BLC_DEVModel.FK_AdditionalOperationPermissions_ScreenOperations" />
+        <AssociationConnector Association="BLC_DEVModel.FK_AdditionalOperationPermissions_Users" />
+        <AssociationConnector Association="BLC_DEVModel.FK_AdditionalScreenPermissions_Screens" />
+        <AssociationConnector Association="BLC_DEVModel.FK_AdditionalScreenPermissions_Users" />
+        <AssociationConnector Association="BLC_DEVModel.FK_ApplicationPolicies_Applications" />
+        <AssociationConnector Association="BLC_DEVModel.FK_Modules_Applications" />
+        <AssociationConnector Association="BLC_DEVModel.FK_Users_Designation" />
+        <AssociationConnector Association="BLC_DEVModel.FK_Screens_Modules" />
+        <AssociationConnector Association="BLC_DEVModel.FK_RolewiseOperationPermissions_Roles" />
+        <AssociationConnector Association="BLC_DEVModel.FK_RolewiseScreenPermissions_Roles" />
+        <AssociationConnector Association="BLC_DEVModel.FK_UserInRoles_Roles" />
+        <AssociationConnector Association="BLC_DEVModel.FK_RolewiseOperationPermissions_ScreenOperations" />
+        <AssociationConnector Association="BLC_DEVModel.FK_RolewiseScreenPermissions_Screens" />
+        <AssociationConnector Association="BLC_DEVModel.FK_ScreenOperations_Screens" />
+        <AssociationConnector Association="BLC_DEVModel.FK_UserCredentialInformation_Users" />
+        <AssociationConnector Association="BLC_DEVModel.FK_UserInRoles_Users" />
+        <EntityTypeShape EntityType="BLC_DEVModel.vw_MenuInScreen" Width="1.5" PointX="14.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BLC_DEVModel.MenuItem" Width="1.5" PointX="5.25" PointY="0.75" />
+        <AssociationConnector Association="BLC_DEVModel.FK_MenuItems_Screens" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

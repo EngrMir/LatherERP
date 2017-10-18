@@ -1,0 +1,967 @@
+﻿@{
+    ViewBag.Title = "Bank Debit Voucher";
+    ViewBag.SearchTitle = "Bank Debit Voucher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("~/Views/Common/_FormHeader.cshtml")
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Bank Name<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" id="BDVID" class="" name="BDVID" value="" readonly="readonly" placeholder="Hidden" />
+                <input type="hidden" id="BankID" name="BankID" value="" placeholder="F9" readonly="readonly" />
+                <input type="text" id="BankName" class="pull-left col-lg-8" style="padding:2px" name="BankName" value="" readonly="readonly" placeholder="Press F9" style="padding:2px" />
+            </div>
+            <div class="col-lg-1">
+                <label>Branch<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" readonly="readonly" id="BranchID" name="BranchID" value="" placeholder="Hidden" />
+                <input type="text" class="pull-left col-lg-8" readonly="readonly" id="BranchName" name="BranchName" value="" placeholder="Branch Name" style="padding:2px" />
+            </div>
+            <div class="col-lg-1">
+                <label> Account No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" class="pull-left col-lg-8"  id="AccountNo" name="AccountNo" value="" placeholder="Account No." style="padding:2px" />
+            </div>           
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>LC No<span style='color:red'>*</span></label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LCNo" class="col-lg-8" style="padding:2px" required name="LCNo" value="" placeholder="Press F9" readonly="readonly" />                        
+                        <input type="hidden" id="LCID" class="" required name="LCID" value="" placeholder="Press F9" readonly="readonly" />                        
+                    </div>                   
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Bank Debit Voucher<span style='color:red'>*</span></label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="BDVNo" name="BDVNo" value=""  class="col-lg-8" style="padding:2px" />                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Voucher Date</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="BDVDate" class="datePicker" placeholder="DD/MM/YYYY" required name="BDVDate" tabindex="" />     
+                    </div>
+                </div>              
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Remarks</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="Remarks" name="Remarks" value="" class="col-lg-8" style="padding:2px" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>LC Amount</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="text-right" id="LCAmt" name="LCAmt" value="" readonly="readonly" onblur="return IsNumber('LCAmt');" placeholder="0.00" />
+                     
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Exchange Rate<span style='color:red'>*</span></label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="text-right" id="ExchangeRate" name="ExchangeRate" value="" onblur="return IsNumber('ExchangeRate');" placeholder="0.00" />
+                        @Html.DropDownList("Currency")
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Exchange Amount<span style='color:red'>*</span></label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="ExchangeAmount" class="text-right" name="ExchangeAmount" value="" onblur="return IsNumber('ExchangeRate');" placeholder="0.00" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Insurance Cost</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="InsuranceCost" class="text-right" name="InsuranceCost" value="" onblur="SumTotalAmount(); return IsNumber('InsuranceCost');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Vat on Swift</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="VatOnSwift" class="text-right" name="VatOnSwift" value="" onblur="SumTotalAmount(); return IsNumber('VatOnSwift');" placeholder="0.00" /> TK
+                    </div>
+                </div>               
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="FormBody">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>LC Margin</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="LCMargin" class="text-right" name="LCMargin" value="0" onblur="SumTotalAmount();return IsNumber('LCMargin');" placeholder="0.00" /> TK
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Commission Amt.</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="CommissionAmt" class="text-right" name="CommissionAmt" value="" onblur="SumTotalAmount(); return IsNumber('CommissionAmt');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Postage Amt.</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="PostageAmt" class="text-right" name="PostageAmt" value="" onblur="SumTotalAmount(); return IsNumber('PostageAmt');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Swift Charge</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="SwiftCharge" class="text-right" name="SwiftCharge" value="" onblur="SumTotalAmount(); return IsNumber('SwiftCharge');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Source Tax Amt.</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="SourceTaxAmt" class="text-right" name="SourceTaxAmt" value="" onblur="SumTotalAmount(); return IsNumber('SourceTaxAmt');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Vat Amt.</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="VatAmt" class="text-right" name="VatAmt" value="" onblur="SumTotalAmount(); return IsNumber('VatAmt');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Stationary Expenses</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="StationaryExpense" class="text-right" name="StationaryExpense" value="" onblur="SumTotalAmount(); return IsNumber('StationaryExpense');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Opening Stamp Charge</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="OpeningStampCharge" class="text-right" name="OpeningStampCharge" value="0" onblur="SumTotalAmount(); return IsNumber('OpeningStampCharge');" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Other Cost</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="OtherCost" class="text-right" name="OtherCost" value="0" onblur="SumTotalAmount(); return IsNumber('OtherCost');" /> TK
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Total Amount</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" id="TotalAmount" class="text-right" name="TotalAmount" value="" readonly="readonly" onblur="SumTotalAmount(); return IsNumber('TotalAmount');" placeholder="0.00" /> TK
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>Comment</label>
+                </div>
+                <div class="col-lg-5">
+                    <textarea   id="ApprovalAdvice" class="" name="ApprovalAdvice" style="width:80%" ></textarea>
+                </div>
+                <div class="col-lg-4"><br />
+                    <table>
+                        <tr>
+                            <td><input type="button" id="btnChecked" class="" name="btnChecked" value="Checked" /></td>
+                            <td><input type="button" id="btnConfirm" class="" name="btnConfirm" value="Confirmed" /></td>
+                        </tr>
+                    </table>
+                   
+                    
+                </div>
+            </div>
+            
+        </div>    
+</div>
+<div id="BankIDWindow" style="display: none;">
+    <p>Bank:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>
+
+    <div id="BankIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBankIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBankIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows LCNo Start ### -->
+<div id="LCLCNoWindow" style="display: none;">
+    <p>
+        LCNo:<input type="text" id="txtLCNo" style="width: 250px;" placeholder="Search LCNo.." />
+        <input type="button" id="btnLCNoGridSearch" value="Search" />
+    </p>
+
+    <div id="LCLCNoGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCLCNoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCLCNoWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows LCNoNO End ### -->
+
+
+<script type="text/javascript">
+
+    NumericAndDecimalValue("ExchangeRate");
+    NumericAndDecimalValue("ExchangeAmount");
+    NumericAndDecimalValue("LCMargin");
+    NumericAndDecimalValue("CommissionAmt");
+    NumericAndDecimalValue("PostageAmt");
+    NumericAndDecimalValue("SwiftCharge");
+    NumericAndDecimalValue("SourceTaxAmt");
+    NumericAndDecimalValue("VatAmt");
+    NumericAndDecimalValue("StationaryExpense");
+    NumericAndDecimalValue("OtherCost");
+
+    // Reset();
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+    $("#btnDelete").attr("disabled", "disabled");
+    $("#BDVID").val('');
+    var saveStatus = 1;
+    var obDataSet = {
+        "BDVID": "", "BDVNo": "", "BDVDate": "", "BDVCurrency": "", "BankID": "", "BranchID": "", "LCID": "",
+        "LCNo": "", "LCMargin": "", "ExpiryDate": "", "ExpiryPlace": "", "NNDSendingTime": "",
+        "LCANo": "", "IRCNo": "", "CommissionAmt": "", "PostageAmt": "", "SwiftCharge": "", "SourceTaxAmt": "", "VatAmt": "",
+        "StationaryExpense": "", "OtherCost": "", "TotalAmount": "", "ExchangeCurrency": "", "ExchangeRate": "",
+        "ExchangeAmount": "", "Remarks": "", "RunningStatus": "", "RecordStatus": "",
+        "CheckedBy": "", "ApprovedBy": "", "ApprovalAdvice": "", "BankName": "", "BranchName": "", "LCAmt": "",
+        "VatOnSwift": "", "InsuranceCost": "", "AccountNo": "", "OpeningStampCharge": ""
+    };
+
+    // ######## Search ###################
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetBankDebitVoucherInfo", "BankDebitVoucher","BDVID");
+      
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchBankDebitVoucherByBDVNo", "BankDebitVoucher");
+    });
+
+    AutoComplete("GetAutoCompleteData", "BankDebitVoucher");
+
+    function ListOfValueSearchGridEvent(gridName) {
+        $('#btnDelete').attr('disabled', true);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetBankDebitVoucherByBDVID", "BankDebitVoucher")',
+            type: 'GET',
+            data: { BDVID: selectedItem.BDVID },
+            success: function (data) {    
+                if (data.RecordStatus == "CHK" )
+                {
+                    $("#btnChecked").attr('disabled', 'disabled');
+                }
+                $('#MessageText').html("");
+                if (selectedItem.RecordStatus == "CNF") {
+                    $('.FormBody').find('input, textarea, button, select').attr('disabled', 'disabled');
+                    $('#btnSubmit').attr('disabled', 'disabled');
+                }
+                else {
+                    $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                $("#BDVID").val(data.BDVID);
+                $("#LCID").val(data.LCID);
+                $("#LCNo").val(data.LCNo);
+                $("#LCNo").val(data.LCNo);
+                $("#BankName").val(data.BankName);
+                $("#BranchName").val(data.BranchName);
+                $("#BankID").val(data.BranchID);
+                $("#BranchID").val(data.BranchID);
+                $("#BDVNo").val(data.BDVNo);
+                $("#BDVDate").val(data.BDVDate);
+                $("#Currency").val(data.ExchangeCurrency);
+                $("#ExchangeRate").val(data.ExchangeRate);
+                $("#ExchangeAmount").val(data.ExchangeAmount);
+                $("#LCMargin").val(data.LCMargin);
+                $("#CommissionAmt").val(data.CommissionAmt);
+                $("#PostageAmt").val(data.PostageAmt);
+                $("#SwiftCharge").val(data.SwiftCharge);
+                $("#SourceTaxAmt").val(data.SourceTaxAmt);
+                $("#VatAmt").val(data.VatAmt);
+                $("#StationaryExpense").val(data.StationaryExpense);
+                $("#OtherCost").val(data.OtherCost);
+                $("#TotalAmount").val(data.TotalAmount);
+                $("#ApprovalAdvice").val(data.ApprovalAdvice);
+                $("#Remarks").val(data.Remarks);
+                
+                $("#OpeningStampCharge").val(data.OpeningStampCharge);
+                $("#LCAmt").val(data.LCAmt);
+                $("#VatOnSwift").val(data.VatOnSwift);
+                $("#InsuranceCost").val(data.InsuranceCost);
+                $("#AccountNo").val(data.AccountNo);
+                if (data.RecordStatus == "CNF") {
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $('#btnSubmit').attr('disabled', true);
+                }
+                else if (data.RecordStatus == "CHK") {
+                    
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                else {
+                    $("#btnChecked").css("display", "block");
+                    $("#btnConfirm").css("display", "block");
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                SumTotalAmount();
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    function SumTotalAmount() {
+        
+        var sum = (($("#VatOnSwift").val() - 0) + ($("#InsuranceCost").val() - 0) + ($("#LCMargin").val() - 0) + ($("#CommissionAmt").val() - 0) + ($("#PostageAmt").val() - 0) + ($("#SwiftCharge").val() - 0) + ($("#SourceTaxAmt").val() - 0) + ($("#VatAmt").val() - 0) + ($("#StationaryExpense").val() - 0) + ($("#OtherCost").val() - 0) + ($("#OpeningStampCharge").val()-0));
+        if (isNaN(sum))
+        {
+            $("#TotalAmount").val('');
+        }
+        else
+       $("#TotalAmount").val(sum-0);
+      // alert(sum);
+    }
+
+    //############### BANK ##########################
+    var BankIDWindow = $('#BankIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LC Opening Bank",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BankIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BranchID",
+                fields: {
+                    BranchID: { editable: false },
+                    BankCode: { editable: false },
+                    BankName: { editable: false },
+                    BranchName: { editable: false },
+                    CurrencyName: { editable: false },
+                    LCLimit: { editable: false }
+                    //LCMargin: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var BankIDGrid = $("#BankIDGrid").kendoGrid({
+        dataSource: BankIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        groupable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+             // { field: "BranchID", title: "Branch ID", width: "60px", filterable: false, sortable: false },
+              { field: "BankCode", title: "Bank SWIFT Code" },
+              { field: "BankName", title: "Bank Name" },
+              { field: "BranchName", title: "Branch Name" },
+              { field: "CurrencyName", title: "Currency" },
+              { field: "LCLimit", title: "LC Limit" }
+              //{ field: "LCMargin", title: "LC Margin" }
+        ]
+    });
+
+    $('#btnBankIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent('BankIDGrid');
+        BankIDWindow.close();
+    });
+
+    $('#btnBankIDWindowCancel').click(function () {
+        BankIDWindow.close();
+    });
+
+    $("#BankIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent('BankIDGrid');
+        BankIDWindow.close();
+    });
+    $(document.body).keypress(function (e) {
+        if ($("#BankName").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetLCBankList", "LCOpening")',
+                    type: "GET",
+                    data: { bankCategory: "BNK", bankType: "LOC" },
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('BankIDGrid');
+                BankIDWindow.open();
+            }
+        }
+    });
+    $("#BankIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent('BankIDGrid');
+            BankIDWindow.close();
+        }
+        else if (keycode == '27') {
+            BankIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnOpeningGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+            type: 'GET',
+            data: { bank: $("#txtOpeningBank").val(), bankCategory: "BNK", BankType: "LOC" },
+            success: function (data33) {
+                $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueOpeningBankGridEvent('BankIDGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCBankNameList", "LCOpening")',
+                data: { bankCategory: "BNK", BankType: "LOC" },
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtOpeningBank").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtOpeningBank").keyup(function (event) {
+        if ($("#txtOpeningBank").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+                    type: 'GET',
+                    data: { bank: $("#txtOpeningBank").val(), bankCategory: "BNK", BankType: "LOC" },
+                    success: function (data33) {
+                        $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueOpeningBankGridEvent('BankIDGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#BankID").val(selectedItem.BranchID);
+        $("#LimitCurrency").val(selectedItem.CurrencyName);
+    }
+
+    // ############ LCNo List F9 Functionality Start ##########
+    $(document.body).keypress(function (e) {
+        if ($("#LCNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetLCNoInfo", "InsuranceInfo")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#LCLCNoGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('LCLCNoGrid');
+                LCLCNoWindow.open();
+            }
+        }
+    });
+
+    var LCLCNoWindow = $('#LCLCNoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LCNo",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCLCNoDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LCNoID",
+                fields: {
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+                    LCDate: { editable: false },
+                    LCAmount: { editable: false },
+                    LCMargin: { editable: false },
+                    CIDate: { editable: false },
+                    SupplierName: { editable: false },
+                    ExchangeRate: { editable: false },
+                    ExchangeAmount: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var LCLCNoGrid = $("#LCLCNoGrid").kendoGrid({
+        dataSource: LCLCNoDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        groupable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              //{ field: "LCID", title: "LC ID" },
+              { field: "LCNo", title: "LC No" },
+               { field: "LCDate", title: "LC Date" },
+              { field: "LCAmount", title: "LC Amount" },
+              { field: "LCMargin", title: "LC Margin" },
+              { field: "ExchangeRate", title: "ExcRate" },
+              { field: "ExchangeAmount", title: "ExcAmount" },
+              { field: "SupplierName", title: "Supplier" }
+
+        ]
+    });
+
+
+    $('#btnLCLCNoWindowOK').click(function () {
+        ListOfValueLCNoGridEvent('LCLCNoGrid');
+        LCLCNoWindow.close();
+    });
+
+    $('#btnLCLCNoWindowCancel').click(function () {
+        LCLCNoWindow.close();
+    });
+
+    $("#LCLCNoWindow").dblclick(function () {
+        ListOfValueLCNoGridEvent('LCLCNoGrid');
+        LCLCNoWindow.close();
+    });
+
+    $("#LCLCNoWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueLCNoGridEvent('LCLCNoGrid');
+            LCLCNoWindow.close();
+        }
+        else if (keycode == '27') {
+            LCLCNoWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnLCNoGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchLCNoByLCNo", "InsuranceInfo")',
+            type: 'GET',
+            data: { search: $("#txtLCNo").val() },
+            success: function (data33) {
+                $("#LCLCNoGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueLCNoGridEvent('LCLCNoGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCNoSearch", "InsuranceInfo")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtLCNo").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtLCNo").keyup(function (event) {
+        if ($("#txtLCNo").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCNoByLCNo", "InsuranceInfo")',
+                    type: 'GET',
+                    data: { search: $("#txtLCNo").val() },
+                    success: function (data33) {
+                        $("#LCLCNoGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueLCNoGridEvent('LCLCNoGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    function ListOfValueLCNoGridEvent(gridName) {
+       
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+        $("#LCNo").val(selectedItem.LCNo);
+        $("#LCID").val(selectedItem.LCID);
+        $("#LCAmt").val(selectedItem.LCAmount);
+     
+        CalculateExcAmount();
+        if (selectedItem.LCMargin == null)
+        {
+            $("#LCMargin").val('0');
+        }
+        else{
+            $("#LCMargin").val(selectedItem.LCMargin);
+        }
+        $("#ExchangeAmount").val(selectedItem.ExchangeAmount);
+        $("#ExchangeRate").val(selectedItem.ExchangeRate);
+        SumTotalAmount();
+   
+    }
+
+    // ############ LCNoNO List F9 Functionality END ##########
+    
+
+    function Save() {
+        saveStatus = 1;
+        //CheckRequiredTextBoxMaxLength('BankID', 15);
+        CheckRequiredTextBoxMaxLength('LCNo', 30);
+        CheckRequiredTextBoxMaxLength('BDVNo', 50);
+        //CheckRequiredTextBoxMaxLength('BDVDate', 30);
+        //CheckRequiredTextBoxMaxLength('ExchangeRate', 30);
+        //CheckRequiredTextBoxMaxLength('ExchangeAmount', 30);
+        //CheckRequiredTextBoxMaxLength('LCMargin', 30);
+        //CheckRequiredTextBoxMaxLength('CommissionAmt', 30);
+        //CheckRequiredTextBoxMaxLength('PostageAmt', 30);
+        //CheckRequiredTextBoxMaxLength('SwiftCharge', 30);
+        //CheckRequiredTextBoxMaxLength('SourceTaxAmt', 15);
+        //CheckRequiredTextBoxMaxLength('VatAmt', 15);
+        //CheckRequiredTextBoxMaxLength('StationaryExpense',30);
+        //CheckRequiredTextBoxMaxLength('TotalAmount', 30);
+        //CheckRequiredTextBoxMaxLength('OtherCost', 30);
+        
+        if (saveStatus == 1) {
+            obDataSet.LCNo = $("#LCNo").val();
+            obDataSet.LCID = $("#LCID").val();
+            obDataSet.BranchID = $("#BranchID").val();
+            obDataSet.BDVID = $("#BDVID").val();
+            obDataSet.BDVNo = $("#BDVNo").val();
+            obDataSet.BDVDate = $("#BDVDate").val();
+            obDataSet.ExchangeCurrency = $("#Currency").val();
+            obDataSet.ExchangeRate = $("#ExchangeRate").val();
+            obDataSet.ExchangeAmount = $("#ExchangeAmount").val();
+            obDataSet.LCMargin = $("#LCMargin").val(); 
+            obDataSet.CommissionAmt = $("#CommissionAmt").val();
+            obDataSet.PostageAmt = $("#PostageAmt").val();
+            obDataSet.SwiftCharge = $("#SwiftCharge").val();
+            obDataSet.SourceTaxAmt = $("#SourceTaxAmt").val();
+            obDataSet.VatAmt = $("#VatAmt").val();
+            obDataSet.StationaryExpense = $("#StationaryExpense").val();
+            obDataSet.OtherCost = $("#OtherCost").val();
+            obDataSet.TotalAmount = $("#TotalAmount").val();           
+            obDataSet.ApprovalAdvice = $("#ApprovalAdvice").val();
+            obDataSet.Remarks = $("#Remarks").val();
+
+            obDataSet.LCAmt = $("#LCAmt").val();
+            obDataSet.VatOnSwift = $("#VatOnSwift").val();
+            obDataSet.InsuranceCost = $("#InsuranceCost").val();
+            obDataSet.AccountNo = $("#AccountNo").val();
+            obDataSet.OpeningStampCharge = $("#OpeningStampCharge").val();
+
+            if ($("#BDVID").val() == "") {
+                // INSERT DATA
+                $("#divLoading").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "BankDebitVoucher")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            //Reset();
+                            $('#BDVID').val(data.msg.ReturnId);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+
+               
+            }
+            else {
+                // UPDATE DATA
+                $("#divLoading").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "BankDebitVoucher")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                           
+                        }
+                       
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+               
+            }
+        }
+
+    }
+
+
+    $("#btnChecked").click(function () {
+        //CheckRequiredTextBoxMaxLength('ApprovalAdvice', 300);
+        
+            $("#divLoading").show();
+        
+        $.ajax({
+            url: '@Url.Action("UpdateRecordStatus", "BankDebitVoucher")',
+            type: 'POST',
+            data: { note: $("#ApprovalAdvice").val(), BDVID: $("#BDVID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnChecked").attr('disabled', 'disabled');
+
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    $("#btnConfirm").click(function () {
+        
+        $("#divLoading").show();
+        
+        $.ajax({
+            url: '@Url.Action("ConfirmRecordStatus", "BankDebitVoucher")',
+            type: 'POST',
+            data: { BDVID: $("#BDVID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $('#btnSubmit').attr('disabled', true);
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    function IsValidVoucherNo()
+    {
+        if ($("#BDVNo").val() != "") {
+            
+            $("#divLoading").show();
+            
+            $.ajax({
+                url: '@Url.Action("IsValidVoucherNo", "BankDebitVoucher")',
+                type: 'POST',
+                data: { no: $("#BDVNo").val() },
+                success: function (data) {                   
+                    if (data =="True") {
+                        $('#MessageText').html("This Account No Already Exist");
+                        $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+                        $("#BDVNo").val("");
+                        return false;
+                    }
+                    else {
+                        $('#MessageText').html("");
+                        return true;
+                    }
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+    }
+
+
+    function Reset() {
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled');
+        $("#btnChecked").css("display", "block");
+        $("#btnConfirm").css("display", "block");
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        $('.FormBody input[type=text]').css("border-color", "");
+        $("#ApprovalAdvice").val("");
+    }
+
+
+    function CalculateExcAmount() {
+        var rat = $("#ExchangeRate").val() - 0;
+        var val = $("#LCAmt").val() - 0;
+        if (rat < 1) { rat = 1; };       
+        if (isNaN(val)) { val = 0; }
+        $("#ExchangeAmount").val((rat * val).toFixed(2));
+    }
+
+    $("#ExchangeRate").blur(function () {
+        CalculateExcAmount();
+    });
+    $("#LCAmt").blur(function () {
+        CalculateExcAmount();
+    });
+
+</script>
+

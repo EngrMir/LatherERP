@@ -1,0 +1,277 @@
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("GradeSelectionDetailReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">LCM Opening Form</div>
+                </div>
+                <div class="col-lg-6">
+                    <label id="MessageText"></label>
+                </div>
+               
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                    <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                    <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                    <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="FormBody">
+            <br />
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>LC Opening Bank</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Advising Bank</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Address</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" style="width:260px" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Bank Swift Code</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>LC Limit</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" />
+                    <input type="text" readonly="readonly" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Beneficiary</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" placeholder="Press F9" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Margin of LC Limit</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" />
+                    <input type="text" readonly="readonly" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Address</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" style="width:260px" />
+                </div>
+            </div>
+            <br />
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>PI No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-2">
+                    <label></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="button" value="Show PI Details" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>PI Date</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>LC No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>LCA No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>LC Date</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>IRC No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>LC Amount</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Vat Reg No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Rate</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>TIN No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Date of Issue</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>BIN No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Date of Expiry</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>ICN No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Expiry Place</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+                <div class="col-lg-2">
+                    <label>ICN Date</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>NND Sending Time</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" /> Days
+                </div>
+                <div class="col-lg-2">
+                    <label>Last Date of Shipment</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" />
+                </div>
+            </div>
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label>Check Note</label>
+                </div>
+                <div class="col-lg-6">
+                    <label>Approve Note</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <textarea style="width:100%"></textarea>
+                </div>
+                <div class="col-lg-6">
+                    <textarea style="width:100%"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <input type="button" value="Checked" />
+            </div>
+            <div class="col-lg-3">
+                <input type="button" value="Confirm" />
+            </div>
+            <div class="col-lg-3">
+                <input type="button" value="Approve" />
+            </div>
+            <div class="col-lg-3">
+                <input type="button" value="Update LC Value" />
+            </div>
+        </div>
+
+        <br /><br /><br />
+    </div>
+}
+
+
+

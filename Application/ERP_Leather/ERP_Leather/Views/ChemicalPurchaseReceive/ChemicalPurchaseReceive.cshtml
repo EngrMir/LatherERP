@@ -1,0 +1,1884 @@
+﻿@{
+    ViewBag.Title = "Chemical Foreign Purchase Receive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+@*<input id="OrderID" type="hidden" class="txtBox" />*@
+<input id="SupplierAddressID" type="hidden" class="txtBox" />
+<input id="SupplierID" type="hidden" class="txtBox" />
+<input id="ReceiveID" type="hidden" class="txtBox" />
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Supplier</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" id="SupplierCode" placeholder="Press F9" class="txtBox SetFocus" name="SupplierCode" tabindex="" style="width: 150px;" />
+                <input type="text" id="SupplierName" class="txtBox" name="" tabindex="SupplierName" style="width: 300px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Receive No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ReceiveNo" readonly="readonly" class="txtBox ReadOnlyTextbox" name="ReceiveNo" tabindex="" value="Auto Generated" />
+            </div>
+            <div class="col-lg-2">
+                <label>Receive At<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ReceiveStore", new SelectList(ViewBag.ddlStoreList, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Receive Date<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ReceiveDate" class="txtBox datePicker" name="ReceiveDate" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="Remark" class="txtBox" name="Remark" tabindex="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div id="plGrid" class="grdKendo" style="width: 450px;float: left;margin-left: 10px;"></div>
+            <div id="challanGrid" class="grdKendo" style="width: 750px;float: right;margin-right: 10px;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="grdKendo"></div>
+        @*<label id="" style="margin-left:600px;">Total PI Quantity</label>
+            <input type="text" readonly="readonly" class="txtBox" id="TotalRCVQuantity" style="width:100px;" />*@
+        <label id="" style="margin-left:750px;">Total RCV Quantity:</label>
+        <input type="text" readonly="readonly" class="txtBox" id="TotalRCVQuantity" style="width:100px;" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Currency</label>
+            </div>
+            <div class="col-lg-1">
+                @Html.DropDownList("Currency", new SelectList(ViewBag.ddlCurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Exchange Currency@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-1">
+                @Html.DropDownList("ExchangeCurrency", new SelectList(ViewBag.ddlCurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox" })
+            </div>
+            <div class="col-lg-2">
+                <label>Exchange Rate@*<span style="color: red">*</span>*@</label>
+            </div>
+            <div class="col-lg-1">
+                <input type="text" id="ExchangeRate" class="txtBox" name="ExchangeRate" tabindex="" />
+            </div>
+            @*<div class="col-lg-2">
+                    <label>Exchange Amt<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-1">
+                    <input type="text" id="ExchangeValue" class="txtBox" name="ExchangeValue" tabindex="" />
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Confirmed By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session["UserName"]" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Confirmed" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ChemicalItemWindow" style="display: none;">
+    <div id="ChemicalItemWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalItemWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalItemWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="OrderWindow" style="display: none;">
+    <div id="OrderWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnOrderWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnOrderWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var dataitem = {};
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function () {
+                $("#divLoading").show();
+            },
+            complete: function () {
+                $("#divLoading").hide();
+            }
+        });
+
+        $("#TotalRCVQuantity").kendoNumericTextBox({
+            format: "n",
+            decimals: 3
+        });
+
+        $(".SetFocus").focus();
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date() // sets max date to Jan 1st, 2013
+        });
+
+        $("#ReceiveDate").attr("readonly", true);
+
+        //GetPackingList();
+        //$("#divLoading").show();
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        var plDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PLReceiveID",
+                    fields: {
+                        PLReceiveID: { editable: true },
+                        ReceiveID: { editable: true },
+                        PLID: { editable: true },
+                        PLNo: { editable: true, defaultValue: 'Press F9' },
+                        PLDate: { editable: true },
+                        CIID: { editable: true },
+                        CINo: { editable: true },
+                        LCID: { editable: true },
+                        LCNo: { editable: true }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+        var plgrid = $("#plGrid").kendoGrid({
+            dataSource: plDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Paking List", className: "btnLocalOrder", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "PLReceiveID", hidden: true },
+                { field: "ReceiveID", hidden: true },
+                { field: "PLID", hidden: true },
+                { field: "PLNo", title: "PackingListNo", filterable: true, width: "120px", attributes: { "class": "OrderList" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PLDate", title: "PackingListDate", filterable: true, width: "120px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "CIID", hidden: true },
+                { field: "CINo", hidden: true },
+                { field: "LCID", hidden: true },
+                { field: "LCNo", hidden: true },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteForeignOrdertem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+        SelectedItemOfListOfValue('plGrid');
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteForeignOrdertem() {
+            deleteStatus = 4;
+            var grid1 = $("#plGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $(".btnLocalOrder").click(function () {
+            var plGrid = $("#plGrid").data("kendoGrid");
+            $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            plGrid.addRow();
+        });
+        //To face child data into another grid for a grid row on click
+        $("#plGrid").on("click", "tr", function (e) {
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+
+            if (parentGridItem.ReceiveID == null) {
+                if (parentGridItem.PLID != "") {
+                    $.ajax({
+                        url: '@Url.Action("GetPackingItemList", "ChemicalPurchaseReceive")',
+                        type: 'GET',
+                        data: { "PLID": parentGridItem.PLID },
+                        success: function (response) {
+                            if (response != null) {
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                            }
+                        } //End of Success Call
+                    });
+                }
+            }
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        var challanDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ReceiveChallanID",
+                    fields: {
+                        ReceiveChallanID: { editable: true },
+                        PLReceiveID: { editable: true },
+                        ReceiveID: { editable: true },
+                        ReceiveChallanNo: { editable: true },
+                        ChallanDate: { editable: true },
+                        CarringCost: { editable: true, type: "number", defaultValue: '' },
+                        LaborCost: { editable: true, type: "number", defaultValue: '' },
+                        OtherCost: { editable: true, type: "number", defaultValue: '' },
+                        Currency: { editable: true },
+                        ExchangeCurrency: { editable: true },
+                        ExchangeRate: { editable: true },
+                        ExchangeValue: { editable: true },
+                        CostIndicator: { editable: true },
+                        Remark: { editable: true },
+                    }
+                }
+            },
+            pageSize: 30
+        });
+        var challangrid = $("#challanGrid").kendoGrid({
+            dataSource: challanDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Challan", className: "btnChallanGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "ReceiveChallanID", hidden: true, },
+                { field: "PLReceiveID", hidden: true, },
+                { field: "ReceiveID", hidden: true, },
+                { field: "ReceiveChallanNo", title: "ChallanNo", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ChallanDate", title: "ChallanDate", editable: true, filterable: false, width: "80px", format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "CarringCost", title: "CarringCost", editable: true, filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "LaborCost", title: "LaborCost", editable: true, filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "OtherCost", title: "OtherCost", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Currency", hidden: true, },
+                { field: "ExchangeCurrency", hidden: true, },
+                { field: "ExchangeRate", hidden: true, },
+                { field: "ExchangeValue", hidden: true, },
+                { field: "CostIndicator", hidden: true, },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteChallanItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        $(".btnChallanGrid").click(function () {
+            var supplieragentgrid = $("#challanGrid").data("kendoGrid");
+            $("#challanGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+        });
+
+        $("#challanGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#challanGrid").data("kendoGrid");
+                $("#challanGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+            }
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteChallanItem() {
+            deleteStatus = 2;
+            var grid1 = $("#challanGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        var itemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ReceiveItemID",
+                    fields: {
+                        ReceiveItemID: { editable: true },
+                        PLReceiveID: { editable: true },
+                        ReceiveID: { editable: true },
+                        ItemID: { editable: true },
+                        ChemicalName: { editable: true, defaultValue: 'Press F9' },
+                        SupplierID: { editable: true },
+                        BatchNo: { editable: true },
+                        LotNo: { editable: true },
+                        ExpiryDate: { editable: true },
+                        //ChallanPacSize: { editable: true },
+                        //ChallanPacUnit: { editable: true },
+                        //ChallanPacQty: { editable: true },
+                        //ChallanQty: { editable: true },
+                        PackSize: { editable: true },
+                        SizeUnit: { editable: true },
+                        PackQty: { editable: true, type: "number", defaultValue: '' },
+                        ReceiveQty: { editable: true, type: "number", defaultValue: '' },
+                        //UnitID: { editable: true },
+                        UnitName: { editable: true },
+                        RecordStatus: { editable: true },
+                        //,
+                        //ManufacturerID: { editable: true },
+                        //Manufacturer: { editable: true }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+
+        var itemgrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: itemDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $(".CalculationNeeded").unbind().change(function () {
+                    var TotalRCVQuantity = 0.00;
+                    var PIGridDataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                    var PIGridData = PIGridDataSource.data();
+                    for (i = PIGridData.length - 1; i >= 0; i--) {
+                        //TotalPrice = TotalPrice + parseFloat(PIGridData[i].PITotalPrice);
+                        TotalRCVQuantity = TotalRCVQuantity + parseFloat(PIGridData[i].ReceiveQty);
+                    }
+                    var TotalPIQuantityValue = $("#TotalRCVQuantity").data("kendoNumericTextBox");
+                    TotalPIQuantityValue.value(TotalRCVQuantity);
+                    //var TotalPriceValue = $("#TotalPrice").data("kendoNumericTextBox");
+                    //TotalPriceValue.value(TotalPrice);
+                    //var ExchangeAmount = parseFloat(($("#ExchangeRate").val()) * $("#TotalPrice").val());
+                    //var ExchangeValue = $("#ExchangeValue").data("kendoNumericTextBox");
+                    //ExchangeValue.value(ExchangeAmount);
+                });
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            dataBound: function (e) {
+                //var TotalPrice = 0.00;
+                var TotalRCVQuantity = 0.00;
+                var PIGridDataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var PIGridData = PIGridDataSource.data();
+                for (i = PIGridData.length - 1; i >= 0; i--) {
+                    //TotalPrice = TotalPrice + parseFloat(PIGridData[i].PITotalPrice);
+                    TotalRCVQuantity = TotalRCVQuantity + parseFloat(PIGridData[i].ReceiveQty);
+                }
+                var TotalPIQuantityValue = $("#TotalRCVQuantity").data("kendoNumericTextBox");
+                TotalPIQuantityValue.value(TotalRCVQuantity);
+
+                //var TotalPriceValue = $("#TotalPrice").data("kendoNumericTextBox");
+                //TotalPriceValue.value(TotalPrice);
+                //var ExchangeAmount = parseFloat(($("#ExchangeRate").val()) * $("#TotalPrice").val());
+                //var ExchangeValue = $("#ExchangeValue").data("kendoNumericTextBox");
+                //ExchangeValue.value(ExchangeAmount);
+            },
+            toolbar: [{ text: "Add Chemical Item", className: "btnPageDetailGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            //height: 250,
+            columns: [
+                { field: "ReceiveItemID", hidden: true, },
+                { field: "PLReceiveID", hidden: true, },
+                { field: "ReceiveID", hidden: true, },
+                { field: "ItemID", hidden: true, },
+                { field: "SupplierID", hidden: true, },
+                //{ field: "ChemicalName", title: "ChemicalName", editable: true, filterable: false, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ChemicalName", title: "ChemicalName", editable: true, filterable: false, width: "120px", attributes: { "class": "ChemicalItem" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "BatchNo", title: "BatchNo", editable: true, filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "LotNo", title: "LotNo", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ExpiryDate", title: "ExpiryDate", editable: true, filterable: false, width: "80px", format: "{0:dd/MM/yyyy}", editor: dateTimeEditor, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "ChallanPacSize", title: "ChalPacSize", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "ChallanPacUnit", title: "ChalPacUnit", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "ChallanPacQty", title: "ChalPacQty", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "ChallanQty", title: "ChallanQty", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "PackSizeID", hidden: true, },
+                //{ field: "SizeUnitID", hidden: true, },
+                { field: "PackSize", title: "RcvPacSize", editable: true, filterable: false, width: "75px", editor: ddlChemicalPackSize, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "SizeUnit", title: "RcvPackUnit", editable: true, filterable: false, width: "75px", editor: ddlChemicalPackUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "PackQty", title: "RcvPackQty", editable: true, filterable: false, width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ReceiveQty", title: "RcvQty", editable: true, filterable: false, width: "60px", attributes: { "class": "CalculationNeeded" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "UnitID", hidden: true },
+                { field: "UnitName", title: "Unit", width: "70px", filterable: false, editor: ddlChemicalUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "RecordStatus", hidden: true },
+                //{ field: "ManufacturerID", hidden: true },
+                //{ field: "Manufacturer", title: "Manufacturer", filterable: false, width: "90px", editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteIssueItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                .appendTo(container)
+                .kendoDatePicker({
+                    change: function () {
+                        changeStatus = 1;
+                    }
+                });
+        }
+
+        $(".btnPageDetailGrid").click(function () {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+            }
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteIssueItem() {
+            deleteStatus = 3;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#ReceiveID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedReceive", "ChemicalPurchaseReceive")',
+                        type: 'POST',
+                        data: JSON.stringify({ "ReceiveID": $("#ReceiveID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                $("#MessageText").html("");
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                //GetPackingList();
+                                //$("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.ReceiveChallanID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedReceiveChallan", "ChemicalPurchaseReceive")',
+                        type: 'POST',
+                        data: JSON.stringify({ "ReceiveChallanID": dataitem.ReceiveChallanID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#challanGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#challanGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 3) {
+                if (dataitem.ReceiveItemID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedReceiveItem", "ChemicalPurchaseReceive")',
+                        type: 'POST',
+                        data: JSON.stringify({ "ReceiveItemID": dataitem.ReceiveItemID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 4) {
+                if (dataitem.PLReceiveID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedReceivePL", "ChemicalLocalPurchaseReceive")',
+                        type: 'POST',
+                        data: JSON.stringify({ "PLReceiveID": dataitem.PLReceiveID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                $(".txtCommandBox").val("");
+                CheckRecordStatusForButton("NCF");
+                ResetOnlyMasterPageData();
+                $(".txtBox").css("border-color", "");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                $("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#ReceiveID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedReceive", "ChemicalPurchaseReceive")',
+                            type: 'POST',
+                            data: JSON.stringify({ "ReceiveID": $("#ReceiveID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    CheckRecordStatusForButton("NCF");
+                                    $("#MessageText").html("");
+                                    ResetOnlyMasterPageData();
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                    //GetPackingList();
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.ReceiveChallanID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedReceiveChallan", "ChemicalPurchaseReceive")',
+                            type: 'POST',
+                            data: JSON.stringify({ "ReceiveChallanID": dataitem.ReceiveChallanID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#challanGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#challanGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 3) {
+                    if (dataitem.ReceiveItemID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedReceiveItem", "ChemicalPurchaseReceive")',
+                            type: 'POST',
+                            data: JSON.stringify({ "ReceiveItemID": dataitem.ReceiveItemID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 4) {
+                    if (dataitem.PLReceiveID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedReceivePL", "ChemicalLocalPurchaseReceive")',
+                            type: 'POST',
+                            data: JSON.stringify({ "PLReceiveID": dataitem.PLReceiveID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+    }); //End of Document.Ready()
+
+    /////////////////////Reset//////////////////
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            ResetOnlyMasterPageData();
+            $(".txtCommandBox").val("");
+            $(".txtBox").css("border-color", "");
+            $("#ReceiveNo").val("Auto Generated");
+            //GetPackingList();
+            $("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#challanGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+
+    ///////////////////////Dynamic DropDown in Item Griid//////////////////
+
+    //To Define Data Source for InfoFor Kendo Grid
+    var ddlChemicalPackSizeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SizeID",
+                fields: {
+                    SizeID: { editable: false },
+                    SizeName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveChemicalPackSize", "ChemicalPurchaseReceive")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlChemicalPackSize(container, options) {
+        $('<input id="SizeName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "SizeName",
+                dataValueField: "SizeName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlChemicalPackSizeDataSource
+            });
+    };
+
+    //To Define Data Source for InfoFor Kendo Grid
+    var ddlChemicalPackUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveChemicalPackUnit", "ChemicalPurchaseReceive")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlChemicalPackUnit(container, options) {
+        $('<input id="UnitName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlChemicalPackUnitDataSource
+            });
+    };
+
+
+    //To Define Data Source for InfoFor Kendo Grid
+    var ddlChemicalUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveChemicalUnit", "ChemicalPurchaseReceive")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlChemicalUnit(container, options) {
+        $('<input id="UnitName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlChemicalUnitDataSource
+            });
+    };
+
+
+    /////////////Save//////////////////////////
+
+
+    // Declare Object
+    var PRQChemFrgnPurcRecvPLModel = { "PLReceiveID": "", "ReceiveID": "", "PLID": "", "PLNo": "", "PLDate": "", "CIID": "", "CINo": "", "LCID": "", "LCNo": "", "Remark": "" };
+    var PRQChemFrgnPurcRecvItemModel = { "ReceiveItemID": "", "PLReceiveID": "", "ReceiveID": "", "ItemID": "", "SupplierID": "", "BatchNo": "", "LotNo": "", "ExpiryDate": "", "PackSize": "", "SizeUnit": "", "PackQty": "", "ReceiveQty": "", "UnitID": "", "ManufacturerID": "", "Remark": "" };
+    var PRQChemFrgnPurcRecvChallanModel = { "ReceiveChallanID": "", "PLReceiveID": "", "ReceiveID": "", "ReceiveChallanNo": "", "ChallanDate": "", "CarringCost": "", "LaborCost": "", "OtherCost": "", "Currency": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "CostIndicator": "", "Remark": "" };
+    var PRQChemFrgnPurcRecvModel = { "ReceiveID": "", "ReceiveNo": "", "ReceiveDate": "", "ReceiveCategory": "", "ReceiveType": "", "SupplierID": "", "SupplierAddressID": "", "ReceiveStore": "", "Remark": "", "PrqChemFrgnPurcRecvPlList": [], "PrqChemFrgnPurcRecvChallanList": [], "PrqChemFrgnPurcRecvItemList": [] };
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('SupplierCode', 30);
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('ReceiveDate', 10);
+        //Check Empty or Maximum Length in PurchaseYear
+        CheckRequiredTextBoxMaxLength('ReceiveStore', 10);
+        ////Check Two Dates
+        //CheckDiffTwoDates('YearStartDate', 'YearEndDate');
+
+        if (saveStatus == 1) {
+            PRQChemFrgnPurcRecvModel.ReceiveID = $('#ReceiveID').val();
+            PRQChemFrgnPurcRecvModel.ReceiveNo = $('#ReceiveNo').val();
+            PRQChemFrgnPurcRecvModel.ReceiveDate = $('#ReceiveDate').val();
+            PRQChemFrgnPurcRecvModel.SupplierID = $('#SupplierID').val();
+            PRQChemFrgnPurcRecvModel.SupplierAddressID = $('#SupplierAddressID').val();
+            PRQChemFrgnPurcRecvModel.ReceiveStore = $('#ReceiveStore').val();
+            PRQChemFrgnPurcRecvModel.Remark = $('#Remark').val();
+            PRQChemFrgnPurcRecvModel.CheckComment = $('#CheckComment').val();
+            PRQChemFrgnPurcRecvModel.ApproveComment = $('#ApproveComment').val();
+            PRQChemFrgnPurcRecvModel.Currency = $('#Currency').val();
+            PRQChemFrgnPurcRecvModel.ExchangeCurrency = $('#ExchangeCurrency').val();
+            PRQChemFrgnPurcRecvModel.ExchangeRate = $('#ExchangeRate').val();
+            //PRQChemFrgnPurcRecvModel.ExchangeValue = $('#ExchangeValue').val();
+
+            var parentGrid = $("#plGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem != null) {
+
+                PRQChemFrgnPurcRecvPLModel.PrqChemFrgnPurcRecvPlList = [];
+                PRQChemFrgnPurcRecvPLModel.ReceiveID = parentGridItem.ReceiveID;
+                PRQChemFrgnPurcRecvPLModel.PLID = parentGridItem.PLID;
+                PRQChemFrgnPurcRecvPLModel.PeriodID = parentGridItem.PeriodID;
+                PRQChemFrgnPurcRecvPLModel.PLNo = parentGridItem.PLNo;
+                PRQChemFrgnPurcRecvPLModel.PLDate = parentGridItem.PLDate;
+                PRQChemFrgnPurcRecvPLModel.CIID = parentGridItem.CIID;
+                PRQChemFrgnPurcRecvPLModel.CINo = parentGridItem.CINo;
+                PRQChemFrgnPurcRecvPLModel.LCID = parentGridItem.LCID;
+                PRQChemFrgnPurcRecvPLModel.LCNo = parentGridItem.LCNo;
+                PRQChemFrgnPurcRecvPLModel.Remark = parentGridItem.Remark;
+
+                PRQChemFrgnPurcRecvModel.PrqChemFrgnPurcRecvPlList.push(PRQChemFrgnPurcRecvPLModel);
+                PRQChemFrgnPurcRecvPLModel = { "PLReceiveID": "", "ReceiveID": "", "PLID": "", "PLNo": "", "PLDate": "", "CIID": "", "CINo": "", "LCID": "", "LCNo": "", "Remark": "" };
+
+                var dataSource = $("#challanGrid").data("kendoGrid").dataSource;
+                var data = dataSource.data(); // Get Detail Grid Data
+                PRQChemFrgnPurcRecvModel.PrqChemFrgnPurcRecvChallanList = [];
+                for (var i = data.length - 1; i >= 0; i--) {
+                    //if (data[i].dirty) {
+                    PRQChemFrgnPurcRecvChallanModel.ReceiveChallanID = data[i].ReceiveChallanID;
+                    PRQChemFrgnPurcRecvChallanModel.PLReceiveID = data[i].PLReceiveID;
+                    PRQChemFrgnPurcRecvChallanModel.ReceiveID = data[i].ReceiveID;
+                    PRQChemFrgnPurcRecvChallanModel.ReceiveChallanNo = data[i].ReceiveChallanNo;
+                    PRQChemFrgnPurcRecvChallanModel.ChallanDate = data[i].ChallanDate;
+                    PRQChemFrgnPurcRecvChallanModel.CarringCost = data[i].CarringCost;
+                    PRQChemFrgnPurcRecvChallanModel.LaborCost = data[i].LaborCost;
+                    PRQChemFrgnPurcRecvChallanModel.OtherCost = data[i].OtherCost;
+                    //PRQChemFrgnPurcRecvChallanModel.Currency = $('#Currency').val();
+                    //PRQChemFrgnPurcRecvChallanModel.ExchangeCurrency = $('#ExchangeCurrency').val();
+                    //PRQChemFrgnPurcRecvChallanModel.ExchangeRate = $('#ExchangeRate').val();
+                    //PRQChemFrgnPurcRecvChallanModel.ExchangeValue = $('#ExchangeValue').val();
+                    PRQChemFrgnPurcRecvChallanModel.CostIndicator = data[i].CostIndicator;
+                    PRQChemFrgnPurcRecvChallanModel.Remark = data[i].Remark;
+
+                    PRQChemFrgnPurcRecvModel.PrqChemFrgnPurcRecvChallanList.push(PRQChemFrgnPurcRecvChallanModel);
+                    PRQChemFrgnPurcRecvChallanModel = { "ReceiveChallanID": "", "PLReceiveID": "", "ReceiveID": "", "ReceiveChallanNo": "", "ChallanDate": "", "CarringCost": "", "LaborCost": "", "OtherCost": "", "Currency": "", "ExchangeCurrency": "", "ExchangeRate": "", "ExchangeValue": "", "CostIndicator": "", "Remark": "" };
+                    //}
+                }
+                var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+                PRQChemFrgnPurcRecvModel.PRQChemFrgnPurcRecvItemList = [];
+                for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                    //if (dataPeriodItem[j].dirty) {
+                    PRQChemFrgnPurcRecvItemModel.ReceiveItemID = dataPeriodItem[j].ReceiveItemID;
+                    PRQChemFrgnPurcRecvItemModel.PLReceiveID = dataPeriodItem[j].PLReceiveID;
+                    PRQChemFrgnPurcRecvItemModel.ReceiveID = dataPeriodItem[j].ReceiveID;
+                    PRQChemFrgnPurcRecvItemModel.ItemID = dataPeriodItem[j].ItemID;
+                    PRQChemFrgnPurcRecvItemModel.SupplierID = dataPeriodItem[j].SupplierID;
+                    PRQChemFrgnPurcRecvItemModel.BatchNo = dataPeriodItem[j].BatchNo;
+                    PRQChemFrgnPurcRecvItemModel.LotNo = dataPeriodItem[j].LotNo;
+                    PRQChemFrgnPurcRecvItemModel.ExpiryDate = dataPeriodItem[j].ExpiryDate;
+                    PRQChemFrgnPurcRecvItemModel.PackSize = dataPeriodItem[j].PackSize;
+                    PRQChemFrgnPurcRecvItemModel.SizeUnit = dataPeriodItem[j].SizeUnit;
+                    PRQChemFrgnPurcRecvItemModel.PackQty = dataPeriodItem[j].PackQty;
+                    PRQChemFrgnPurcRecvItemModel.ReceiveQty = dataPeriodItem[j].ReceiveQty;
+                    PRQChemFrgnPurcRecvItemModel.UnitName = dataPeriodItem[j].UnitName;
+                    PRQChemFrgnPurcRecvItemModel.ManufacturerID = dataPeriodItem[j].ManufacturerID;
+                    PRQChemFrgnPurcRecvItemModel.Remark = dataPeriodItem[j].Remark;
+
+                    PRQChemFrgnPurcRecvModel.PRQChemFrgnPurcRecvItemList.push(PRQChemFrgnPurcRecvItemModel);
+                    PRQChemFrgnPurcRecvItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+                    //}
+                }
+                if (changeStatus == 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("ChemicalPurchaseReceive", "ChemicalPurchaseReceive")',
+                        data: JSON.stringify(PRQChemFrgnPurcRecvModel),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#ReceiveID").val(respnse.ReceiveID);
+                                $("#ReceiveNo").val(respnse.ReceiveNo);
+                                changeStatus = 0;
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetPackingAfterSaveList", "ChemicalPurchaseReceive")',
+                                    data: { ReceiveID: $("#ReceiveID").val() },
+                                    dataType: 'json',
+                                    success: function (listofdata) {
+                                        $("#plGrid").data("kendoGrid").dataSource.data(listofdata);
+                                    }
+                                });
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetChallanAfterSaveList", "ChemicalPurchaseReceive")',
+                                    data: { ReceiveID: $("#ReceiveID").val() },
+                                    dataType: 'json',
+                                    success: function (listofdata) {
+                                        $("#challanGrid").data("kendoGrid").dataSource.data(listofdata);
+                                    }
+                                });
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetPackingItemAfterSaveList", "ChemicalPurchaseReceive")',
+                                    data: { ReceiveID: $("#ReceiveID").val() },
+                                    dataType: 'json',
+                                    success: function (listofdata) {
+                                        $("#PageDetailGrid").data("kendoGrid").dataSource.data(listofdata);
+                                    }
+                                });
+
+                            } else if (respnse.msg.Type == 3) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                changeStatus = 0;
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetPackingAfterSaveList", "ChemicalPurchaseReceive")',
+                                    data: { ReceiveID: $("#ReceiveID").val() },
+                                    dataType: 'json',
+                                    success: function (listofdata) {
+                                        $("#plGrid").data("kendoGrid").dataSource.data(listofdata);
+                                    }
+                                });
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetChallanAfterSaveList", "ChemicalPurchaseReceive")',
+                                    data: { ReceiveID: $("#ReceiveID").val() },
+                                    dataType: 'json',
+                                    success: function (challandata) {
+                                        $("#challanGrid").data("kendoGrid").dataSource.data(challandata);
+                                    }
+                                });
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("GetPackingItemAfterSaveList", "ChemicalPurchaseReceive")',
+                                    data: { ReceiveID: $("#ReceiveID").val() },
+                                    dataType: 'json',
+                                    success: function (itemdata) {
+                                        $("#PageDetailGrid").data("kendoGrid").dataSource.data(itemdata);
+                                    }
+                                });
+                            }
+                            else {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                }
+                    // No Changes Exiting Data
+                else {
+                    $("#MessageText").html("No Changes to Save.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+            } else {
+                $("#MessageText").html("There is no packing list to receive.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            PRQChemFrgnPurcRecvModel = { "ReceiveID": "", "ReceiveNo": "", "ReceiveDate": "", "ReceiveCategory": "", "ReceiveType": "", "SupplierID": "", "SupplierAddressID": "", "ReceiveStore": "", "Remark": "", "PrqChemFrgnPurcRecvPlList": [], "PrqChemFrgnPurcRecvChallanList": [], "PrqChemFrgnPurcRecvItemList": [] };
+        }
+    }
+
+    /////////////////////Confirmed Chemical Item////////////////////
+
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            PRQChemFrgnPurcRecvModel.ReceiveID = $('#ReceiveID').val();
+            PRQChemFrgnPurcRecvModel.ReceiveNo = $('#ReceiveNo').val();
+            PRQChemFrgnPurcRecvModel.ReceiveDate = $('#ReceiveDate').val();
+            PRQChemFrgnPurcRecvModel.SupplierID = $('#SupplierID').val();
+            PRQChemFrgnPurcRecvModel.SupplierAddressID = $('#SupplierAddressID').val();
+            PRQChemFrgnPurcRecvModel.ReceiveStore = $('#ReceiveStore').val();
+            PRQChemFrgnPurcRecvModel.Remark = $('#Remark').val();
+            PRQChemFrgnPurcRecvModel.CheckComment = $('#CheckComment').val();
+            PRQChemFrgnPurcRecvModel.ApproveComment = $('#ApproveComment').val();
+
+            var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+            PRQChemFrgnPurcRecvModel.PRQChemFrgnPurcRecvItemList = [];
+            for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                //PRQChemFrgnPurcRecvItemModel.ReceiveItemID = dataPeriodItem[j].ReceiveItemID;
+                //PRQChemFrgnPurcRecvItemModel.PLReceiveID = dataPeriodItem[j].PLReceiveID;
+                //PRQChemFrgnPurcRecvItemModel.ReceiveID = dataPeriodItem[j].ReceiveID;
+                PRQChemFrgnPurcRecvItemModel.ItemID = dataPeriodItem[j].ItemID;
+                PRQChemFrgnPurcRecvItemModel.SupplierID = dataPeriodItem[j].SupplierID;
+                //PRQChemFrgnPurcRecvItemModel.BatchNo = dataPeriodItem[j].BatchNo;
+                //PRQChemFrgnPurcRecvItemModel.LotNo = dataPeriodItem[j].LotNo;
+                //PRQChemFrgnPurcRecvItemModel.ExpiryDate = dataPeriodItem[j].ExpiryDate;
+                PRQChemFrgnPurcRecvItemModel.PackSize = dataPeriodItem[j].PackSize;
+                PRQChemFrgnPurcRecvItemModel.SizeUnit = dataPeriodItem[j].SizeUnit;
+                PRQChemFrgnPurcRecvItemModel.PackQty = dataPeriodItem[j].PackQty;
+                PRQChemFrgnPurcRecvItemModel.ReceiveQty = dataPeriodItem[j].ReceiveQty;
+                PRQChemFrgnPurcRecvItemModel.UnitName = dataPeriodItem[j].UnitName;
+                //PRQChemFrgnPurcRecvItemModel.UnitID = dataPeriodItem[j].UnitID;
+                //PRQChemFrgnPurcRecvItemModel.ManufacturerID = dataPeriodItem[j].ManufacturerID;
+                //PRQChemFrgnPurcRecvItemModel.Remark = dataPeriodItem[j].Remark;
+
+                PRQChemFrgnPurcRecvModel.PRQChemFrgnPurcRecvItemList.push(PRQChemFrgnPurcRecvItemModel);
+                PRQChemFrgnPurcRecvItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmChemicalPurchase", "ChemicalPurchaseReceive")',
+                data: JSON.stringify(PRQChemFrgnPurcRecvModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            PRQChemFrgnPurcRecvItemModel = { "ItemTypeID": "", "LeatherType": "", "LeatherStatus": "", "SizeID": "", "TargetQuantity": "", "UnitID": "", "TargetValue": "", "CurrencyID": "" };
+        } else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    var supplierSearchdataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalSupplierListForSearch", "Supplier")',// "/Supplier/GetSupplierListForSearch",
+                type: "GET"
+            }
+        }
+    });
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: supplierSearchdataSource,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+    $("#btnGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetAllChemicalSupplierList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierList);
+                if (data33.Count == 1) {
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SupplierWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetAllChemicalSupplierList", "ChemicalPurchaseReceive")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            ListOfValueGridEvent('SupplierWindowGrid');
+                            SupplierWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    Address: { editable: false }
+                    //,
+                    //OrderID: { editable: false },
+                    //OrderNo: { editable: false },
+                    //OrderDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierName", title: "Supplier", width: "120px" },
+            { field: "SupplierCode", title: "Supplier Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierAddressID", hidden: true },
+            { field: "Address", title: "Address", width: "120px" }
+            //,
+            //{ field: "OrderID", hidden: true },
+            //{ field: "OrderNo", title: "OrderNo", width: "60px" },
+            //{ field: "OrderDate", title: "OrderDate", width: "60px" },
+        ]
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#txtSupplier").val("");
+                ListOfValueGridEventSupplier();
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        }
+    });
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    function ListOfValueGridEventSupplier() {
+        $.ajax({
+            url: '@Url.Action("GetChemicalSupplierList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            success: function (data) {
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#SupplierID").val(selectedItem.SupplierID);
+        $("#SupplierCode").val(selectedItem.SupplierCode);
+        $("#SupplierName").val(selectedItem.SupplierName);
+        $("#SupplierAddressID").val(selectedItem.SupplierAddressID);
+        $("#Address").val(selectedItem.Address);
+    }
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////Search Purchase Receive////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#MessageText").html("");
+            $(".txtBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ReceiveID",
+                fields: {
+                    ReceiveID: { editable: false },
+                    ReceiveDate: { editable: false },
+                    ReceiveNo: { editable: false },
+                    SupplierID: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    ReceiveStore: { editable: false },
+                    Remark: { editable: false },
+                    RecordStatus: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    Currency: { editable: false },
+                    ExchangeCurrency: { editable: false },
+                    ExchangeRate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "ReceiveID", hidden: true },
+            { field: "SupplierCode", hidden: true },
+            { field: "SupplierName", title: "Supplier", width: "60px" },
+            { field: "ReceiveNo", title: "Receive No.", width: "60px" },
+            { field: "ReceiveDate", title: "ReceiveDate", width: "60px" },
+            { field: "ReceiveStoreName", title: "ReceiveAt", width: "60px" },
+            { field: "LCNo", title: "LC No", width: "60px" },
+            { field: "LCDate", title: "LC Date", width: "60px" },
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierAddressID", hidden: true },
+            { field: "Remark", hidden: true },
+            { field: "RecordStatus", hidden: true },
+            { field: "Currency", hidden: true },
+            { field: "ExchangeCurrency", hidden: true },
+            { field: "ExchangeRate", hidden: true },
+            { field: "ReceiveStore", hidden: true },
+            { field: "RecordStatusName", title: "Status", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Chemical Purchase Receive Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetChemicalPurchaseReceiveList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#ReceiveID").val(selectedItem.ReceiveID);
+        $("#ReceiveNo").val(selectedItem.ReceiveNo);
+        $("#ReceiveDate").val(selectedItem.ReceiveDate);
+        $("#SupplierID").val(selectedItem.SupplierID);
+        $("#SupplierAddressID").val(selectedItem.SupplierAddressID);
+        $("#SupplierID").val(selectedItem.SupplierID);
+        $("#SupplierAddressID").val(selectedItem.SupplierAddressID);
+        $("#SupplierCode").val(selectedItem.SupplierCode);
+        $("#SupplierName").val(selectedItem.SupplierName);
+        $("#ReceiveStore").val(selectedItem.ReceiveStore);
+        $("#Remark").val(selectedItem.Remark);
+
+        $("#Currency").val(selectedItem.Currency);
+        $("#ExchangeCurrency").val(selectedItem.ExchangeCurrency);
+        $("#ExchangeRate").val(selectedItem.ExchangeRate);
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+        $.ajax({
+            url: '@Url.Action("GetAllGridList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            data: { "ReceiveID": selectedItem.ReceiveID },
+            success: function (data) {
+                $("#plGrid").data("kendoGrid").dataSource.data(data.PrqChemFrgnPurcRecvPlList);
+                $("#challanGrid").data("kendoGrid").dataSource.data(data.PrqChemFrgnPurcRecvChallanList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrqChemFrgnPurcRecvItemList);
+            }
+        });
+        $("#plGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ////////////////////Paking List/////////////////////////
+
+    function GetPackingList() {
+        $.ajax({
+            url: "@Url.Action("GetPackingInfoList", "ChemicalPurchaseReceive")",
+            type: 'GET',
+            success: function (data) {
+                if (data.PrqChemFrgnPurcRecvPlList != '') {
+                    $("#plGrid").data("kendoGrid").dataSource.data(data.PrqChemFrgnPurcRecvPlList);
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.PrqChemFrgnPurcRecvItemList);
+                    //$("#divLoading").hide();
+                } else {
+                    //$("#divLoading").hide();
+                }
+            }
+        });
+    }
+
+
+    ///////////////////Supplier Wise Order List/////////////////////////
+
+    $(document).on('keyup', '.OrderList', function (e) {
+        if (e.keyCode == 120) {
+            GetOrderList();
+            SelectedItemOfListOfValue('OrderWindowGrid');
+            OrderWindow.open();
+        }
+    });
+
+    function GetOrderList() {
+        $.ajax({
+            url: '@Url.Action("GetPackingInfoList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#OrderWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var OrderWindow = $('#OrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Order",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var OrderGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PLID",
+                fields: {
+                    PLID: { editable: false },
+                    PLNo: { editable: false },
+                    PLDate: { editable: false },
+                    CIID: { editable: true },
+                    CINo: { editable: true },
+                    CIDate: { editable: true },
+                    LCID: { editable: true },
+                    LCNo: { editable: true },
+                    LCDate: { editable: true },
+                    OrderID: { editable: false },
+                    OrderNo: { editable: false },
+                    OrderDate: { editable: false },
+                    PIID: { editable: false },
+                    PINo: { editable: false },
+                    PIDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var OrderGrid = $("#OrderWindowGrid").kendoGrid({
+        dataSource: OrderGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+                { field: "PLID", hidden: true },
+                { field: "PLNo", title: "PLNo", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PLDate", title: "PLDate", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "OrderID", hidden: true },
+                { field: "OrderNo", title: "OrderNo", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "OrderDate", title: "OrderDate", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PIID", hidden: true },
+                { field: "PINo", title: "PINo", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PIDate", title: "PIDate",  filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "CIID", hidden: true },
+                { field: "CINo", title: "CINo", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "CIDate", title: "CIDate", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCID", hidden: true },
+                { field: "LCNo", title: "LCNo", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "LCDate", title: "LCDate", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    //var isDuplicate = 0;
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventOrder(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#plGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("PLID", selectedItem.PLID);
+        pageGridItem.set("PLNo", selectedItem.PLNo);
+        pageGridItem.set("PLDate", selectedItem.PLDate);
+
+        pageGridItem.set("CIID", selectedItem.CIID);
+        pageGridItem.set("CINo", selectedItem.CINo);
+        pageGridItem.set("LCID", selectedItem.LCID);
+        pageGridItem.set("LCNo", selectedItem.LCNo);
+
+        $.ajax({
+            url: '@Url.Action("GetPackingItemList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            data: { "PLID": selectedItem.PLID },
+            success: function (response) {
+                if (response != null) {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                }
+            } //End of Success Call
+        });
+    }
+
+    //Handling button click for Order window grid
+    $('#btnOrderWindowOK').click(function () {
+        ListOfValueGridEventOrder('OrderWindowGrid');
+        OrderWindow.close();
+    });
+    $('#btnOrderWindowCancel').click(function () {
+        OrderWindow.close();
+    });
+    $("#OrderWindow").dblclick(function () {
+        ListOfValueGridEventOrder('OrderWindowGrid');
+        OrderWindow.close();
+    });
+    $("#OrderWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventOrder('OrderWindowGrid');
+            OrderWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            OrderWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ///////////////////////////////////////////////////////
+
+
+    ///////////////////Chemical Item List/////////////////////////
+
+    $(document).on('keyup', '.ChemicalItem', function (e) {
+        if (e.keyCode == 120) {
+            GetChemicalItemList();
+            SelectedItemOfListOfValue('ChemicalItemWindowGrid');
+            ChemicalItemWindow.open();
+        }
+    });
+
+    function GetChemicalItemList() {
+        $.ajax({
+            url: '@Url.Action("GetChemicalItemList", "ChemicalPurchaseReceive")',
+            type: 'GET',
+            //data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#ChemicalItemWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var ChemicalItemWindow = $('#ChemicalItemWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of ChemicalItem",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ChemicalItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: false },
+                    HSCode: { editable: false },
+                    ItemName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var ChemicalItemGrid = $("#ChemicalItemWindowGrid").kendoGrid({
+        dataSource: ChemicalItemGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "ItemID", hidden: true },
+            { field: "HSCode", title: "HSCode", width: "60px", filterable: true, sortable: false },
+            { field: "ItemName", title: "ChemicalItem", width: "60px", filterable: true, sortable: false }
+        ]
+    });
+
+    //var isDuplicate = 0;
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventChemicalItem(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+        //var dataSourceChemicalItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        //var dataChemicalItem = dataSourceChemicalItem.data(); // Get Detail Grid Data
+        //for (var j = 0; j <= dataChemicalItem.length - 1; j++) {
+        //    if (dataChemicalItem[j].ItemID == selectedItem.ItemID) {
+        //        isDuplicate = 1;
+        //        break;
+        //    }
+        //}
+        //if (isDuplicate == 0) {
+        pageGridItem.set("ItemID", selectedItem.ItemID);
+        pageGridItem.set("ChemicalName", selectedItem.ItemName);
+        //} else {
+        //    isDuplicate = 0;
+        //    alert("Duplicate Chemical Item");
+        //    //$('#MessageText').html("Duplicate HSCode");
+        //    //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        //}
+    }
+
+    //Handling button click for ChemicalItem window grid
+    $('#btnChemicalItemWindowOK').click(function () {
+        ListOfValueGridEventChemicalItem('ChemicalItemWindowGrid');
+        ChemicalItemWindow.close();
+    });
+    $('#btnChemicalItemWindowCancel').click(function () {
+        ChemicalItemWindow.close();
+    });
+    $("#ChemicalItemWindow").dblclick(function () {
+        ListOfValueGridEventChemicalItem('ChemicalItemWindowGrid');
+        ChemicalItemWindow.close();
+    });
+    $("#ChemicalItemWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventChemicalItem('ChemicalItemWindowGrid');
+            ChemicalItemWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ChemicalItemWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ///////////////////////////////////////////////////////
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckedChemicalPurchase", "ChemicalPurchaseReceive")',
+                data: JSON.stringify({ receiveId: $("#ReceiveID").val(), checkComment: $("#CheckComment").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        changeStatus = 0;
+                    }
+                }
+            });
+        } else {
+            //$('#MessageText').html("At First Saved Then Checked.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Checked.");
+        }
+    });
+
+
+</script>

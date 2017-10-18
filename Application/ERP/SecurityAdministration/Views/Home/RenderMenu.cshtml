@@ -1,0 +1,118 @@
+﻿@using System.Threading
+@using Microsoft.Ajax.Utilities
+@model IEnumerable<SecurityAdministration.DAL.MenuItem>
+@{
+    ViewBag.Title = "Menu";
+
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+
+
+@{var sign = "";}
+<ul id="menu">
+
+    <li id="home">
+        <a href="#"><span class="glyphicon glyphicon-home"></span> Home</a>
+    </li>
+    @foreach (var menuItem in Model.OrderBy(o => o.ItemOrder).Where(w => w.MenuLevel == 1))
+    {
+        string style1 = "";
+        if (menuItem.ItemOrder == 1)
+        {
+            style1 = "dropdown_4columns1st";
+        }
+
+        if (menuItem.ItemOrder == 2)
+        {
+            style1 = "dropdown_4columns2nd";
+        }
+
+        if (menuItem.ItemOrder == 3)
+        {
+            style1 = "dropdown_4columns3rd";
+        }
+
+        if (menuItem.ItemOrder == 4)
+        {
+            style1 = "dropdown_4columns4th";
+        }
+
+        <li>
+            @if (menuItem.ItemOrder < 8)
+            {
+                <a href="#" class="drop">@menuItem.Caption</a>
+
+                <div class="@style1">
+                    <div class="row">
+                        @foreach (var child1 in Model.OrderBy(o => o.ItemOrder).Where(w => w.MenuLevel == 2 && w.ParentID == menuItem.MenuID))
+                        {
+                            <div class="col-md-3 arrow" style="border: 1px aquamarine; border-bottom-style: hidden; border-left-style: hidden; border-top-style:hidden;">
+                                <h3> @child1.Caption</h3>
+                                @foreach (var child2 in Model.OrderBy(o => o.ItemOrder).Where(w => w.ParentID == child1.MenuID && w.MenuLevel == 3))
+                                {
+                                    if (child2.HasChild)
+                                    {
+                                        <p id="@child2.MenuID">+ @child2.Caption</p>
+                                    }
+                                    else
+                                    {
+                                        <p id="@child2.MenuID">&nbsp; &nbsp; @child2.Caption</p>
+                                    }
+                                    foreach (var child3 in Model.OrderBy(o => o.ItemOrder).Where(w => w.MenuLevel == 4 && w.ParentID == child2.MenuID))
+                                    {
+                                        if (child2.HasChild)
+                                        {
+                                            <p id="@child3.MenuID" style="display: none;">&nbsp; &nbsp; &nbsp;+ @child3.Caption</p>
+                                        }
+                                        else
+                                        {
+                                            <p id="@child3.MenuID" style="display: none;">&nbsp; &nbsp; &nbsp; @child3.Caption</p>
+                                        }
+
+                                        <script>
+                                            $(document).ready(function () {
+                                                //alert("Hi");
+                                                $("#@child3.ParentID").click(function () {
+                                                    $("#@child3.MenuID").fadeToggle("slow");
+                                                });
+                                            });
+                                        </script>
+                                        foreach (var child4 in Model.OrderBy(o => o.ItemOrder).Where(w => w.MenuLevel == 5 && w.ParentID == child3.MenuID))
+                                        {
+                                            <p>&nbsp; &nbsp; &nbsp; @child4.Caption</p>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    //alert("Hi");
+                                                    $("#@child4.ParentID").click(function () {
+                                                        $("#@child4.MenuID").fadeToggle("slow");
+                                                    });
+                                                });
+                                            </script>
+                                        }
+                                    }
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </li>
+    }
+    <li class="menu_right">
+        <a href="#"><span class="glyphicon glyphicon-list-alt"> Reports</span></a>
+        <div class="dropdown_1column menu_right">
+            <h3> Report 1</h3>
+            <h3> Report 2</h3>
+            <h3> Report 3</h3>
+            <h3> Report 4</h3>
+        </div>
+    </li>
+</ul>
+@*<script type="text/javascript">
+        function showStuff(id) {
+            document.getElementById(id).style.display = 'block';
+            document.getElementById(id).style.padding = '5px';
+        }
+    </script>*@
+

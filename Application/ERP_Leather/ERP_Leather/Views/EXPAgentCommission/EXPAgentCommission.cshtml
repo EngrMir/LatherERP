@@ -1,0 +1,1532 @@
+﻿@{
+    ViewBag.Title = "Agent Commision";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTiltle</title>
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <input type="hidden" id="AgentComID" class="txtBox" />
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Agent Com. No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="AgentComNo" readonly="readonly" style="width: 100%;" class="txtBox" name="AgentComNo" tabindex="" placeholder="Auto" />
+            </div>
+            @*<div class="col-lg-2">
+                    <label>Local Currency</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("LocalCurrency", new SelectList(ViewBag.ddlCurrencyList, "CurrencyID", "CurrencyName"), "TK", new { @class = "txtBox", @style = "width: 100%;" })
+                </div>*@
+            <div class="col-lg-2">
+                <label>CI No</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="CIID" class="txtBox" />
+                <input type="text" id="CINo" class="txtBox" readonly="readonly" placeholder="Press F9" />
+            </div>
+            <div class="col-lg-2">
+                <label>CI Currency</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="InvoiceCurrency" class="txtBox" />
+                <input type="text" id="InvoiceCurrencyName" class="txtBox" readonly="readonly" />
+                @*@Html.DropDownList("InvoiceCurrency", new SelectList(ViewBag.ddlCurrencyList, "CurrencyID", "CurrencyName"), "-- Select --", new { @class = "txtBox", @style = "width: 100%;" })*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Agent Com.Ref.No<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="AgentComRef" style="width: 100%;" class="txtBox" name="AgentComRef" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>CI Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CIDate" class="txtBox" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>CI Amount</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CIAmount" class="txtBox" readonly="readonly" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Com. Date</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="AgentComDate" class="txtBox datePicker" required />
+            </div>
+            <div class="col-lg-2">
+                <label>Buyer</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="BuyerID" class="txtBox" />
+                <input type="text" id="BuyerName" class="txtBox" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>CI Com. Amount</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ComOnAmount" class="txtBox" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="row">
+        <div class="FormBody">
+            <div id="plGrid" class="grdKendo"></div>
+        </div>
+    </div>*@
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="grdKendo"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Checked By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtCheckedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session[" username"]" />
+            </div>
+            <div class="col-lg-2">
+                <label>Confirmed By</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="txtApprovedBy" class="txtCommandBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" value="@Session[" username"]" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="CheckComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Comments</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ApproveComment" class="txtCommandBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnCheck" value="Checked" style="position: absolute;left: 15px;" />
+            </div>
+            <div class="col-lg-2">
+                <label></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="button" id="btnConfirm" value="Confirmed" style="position: absolute;left: 15px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ConfirmWindow" style="display: none;">
+    <p><h5 style="color: red;">At First Save this Record.</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnConfirmationClose" value="Close" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindowPI" style="display: none;">
+    <div id="SearchWindowPIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowPICancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowPIOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="PartyWindow" style="display: none;">
+    <div id="PartyWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPartyWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPartyWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="BuyerAgentWindow" style="display: none;">
+    <div id="BuyerAgentWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerAgentWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerAgentWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="CINoWindow" style="display: none;">
+    <div id="CINoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnCINoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCINoWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+<script type="text/javascript">
+
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var checkGridData = 1;
+    var saveStatus = 1;
+    var dataitem = {};
+    var PIAmount = 0;
+    var CIAmount = 0;
+    var AddPI = 0;
+    var gridUnsaveData = 0;
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function () {
+                $("#divLoading").show();
+            },
+            complete: function () {
+                $("#divLoading").hide();
+            }
+        });
+        $(".SetFocus").focus();
+        //OnlyNumericValue('AgentComNo');
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date(),
+            max: new Date() // sets max date to Jan 1st, 2013
+        });
+
+        $("#PrepareDate").attr("readonly", true);
+
+        $("#datePicker").click(function () {
+            changeStatus = 1;
+        });
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        var itemDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "AgentComCIID",
+                    fields: {
+                        AgentComCIID: { editable: false },
+                        AgentComID: { editable: false },
+                        BuyerAgentID: { editable: true },
+                        BuyerAgentName: { editable: true, defaultValue: 'Press F9' },
+                        AgentType: { editable: true },
+                        CIID: { editable: true },
+                        //CINo: { editable: true, defaultValue: 'Press F9' },
+                        //CIDate: { editable: true },
+                        //InvoiceAmount: { editable: true },
+                        //InvoiceCurrency: { editable: true },
+                        //InvoiceCurrencyName: { editable: true },
+                        CommissionPercent: { editable: true, type: "number", defaultValue: '' },
+                        CommissionAmount: { editable: true, type: "number", defaultValue: '' },
+                        AITPercent: { editable: true, type: "number", defaultValue: '' },
+                        AITAmount: { editable: true, type: "number", defaultValue: '' },
+                        PayableAmount: { editable: true, type: "number", defaultValue: '' },
+                        ExchangeCurrencyName: { editable: true },
+                        ExchangeRate: { editable: true, type: "number", defaultValue: '' },
+                        ExchangeAmount: { editable: true, type: "number", defaultValue: '' },
+                        LocalCurrency: { editable: true },
+                        LocalRate: { editable: true, type: "number", defaultValue: '' },
+                        LocalAmount: { editable: true, type: "number", defaultValue: '' },
+                        PIID: { editable: true },
+                        PINo: { editable: true, defaultValue: 'Press F9' },
+                        RecordStatus: { editable: true }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+
+        var itemgrid = $("#PageDetailGrid").kendoGrid({
+            dataSource: itemDataSource,
+            pageable: true,
+            edit: function (e) {
+
+                $('input[name = "BuyerAgentName"]').attr("readonly", true);
+                $('input[name = "PINo"]').attr("readonly", true);
+
+                //$('input[name = "CIDate"]').attr("readonly", true);
+                //$('input[name = "InvoiceAmount"]').attr("readonly", true);
+                //$('input[name = "InvoiceCurrencyName"]').attr("readonly", true);
+                //$('input[name = "ExchangeAmount"]').attr("readonly", true);
+                //$('input[name = "LocalAmount"]').attr("readonly", true);
+
+                //$('input[name = "CommissionAmount"]').attr("readonly", true);
+                //$('input[name = "ExchangeAmount"]').attr("readonly", true);
+                //$('input[name = "LocalAmount"]').attr("readonly", true);
+
+                $("[name='CommissionPercent']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("CommissionAmount", (($('#ComOnAmount').val() * grid.dataItem(row).CommissionPercent) / 100).toFixed(2));
+                });
+                $("[name='ExchangeRate']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("ExchangeAmount", (grid.dataItem(row).CommissionAmount * grid.dataItem(row).ExchangeRate).toFixed(2));
+                });
+                $("[name='LocalRate']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    //alert(grid.dataItem(row).ExchangeAmount);
+                    if ((grid.dataItem(row).ExchangeAmount == 0.00) || (grid.dataItem(row).ExchangeAmount == "") || (grid.dataItem(row).ExchangeAmount == null)) {
+                        e.model.set("LocalAmount", (grid.dataItem(row).CommissionAmount * grid.dataItem(row).LocalRate).toFixed(2));
+                    }
+                    else {
+                        e.model.set("LocalAmount", (grid.dataItem(row).ExchangeAmount * grid.dataItem(row).LocalRate).toFixed(2));
+                        //alert(grid.dataItem(row).CommissionAmount * grid.dataItem(row).LocalRate).toFixed(2);
+                    }
+                });
+                $("[name='AITPercent']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("AITAmount", ((grid.dataItem(row).LocalAmount * grid.dataItem(row).AITPercent) / 100).toFixed(2));
+                });
+                $("[name='AITAmount']", e.container).blur(function () {
+                    var grid = $("#PageDetailGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("PayableAmount", (grid.dataItem(row).LocalAmount - grid.dataItem(row).AITAmount).toFixed(2));
+                });
+            },
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add CI Agent", className: "btnPageDetailGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            //height: 250,
+            columns: [
+                { field: "AgentComCIID", hidden: true },
+                { field: "AgentComID", hidden: true },
+                { field: "BuyerAgentID", hidden: true },
+                { field: "BuyerAgentName", title: "Agent", editable: true, filterable: false, width: "110px", attributes: { "class": "AgentInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "AgentType", title: "AgentType", editable: true, filterable: false, width: "70px", attributes: { "class": "AgentInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "CIID", hidden: true },
+                //{ field: "CINo", title: "Invoice No", editable: true, filterable: false, width: "110px", attributes: { "class": "CINoInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "CIDate", title: "Invoice Date", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "InvoiceAmount", title: "Invoice Amount", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                //{ field: "InvoiceCurrency", hidden: true },
+                //{ field: "InvoiceCurrencyName", title: "Invoice Currency", editable: true, filterable: false, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "CommissionPercent", title: "Com%", editable: true, filterable: false, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "CommissionAmount", title: "Com. Amt", editable: true, filterable: false, width: "60px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ExchangeCurrencyName", title: "Ex. Currency", editable: true, filterable: false, editor: ddlCurrency, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ExchangeRate", title: "Ex.Rate", editable: true, filterable: false, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "ExchangeAmount", title: "Ex.Amt", editable: true, filterable: false, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "LocalCurrency", hidden: true, title: "Loc. Currency", editable: true, filterable: false, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "LocalRate", title: "Loc.Rate", editable: true, filterable: false, width: "45px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "LocalAmount", title: "Loc.Amt", editable: true, filterable: false, width: "45px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "AITPercent", title: "AIT%", editable: true, filterable: false, width: "30px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "AITAmount", title: "AIT Amt", editable: true, filterable: false, width: "45px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "PayableAmount", title: "PayAmt", editable: true, filterable: false, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "PIID", hidden: true },
+                { field: "PINo", title: "Concern PI", editable: true, filterable: false, width: "60px", attributes: { "class": "PIInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;color:red;" } },
+                { field: "RecordStatus", hidden: true },
+                { command: [{ name: "DeltedRow", text: "Delete", click: handleDeleteIssueItem }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        $(".btnPageDetailGrid").click(function () {
+            var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieragentgrid.addRow();
+            //$("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieragentgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieragentgrid.addRow();
+                //$("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+            }
+        });
+
+        SelectedItemOfListOfValue('PageDetailGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDeleteIssueItem() {
+            deleteStatus = 3;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Address Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationClose').click(function () {
+            CloseSaveChangesDialogOneButton();
+        });
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#AgentComID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedAgentCom", "EXPAgentCommission")',
+                        type: 'POST',
+                        data: JSON.stringify({ "AgentComID": $("#AgentComID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                $("#MessageText").html("");
+                                ResetOnlyMasterPageData();
+                                $(".txtCommandBox").val("");
+                                $(".txtBox").css("border-color", "");
+                                //$("#AgentComID").val("Auto Generated");
+                                //$("#plGrid").data("kendoGrid").dataSource.data([]);
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 2) {
+                if (dataitem.AgentComID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedAgentComBuyer", "EXPAgentCommission")',
+                        type: 'POST',
+                        data: JSON.stringify({ "AgentComID": dataitem.AgentComID, "BuyerID": dataitem.BuyerID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                //$("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    //$("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 3) {
+                if (dataitem.AgentComCIID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedAgentComBuyerCI", "EXPAgentCommission")',
+                        type: 'POST',
+                        data: JSON.stringify({ "AgentComCIID": dataitem.AgentComCIID }),
+                        //data: JSON.stringify({ "AgentComCIID": dataitem.AgentComCIID, "BuyerID": dataitem.BuyerID, "CIID": dataitem.CIID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#AgentComID").val("Auto Generated");
+                //$("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                gridUnsaveData = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                ResetOnlyMasterPageData();
+                $(".txtCommandBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#AgentComID").val("Auto Generated");
+                //$("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                gridUnsaveData = 0;
+                CloseSaveChangesDialog();
+                GetCIInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 4) { // Add Schedule
+                CheckRecordStatusForButton("NCF");
+                $("#MessageText").html("");
+                $(".txtCommandBox").val("");
+                $("#AgentComID").val("");
+                $("#AgentComID").val("");
+                $(".txtPIBox").val("");
+                $(".txtBox").css("border-color", "");
+                //$("#plGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                gridUnsaveData = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#AgentComID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedAgentCom", "EXPAgentCommission")',
+                            type: 'POST',
+                            data: JSON.stringify({ "AgentComID": $("#AgentComID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    CheckRecordStatusForButton("NCF");
+                                    $("#MessageText").html("");
+                                    ResetOnlyMasterPageData();
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                    //$("#AgentComID").val("Auto Generated");
+                                    //$("#plGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $(".txtCommandBox").val("");
+                                    $(".txtBox").css("border-color", "");
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 2) {
+                    if (dataitem.AgentComID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedYearMonthScheduleDate", "EXPAgentCommission")',
+                            type: 'POST',
+                            data: JSON.stringify({ "AgentComID": dataitem.AgentComID, "RecordStatus": dataitem.RecordStatus }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    //$("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        //$("#plGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+                else if (deleteStatus == 3) {
+                    if (dataitem.AgentComCIID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedAgentComBuyerCI", "EXPAgentCommission")',
+                            type: 'POST',
+                            data: JSON.stringify({ "AgentComCIID": dataitem.AgentComCIID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $("#MessageText").html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".txtBox").css("border-color", "");
+                    CloseSaveChangesDialog();
+                }
+            }
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+    }); //End of Document.Ready()
+
+    ///////////////////////Dynamic DropDown in Item Griid//////////////////
+
+    var ddlUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CurrencyID",
+                fields: {
+                    CurrencyID: { editable: false },
+                    CurrencyName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveCurrency", "EXPAgentCommission")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlCurrency(container, options) {
+        $('<input id="CurrencyName" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "CurrencyName",
+                dataValueField: "CurrencyName",
+                optionLabel: "--Slelct--",
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: ddlUnitDataSource
+            });
+    };
+
+    ///////////////////////////////////////
+
+    /////////////////////Reset//////////////////
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            CheckRecordStatusForButton("NCF");
+            $("#MessageText").html("");
+            ResetOnlyMasterPageData();
+            $(".txtCommandBox").val("");
+            $(".txtBox").css("border-color", "");
+            //$("#AgentComID").val("Auto Generated");
+            //$("#plGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    /////////////Save//////////////////////////
+
+    // Declare Object
+    var EXPAgentCommissionBuyerModel = { "AgentComID": "", "BuyerID": "", "RecordStatus": "" };
+    var EXPAgentCommissionBuyerCIModel = { "AgentComID": "", "BuyerID": "", "CIID": "", "InvoiceAmount": "", "InvoiceCurrency": "", "CommissionPercent": "", "CommissionAmount": "", "LocalCurrency": "", "ExchangeRate": "", "ExchangeAmount": "", "LocalCurrency": "", "LocalRate": "", "LocalAmount": "", "RecordStatus": "" };
+    var EXPAgentCommissionModel = { "AgentComID": "", "AgentComNo": "", "AgentComRef": "", "AgentComDate": "", "AgentComCatg": "", "BuyerAgentID": "", "RecordStatus": "", "EXPAgentCommissionBuyerList": [], "EXPAgentCommissionBuyerCIList": [] };
+
+    function Save() {
+        saveStatus = 1;
+        //Check Empty or Maximum Length in AgentComNo
+        CheckRequiredTextBoxMaxLength('AgentComRef', 30);
+        ////Check Empty or Maximum Length in CIDate
+        //CheckRequiredTextBoxMaxLength('CIDate', 2);
+        ////Check Empty or Maximum Length in CIAmount
+        //CheckRequiredTextBoxMaxLength('CIAmount', 10);
+        ////Check Empty or Maximum Length in CICurrency
+        //CheckRequiredTextBoxMaxLength('CICurrency', 10);
+        ////Check Empty or Maximum Length in PrepareDate
+        //CheckRequiredTextBoxMaxLength('PrepareDate', 10);
+        ////Check Empty or Maximum Length in ProductionProcessID
+        //CheckRequiredTextBoxMaxLength('ProductionProcessID', 10);
+
+        if (saveStatus == 1) {
+            EXPAgentCommissionModel.AgentComID = $('#AgentComID').val();
+            EXPAgentCommissionModel.AgentComNo = $('#AgentComNo').val();
+            EXPAgentCommissionModel.AgentComRef = $('#AgentComRef').val();
+            EXPAgentCommissionModel.AgentComDate = $('#AgentComDate').val();
+            //EXPAgentCommissionModel.AgentComCatg = $('#AgentComCatg').val();
+
+            EXPAgentCommissionModel.BuyerID = $('#BuyerID').val();
+            EXPAgentCommissionModel.CIID = $('#CIID').val();
+            EXPAgentCommissionModel.CIDate = $('#CIDate').val();
+            EXPAgentCommissionModel.CIAmount = $('#CIAmount').val();
+            EXPAgentCommissionModel.ComOnAmount = $('#ComOnAmount').val();
+            EXPAgentCommissionModel.InvoiceCurrency = $('#InvoiceCurrency').val();
+            EXPAgentCommissionModel.LocalCurrency = $('#LocalCurrency').val();
+
+
+            //var grid33 = $("#plGrid").data("kendoGrid");
+            //dataitem33 = (grid33.dataItem(grid33.select())); //Selected Row
+
+            //var parentGrid = $("#plGrid").data("kendoGrid").dataSource;
+            //var parentGridItem = parentGrid.data(); // Get Detail Grid Data
+            //EXPAgentCommissionModel.EXPAgentCommissionBuyerList = [];
+            //for (var i = 0; i <= parentGridItem.length - 1; i++) {
+
+            //    EXPAgentCommissionBuyerModel.AgentComID = parentGridItem[i].AgentComID;
+            //    EXPAgentCommissionBuyerModel.BuyerID = parentGridItem[i].BuyerID;
+
+            //    EXPAgentCommissionModel.EXPAgentCommissionBuyerList.push(EXPAgentCommissionBuyerModel);
+            //    EXPAgentCommissionBuyerModel = { "AgentComID": "", "BuyerID": "", "RecordStatus": "" };
+            //}
+            var dataSourcePeriodItem = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+            EXPAgentCommissionModel.EXPAgentCommissionBuyerCIList = [];
+            for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+                //if (dataPeriodItem[j].dirty) {
+                EXPAgentCommissionBuyerCIModel.AgentComCIID = dataPeriodItem[j].AgentComCIID;
+                EXPAgentCommissionBuyerCIModel.AgentComID = dataPeriodItem[j].AgentComID;
+                EXPAgentCommissionBuyerCIModel.BuyerAgentID = dataPeriodItem[j].BuyerAgentID;
+                EXPAgentCommissionBuyerCIModel.AgentType = dataPeriodItem[j].AgentType;
+                EXPAgentCommissionBuyerCIModel.PIID = dataPeriodItem[j].PIID;
+                EXPAgentCommissionBuyerCIModel.CIID = $('#CIID').val();
+                //EXPAgentCommissionBuyerCIModel.InvoiceAmount = dataPeriodItem[j].InvoiceAmount;
+                //EXPAgentCommissionBuyerCIModel.InvoiceCurrency = dataPeriodItem[j].InvoiceCurrency;
+                EXPAgentCommissionBuyerCIModel.CommissionPercent = dataPeriodItem[j].CommissionPercent;
+                EXPAgentCommissionBuyerCIModel.CommissionAmount = dataPeriodItem[j].CommissionAmount;
+
+                EXPAgentCommissionBuyerCIModel.AITPercent = dataPeriodItem[j].AITPercent;
+                EXPAgentCommissionBuyerCIModel.AITAmount = dataPeriodItem[j].AITAmount;
+                EXPAgentCommissionBuyerCIModel.PayableAmount = dataPeriodItem[j].PayableAmount;
+
+                EXPAgentCommissionBuyerCIModel.ExchangeCurrencyName = dataPeriodItem[j].ExchangeCurrencyName;
+                EXPAgentCommissionBuyerCIModel.ExchangeRate = dataPeriodItem[j].ExchangeRate;
+                EXPAgentCommissionBuyerCIModel.ExchangeAmount = dataPeriodItem[j].ExchangeAmount;
+                EXPAgentCommissionBuyerCIModel.LocalCurrency = $('#LocalCurrency').val();
+                EXPAgentCommissionBuyerCIModel.LocalRate = dataPeriodItem[j].LocalRate;
+                EXPAgentCommissionBuyerCIModel.LocalAmount = dataPeriodItem[j].LocalAmount;
+                //EXPAgentCommissionBuyerCIModel.BuyerID = dataitem33.BuyerID;
+
+                EXPAgentCommissionModel.EXPAgentCommissionBuyerCIList.push(EXPAgentCommissionBuyerCIModel);
+                EXPAgentCommissionBuyerCIModel = { "AgentComID": "", "BuyerID": "", "CIID": "", "InvoiceAmount": "", "InvoiceCurrency": "", "CommissionPercent": "", "CommissionAmount": "", "LocalCurrency": "", "ExchangeRate": "", "ExchangeAmount": "", "LocalCurrency": "", "LocalRate": "", "LocalAmount": "", "RecordStatus": "" };
+                //}
+            }
+            //}
+            if (changeStatus == 1) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EXPAgentCommission", "EXPAgentCommission")',
+                    data: JSON.stringify(EXPAgentCommissionModel),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#AgentComID").val(respnse.AgentComID);
+                            $("#AgentComNo").val(respnse.AgentComNo);
+                            changeStatus = 0;
+                            gridUnsaveData = 0;
+
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "EXPAgentCommission")',
+                                type: 'GET',
+                                data: { "AgentComID": respnse.AgentComID },
+                                success: function (data) {
+                                    //$("#plGrid").data("kendoGrid").dataSource.data(data.EXPAgentCommissionBuyerList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPAgentCommissionBuyerCIList);
+                                }
+                            });
+                            //$("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                            //    this.element.find('tbody tr:first').addClass('k-state-selected');
+                            //});
+                        } else if (respnse.msg.Type == 3) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#CIID").val(respnse.CIID);
+                            $("#AgentComNo").val(respnse.AgentComNo);
+                            $("#AgentComID").val(respnse.AgentComID);
+                            //$("#AgentComID").val(respnse.AgentComID);
+                            changeStatus = 0;
+                            gridUnsaveData = 0;
+
+                            $.ajax({
+                                url: '@Url.Action("GetAllGridList", "EXPAgentCommission")',
+                                type: 'GET',
+                                data: { "AgentComID": $("#AgentComID").val() },
+                                success: function (data) {
+                                    //$("#plGrid").data("kendoGrid").dataSource.data(data.EXPAgentCommissionBuyerList);
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPAgentCommissionBuyerCIList);
+                                }
+                            });
+                            //$("#plGrid").data().kendoGrid.bind('dataBound', function () {
+                            //    this.element.find('tbody tr:first').addClass('k-state-selected');
+                            //});
+                        } else {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            EXPAgentCommissionModel = { "AgentComID": "", "AgentComNo": "", "AgentComRef": "", "AgentComDate": "", "AgentComCatg": "", "BuyerAgentID": "", "RecordStatus": "", "EXPAgentCommissionBuyerList": [], "EXPAgentCommissionBuyerCIList": [] };
+        } else {
+            $("#MessageText").html("Please Enter the Proper Data.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+    }
+
+    /////////////////////Confirmed Chemical Item////////////////////
+
+    $("#btnConfirm").click(function () {
+        if (changeStatus == 0) {
+            EXPAgentCommissionModel.AgentComID = $('#AgentComID').val();
+
+            //var parentGrid = $("#plGrid").data("kendoGrid");
+            //var parentGridRow = parentGrid.select();
+            //var parentGridItem = parentGrid.dataItem(parentGridRow);
+            //if (parentGridItem != null) {
+            //    EXPAgentCommissionModel.EXPAgentCommissionBuyerList = [];
+            //    EXPAgentCommissionBuyerModel.BuyerID = parentGridItem.BuyerID;
+            //    EXPAgentCommissionModel.EXPAgentCommissionBuyerList.push(EXPAgentCommissionBuyerModel);
+            //    EXPAgentCommissionBuyerModel = { "AgentComID": "", "BuyerID": "", "RecordStatus": "" };
+            //}
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ConfirmedEXPAgentCommission", "EXPAgentCommission")',
+                data: JSON.stringify(EXPAgentCommissionModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            EXPAgentCommissionModel = { "AgentComID": "", "AgentComNo": "", "AgentComRef": "", "AgentComDate": "", "AgentComCatg": "", "BuyerAgentID": "", "RecordStatus": "", "EXPAgentCommissionBuyerList": [], "EXPAgentCommissionBuyerCIList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Confirmed.");
+        }
+    });
+
+    $("#btnCheck").click(function () {
+        if (changeStatus == 0) {
+            EXPAgentCommissionModel.AgentComID = $('#AgentComID').val();
+
+            //var parentGrid = $("#plGrid").data("kendoGrid");
+            //var parentGridRow = parentGrid.select();
+            //var parentGridItem = parentGrid.dataItem(parentGridRow);
+            //if (parentGridItem != null) {
+            //    EXPAgentCommissionModel.EXPAgentCommissionBuyerList = [];
+            //    EXPAgentCommissionBuyerModel.BuyerID = parentGridItem.BuyerID;
+            //    EXPAgentCommissionModel.EXPAgentCommissionBuyerList.push(EXPAgentCommissionBuyerModel);
+            //    EXPAgentCommissionBuyerModel = { "AgentComID": "", "BuyerID": "", "RecordStatus": "" };
+            //}
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckedEXPCI", "EXPAgentCommission")',
+                data: JSON.stringify(EXPAgentCommissionModel),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (respnse) {
+                    if (respnse.msg.Type == "2") {
+                        CheckRecordStatusForButton("CNF");
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            EXPAgentCommissionModel = { "AgentComID": "", "AgentComNo": "", "AgentComRef": "", "AgentComDate": "", "AgentComCatg": "", "BuyerAgentID": "", "RecordStatus": "", "EXPAgentCommissionBuyerList": [], "EXPAgentCommissionBuyerCIList": [] };
+        }
+        else {
+            //$('#MessageText').html("At First Saved Then Confirmed.");
+            //$("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            alert("At First Saved Then Checked.");
+        }
+    });
+
+    ////////////////////Search CI Information////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#MessageText").html("");
+            $(".txtBox").css("border-color", "");
+            GetCIInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "AgentComID",
+                fields: {
+                    AgentComID: { editable: false },
+                    AgentComNo: { editable: false },
+                    AgentComRef: { editable: false },
+                    AgentComDate: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIAmount: { editable: false },
+                    ComOnAmount: { editable: false },
+                    CIDate: { editable: false },
+                    InvoiceCurrency: { editable: false },
+                    InvoiceCurrencyName: { editable: false },
+                    LocalCurrency: { editable: false },
+                    RecordStatus: { editable: false },
+                    RecordStatusName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "AgentComID", hidden: true },
+            { field: "AgentComNo", hidden: true },
+            { field: "AgentComRef", title: "AgentComRefNo", width: "60px" },
+            { field: "AgentComDate", title: "AgentComDate", width: "60px" },
+            { field: "BuyerID", hidden: true },
+            { field: "BuyerName", title: "Buyer", width: "60px" },
+            { field: "CIID", hidden: true },
+            { field: "CINo", title: "CINo", width: "60px" },
+            { field: "CIAmount", title: "CIAmount", width: "60px" },
+            { field: "ComOnAmount", title: "ComOnAmount", width: "60px" },
+            { field: "CIDate", title: "CIDate", width: "60px" },
+            { field: "InvoiceCurrency", hidden: true },
+            { field: "InvoiceCurrencyName", title: "CICurrency", width: "60px" },
+            { field: "LocalCurrency", hidden: true },
+            { field: "RecordStatus", hidden: true },
+            { field: "RecordStatusName", title: "Status", width: "60px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "CI Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetCIInformation() {
+        $.ajax({
+            url: '@Url.Action("GetAgentCommissionInformation", "EXPAgentCommission")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        $("#AgentComID").val(selectedItem.AgentComID);
+        $("#AgentComNo").val(selectedItem.AgentComNo);
+        $("#AgentComRef").val(selectedItem.AgentComRef);
+        $("#AgentComDate").val(selectedItem.AgentComDate);
+
+        $("#BuyerID").val(selectedItem.BuyerID);
+        $("#BuyerName").val(selectedItem.BuyerName);
+
+        $("#CIID").val(selectedItem.CIID);
+        $("#CINo").val(selectedItem.CINo);
+        $("#CIAmount").val(selectedItem.CIAmount);
+        $("#ComOnAmount").val(selectedItem.ComOnAmount);
+
+        $("#CIDate").val(selectedItem.CIDate);
+        $("#InvoiceCurrency").val(selectedItem.InvoiceCurrency);
+        $("#InvoiceCurrencyName").val(selectedItem.InvoiceCurrencyName);
+
+        $("#LocalCurrency").val(selectedItem.LocalCurrency);
+
+        CheckRecordStatusForButton(selectedItem.RecordStatus);
+
+        $.ajax({
+            url: '@Url.Action("GetAllGridList", "EXPAgentCommission")',
+            type: 'GET',
+            data: { "AgentComID": selectedItem.AgentComID },
+            success: function (data) {
+                //$("#plGrid").data("kendoGrid").dataSource.data(data.EXPAgentCommissionBuyerList);
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data.EXPAgentCommissionBuyerCIList);
+            }
+        });
+        //$("#plGrid").data().kendoGrid.bind('dataBound', function () {
+        //    this.element.find('tbody tr:first').addClass('k-state-selected');
+        //});
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    /////////////////////////////////////////////
+
+    //////////////////////////BuyerAgent/Party////////////////////////////////////////
+
+    $(document).on('keyup', '.AgentInfo', function (e) {
+        if (e.which == 120) {
+            GetBuyerAgentInfo();
+            SelectedItemOfListOfValue('BuyerAgentWindowGrid');
+            BuyerAgentWindow.open(); //Open Popup
+            BuyerAgentWindow.center();
+        }
+    });
+
+    //$(document.body).keyup(function (e) {
+    //    if ($("#BuyerAgentName").is(":focus")) {
+    //        if (e.which == 120) {
+    //            GetBuyerAgentInfo();
+    //            SelectedItemOfListOfValue('BuyerAgentWindowGrid');
+    //            BuyerAgentWindow.open(); //Open Popup
+    //            BuyerAgentWindow.center();
+    //        }
+    //    }
+    //});
+
+    function GetBuyerAgentInfo() {
+        $.ajax({
+            url: '@Url.Action("GetBuyerAgentPopupList", "EXPAgentCommission")',
+            type: 'GET',
+            //data: { "BuyerType": $("#AgentComCatg").val() },
+            success: function (response) {
+                $("#BuyerAgentWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var BuyerAgentWindow = $('#BuyerAgentWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "BuyerAgent Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BuyerAgentDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerCategory: { editable: false },
+                    BuyerType: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var BuyerAgentGrid = $("#BuyerAgentWindowGrid").kendoGrid({
+        dataSource: BuyerAgentDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerName", title: "Agent", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "BuyerCategory", title: "Category", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "BuyerType", title: "Type", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "Address", title: "Address", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+        ]
+    });
+
+    function BuyerAgentWindowEvent() {
+        var WindowGrid = $("#BuyerAgentWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("BuyerAgentID", WindowGridItem.BuyerID);
+        PageGridItem.set("BuyerAgentName", WindowGridItem.BuyerName);
+        PageGridItem.set("AgentType", WindowGridItem.BuyerType);
+
+        changeStatus = 1;
+    };
+
+    $('#btnBuyerAgentWindowOK').click(function () {
+        BuyerAgentWindowEvent();
+        BuyerAgentWindow.close();
+    });
+
+    $('#btnBuyerAgentWindowCancel').click(function () {
+        BuyerAgentWindow.close();
+    });
+
+    $("#BuyerAgentWindow").dblclick(function () {
+        BuyerAgentWindowEvent();
+        BuyerAgentWindow.close();
+    });
+
+    $("#BuyerAgentWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            BuyerAgentWindowEvent();
+            BuyerAgentWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            BuyerAgentWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //////////////////////////Buyer/Party////////////////////////////////////////
+
+    $(document).on('keyup', '.PIInfo', function (e) {
+        if (e.which == 120) {
+            GetPartyInfo();
+            SelectedItemOfListOfValue('PartyWindowGrid');
+            PartyWindow.open(); //Open Popup
+            PartyWindow.center();
+        }
+    });
+
+    function GetPartyInfo() {
+        $.ajax({
+            url: '@Url.Action("GetPIInfoList", "EXPAgentCommission")',
+            type: 'GET',
+            data: { "CIID": $("#CIID").val() },
+            success: function (response) {
+                $("#PartyWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var PartyWindow = $('#PartyWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "PI Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var PartyDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PIID",
+                fields: {
+                    PIID: { editable: false },
+                    PINo: { editable: false },
+                    BuyerName: { editable: false },
+                    BuyerOrderNo: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var PartyGrid = $("#PartyWindowGrid").kendoGrid({
+        dataSource: PartyDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+                  { field: "PIID", hidden: true },
+                  { field: "PINo", title: "PINo", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "BuyerName", title: "Buyer", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "BuyerOrderNo", title: "OrderNo", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    function PartyWindowEvent() {
+        var WindowGrid = $("#PartyWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        PageGridItem.set("PIID", WindowGridItem.PIID);
+        PageGridItem.set("PINo", WindowGridItem.PINo);
+
+        changeStatus = 1;
+    };
+
+    $('#btnPartyWindowOK').click(function () {
+        PartyWindowEvent();
+        PartyWindow.close();
+    });
+
+    $('#btnPartyWindowCancel').click(function () {
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").dblclick(function () {
+        PartyWindowEvent();
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            PartyWindowEvent();
+            PartyWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PartyWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////CINoInfo////////////////////////////////////////
+
+    //$(document).on('keyup', '.CINoInfo', function (e) {
+    //    if (e.which == 120) {
+    //        GetCINoInfo();
+    //        SelectedItemOfListOfValue('CINoWindowGrid');
+    //        CINoWindow.open(); //Open Popup
+    //        CINoWindow.center();
+    //    }
+    //});
+
+    $(document.body).keyup(function (e) {
+        if ($("#CINo").is(":focus")) {
+            if (e.which == 120) {
+                GetCINoInfo();
+                SelectedItemOfListOfValue('CINoWindowGrid');
+                CINoWindow.open(); //Open Popup
+                CINoWindow.center();
+            }
+        }
+    });
+
+    function GetCINoInfo() {
+        //var grid = $("#plGrid").data("kendoGrid");
+        //var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        //alert("t");
+        $.ajax({
+            url: '@Url.Action("GetCINoList", "EXPAgentCommission")',
+            type: 'GET',
+            //data: { "BuyerID": selectedItem.BuyerID },
+            success: function (response) {
+                $("#CINoWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var CINoWindow = $('#CINoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "CINo Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var CINoDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    CIAmount: { editable: false },
+
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    //PINo: { editable: false },
+                    //BuyerOrderNo: { editable: false },
+
+                    InvoiceCurrency: { editable: false },
+                    InvoiceCurrencyName: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var CINoGrid = $("#CINoWindowGrid").kendoGrid({
+        dataSource: CINoDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+              { field: "CIID", hidden: true },
+              { field: "CINo", title: "Invoice No", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "CIDate", title: "Invoice Date", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "CIAmount", title: "InvoiceAmount", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "InvoiceCurrency", hidden: true },
+              { field: "InvoiceCurrencyName", title: "InvoiceCurrency", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerName", title: "Buyer", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+              //,
+              //{ field: "BuyerOrderNo", title: "OrderNo", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              //{ field: "PINo", title: "PINo", filterable: true, width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    function CINoWindowEvent() {
+        var WindowGrid = $("#CINoWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //var PageGrid = $("#PageDetailGrid").data("kendoGrid");
+        //var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        $("#CIID").val(WindowGridItem.CIID);
+        $("#CINo").val(WindowGridItem.CINo);
+
+        $("#BuyerID").val(WindowGridItem.BuyerID);
+        $("#BuyerName").val(WindowGridItem.BuyerName);
+
+        $("#CIDate").val(WindowGridItem.CIDate);
+        $("#CIAmount").val(WindowGridItem.CIAmount);
+        $("#ComOnAmount").val(WindowGridItem.CIAmount);
+        $("#InvoiceCurrency").val(WindowGridItem.InvoiceCurrency);
+        $("#InvoiceCurrencyName").val(WindowGridItem.InvoiceCurrencyName);
+
+        $.ajax({
+            url: '@Url.Action("GetBuyerAgentList", "EXPAgentCommission")',
+            type: 'GET',
+            data: { "CIID": $("#CIID").val(), "CIAmount": WindowGridItem.CIAmount },
+            success: function (response) {
+                $("#PageDetailGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+
+        changeStatus = 1;
+    };
+
+    $('#btnCINoWindowOK').click(function () {
+        CINoWindowEvent();
+        CINoWindow.close();
+    });
+
+    $('#btnCINoWindowCancel').click(function () {
+        CINoWindow.close();
+    });
+
+    $("#CINoWindow").dblclick(function () {
+        CINoWindowEvent();
+        CINoWindow.close();
+    });
+
+    $("#CINoWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            CINoWindowEvent();
+            CINoWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            CINoWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    ///////////////////////////////////////////////////////////////////
+</script>

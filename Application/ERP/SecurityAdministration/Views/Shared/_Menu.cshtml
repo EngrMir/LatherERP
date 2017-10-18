@@ -1,0 +1,103 @@
+﻿@{
+
+    var roleId=0;
+    if (Session["RoleId"] != null)
+    {
+        roleId = Convert.ToInt32(Session["RoleId"]);
+    }
+}
+
+<div id="menubar" class="navbar navbar-inverse">
+    <div class="container">
+        <div class="container-fluid">
+         <div class="collapse navbar-collapse">
+                
+             @switch (roleId)
+             {
+                 case 1: //Super Admin
+                     <ul class="nav navbar-nav">
+                         <li class="active"><a id="homebtn" href="~/Home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                         <li>&nbsp; &nbsp; &nbsp;</li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Standing Data Setup<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="applicationLink" href="~/Application">Add Application</a></li>
+                                 <li><a id="applicationPoliciesLink" href="#">Add Application Policies</a></li>
+                                 <li><a id="moduleLink" href="~/Module">Add Module</a></li>
+                                 <li><a id="roleLink" href="~/Role">Add Role</a></li>
+                                 <li><a href="~/Designation">Add Designation</a></li>
+                             </ul>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu &amp; Screen Management<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="menuItemLink" href="~/MenuItem">Add Menu Item</a></li>
+                                 <li><a id="screenLink" href="~/Screen">Add Screen</a></li>
+                             </ul>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Administration<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="userLink" href="~/User">Add User</a></li>
+                                 <li><a id ="userInRoleLink" href="userinrole">User In Role</a></li>
+                             </ul>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Permission &amp; Operation<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="roleWiseScreenPermissionLink" href="~/RoleWiseScreenPermission">Add Role Wise Screen Permission</a></li>
+                                 <li><a id="roleAdditionalScreenPermission" href="#">Add Additional Screen Permission</a></li>
+                                 <li><a id="roleWiseOperationLink" href="~/RoleWiseOperationPermission">Add Role Wise Operation</a></li>
+                                 <li><a id="additionalOperationLink" href="#">Add Additional Operation</a></li>
+                             </ul>
+                         </li>
+                     </ul>
+                     break;
+                 case 2: // Admin 
+                     <ul class="nav navbar-nav">
+                         <li class="active"><a id="homebtn" href="~/Home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                         <li>&nbsp; &nbsp; &nbsp;</li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Standing Data Setup<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="roleLink" href="~/Role">Add Role</a></li>
+                                 <li><a href="~/Designation">Add Designation</a></li>
+                             </ul>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Administration<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="userLink" href="~/User">Add User</a></li>
+                                 <li><a id ="userInRoleLink" href="userinrole">User In Role</a></li>
+                             </ul>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Permission &amp; Operation<b class="caret"></b></a>
+                             <ul class="dropdown-menu">
+                                 <li><a id="roleWiseScreenPermissionLink" href="~/RoleWiseScreenPermission">Add Role Wise Screen Permission</a></li>
+                              </ul>
+                         </li>
+                     </ul>
+                 
+                     break;
+                     case 0:
+                      <ul class="nav navbar-nav">
+                         <li class="active"><a id="homebtn" href="~/Home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                       <li>&nbsp; &nbsp; &nbsp;</li>
+                          </ul>
+                     
+                     break;
+             }
+                    
+                    
+            </div><!-- /.nav-collapse -->
+        </div><!-- /.container -->
+    </div><!-- /.navbar-inner -->
+</div><!-- /.navbar -->
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $('#applicationLink').click(function (e) {
+              location.href = '@Url.Content("~/Application")';
+          });
+        });
+    </script>*@

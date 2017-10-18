@@ -1,0 +1,938 @@
+﻿@{
+    ViewBag.Title = "SupplierBillApproval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        setTimeout(function () {
+            $("#SupplierID").focus();
+        }, 1);
+        $('#appPrice').blur(function () {
+            var stri = $('#purchaseYear').val();//the input element
+            var numbers = "0123456789";
+            var flag = false;
+            for (var x = 0; x < stri.length; x++) {
+                var ch = stri.charAt(x);
+                var n = numbers.indexOf(ch);
+                if (n === -1) {//why does it always resolve to true
+                    flag = true;
+                    break;
+                }
+                else { }
+            }
+            if (flag) {
+                alert("Not a number");
+                $('#purchaseYear').val("");
+                setTimeout(function () {
+                    $("#purchaseYear").focus();
+                }, 1);
+            }
+        });
+        $('#totalAppAmount').blur(function () {
+            var stri = $('#purchaseYear').val();//the input element
+            var numbers = "0123456789";
+            var flag = false;
+            for (var x = 0; x < stri.length; x++) {
+                var ch = stri.charAt(x);
+                var n = numbers.indexOf(ch);
+                if (n === -1) {//why does it always resolve to true
+                    flag = true;
+                    break;
+                }
+                else {}
+            }
+            if (flag) {
+                alert("Not a number");
+                $('#purchaseYear').val("");
+                setTimeout(function () {
+                    $("#purchaseYear").focus();
+                }, 1);
+            }
+        });
+    });
+    ClearOperationalMessage();
+    ClearRequiredTextBoxRedColor();
+</script>
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Supplier Bill Approval</div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+            </div>
+            <div id="" class="col-lg-3">
+                <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" disabled />
+                <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+                <input type="button" id="btnSave" onclick="return saveData()" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" disabled="true"/>
+                <input type="text" id="supplierBillId" class="" style="display:none;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <fieldset>
+            <div class="col-lg-3">
+                <div class="col-md-5"><label class="" style=" font-size: 12px; float: right;">Supplier Code </label></div>
+                <div class="col-md-7" style="padding-left: 0;">
+                    <input type="text" id="SupplierID" hidden="hidden" class="txtBox" tabindex="1" placeholder="Press (F9)" style="width: 90px;font-size: 12px; font-weight: normal;" />
+                    <input type="text" id="SupplierCode" class="text-box" tabindex="1" placeholder="Press (F9)" style="width: 90px;font-size: 12px; font-weight: normal;" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-2"><label class="" style=" font-size: 12px; float: right;">Name</label></div>
+                <div class="col-md-9" style="padding-left: 0;">
+                    <input type="text" id="SupplierName" class="" readonly="readonly" style="width: 230px; font-size: 12px; font-weight: normal;" />
+                </div>
+            </div>
+            <div class="col-lg-5">
+                @*<p id="SupplierAddressID" style="display: none;"></p>*@
+                <input type="text" id="SupplierAddressID" class="" style="display: none;" />
+                <div class="col-md-2">
+                    <label class="" style=" font-size: 12px; float: right;">Address</label>
+                </div>
+                <div class="col-md-9" style="padding-left: 0;">
+                    <input type="text" id="Address" readonly="readonly" class="" style="font-size: 12px; width: 400px; font-weight: normal; " />
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="col-md-5"><label style=" font-size: 12px; float:right; ">Bill Category</label></div>
+                <div class="col-md-7" style=" padding-left: 0;">
+                    <select id="billCategory" class="" tabindex="2" style="width: 150px; font-weight: normal; font-size: 12px;">
+                        <option value="0" style="display: none;">-- Select --</option>
+                        <option value="Dummy">Dummy</option>
+                        <option value="Real">Real</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3">                
+                <div class="col-md-5">
+                    <label style=" font-size: 12px; float: right;">Bill No</label>
+                </div>
+                <div class="col-md-7" style=" padding-left: 0;">
+                    <input id="supplierBillNo" type="text" class="" readonly="readonly" tabindex="4" style="width: 150px; font-size: 12px; font-weight: normal;" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-5">
+                    <label style=" font-size: 12px; float:right; ">Purchase Year</label>
+                </div>
+                <div class="col-md-7" style=" padding-left: 0;">
+                    <input id="purchaseYear" type="text" class="" readonly="readonly" tabindex="6" style="width: 150px; font-size: 12px; font-weight: normal;" />
+                </div>
+            </div>
+        </div>
+        <div class="row" style="">
+            <div class="col-lg-3">
+                <div class="col-md-5">
+                    <label style=" font-size: 12px; float: right;">Bill Type</label>
+                </div>
+                <div class="col-md-7" style=" padding-left: 0;">                    
+                    <input type="text" id="billType" class="" readonly="readonly" tabindex="3" style="width: 150px; font-weight: normal; " />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-5">
+                    <label style=" font-size: 12px; float: right;">Bill Date</label>
+                </div>
+                <div class="col-md-7" style=" padding-left: 0;">
+                    <input type="text" id="billDate" class="datePicker" readonly="readonly" tabindex="5" style="width: 150px; font-weight: normal; " />
+                </div>
+            </div>          
+            <div class="col-lg-3">
+                <div class="col-md-5">
+                    <label style=" font-size: 12px; float: right;">Remarks </label>
+                </div>
+                <div class="col-md-7" style=" padding-left: 0;">
+                    <input id="remarks1" type="text" readonly="readonly" class="" tabindex="7" style="font-size: 12px;  width: 150px; " />
+                </div>
+            </div>
+            <input type="text" id="recordStatus" value="" style="display: none;" />
+        </div>
+    </div>
+    <div class="FormBody" style="min-height: 250px; height: Auto; font-size: 12px;">
+        @*Table Header*@
+        <div class="row" style="margin-top: -10px;">
+            <div id="BillItemGrid" tabindex="8" class="col-lg-12" style="padding: 0 0 0 0; width: 1220px; position: relative; left: 6px; font-weight: normal; font-size: 12px;"></div>
+        </div>
+        <div class="row" style="margin-top: 5px;"></div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float:  right; font-size: 12px;">Total Quantity </label></div>
+                <div class="col-md-6"><input type="text" readonly="readonly" tabindex="9" id="tQty" class="" style="width: 150px;" /></div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Other Cost</label></div>
+                <div class="col-md-6"><input type="text" tabindex="15" id="otherCost" readonly="readonly" class="" style="width: 150px;" /></div>               
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Total Reject Qty.</label></div>
+                <div class="col-md-6"><input type="text" tabindex="12" id="tRQty" class="" style="width: 150px;" /></div>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Average Price</label></div>
+                <div class="col-md-6"><input type="text" id="avgPrice" readonly="readonly" tabindex="10" class="" style="width: 150px;" /></div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Discount</label></div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <input type="text" id="discountPer" class="" tabindex="16" readonly="readonly" style="width: 74px; position: absolute; left: 15px;" placeholder="Percentage" />
+                        <input type="text" id="discountVal" class="" tabindex="17" readonly="readonly" style="width: 74px; position: absolute; left: 91px;" placeholder="Value" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Approved Price</label></div>
+                <div class="col-md-6"><input type="text" id="appPrice" tabindex="13" class="" style="width: 150px;" /></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Total Amount</label></div>
+                <div class="col-md-6"><input type="text" id="totalAmount" readonly="readonly" tabindex="11" class="" style="width: 150px;" /></div>
+            </div>
+            <div class="col-lg-3">                
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Payable Amount</label></div>
+                <div class="col-md-6"><input type="text" id="payableAmount" readonly="readonly" tabindex="18" class="" style="width: 150px;" /></div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-6"><label style="float: right; font-size: 12px;">Approved Amount</label></div>
+                <div class="col-md-6"><input type="text" id="totalAppAmount" tabindex="14" style="width: 150px;" /></div>
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-1" style=" padding-right:0;">
+                <label style="">Approve Remark</label>
+            </div>
+            <div class="col-lg-3" style="padding-left:0; padding-right:0;">
+                <textarea id="approveComment" tabindex="" style="float:left; width:300px;"></textarea>
+            </div>
+            <div class="col-lg-1">
+                <input type="button" tabindex="" id="btnApprove" value="Approve" onclick="Approve()" style="position: absolute; width: 73px; font-size: 12px;" />
+            </div>
+        </div>
+    </div>
+</div>
+<div id="SaveChangeWindow" style="display: none;">
+    <div class="row" style="width:245px;">
+        <h5 style="margin-left: 30px;">Data will be lost if you continue.</h5>
+    </div>
+    <div class="row" style="width:245px;">
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" style="float: right;" />
+        <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" style="float: right; margin-right: -30px;" />
+    </div>
+</div>
+<div id="dataExist" style="display: none;">
+    <div class="row" style="width: 395px;">
+        <h5 style="margin-left: 30px;">The data you selected already exists in the challan grid.</h5>
+    </div>
+    <div class="row" style="width: 395px;">
+        <input type="button" class="ThreeButtonWindow" id="btnDataExistOk" value="OK" style="float: right;" />
+    </div>
+</div>
+<div id="SupplierWindow" style="display: none;">
+    <div class="row" style="width: 796px;">
+        <label style="margin-left: 20px;">Supplier</label>
+        <input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 796px;">
+        <div id="SupplierWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 796px;">
+        <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="SearchWindow" style="display: none;">
+    <div class="row" style="width: 695px;">
+        <label style="margin-left: 20px;">Supplier</label>
+        <input type="text" id="txtSupplierIdForBill" style="width: 250px;" /><input type="button" id="btnBillSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 695px;">
+        <div id="SearchWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 695px;">
+        <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+        <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+<div id="DeleteBillConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillCancel" value="Cancel" />
+</div>
+<div id="DeleteChallanConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteChallanOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteChallanCancel" value="Cancel" />
+</div>
+<div id="DeleteBillItemConfirmWindow" style="display: none;">
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillItemOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 50px; float: left;" id="btnDeleteBillItemCancel" value="Cancel" />
+</div>
+<div id="ChallanListWindow" style="display: none;">
+    <div id="ChallanListWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanListWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanListWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    var changeStatus = 0;
+    var saveStatus = 0;
+    var dataitem = {};
+    var switchChallanGridDataSource = 0;
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                $("#txtSupplier").val("");
+                SupplierWindow.open();
+                SupplierWindow.center();
+            }
+        }
+        if ($("#supplierBillId").is(":focus")) {
+            if (e.keyCode == 120) {                
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+        }
+    });    
+    /*---------------------------------------------------------- Bill Item Grid ---------------------------------------------------------------*/
+    var BillItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierBillID",
+                fields: {
+                    SupplierBillID: { editable: false },
+                    BillItemID: { editable: false },
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    ItemSizeID: { editable: false },
+                    ItemSizeName: { editable: false },
+                    ItemQty: { editable: false },
+                    RejectQty: { editable: false },
+                    ItemRate: { editable: false },
+                    ApproveRate: { editable: true },
+                    Amount: { editable: false, },
+                    ApproveAmount: { editable: true },
+                    AmtUnit: { editable: false },
+                    AmtUnitName: { editable: false },
+                    AvgArea: { editable: false, },
+                    AreaUnit: { editable: false },
+                    AreaUnitName: { editable: false },
+                    Remarks: { editable: false },
+                }
+            }
+        },
+        pageSize: 30
+    });
+    var BillItemGrid = $("#BillItemGrid").kendoGrid({
+        dataSource: BillItemGridDataSource,
+        pageable: true,
+        edit: function (e) {
+            if (($("#recordStatus").val() == "CNF" && $("#billCategory").val() == 'Dummy') || ($("#recordStatus").val() == "CNF" && $("#billCategory").val() == 'Real')) {
+                //$(":input").attr('disabled', true);
+                $(".ApproveRate input").each(function () {
+                    $(this).attr('disabled', false);
+                });
+            }           
+            $("[name='ApproveRate']", e.container).blur(function (e) {
+                var grid = $("#BillItemGrid").data("kendoGrid");
+                var row = $(this).closest("tr");
+                var appAmount = parseFloat(grid.dataItem(row).ItemQty) * parseFloat(grid.dataItem(row).ApproveRate);
+                var item = grid.dataItem(row);
+                item.ApproveAmount = appAmount.toFixed(2);
+                var dataSource = $("#BillItemGrid").data("kendoGrid").dataSource;
+                var data = dataSource.data(); // Get Detail Grid Data
+                var sumAppAmount = 0;
+                var avgAppRate = 0;
+                for (var i = 0; i <= data.length - 1; i++) {
+                    sumAppAmount += parseFloat(data[i].ApproveAmount);
+                    avgAppRate += parseFloat(data[i].ApproveRate);
+                }
+                avgAppRate = sumAppAmount / parseFloat($('#tQty').val());
+                if (!isNaN(sumAppAmount)) {
+                    $("#totalAppAmount").val(sumAppAmount.toFixed(2));
+                    $("#totalAppAmount").attr("disabled", true);
+                }
+                if (!isNaN(avgAppRate)) {
+                    $("#appPrice").val(avgAppRate.toFixed(2));
+                    $("#appPrice").attr("disabled", true);
+                } 
+            });
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 200,
+        columns: [
+            { field: "ItemTypeName", title: "Item Type *", width: "45px", attributes: { "class": "ItemTypeName" } },
+            { field: "ItemSizeName", title: "Item Size *", width: "45px", attributes: { "class": "ItemSizeName" } },
+            { field: "ItemQty", title: "Item Qty *", width: "45px", attributes: { "class": "ItemQty" } },
+            { field: "ItemRate", title: "Item Rate *", width: "45px", attributes: { "class": "ItemRate" } },
+            { field: "ApproveRate", title: "Approve Rate", width: "50px", attributes: { "class": "ApproveRate" } },
+            { field: "Amount", title: "Amount", width: "45px", attributes: { "class": "Amount" } },
+            { field: "AmtUnitName", title: "Currency", width: "45px", attributes: { "class": "AmtUnit" } },
+            { field: "AvgArea", title: "Avg Area", width: "45px", attributes: { "class": "AvgArea" } },
+            { field: "AreaUnitName", title: "Area Unit", width: "45px", attributes: { "class": "AreaUnitName" } },
+            { field: "Remarks", title: "Remarks", width: "70px", attributes: { "class": "Remarks" } }
+        ]
+    });
+    /*------------------------------------------------------- Bill Item Grid End --------------------------------------------------------------*/
+    /*--------------------------------------------------- Supplier Information Window ---------------------------------------------------------*/
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "800px",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                    SupplierAddressID: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierList", "Common")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+    });
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        width: 795,
+        columns: [
+            { field: "SupplierCode", title: "Supplier Code", width: "60px", filterable: false, sortable: false },
+            { field: "SupplierName", title: "Supplier Name", width: "60px" },
+            { field: "Address", title: "Address", width: "60px" },
+            { field: "ContactPerson", title: "Contact Person", width: "60px" },
+            { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        //  changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "@Url.Action("GetSupplierListForSearch", "Supplier")",
+            type: "GET"
+        }
+    }
+    });
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+    $("#btnGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListSearchById", "Common")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                console.log(data33.SupplierList);
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    SearchWindowEvents();
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierListSearchById", "Common")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+        setTimeout(function () {
+            $("#SupplierID").focus();
+        }, 1);
+    });
+    $("#SupplierWindowGrid").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+    $("#SupplierWindowGrid").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+    /*---------------------------------------------------- Supplier Information Window End ----------------------------------------------------*/
+    /*---------------------------------------------------- Supplier Bill Information Window ---------------------------------------------------*/
+    $("#btnSearch").click(function () {
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $("#totalAppAmount").attr("disabled", false);
+            $("#appPrice").attr("disabled", false);
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "white");
+            $("#txtSupplierIdForBill").val("");
+            GetBillInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+            SearchWindow.center();
+        }
+    });
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierBillID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierCode: { editable: false },
+                    SupplierBillID: { editable: false },
+                    SupplierName: { editable: false },
+                    SupplierAddressID: { editable: false },
+                    SupplierAddress: { editable: false },
+                    PurchaseYear: { editable: false },
+                    SupplierBillNo: { editable: false },
+                    BillDate: { editable: false },
+                    BillCategory: { editable: false },
+                    BillType: { editable: false },
+                    TotalQty: { editable: false },
+                    AvgPrice: { editable: false },
+                    TotalAmt: { editable: false },
+                    TotalRejectQty: { editable: false },
+                    ApprovedPrice: { editable: false },
+                    ApprovedAmt: { editable: false },
+                    OtherCost: { editable: false },
+                    DiscountPercent: { editable: false },
+                    DiscountAmt: { editable: false },
+                    PayableAmt: { editable: false },
+                    Remarks: { editable: false },
+                    RecordStatus: { editable: false },
+                }
+            }
+        },
+        pageSize: 30
+    });
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "SupplierName", title: "Supplier Name", width: "80px" },
+            { field: "SupplierBillID", title: "Bill ID", width: "60px" },
+            { field: "SupplierBillNo", title: "Bill No.", width: "60px" },
+            { field: "PurchaseYear", title: "Purchase Year", width: "60px" },
+            { field: "BillDate", title: "Bill date", width: "60px" },
+            { field: "SupplierID", hidden: true },
+            { field: "SupplierAddressID", hidden: true },
+            { field: "BillCategory", hidden: true },
+            { field: "BillType", hidden: true },
+            { field: "TotalQty", hidden: true },
+            { field: "AvgPrice", hidden: true },
+            { field: "TotalAmt", hidden: true },
+            { field: "TotalRejectQty", hidden: true },
+            { field: "ApprovedPrice", hidden: true },
+            { field: "ApprovedAmt", hidden: true },
+            { field: "OtherCost", hidden: true },
+            { field: "DiscountPercent", hidden: true },
+            { field: "DiscountAmt", hidden: true },
+            { field: "PayableAmt", hidden: true },
+            { field: "Remarks", hidden: true }
+        ]
+    });
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700",
+        height: "auto",
+        title: "Purchase Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    function GetBillInformation() {
+        if ($("#SupplierID").val() != "") {
+            $.ajax({
+                url: '@Url.Action("GetSupplierBillForApprove", "SupplierBillEntry")',
+                type: 'GET',
+                data: { "supplierId": parseInt($("#SupplierID").val()) },
+                success: function (data) {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        } else {
+            $.ajax({
+                url: '@Url.Action("GetAllSupplierBillForApprove", "SupplierBillEntry")',
+                type: 'GET',
+                success: function (data) {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+    }
+    function SearchWindowEvents() {
+        // Get the data from the Supplier Bill
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        // Set the data to the respected fields
+        if ($("#SupplierCode").val() == "") {
+            $("#SupplierID").val(selectedItem.SupplierID);
+            $("#SupplierCode").val(selectedItem.SupplierCode);
+            $("#SupplierAddressID").val(selectedItem.SupplierAddressID);
+            $("#Address").val(selectedItem.SupplierAddress);
+            $("#SupplierName").val(selectedItem.SupplierName);
+        }
+        $("#supplierBillId").val(selectedItem.SupplierBillID);
+        $("#purchaseYear").val(selectedItem.PurchaseYear);
+        $("#billType").val(selectedItem.BillType);
+        $("#billDate").val(selectedItem.BillDate);
+        $("#supplierBillNo").val(selectedItem.SupplierBillNo);
+        $("#billCategory").val(selectedItem.BillCategory);
+        $("#remarks1").val(selectedItem.Remarks);
+        $("#tQty").val(selectedItem.TotalQty);
+        $("#avgPrice").val(selectedItem.AvgPrice);
+        $("#totalAmount").val(selectedItem.TotalAmt);
+        $("#tRQty").val(selectedItem.TotalRejectQty);
+        $("#appPrice").val(selectedItem.ApprovedPrice);
+        $("#totalAppAmount").val(selectedItem.ApprovedAmt);
+        $("#otherCost").val(selectedItem.OtherCost);
+        $("#discountPer").val(selectedItem.DiscountPercent);
+        $("#discountVal").val(selectedItem.DiscountAmt);
+        $("#payableAmount").val(selectedItem.PayableAmt);
+        $("#recordStatus").val(selectedItem.RecordStatus);
+        getBillItemList(selectedItem.SupplierBillID);       
+    }
+    // Function to get the bill items of the selected bill
+    function getBillItemList(supplierBillId) {
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({ supplierBillId: supplierBillId }),
+            url: '@Url.Action("GetBillItems", "SupplierBillEntry")',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                // Set the data in Bill Item Grid
+                $("#BillItemGrid").data("kendoGrid").dataSource.data(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+    $('#btnSearchWindowOK').click(function() {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function() {
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").dblclick(function() {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keypress(function(event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+        // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+//To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function(e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+    /*-------------------------------------------- Bill Search by supplier name -------------------------------------------*/
+    var dataSource2 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "@Url.Action("GetSupplierListForSearch", "Supplier")",
+            type: "GET"
+        }
+    }
+    });
+
+    $("#txtSupplierIdForBill").kendoAutoComplete({
+        dataSource: dataSource2,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+    $("#btnBillSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetBillApv", "SupplierBillEntry")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplierIdForBill").val() },
+            success: function (data33) {
+                console.log(data33.SupplierList);
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    SearchWindowEvents();
+                    ListOfValueGridEvent('SearchWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+    $("#txtSupplierIdForBill").keyup(function (event) {
+        if ($("#txtSupplierIdForBill").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetBillApv", "SupplierBillEntry")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplierIdForBill").val() },
+                    success: function (data33) {
+                        $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+    /*------------------------------------------ Bill Search by supplier name End -----------------------------------------*/
+    /*-------------------------------------------------- Supplier Bill Information Window End -------------------------------------------------*/
+    /*------------------------------------------------------- Get Total Approved Amount -------------------------------------------------------*/
+    $('#appPrice').blur(function() {
+        if ($("#tQty").val() != "") {
+            if (parseFloat($('#appPrice').val()) > 0) {
+                var totalQuantity = parseFloat($("#tQty").val());
+                var approvedPrice = parseFloat($('#appPrice').val());
+                $("#totalAppAmount").val((totalQuantity * approvedPrice).toFixed(2));
+            }
+        }
+    });
+    /*----------------------------------------------------- Get Total Approved Amount End -----------------------------------------------------*/
+    /*------------------------------------------------------------- Save Bill Info ------------------------------------------------------------*/
+    var supplierBillInfo = {
+        "SupplierBillId": "",
+        "SupplierId": "",
+        "BillCategory": "",
+        "BillType": "",
+        "TotalRejectQty": "",
+        "ApprovedPrice": "",
+        "ApprovedAmt": "",
+        "ApproveComment": "",
+        "RecordStatus": ""
+    };
+    var supplierBillItem = {
+        "BillItemId": "",
+        "SupplierBillId": "",
+        "RejectQty": "",
+        "ApproveRate": "",
+        "RecordStatus": ""
+    };
+    var isApproved = 0;
+    $("#approve").click(function() {
+        isApproved = 1;
+        saveData();
+    });
+    function saveData() {
+        if ($("#SupplierID").val() != "") {
+            saveStatus = 1;
+            supplierBillInfo.SupplierBillId = $("#supplierBillId").val();
+            supplierBillInfo.SupplierId = $("#SupplierID").val();
+            supplierBillInfo.BillCategory = $("#billCategory option:selected").text();
+            supplierBillInfo.TotalRejectQty = $("#tRQty").val();
+            supplierBillInfo.ApprovedPrice = $("#appPrice").val();
+            supplierBillInfo.ApprovedAmt = $("#totalAppAmount").val();
+            supplierBillInfo.ApproveComment = $("#approveComment").val();
+            if (isApproved == 1) {
+                supplierBillInfo.RecordStatus = "APV";
+            }
+            var billItemGridDataSource = $("#BillItemGrid").data("kendoGrid").dataSource;
+            var billItemGridData = billItemGridDataSource.data();
+            var supplierBillItemList = [];
+            for (var i = 0; i < billItemGridData.length; i++) {
+                supplierBillItem.BillItemId = billItemGridData[i].BillItemID;
+                supplierBillItem.ApproveRate = billItemGridData[i].ApproveRate;
+                supplierBillItemList.push(supplierBillItem);
+                supplierBillItem = {
+                    "BillItemId": "",
+                    "SupplierBillId": "",
+                    "RejectQty": "",
+                    "ApproveRate": "",
+                    "RecordStatus": ""
+                };
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("BillApproval", "SupplierBillEntry")',
+                dataType: 'json',
+                data: JSON.stringify({ billModel: supplierBillInfo, billItemModel: supplierBillItemList }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.Type == 2) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    } else if (response.Type == 3) {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    } else {
+                        $('#MessageText').html(response.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    /*----------------------------------------------------------- Save Bill Info End ----------------------------------------------------------*/
+    /*--------------------------------------------------------------- Validations -------------------------------------------------------------*/
+    $("#btnReset").click(function () {
+        if (changeStatus == 1) {
+            if (saveStatus == 1) {
+                $("#totalAppAmount").attr("disabled", false);
+                $("#appPrice").attr("disabled", false);
+                clearfields();
+                return false;
+            }
+            SaveChangeWindow.open();
+            SaveChangeWindow.center();
+        } else {
+            $("#totalAppAmount").attr("disabled", false);
+            $("#appPrice").attr("disabled", false);
+            clearfields();
+        }
+    });
+    var SaveChangeWindow = $('#SaveChangeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "250px",
+        height: "auto",
+        title: "Confirmation!",
+        //position: { top: 100, left: 400 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    $("#btnSaveChangeWindowOk").click(function () {
+        clearfields();
+        changeStatus = 0;
+        CloseSaveChangesDialog();
+    });
+    $("#btnSaveChangeWindowCancel").click(function () {
+        CloseSaveChangesDialog();
+    });
+    /*------------------------------------------------------------- Validations End -----------------------------------------------------------*/
+    // Reset Form
+    function clearfields() {
+        $("#supplierBillId").val("");
+        $("#SupplierID").val("");
+        $("#SupplierCode").val("");
+        $("#SupplierName").val("");
+        $("#Address").val("");
+        $("#purchaseYear").val("");
+        $("#billType").val("");
+        $("#billDate").val("");
+        $("#supplierBillNo").val("");
+        $("#billCategory").val(0);
+        $("#remarks1").val("");
+        $("#tQty").val("");
+        $("#tRQty").val("");
+        $("#otherCost").val("");       
+        $("#avgPrice").val("");
+        $("#appPrice").val("");
+        $("#discountPer").val("");
+        $("#discountVal").val("");
+        $("#totalAmount").val("");
+        $("#totalAppAmount").val("");
+        $("#payableAmount").val("");
+        $("#approveComment").val("");
+        $("#BillItemGrid").data('kendoGrid').dataSource.data([]);
+    }
+</script>

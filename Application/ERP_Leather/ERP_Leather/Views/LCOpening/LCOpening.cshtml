@@ -1,0 +1,2409 @@
+﻿@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("GradeSelectionDetailReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row">
+        <div class="FormHeader">
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-3">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;">L/C Opening </div>
+                </div>
+                <div class="col-lg-6">
+                    <label id="MessageText"></label>
+                </div>
+                <div id="ButtonPanel" class="col-lg-3 right">
+                    <input type="button" id="btn" class="Button" value="Reset" style="position:absolute; right:20px;" onclick="Reset();" />
+                    <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" disabled="disabled" />
+                    <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                    <input type="button" id="btnSubmit" class="Button" value="Save" onclick="return Save()" style="position:absolute; right:200px;" />
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div id="WrapForm" class="row">
+      
+        <div class="FormBody">
+            <input type="hidden" id="LCID" name="LCID" value="" placeholder="LCID" readonly="readonly" />
+            <br />
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>L/C Opening Bank<span style="color:red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" id="BankID" class="" name="BankID" value="" placeholder="Press F9" readonly="readonly" />
+                    <input type="text" id="BankName" class="col-lg-8" name="BankName" value="" placeholder="Press F9" readonly="readonly" style="padding:2px" />
+                    <input type="text" id="BankBINNo" class="col-lg-3" name="BankBINNo" value="" readonly="readonly" style="padding:2px" placeholder="BIN No" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Advising Bank</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" id="AdvisingBank" name="AdvisingBank" value="" readonly="readonly" />
+                    <input type="text" id="AdvisingBankName" class="col-lg-8" name="AdvisingBank" value="" readonly="readonly" style="padding:2px" placeholder="Press F9" />
+                    <input type="text" id="AdvisingBankBINNo" class="col-lg-3" name="AdvisingBankBINNo" value="" readonly="readonly" style="padding:2px" placeholder="BIN No" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Branch</label>
+                </div>
+                <div class="col-lg-4">                
+                    <input type="text" id="BranchName" class="col-lg-11" name="BranchName" value="" readonly="readonly" placeholder="" style="padding:2px" />
+                    <input type="text" id="BranchID" name="BranchID" style="display:none" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Bank Swift Code</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" class="col-lg-11" style="padding:2px" readonly="readonly" id="BankSwiftCode" name="BankSwiftCode" value="" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>L/C Limit</label>
+                </div>
+                <div class="col-lg-4">
+                    <div id="LCLimitCurrency">
+                        <input type="text" readonly="readonly" id="LCLimit" name="LCLimit" value="" />
+                        <input type="text" id="LimitCurrency" value="" readonly="readonly" placeholder="Currency" />
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label>Beneficiary</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" placeholder="Press F9" id="Beneficiary" name="Beneficiary" value="" readonly="readonly" />
+                    <input type="hidden" id="BuyerAddressID" name="BuyerAddressID" value=""  />
+                    <input type="text" id="BeneficiaryName" name="BeneficiaryName" value="" readonly="readonly" style="padding:2px" class="col-lg-8" />
+                    @*<input type="hidden" id="BuyerID" />
+                    <input type="text" id="BuyerCode" class="txtBox RequiredTextBox " name="" tabindex="" readonly="readonly" style="width: 80px;" placeholder="Press F9" />
+                    <input type="text" id="BuyerName" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" style="width: 266px;" />*@
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Margin of L/C Limit</label>
+                </div>
+                <div class="col-lg-4">
+                    <div id="LCMarginCurrency">
+                        <input type="text" id="LCMargin" name="LCMargin" value="" placeholder="0" /> %
+
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label>Address</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" readonly="readonly"  id="BeneficiaryAddressID" name="BeneficiaryAddressID" value="" />
+                    <input type="text" readonly="readonly" class="col-md-8" style="padding:2px" id="BenificiaryAddress" name="BenificiaryAddress" value="" />
+                </div>
+            </div>
+            <br />
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Insurance No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" placeholder="Press F9" id="InsuranceNo" name="InsuranceIDNo" value="" readonly="readonly" class="col-md-8" style="padding:2px" />
+                    <input type="hidden" id="InsuranceID" name="InsuranceID" value="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Period for Presentation </label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="PresentationDays" name="PresentationDays" value="15"  /> Days
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>PI/Indent No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" placeholder="Press F9" id="PINo" name="PINo" value="" readonly="readonly" class="col-md-8" style="padding:2px" />
+                    <input type="text" id="PIID" name="PIID" value="" style="display:none" />
+                </div>
+                <div class="col-lg-2">
+                    <label>L/C Confirmation </label>
+                </div>
+                <div class="col-lg-4">
+                    <select id="ConfirmStatus">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>PI/Indent Date</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" readonly="readonly" placeholder="DD/MM/YYYY" id="PIDate" name="PIDate" value="" />
+                </div>
+                <div class="col-lg-2">
+                    <label></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="button" value="Show PI Details" id="btnPIDetails" name="btnPIDetails" />
+                </div>
+            </div>
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>L/C No<span style="color:red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="LCNo" name="LCNo" value="" onblur="IsValidLCNo();" class="col-md-8" style="padding:2px" />
+                </div>
+                <div class="col-lg-2">
+                    <label>LCA No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="LCANo" name="LCANo" value="" class="col-md-8" style="padding:2px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Date of Issue</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="LCDate" class="datePicker" name="LCDate" tabindex="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>IRC No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="IRCNo" name="IRCNo" value="" class="col-md-8" style="padding:2px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>L/C Amount</label>
+                </div>
+                <div class="col-lg-4">
+                    <div id="LCAmountCurrency">
+                        <input type="text" id="LCAmount" name="LCAmount" value="" placeholder="0.00" onblur="return IsNumber('LCAmount');" />
+                        @Html.DropDownList("Currency")
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label>Vat Reg No / BIN No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="VatRegNo" name="VatRegNo" value="" class="col-md-8" style="padding:2px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Rate</label>
+                </div>
+                <div class="col-lg-4">
+                    <div id="ExchangeCurrency">
+                        <input type="text" id="ExchangeRate" name="ExchangeRate" value="" placeholder="0.00" onblur="return IsNumber('ExchangeRate');" />
+                        @Html.DropDownList("Currency")                        
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label>TIN No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="TINNo" name="TINNo" value="" class="col-md-8" style="padding:2px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Exchange Amount</label>
+                </div>
+                <div class="col-lg-4">                   
+                    <input type="text" id="ExchangeAmount" name="ExchangeAmount" value="" placeholder="0.00" readonly="readonly" />                  
+                </div>
+                <div class="col-lg-2">
+                 
+                </div>
+                <div class="col-lg-4">
+                   
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>ICN No.</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ICNNo" name="ICNNo" value="" class="col-md-8" style="padding:2px" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Place of Expiry</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ExpiryPlace" name="ExpiryPlace" value="" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>ICN Date</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ICNDate" class="datePicker" name="ICNDate" tabindex="" />
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Date of Expiry</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ExpiryDate" class="datePicker" name="ExpiryDate" tabindex="" />
+                </div>
+              
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>NND Sending Time</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="NNDSendingTime" name="NNDSendingTime" value="" onblur="return IsNumber('NNDSendingTime');" /> Days
+                </div>
+                <div class="col-lg-2">
+                    <label>Last Date of Shipment</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="LastShipmentDate" class="datePicker" name="LastShipmentDate" tabindex="" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    @*<label>Date of Issue</label>*@
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" style="display:none" id="IssueDate" class="datePicker" name="IssueDate" tabindex="" />
+                </div>
+                <div style="display:none">
+                    <div class="col-lg-2">
+                        <label>BIN No.</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="BINNo" name="BINNo" value="" class="col-md-8" style="padding:2px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="FormBody">
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Currency</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("PICurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Delivery Term</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="DeliveryTerm" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="EW">Ex Work</option>
+                        <option value="FB">FOB</option>
+                        <option value="CF">C&F</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Goods Delivery</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="GoodDelivery" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="FCL">FCL</option>
+                        <option value="LCL">LCL</option>
+                    </select>
+                </div>
+
+            </div>
+          
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Payment Term</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="PaymentTerm" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="LC">LC</option>
+                        <option value="CD">CAD</option>
+                        <option value="FT">FTT</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Delivery Mode</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="DeliveryMode" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="BS">By Sea</option>
+                        <option value="BA">By Air</option>
+                        <option value="BR">By Road</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Shipping Mark</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="ShippingMark" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 166px;" />
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Payment Mode</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="PaymentMode" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="ST">At Sight</option>
+                        <option value="DF">Defered</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label>Port of Loading</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("PortofLoading", new SelectList(ViewBag.PortList, "PortID", "PortName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Expected Time of Shipment</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="ExpectedShipmentTime" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 100px;" />
+                    <label>Days</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Deferred Days</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="DeferredDays" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="30">30</option>
+                        <option value="60">60</option>
+                        <option value="90">90</option>
+                        <option value="120">120</option>
+                        <option value="150">150</option>
+                        <option value="180">180</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Port of Discharge</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("PortofDischarge", new SelectList(ViewBag.PortList, "PortID", "PortName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Packing</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="Packing" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="EQ">Export Standard</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Country of Origin</label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("CountryOforigin", new SelectList(ViewBag.CountryList, "CountryID", "CountryName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Transhipment</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="Transshipment" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="TA">Allowed</option>
+                        <option value="TN">Not Allowed</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Pre Shipment Ins.</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="PreShipmentIns" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="IR">Required</option>
+                        <option value="NR">Not Required</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Beneficiary Bank <span style="color:red">*</span> </label>
+                </div>
+                <div class="col-lg-2">
+                    @Html.DropDownList("BeneficiaryBank", new SelectList(ViewBag.BankList, "BranchID", "BranchName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Partial Shipment</label>
+                </div>
+                <div class="col-lg-2">
+                    <select class="txtBox RequiredTextBox Dropdown" id="PartialShipment" style="width: 166px;">
+                        <option value="" selected="selected">--Select--</option>
+                        <option value="PA">Allowed</option>
+                        <option value="PN">Not Allowed</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    @*<label>Offer Validity</label>*@
+                </div>
+                <div class="col-lg-2">
+                    <input type="hidden" id="OfferValidityDays" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 40px;" />
+                    <input type="hidden" id="OfferValidityNote" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 116px;" />
+                </div>
+
+            </div>
+            @*<div class="row">
+        <div class="col-lg-2">
+            <label>Currency</label>
+        </div>
+        <div class="col-lg-2">
+            @Html.DropDownList("PICurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+        </div>
+
+        <div class="col-lg-2">
+            <label>Delivery Term</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="DeliveryTerm" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="EW">Ex Work</option>
+                <option value="FB">FOB</option>
+                <option value="CF">C&F</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Goods Delivery</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="GoodDelivery" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="FCL">FCL</option>
+                <option value="LCL">LCL</option>
+            </select>
+        </div>
+
+    </div>
+
+
+
+        <div class="row">
+        <div class="col-lg-2">
+            <label>Deferred Days</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="DeferredDays" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="30">30</option>
+                <option value="60">60</option>
+                <option value="90">90</option>
+                <option value="120">120</option>
+                <option value="150">150</option>
+                <option value="180">180</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Country of Origin</label>
+        </div>
+        <div class="col-lg-2">
+            @Html.DropDownList("CountryOforigin", new SelectList(ViewBag.CountryList, "CountryID", "CountryName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+        </div>
+
+        <div class="col-lg-2">
+            <label>Beneficiary Bank</label>
+        </div>
+        <div class="col-lg-2">
+            @Html.DropDownList("BeneficiaryBank", new SelectList(ViewBag.BankList, "BranchID", "BranchName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2">
+            <label>Delivery Term</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="DeliveryTerm" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="EW">Ex Work</option>
+                <option value="FB">FOB</option>
+                <option value="CF">C&F</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Delivery Mode</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="DeliveryMode" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="BS">By Sea</option>
+                <option value="BA">By Air</option>
+                <option value="BR">By Road</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Port of Loading</label>
+        </div>
+        <div class="col-lg-2">
+            @Html.DropDownList("PortofLoading", new SelectList(ViewBag.PortList, "PortID", "PortName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2">
+            <label>Port of Discharge</label>
+        </div>
+        <div class="col-lg-2">
+            @Html.DropDownList("PortofDischarge", new SelectList(ViewBag.PortList, "PortID", "PortName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+        </div>
+
+        <div class="col-lg-2">
+            <label>Transshipment</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="Transshipment" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="TA">Allowed</option>
+                <option value="TN">Not Allowed</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Partial Shipment</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="PartialShipment" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="PA">Allowed</option>
+                <option value="PN">Not Allowed</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2">
+            <label>Good Delivery</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="GoodDelivery" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="FCL">FCL</option>
+                <option value="LCL">LCL</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Shipping Mark</label>
+        </div>
+        <div class="col-lg-2">
+            <input type="text" id="ShippingMark" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 166px;" />
+        </div>
+
+        <div class="col-lg-2">
+            <label>Expected Time of Shipment</label>
+        </div>
+        <div class="col-lg-2">
+            <input type="text" id="ExpectedShipmentTime" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 100px;" />
+            <label>Days</label>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2">
+            <label>Packing</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="Packing" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="EQ">Export Quality</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Pre Shipment Ins.</label>
+        </div>
+        <div class="col-lg-2">
+            <select class="txtBox RequiredTextBox Dropdown" id="PreShipmentIns" style="width: 166px;">
+                <option value="" selected="selected">--Select--</option>
+                <option value="IR">Required</option>
+                <option value="NR">Not Required</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2">
+            <label>Offer Validity</label>
+        </div>
+        <div class="col-lg-2">
+            <input type="text" id="OfferValidityDays" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 40px;" />
+            <input type="hidden" id="OfferValidityNote" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 116px;" />
+        </div>
+
+    </div>*@
+        </div>
+
+        <div class="FormBody">
+            <div class="row">
+                <div class="col-lg-10">
+                    <label>Check Note</label>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <textarea style="width:100%" id="ApprovalAdvice" name="ApprovalAdvice"></textarea>
+                </div>
+                <div class="col-lg-2">
+                    <input id="btnConfirm" type="button" value="Confirm" />
+                </div>
+            </div>
+        </div>
+        @*<div class="row">
+            <div class="col-lg-3">
+                <input id="btnChecked" type="hidden" value="Checked" />
+            </div>
+            <div class="col-lg-3">
+                <input id="btnConfirm" type="button" value="Confirm" />
+            </div>
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" value="Update LC Value" />
+            </div>
+        </div>*@
+
+        <br /><br /><br />
+    </div>
+}
+
+
+<div id="BankIDWindow" style="display: none;">
+    @*<p>Bank:<input type="text" id="txtOpeningBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>*@
+
+    <div id="BankIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBankIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBankIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="LCAdvisingBankWindow" style="display: none;">
+    @*<p>Bank:<input type="text" id="txtAdvisingBank" style="width: 250px;" placeholder="Search Bank Name.." /><input type="button" id="btnAdvisingGridSearch" value="Search" /></p>*@
+
+    <div id="LCAdvisingBankGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCAdvisingBankWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCAdvisingBankWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="LCBenificiaryWindow" style="display: none;">
+    @*<p>
+        Benificiary:<input type="text" id="txtBenificiary" style="width: 250px;" placeholder="Search Benificiary.." />
+        <input type="button" id="btnBeneficiaryGridSearch" value="Search" />
+    </p>*@
+
+    <div id="LCBenificiaryGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCBenificiaryWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCBenificiaryWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="LCPIWindow" style="display: none;">
+    @*<p>
+        PI:<input type="text" id="txtPI" style="width: 250px;" placeholder="Search PI.." />
+        <input type="button" id="btnPIGridSearch" value="Search" />
+    </p>*@
+
+    <div id="LCPIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCPIWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCPIWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<div id="LCInsuranceWindow" style="display: none;">
+    @*<p>
+        Insurance:<input type="text" id="txtInsurance" style="width: 250px;" placeholder="Search Insurance.." />
+        <input type="button" id="btnInsuranceGridSearch" value="Search" />
+    </p>*@
+
+    <div id="LCInsuranceGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCInsuranceWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCInsuranceWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<div id="SearchWindow" style="display: none;">
+    @*<p>
+        LC NO:<input type="text" id="txtSearch" style="width: 250px;" placeholder="Search PI.." />
+        <input type="button" id="btnSearchGridSearch" value="Search" />
+    </p>*@
+
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+
+<div id="PIDetailsWindow" style="display: none;">      
+     @Html.Partial("~/Views/LCOpening/GetPIDetailsInfo.cshtml")   
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+
+<script type="text/javascript">
+    NumericAndDecimalValue("LCAmount");
+    NumericAndDecimalValue("ExchangeRate");
+    NumericAndDecimalValue("NNDSendingTime");
+   
+    $("select").addClass("select");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+    //Reset();
+    $("#PresentationDays").val('15');
+    $("#btnChecked").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnChecked").removeAttr('disabled');
+    var changeStatus = 0;
+    $("#LCID").val('');
+    var saveStatus = 1;
+    var obDataSet = {
+        "LCID": "", "LCNo": "", "LCDate": "", "LCAmount": "", "LCAmountCurrency": "", "ExchangeRate": "", "LCMarginBalance": "",
+        "ExchangeValue": "", "IssueDate": "", "ExpiryDate": "", "ExpiryPlace": "", "NNDSendingTime": "",
+        "LCANo": "", "IRCNo": "", "VatRegNo": "", "TINNo": "", "BINNo": "", "ICNNo": "", "ICNDate": "",
+        "LastShipmentDate": "", "BankID": "", "BankName": "", "BranchID": "", "BranchName": "", "AdvisingBank": "", "BeneficiaryAddressID": "", "PIID": "", "ExchangeCurrency": "",
+        "PINo": "", "LCReviceNo": "", "LCReviceDate": "", "RunningStatus": "", "LCState": "", "LCStatus": "", "RecordStatus": "", "ApprovalAdvice": "",
+        "Address1": "", "BankSwiftCode": "", "LCLimit": "", "LCLimitCurrencyID": "", "Beneficiary": "", "LCMargin": "", "LCMarginCurrency": "", "PIDate": "",
+        "InsuranceID": "", "PICurrency": "", "PaymentTerm": "", "PaymentMode": "", "DeferredDays": "",
+        "CountryOforigin": "", "BeneficiaryBank": "", "DeliveryTerm": "", "PortofDischarge": "", "DeliveryMode": "",
+        "PortofLoading": "", "Transshipment": "", "PartialShipment": "", "GoodDelivery": "",
+        "ShippingMark": "", "ExpectedShipmentTime": "", "Packing": "", "PreShipmentIns": "", "OfferValidityDays": "", "PresentationDays": "", "ConfirmStatus": ""
+    };
+
+    var PIDetailsWindow;
+    function OpenConfirmationDialog() {
+        PIDetailsWindow = $('#PIDetailsWindow').kendoWindow({
+            width: "80%",
+            // padding: "top:100px",
+            title: "PI Details",
+            visible: false,
+            resizable: false,
+            draggable: true,
+            actions: [
+                        "Pin",
+                        "Minimize",
+                        "Maximize",
+                        "Close"
+            ],
+            position: { top: 100 }
+        }).data('kendoWindow');
+
+        PIDetailsWindow.open();
+    }
+
+    $("#btnPIDetails").click(function () {
+        var PINo = $("#PINo").val();
+        if (PINo != "") {
+            $("#divLoading").show();
+            $.ajax({
+                url: '@Url.Action("GetPIDetailsInfo", "LCOpening")',
+                type: 'POST',
+                data: { PINO: PINo },
+                success: function (data) {
+                    OpenConfirmationDialog();
+                    $('#PIDetailsWindow').html(data);
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+            $('#MessageText').html("");
+        }
+        else {
+            $('#MessageText').html("First Select a PINO.");
+            $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+        }
+    });
+
+    $(document).ready(function () {
+        $(document.body).keypress(function (e) {
+            if ($("#BankName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#divLoading").show();
+                    $.ajax({
+                        url: '@Url.Action("GetLCBankList", "LCOpening")',
+                        type: "GET",
+                        data: { bankCategory: "BNK", bankType: "LOC" },
+                        dataType: "JSON",
+                        success: function (data33) {
+                            $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('BankIDGrid');
+                    BankIDWindow.open();
+                }
+            }
+        });
+
+        $(document.body).keypress(function (e) {
+            if ($("#AdvisingBankName").is(":focus")) {
+                if (e.keyCode == 120) {
+
+                    $("#divLoading").show();
+
+                    $.ajax({
+                        url: '@Url.Action("GetLcAdvBenfBankList", "LCOpening")',
+                        type: "GET",
+                        data: { bankCategory: "BNK", bankType: "ADV" },
+                        dataType: "JSON",
+                        success: function (data33) {
+                            $("#LCAdvisingBankGrid").data("kendoGrid").dataSource.data(data33);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('LCAdvisingBankGrid');
+                    LCAdvisingBankWindow.open();
+                }
+            }
+        });
+
+        @*$(document.body).keypress(function (e) {
+            if ($("#Beneficiary").is(":focus")) {
+                if (e.keyCode == 120) {
+
+                    $("#divLoading").hide();
+
+                    $.ajax({
+                        url: '@Url.Action("GetBenificiaryInfo", "LCOpening")',
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data33) {
+                            $("#LCBenificiaryGrid").data("kendoGrid").dataSource.data(data33);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('LCBenificiaryGrid');
+                    LCBenificiaryWindow.open();
+                }
+            }
+        });*@
+
+        $(document.body).keypress(function (e) {
+            if ($("#PINo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#divLoading").show();
+                    $.ajax({
+                        url: '@Url.Action("GetPIInfo", "LCOpening")',
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data33) {
+                            $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('LCPIGrid');
+                    LCPIWindow.open();
+                }
+            }
+        });
+    });
+
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    // #################### PI #########
+
+    var LCPIWindow = $('#LCPIWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        groupable: true,
+        title: "List Of PI",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCPIDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PIID",
+                fields: {
+                    PIID: { editable: false },
+                    PINo: { editable: false },
+                    PIDate: { editable: false },
+                    //AdvisingBank: { editable: false },
+                    //AdvisingBankName: { editable: false },
+                    BeneficiaryBankID: { editable: false },
+                    BeneficiaryBankName:{editable: false},
+                    BankSwiftCode: { editable: false },
+                    Beneficiary: { editable: false },
+                    BeneficiaryName: { editable: false },
+                    BenificiaryAddress: { editable: false },
+                    BuyerAddressID: { editable: false },
+
+                    PICurrency: { editable: false },
+                    PaymentTerm: { editable: false },
+                    PaymentMode: { editable: false },
+                    DeferredDays: { editable: false },
+                    CountryOforigin: { editable: false },
+                    BeneficiaryBank: { editable: false },
+                    DeliveryTerm: { editable: false },
+                    PortofDischarge: { editable: false },
+                    DeliveryMode: { editable: false },
+                    PortofLoading: { editable: false },
+                    Transshipment: { editable: false },
+                    PartialShipment: { editable: false },
+                    GoodDelivery: { editable: false },
+                    ShippingMark: { editable: false },
+                    ExpectedShipmentTime: { editable: false },
+                    Packing: { editable: false },
+                    PreShipmentIns: { editable: false },
+                    OfferValidityDays: { editable: false },
+                    ActualPrice: { editable: false },
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var LCPIGrid = $("#LCPIGrid").kendoGrid({
+        dataSource: LCPIDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              { field: "PINo", title: "PI No" },
+              { field: "PIDate", title: "PI Date" },
+              //{ field: "AdvisingBankName", title: "AdvisingBank" },
+              { field: "BeneficiaryBankName", title: "BeneficiaryBank" },
+              { field: "BeneficiaryName", title: "Beneficiary" },
+              { field: "ActualPrice", title: "PI Amount" }
+        ]
+    });
+
+
+    $('#btnLCPIWindowOK').click(function () {
+        ListOfValuePIGridEvent('LCPIGrid');
+        LCPIWindow.close();
+    });
+
+    $('#btnLCPIWindowCancel').click(function () {
+        LCPIWindow.close();
+    });
+
+    $("#LCPIWindow").dblclick(function () {
+        ListOfValuePIGridEvent('LCPIGrid');
+        LCPIWindow.close();
+    });
+
+    $("#LCPIWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuePIGridEvent('LCPIGrid');
+            LCPIWindow.close();
+        }
+        else if (keycode == '27') {
+            LCPIWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnPIGridSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("SearchPIByPI", "LCOpening")',
+            type: 'GET',
+            data: { beni: $("#txtPI").val() },
+            success: function (data33) {
+                $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValuePIGridEvent('LCPIGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetPISearch", "LCOpening")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtPI").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtPI").keyup(function (event) {
+        if ($("#txtPI").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchPIByPI", "LCOpening")',
+                    type: 'GET',
+                    data: { beni: $("#txtPI").val() },
+                    success: function (data33) {
+                        $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValuePIGridEvent('LCPIGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValuePIGridEvent(gridName) {  
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#ExchangeRate").val("");
+        $("#LCAmount").val("");
+        $("#PINo").val(selectedItem.PINo);
+        $("#PIDate").val(selectedItem.PIDate);
+        $("#PIID").val(selectedItem.PIID);
+        //$("#AdvisingBank").val(selectedItem.AdvisingBankID);
+        //$("#BankSwiftCode").val(selectedItem.BankSwiftCode);
+        //$("#AdvisingBankName").val(selectedItem.AdvisingBankName);
+        $("#BeneficiaryBank").val(selectedItem.BeneficiaryBankID);
+      
+        $("#BeneficiaryName").val(selectedItem.BeneficiaryName);
+        $("#BenificiaryAddress").val(selectedItem.BenificiaryAddress);
+        $("#Beneficiary").val(selectedItem.Beneficiary);
+        $("#BuyerAddressID").val(selectedItem.BuyerAddressID);
+        if (!isNaN(selectedItem.PICurrency))
+        { $("#PICurrency").val(selectedItem.PICurrency); }
+        else
+        { $("#PICurrency").val(""); }
+ 
+        
+        $("#DeferredDays").val(selectedItem.DeferredDays);
+        $("#DeliveryTerm").val(selectedItem.DeliveryTerm);
+        $("#DeliveryMode").val(selectedItem.DeliveryMode);
+
+        $("#PortofDischarge").val(selectedItem.PortofDischarge);
+        $("#GoodDelivery").val(selectedItem.GoodDelivery);
+        $("#Packing").val(selectedItem.Packing);
+        $("#PaymentTerm").val(selectedItem.PaymentTerm);
+        $("#CountryOforigin").val(selectedItem.CountryOforigin);
+        $("#Transshipment").val(selectedItem.Transshipment);
+        $("#ShippingMark").val(selectedItem.ShippingMark);
+        $("#PreShipmentIns").val(selectedItem.PreShipmentIns);
+        $("#PaymentMode").val(selectedItem.PaymentMode);
+        $("#BeneficiaryBank").val(selectedItem.BeneficiaryBank);
+        $("#PortofLoading").val(selectedItem.PortofLoading);
+        $("#PartialShipment").val(selectedItem.PartialShipment);
+        $("#ExpectedShipmentTime").val(selectedItem.ExpectedShipmentTime);
+        $("#OfferValidityDays").val(selectedItem.OfferValidityDays);
+        $("#OfferValidityNote").val(selectedItem.OfferValidityNote);
+
+        $("#BeneficiaryAddressID").val(selectedItem.BeneficiaryAddressID);
+        $("#LCAmount").val(selectedItem.ActualPrice);
+  
+    }
+
+    // #################### Beneficiary
+    var LCBenificiaryWindow = $('#LCBenificiaryWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LC Beneficiary",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCBenificiaryDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerAddressID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerAddressID: { editable: false },
+                    BuyerName: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LCBenificiaryGrid = $("#LCBenificiaryGrid").kendoGrid({
+        dataSource: LCBenificiaryDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              { field: "BuyerID", title: "Supplier No", filterable: false, sortable: false },
+              { field: "BuyerName", title: "Supplier Name" },
+              { field: "Address", title: "Supplier Address" }
+        ]
+    });
+
+
+
+    $('#btnLCBenificiaryWindowOK').click(function () {
+        ListOfValueBenificiaryGridEvent('LCBenificiaryGrid');
+        LCBenificiaryWindow.close();
+    });
+
+    $('#btnLCBenificiaryWindowCancel').click(function () {
+        LCBenificiaryWindow.close();
+    });
+
+    $("#LCBenificiaryWindow").dblclick(function () {
+        ListOfValueBenificiaryGridEvent('LCBenificiaryGrid');
+        LCBenificiaryWindow.close();
+    });
+
+    $("#LCBenificiaryWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueBenificiaryGridEvent('LCBenificiaryGrid');
+            LCBenificiaryWindow.close();
+        }
+        else if (keycode == '27') {
+            LCBenificiaryWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnBeneficiaryGridSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("SearchBenificiaryByBenificiary", "LCOpening")',
+            type: 'GET',
+            data: { beni: $("#txtBenificiary").val() },
+            success: function (data33) {
+                $("#LCBenificiaryGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueBenificiaryGridEvent('LCBenificiaryGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    var dataSource3 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetBeneficiarySearch", "LCOpening")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtBenificiary").kendoAutoComplete({
+        dataSource: dataSource3,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtBenificiary").keyup(function (event) {
+        if ($("#txtBenificiary").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchBenificiaryByBenificiary", "LCOpening")',
+                    type: 'GET',
+                    data: { beni: $("#txtBenificiary").val() },
+                    success: function (data33) {
+                        $("#LCBenificiaryGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueBenificiaryGridEvent('LCBenificiaryGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueBenificiaryGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        //$("#BenificiaryAddress").val(selectedItem.Address);
+        $("#Beneficiary").val(selectedItem.BuyerID);
+        $("#BuyerAddressID").val(selectedItem.BuyerAddressID);
+
+
+
+    }
+
+    // #################### Advising Bank
+
+    var LCAdvisingBankWindow = $('#LCAdvisingBankWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List of L/C Advising Bank",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCAdvisingBankDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BankID",
+                fields: {
+                    BankID: { editable: false },
+                    BankCode: { editable: false },
+                    BankName: { editable: false },
+                    BranchID: { editable: false },
+                    BranchName: { editable: false },
+                    BankBINNo: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var LCAdvisingBankGrid = $("#LCAdvisingBankGrid").kendoGrid({
+        dataSource: LCAdvisingBankDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        groupable: true,
+        columns: [
+              //{ field: "BankID", title: "Bank ID", width: "60px", filterable: false, sortable: false },
+              { field: "BankCode", title: "SWIFT Code" },
+              { field: "BankName", title: "Bank Name" },
+              //{ field: "BranchID", title: "Branch ID" },
+              { field: "BranchName", title: "Branch Name" }
+        ]
+    });
+
+    $('#btnLCAdvisingBankWindowOK').click(function () {
+        ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+        LCAdvisingBankWindow.close();
+    });
+
+    $('#btnLCAdvisingBankWindowCancel').click(function () {
+        LCAdvisingBankWindow.close();
+    });
+
+    $("#LCAdvisingBankWindow").dblclick(function () {
+        ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+        LCAdvisingBankWindow.close();
+    });
+
+    $("#LCAdvisingBankWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+            LCAdvisingBankWindow.close();
+        }
+        else if (keycode == '27') {
+            LCAdvisingBankWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnAdvisingGridSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+            type: 'GET',
+            data: { bank: $("#txtAdvisingBank").val(), bankCategory: "BNK", BankType: "ADV" },
+            success: function (data33) {
+                $("#LCAdvisingBankGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+    var dataSource2 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCBankNameList", "LCOpening")',
+                data: { bankCategory: "BNK", BankType: "ADV" },
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtAdvisingBank").kendoAutoComplete({
+        dataSource: dataSource2,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtAdvisingBank").keyup(function (event) {
+        if ($("#txtAdvisingBank").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+                    type: 'GET',
+                    data: { bank: $("#txtAdvisingBank").val(), bankCategory: "BNK", BankType: "ADV" },
+                    success: function (data33) {
+                        $("#LCAdvisingBankGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueAdvisingBankGridEvent('LCAdvisingBankGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueAdvisingBankGridEvent(gridName) {
+        $("#AdvisingBankBINNo").val("");
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#AdvisingBank").val(selectedItem.BranchID);
+        $("#BankSwiftCode").val(selectedItem.BankCode);
+        $("#AdvisingBankName").val(selectedItem.BankName);
+        $("#AdvisingBankBINNo").val(selectedItem.BankBINNo);
+    }
+
+    // ##################### Opening Bank
+    var BankIDWindow = $('#BankIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LC Opening Bank",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BankIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BranchID",
+                fields: {
+                    BranchID: { editable: false },
+                    BankCode: { editable: false },
+                    BankName: { editable: false },
+                    BranchName: { editable: false },
+                    CurrencyName: { editable: false },
+                    LCLimit: { editable: false },
+                    LCMargin: { editable: false },
+                    BankBINNo: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var BankIDGrid = $("#BankIDGrid").kendoGrid({
+        dataSource: BankIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              //{ field: "BranchID", title: "Branch ID", width: "60px", filterable: false, sortable: false },
+              { field: "BankCode", title: "SWIFT Code" },
+              { field: "BankName", title: "Bank Name" },
+              { field: "BranchName", title: "Branch Name" },
+              { field: "CurrencyName", title: "Currency" },
+              { field: "LCLimit", title: "LC Limit" }
+        ]
+    });
+
+    $('#btnBankIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent('BankIDGrid');
+        BankIDWindow.close();
+    });
+
+    $('#btnBankIDWindowCancel').click(function () {
+        BankIDWindow.close();
+    });
+
+    $("#BankIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent('BankIDGrid');
+        BankIDWindow.close();
+    });
+
+    $("#BankIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent('BankIDGrid');
+            BankIDWindow.close();
+        }
+        else if (keycode == '27') {
+            BankIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnOpeningGridSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+            type: 'GET',
+            data: { bank: $("#txtOpeningBank").val(), bankCategory: "BNK", BankType: "LOC" },
+            success: function (data33) {
+                $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueOpeningBankGridEvent('BankIDGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCBankNameList", "LCOpening")',
+                data: { bankCategory: "BNK", BankType: "LOC" },
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtOpeningBank").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtOpeningBank").keyup(function (event) {
+        if ($("#txtOpeningBank").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+                    type: 'GET',
+                    data: { bank: $("#txtOpeningBank").val(), bankCategory: "BNK", BankType: "LOC" },
+                    success: function (data33) {
+                        $("#BankIDGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueOpeningBankGridEvent('BankIDGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        $("#BankBINNo").val("");
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#BankID").val(selectedItem.BranchID);
+
+        $("#BankBINNo").val(selectedItem.BankBINNo);
+        $("#LimitCurrency").val(selectedItem.CurrencyName);
+    }
+
+
+
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('BankName', 500);
+        //CheckRequiredTextBoxMaxLength('PINo', 30);
+        CheckRequiredTextBoxMaxLength('LCNo', 30);
+        //CheckRequiredTextBoxMaxLength('BeneficiaryName', 200);
+        //CheckRequiredTextBoxMaxLength('LCDate', 15);
+        //CheckRequiredTextBoxMaxLength('IRCNo', 30);
+        //CheckRequiredTextBoxMaxLength('LCAmount', 30);
+        //CheckRequiredTextBoxMaxLength('VatRegNo', 30);
+        //CheckRequiredTextBoxMaxLength('ExchangeRate', 30);
+        //CheckRequiredTextBoxMaxLength('TINNo', 30);
+        //CheckRequiredTextBoxMaxLength('IssueDate', 15);
+        //CheckRequiredTextBoxMaxLength('ExpiryDate', 15);
+        //CheckRequiredTextBoxMaxLength('BINNo', 30);
+        //CheckRequiredTextBoxMaxLength('NNDSendingTime', 15);
+        //CheckRequiredTextBoxMaxLength('LastShipmentDate', 15);
+
+        if (saveStatus == 1) {
+            obDataSet.LCID = $("#LCID").val();
+           
+            obDataSet.BankID = $("#BankID").val();
+            obDataSet.BranchID = $("#BranchID").val();
+            obDataSet.AdvisingBank = $("#AdvisingBank").val();
+            obDataSet.Address1 = $("#Address1").val();
+            obDataSet.BankSwiftCode = $("#BankSwiftCode").val();
+            obDataSet.LCLimit = $("#LCLimit").val();
+            obDataSet.Beneficiary = $("#Beneficiary").val();
+            obDataSet.LCMargin = $("#LCMargin").val(); //LCMarginCurrency
+            //obDataSet.LCMarginCurrency = $("#LCLimitCurrency").find('.select').val();
+            obDataSet.BeneficiaryAddressID = $("#BuyerAddressID").val();
+            obDataSet.PINo = $("#PINo").val();
+            obDataSet.PIID = $("#PIID").val();
+            obDataSet.PIDate = $("#PIDate").val();
+            obDataSet.LCNo = $("#LCNo").val();
+            obDataSet.LCANo = $("#LCANo").val();
+            obDataSet.LCDate = $("#LCDate").val();
+            obDataSet.IRCNo = $("#IRCNo").val();
+            obDataSet.LCAmount = $("#LCAmount").val();
+            obDataSet.LCAmountCurrency = $("#LCAmountCurrency").find('.select').val();
+            obDataSet.VatRegNo = $("#VatRegNo").val();
+            obDataSet.ExchangeRate = $("#ExchangeRate").val();
+            obDataSet.ExchangeCurrency = $("#ExchangeCurrency").find('.select').val();
+            obDataSet.TINNo = $("#TINNo").val();
+            obDataSet.IssueDate = $("#IssueDate").val();
+            obDataSet.BINNo = $("#BINNo").val();
+            obDataSet.ExpiryDate = $("#ExpiryDate").val();
+            obDataSet.ICNNo = $("#ICNNo").val();
+            obDataSet.ExpiryPlace = $("#ExpiryPlace").val();
+            obDataSet.ICNDate = $("#ICNDate").val();
+            obDataSet.NNDSendingTime = $("#NNDSendingTime").val();
+            obDataSet.LastShipmentDate = $("#LastShipmentDate").val();
+            obDataSet.ApprovalAdvice = $("#ApprovalAdvice").val();
+            console.log(obDataSet.ApprovalAdvice);
+            obDataSet.InsuranceNo = $("#InsuranceNo").val();
+            obDataSet.InsuranceID = $("#InsuranceID").val();
+            obDataSet.PICurrency = $("#PICurrency").val();
+            obDataSet.DeferredDays = $("#DeferredDays").val();
+            obDataSet.DeliveryTerm = $("#DeliveryTerm").val();
+            obDataSet.DeliveryMode = $("#DeliveryMode").val();
+            
+            obDataSet.PortofDischarge = $("#PortofDischarge").val();
+            obDataSet.GoodDelivery = $("#GoodDelivery").val();
+            obDataSet.Packing = $("#Packing").val();
+            obDataSet.PaymentTerm = $("#PaymentTerm").val();
+            obDataSet.CountryOforigin = $("#CountryOforigin").val();
+            obDataSet.Transshipment = $("#Transshipment").val();
+            obDataSet.ShippingMark = $("#ShippingMark").val();
+            obDataSet.PreShipmentIns = $("#PreShipmentIns").val();
+            obDataSet.PaymentMode = $("#PaymentMode").val();
+            obDataSet.BeneficiaryBank = $("#BeneficiaryBank").val();
+            obDataSet.PortofLoading = $("#PortofLoading").val();
+            obDataSet.PartialShipment = $("#PartialShipment").val();
+            obDataSet.ExpectedShipmentTime = $("#ExpectedShipmentTime").val();
+            obDataSet.OfferValidityDays = $("#OfferValidityDays").val();
+            obDataSet.OfferValidityNote = $("#OfferValidityNote").val();
+            obDataSet.PresentationDays = $("#PresentationDays").val();
+            obDataSet.ConfirmStatus = $("#ConfirmStatus").val();
+        
+            if (obDataSet.LCID == "") {
+                // INSERT DATA
+                $("#divLoading").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "LCOpening")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            // Reset();
+                            $("#LCID").val(data.msg.ReturnId);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                $("#divLoading").show();
+                // UPDATE DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "LCOpening")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+        }
+
+    }
+
+    // ############## Btn Search
+    $("#btnSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetLCOpeningInfo", "LCOpening")',
+            type: "GET",
+            dataType: "JSON",
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        SelectedItemOfListOfValue('SearchWindowGrid');
+        SearchWindow.open();
+
+    });
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of LC",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SearchWindowDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LCID",
+                fields: {
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+                    LCDate: { editable: false },
+                    LCAmount: { editable: false },
+                    LCMargin: { editable: false },
+                    RecordStatus: { editable: false },
+                    InsuranceNo: { editable: false },
+                    InsuranceID: { editable: false },
+                    PICurrency: { editable: false },
+                    PaymentTerm: { editable: false },
+                    PaymentMode: { editable: false },
+                    DeferredDays: { editable: false },
+                    CountryOforigin: { editable: false },
+                    BeneficiaryBank: { editable: false },
+                    BeneficiaryAddress:{editable: false },
+                    DeliveryTerm: { editable: false },
+                    PortofDischarge: { editable: false },
+                    DeliveryMode: { editable: false },
+                    PortofLoading: { editable: false },
+                    Transshipment: { editable: false },
+                    PartialShipment: { editable: false },
+                    GoodDelivery: { editable: false },
+                    ShippingMark: { editable: false },
+                    ExpectedShipmentTime: { editable: false },
+                    Packing: { editable: false },
+                    PreShipmentIns: { editable: false },
+                    OfferValidityDays: { editable: false },
+                    
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var SearchWindowGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchWindowDataSource,
+        pageable: {
+            refresh: true,
+            pageSizes: [10, 25, 50],
+            previousNext: true,
+            info: true
+        },
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 400,
+        groupable: true,
+        columns: [
+              //{ field: "LCID", title: "LCID" },
+              { field: "LCNo", title: "LC No" },
+              { field: "LCDate", title: "LC Date" },
+              { field: "LCAmount", title: "LC Amount" },
+              { field: "LCMargin", title: "LC Margin" },
+              { field: "RecordStatus", title: "Status" }
+        ]
+    });
+
+
+
+    $('#btnSearchWindowOK').click(function () {
+        ListOfValuePIGridEvent('SearchWindowGrid');
+        SearchWindow.close();
+    });
+
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    $("#SearchWindow").dblclick(function () {
+        ListOfValuePIGridEvent('SearchWindowGrid');
+        SearchWindow.close();
+    });
+
+    $("#SearchWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueSearchGridEvent('SearchWindowGrid');
+            SearchWindow.close();
+        }
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("BtnSearchLCByLCNo", "LCOpening")',
+            type: 'GET',
+            data: { search: $("#txtSearch").val() },
+            success: function (data33) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueSearchGridEvent('SearchWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+
+    var dataSource6 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCNOList", "LCOpening")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSearch").kendoAutoComplete({
+        dataSource: dataSource6,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtSearch").keyup(function (event) {
+        if ($("#txtSearch").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCByLCNo", "LCOpening")',
+                    type: 'GET',
+                    data: { search: $("#txtSearch").val() },
+                    success: function (data33) {
+                        $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueSearchGridEvent('SearchWindowGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    $('#btnSearchWindowOK').click(function () {
+        ListOfValueSearchGridEvent('SearchWindowGrid');
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        ListOfValueSearchGridEvent('SearchWindowGrid');
+        SearchWindow.close();
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueSearchGridEvent('SearchWindowGrid');
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueSearchGridEvent(gridName) {
+
+        $('#PresentationDays').val("");
+        $('#btnDelete').attr('disabled', true);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        $("#btnChecked").css("display", "block");
+        $("#btnConfirm").css("display", "block");
+        $("#btnConfirm").removeAttr('disabled');
+        $("#btnChecked").removeAttr('disabled');
+
+        $('#MessageText').html("");
+     
+        if (selectedItem.RecordStatus == "Confirmed") {
+            $('.FormBody').find('input, textarea, button, select').attr('disabled', 'disabled');
+            $('#btnSubmit').attr('disabled', true);
+        }
+        else {
+            $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+            $('#btnSubmit').attr('disabled', false);
+        }
+
+
+        $("#InsuranceID").val(selectedItem.InsuranceID);
+        $("#PICurrency").val(selectedItem.PICurrency);
+        $("#DeferredDays").val(selectedItem.DeferredDays);
+        $("#DeliveryTerm").val(selectedItem.DeliveryTerm);
+        $("#DeliveryMode").val(selectedItem.DeliveryMode);
+        $("#PortofDischarge").val( selectedItem.PortofDischarge);
+        $("#GoodDelivery").val(selectedItem.GoodDelivery);
+        $("#Packing").val(selectedItem.Packing);
+        $("#PaymentTerm").val(selectedItem.PaymentTerm);
+        $("#CountryOforigin").val(selectedItem.CountryOforigin);
+        $("#Transshipment").val(selectedItem.Transshipment);
+        $("#ShippingMark").val(selectedItem.ShippingMark);
+        $("#PreShipmentIns").val(selectedItem.PreShipmentIns);
+        $("#PaymentMode").val(selectedItem.PaymentMode);
+        $("#BeneficiaryBank").val(selectedItem.BeneficiaryBank);
+        $("#PortofLoading").val(selectedItem.PortofLoading);
+        $("#PartialShipment").val(selectedItem.PartialShipment);
+        $("#ExpectedShipmentTime").val(selectedItem.ExpectedShipmentTime);
+        $("#OfferValidityDays").val(selectedItem.OfferValidityDays);
+        $("#OfferValidityNote").val(selectedItem.OfferValidityNote);
+
+        $("#BenificiaryAddress").val(selectedItem.BeneficiaryAddress);
+
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetLcDetailsInfoByLcNo", "LCOpening")',
+            type: 'GET',
+            data: { LCID: selectedItem.LCID },
+            success: function (data33) {
+                $("#InsuranceNo").val(data33.InsuranceNo);
+                $("#LCID").val(data33.LCID);
+                $("#BankID").val(data33.BankID);
+                $("#BankName").val(data33.BankName);
+                $("#BranchName").val(data33.BranchName);
+                $("#LCLimit").val(data33.LCLimitAmount);
+                $("#LimitCurrency").val(data33.CurrencyName);
+                $("#LCMargin").val(data33.LCMarginBalance);
+                $("#BranchID").val(data33.BranchID);
+                $("#BranchName").val(data33.BranchName);
+                $("#AdvisingBank").val(data33.AdvisingBank);
+            
+                $("#Address1").val(data33.Address1);
+                $("#BankSwiftCode").val(data33.BankSwiftCode);
+                $("#Beneficiary").val(data33.Beneficiary);
+                $("#LCMargin").val(data33.LCMarginBalance);
+                $("#LCLimitCurrency").find('.select').val(data33.LCLimitCurrencyID);
+                $("#BuyerAddressID").val(data33.BuyerAddressID);
+                $("#PINo").val(data33.PINo);
+                $("#PIID").val(data33.PIID);
+                $("#PIDate").val(data33.PIDate);
+                $("#LCNo").val(data33.LCNo);
+                $("#LCANo").val(data33.LCANo);
+                $("#LCDate").val(data33.LCDate);
+                $("#IRCNo").val(data33.IRCNo);
+                $("#LCAmount").val(data33.LCAmount);
+                $("#LCAmountCurrency").find('.select').val(data33.LCAmountCurrency);
+                $("#VatRegNo").val(data33.VatRegNo);
+                $("#ExchangeRate").val(data33.ExchangeRate);
+                $("#ExchangeCurrency").find('.select').val(data33.ExchangeCurrency);
+                $("#TINNo").val(data33.TINNo);
+                $("#IssueDate").val(data33.IssueDate);
+                $("#BINNo").val(data33.BINNo);
+                $("#ExpiryDate").val(data33.ExpiryDate);
+                $("#ICNNo").val(data33.ICNNo);
+                $("#ExpiryPlace").val(data33.ExpiryPlace);
+                $("#ICNDate").val(data33.ICNDate);
+                $("#NNDSendingTime").val(data33.NNDSendingTime);
+                $("#LastShipmentDate").val(data33.LastShipmentDate);
+                $("#ApprovalAdvice").val(data33.ApprovalAdvice);
+                $("#AdvisingBankName").val(data33.AdvisingBankName);
+                $("#BeneficiaryName").val(data33.BeneficiaryName);
+
+                $("#PresentationDays").val(data33.PresentationDays);
+                $("#ConfirmStatus").val(data33.ConfirmStatus);
+
+                $("#BankBINNo").val(data33.OpeningBINNo);
+                $("#AdvisingBankBINNo").val(data33.AdvisingBINNo);
+                CalculateExcAmount();
+               
+                $("#ICNNo").val(data33.InsuranceNo);
+
+                if (data33.RecordStatus == "CNF") {
+                    $("#btnChecked").css("display", "none");
+                    $("#btnConfirm").css("display", "none");
+                }
+                else if (data33.RecordStatus == "CHK") {
+                    $("#btnChecked").css("display", "none");
+                    $("#btnConfirm").css("display", "block");
+                }
+                else {
+                    $("#btnChecked").css("display", "block");
+                    $("#btnConfirm").css("display", "block");
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+
+        });
+    }
+
+
+    $("#btnChecked").click(function () {
+        // CheckRequiredTextBoxMaxLength('ApprovalAdvice', 300);
+
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '@Url.Action("UpdateRecordStatus", "LCOpening")',
+            type: 'POST',
+            data: { note: $("#ApprovalAdvice").val(), lcId: $("#LCID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html("Checked Successfully");
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $("#ApprovalAdvice").val('');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    $("#btnConfirm").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("UpdateConfRecordStatus", "LCOpening")',
+            type: 'POST',
+            data: { lcId: $("#LCID").val(), approvalAdvice: $("#ApprovalAdvice").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+
+                    $('#btnSubmit').attr('disabled', true);
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+    function Reset() {
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled');
+        $("#btnChecked").css("display", "block");
+        $("#btnConfirm").css("display", "block");
+        $('select').find('option:first').prop('selected', 'selected');
+        $("#ApprovalAdvice").val('');
+        $('.FormBody input[type=text]').css("border-color", "");
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        $("#PresentationDays").val('15');
+    }
+    function IsValidLCNo() {
+        if ($("#LCNo").val() != "") {
+            $.ajax({
+                url: '@Url.Action("IsAlreadyExist", "Utility")',
+                type: 'POST',
+                data: { table: "LCM_LCOpening", fld: "LCNo", val: $("#LCNo").val(), datatype: "str" },
+                success: function (data) {
+                    if (data == "True") {
+                        $('#MessageText').html("This LC No. Already Exist");
+                        $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+                        $("#txtCoverNote").val("");
+                        return false;
+                    }
+                    else {
+                        $('#MessageText').html("");
+                    }
+                }
+            });
+        }
+        return true;
+    }
+
+
+    // #################### Insurance
+    $(document.body).keypress(function (e) {
+        if ($("#InsuranceNo").is(":focus")) {
+            if (e.keyCode == 120) {
+
+                $("#divLoading").show();
+
+                $.ajax({
+                    url: '@Url.Action("GetInsuranceInfo", "LCOpening")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#LCInsuranceGrid").data("kendoGrid").dataSource.data(data33);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('LCInsuranceGrid');
+
+                LCInsuranceWindow.open();
+            }
+        }
+    });
+
+
+    var LCInsuranceWindow = $('#LCInsuranceWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        groupable: true,
+        title: "List Of Insurance",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCInsuranceDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "InsuranceID",
+                fields: {
+                    InsuranceID: { editable: false },
+                    InsuranceNo: { editable: false },
+                    InsuranceCompanyName: { editable: false },
+                    IncreaceAmount: { editable: false },
+                    CoverNoteDate: { editable: false }
+                }
+            }
+        },
+        pageSize:50
+    });
+
+    var LCInsuranceGrid = $("#LCInsuranceGrid").kendoGrid({
+        dataSource: LCInsuranceDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              { field: "InsuranceNo", title: "Insurance No" },
+              { field: "InsuranceCompanyName", title: "Company" },
+             { field: "CoverNoteDate", title: "ICNDate" }
+        ]
+    });
+
+
+    $('#btnLCInsuranceWindowOK').click(function () {
+        ListOfValueInsuranceGridEvent('LCInsuranceGrid');
+        LCInsuranceWindow.close();
+    });
+
+    $('#btnLCInsuranceWindowCancel').click(function () {
+        LCInsuranceWindow.close();
+    });
+
+    $("#LCInsuranceWindow").dblclick(function () {
+        ListOfValueInsuranceGridEvent('LCInsuranceGrid');
+        LCInsuranceWindow.close();
+    });
+
+    $("#LCInsuranceWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueInsuranceGridEvent('LCInsuranceGrid');
+            LCInsuranceWindow.close();
+        }
+        else if (keycode == '27') {
+            LCInsuranceWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnInsuranceGridSearch").click(function () {
+
+        $.ajax({
+            url: '@Url.Action("SearchInsuranceByInsurance", "LCOpening")',
+            type: 'GET',
+            data: { ins: $("#txtInsurance").val() },
+            success: function (data33) {
+                $("#LCInsuranceGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueSearchGridEvent('LCInsuranceGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+
+    });
+
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetInsuranceAutocompleteData", "LCOpening")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtInsurance").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueInsuranceGridEvent(gridName) {
+        $("#ICNNo").val("");
+        $("#ICNDate").val("");
+        $("#InsuranceID").val("");
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#InsuranceNo").val(selectedItem.InsuranceNo);
+        $("#InsuranceDate").val(selectedItem.InsuranceDate);
+        $("#InsuranceID").val(selectedItem.InsuranceID);
+        
+        $("#ICNNo").val(selectedItem.InsuranceNo);
+        $("#ICNDate").val(selectedItem.CoverNoteDate);
+    }
+
+    $("#ExchangeRate").blur(function () {
+        CalculateExcAmount();
+    });
+    $("#LCAmount").blur(function () {
+        CalculateExcAmount();
+    });
+    
+    function CalculateExcAmount() {
+        var rat = $("#ExchangeRate").val() - 0;
+        var val = $("#LCAmount").val() - 0;
+        if (rat < 1) { rat = 1; };
+        if (isNaN(val)) { val = 0; }
+        $("#ExchangeAmount").val((rat * val).toFixed(2));
+    }
+
+</script>
+
+

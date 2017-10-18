@@ -1,0 +1,957 @@
+﻿@{
+    ViewBag.Title = "Stock Adjustment Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2 right">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Request Number</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="RequestID" class="txtBox ReadOnlyTextbox" name="" tabindex="" readonly="readonly" />
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Year<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="PurchaseYear" class="txtBox RequiredTextBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Adjustment Of<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("LeatherType", new SelectList(ViewBag.LeatherType, "LeatherTypeID", "LeatherTypeName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 220px;" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Request Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="RequestDate" class="txtBox RequiredTextBox datePicker" name="" tabindex="" style="width:160px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Adjustment At<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("ReceiveStore", new SelectList(ViewBag.ReceiveStore, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 220px;" })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div id="AdjustmentGrid"></div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Confirm Comment</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="ConfirmComment" class="txtBox" name="" tabindex=""></textarea>
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ChallanWindow" style="display: none;">
+    <div id="ChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+
+<script type="text/javascript">
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+
+    $(document).ready(function () {
+        //--------------------------------------Start of defining Datasource & Datagrid----------------------------------------------------------------
+
+        var AdjustmentGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "AdjustID",
+                    fields: {
+                        AdjustID: { editable: false },
+                        SupplierID: { editable: true },
+                        SupplierName: { editable: true, defaultValue: 'Press F9' },
+                        PurchaseID: { editable: true, defaultValue: 'Press F9' },
+                        PurchaseNo: { editable: true, defaultValue: 'Press F9' },
+                        AdjustmentCause: { editable: true },
+                        ItemTypeID: { editable: true },
+                        ItemTypeName: { editable: true },
+                        Unit: { editable: true },
+                        UnitName: { editable: true },
+                        StockQty: { editable: true },
+                        ItemQty: { editable: true },
+                        Remarks: { editable: true }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var AdjustmentGrid = $("#AdjustmentGrid").kendoGrid({
+            dataSource: AdjustmentGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            toolbar: [{
+                text: "Add New Request Item",
+                className: "btnRequestGrid",
+                imageClass: "k-icon k-add"
+            }],
+            //toolbar: [{ name: "create" , text: "Add New Request Item"}],
+            filterable: true,
+            sortable: true,
+            height: 250,
+            columns: [
+                  { field: "SupplierName", title: "Supplier<span style='color:red'>*</span>", width: "70px", attributes: { "class": "SupplierName" } },
+                  //{ field: "ChallanID", title: "Challan ID", width: "60px", attributes: { "class": "ChallanID" } },
+                  { field: "PurchaseNo", title: "Purchase No<span style='color:red'>*</span>", width: "60px", attributes: { "class": "ChallanID" } },
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" },
+                  { field: "StockQty", title: "Stock Qty", width: "70px" },
+                  { field: "UnitName", title: "Unit", width: "60px" },
+                  { field: "ItemQty", title: "Request Qty<span style='color:red'>*</span>", width: "70px" },
+                  { field: "AdjustmentCause", title: "Adjustment Cause", width: "100px" },
+                  { field: "Remarks", title: "Remarks", width: "70px" },
+                  { command: [{ name: "DeltedRow", text: "Delete", click: DeleteAdjustItem }], title: "Delete", width: 50 }
+            ]
+        }).data('kendoGrid');
+
+        
+        var SupplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: SupplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            autoBind: false,
+            columns: [
+                  //{ field: "SupplierID", title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+                  { field: "SupplierCode", title: "Supplier Code", width: "60px", filterable: false, sortable: false },
+                  { field: "SupplierName", title: "Supplier Name", width: "60px" }
+            ]
+        });
+
+        var ChallanGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PurchaseID",
+                    fields: {
+                        PurchaseID: { editable: false },
+                        PurchaseNo: { editable: false },
+                        ItemTypeID: { editable: false },
+                        ItemTypeName: { editable: false },
+                        StockQty: { editable: false },
+                        Unit: { editable: false },
+                        UnitName: { editable: false },
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+            dataSource: ChallanGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  //{ field: "ChallanID", title: "Challan ID", width: "60px", filterable: false, sortable: false },
+                  { field: "PurchaseNo", title: "Purchase No.", width: "60px", filterable: false, sortable: false },
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" },
+                  { field: "StockQty", title: "Stock Quantity", width: "60px" },
+                  { field: "UnitName", title: "Unit", width: "60px" }
+            ]
+        });
+
+        var SearchWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "RequestID",
+                    fields: {
+                        RequestID: { editable: false },
+                        RequestDate: { editable: false },
+                        LeatherType: { editable: false },
+                        LeatherTypeName: { editable: false },
+                        StoreID: { editable: false },
+                        StoreName: { editable: false },
+                        PurchaseYear: { editable: false },
+                        RecordStatus: { editable: false },
+                    }
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var SearchWindowGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            autoBind: false,
+            columns: [
+                  { field: "RequestID", title: "Request ID", width: "60px" },
+                  { field: "RequestDate", title: "Request Date", width: "70px", format: "{0:dd/MM/yyyy}" },
+                  { field: "LeatherTypeName", title: "Leather Type", width: "60px" },
+                  { field: "StoreName", title: "Store Name", width: "60px" },
+                  { field: "PurchaseYear", title: "Purchase Year", width: "70px" },
+                  { field: "RecordStatus", title: "Record Status", width: "70px" }
+            ]
+        });
+
+        //--------------------------------------End of defining Datasource & Datagrid----------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+        var SupplierWindow = $('#SupplierWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Supplier",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ChallanWindow = $('#ChallanWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Purchase",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var SearchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Request",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Start of Common Function--------------------------------------------------------
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date()
+                    });
+        }
+
+        $("#AdjustmentGrid").on('input', function () {
+            changeStatus = 1;
+        });
+        //-------------------------------------------------End of Common Function--------------------------------------------------------
+
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+        function LoadSupplierGrid() {
+            $.ajax({
+                url: '@Url.Action("FindSupplierForAdjust", "StockAdjust")',
+                type: 'GET',
+                data: { "leatherType": $("#LeatherType").val(), "receiveStore": $("#ReceiveStore").val() },
+                success: function (data) {
+                    $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        };
+
+        $(document).on('keyup', '.SupplierName', function (e) {
+            if (e.which == 120) {
+                LoadSupplierGrid();
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        });
+
+        function LoadChallanGrid() {
+            var grid = $("#AdjustmentGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            $.ajax({
+                url: '@Url.Action("FindChallanForAdjust", "StockAdjust")', 
+                type: 'GET',
+                data: { "SupplierID": selectedItem.SupplierID, "leatherType": $("#LeatherType").val(), "receiveStore": $("#ReceiveStore").val() },
+                success: function (data) {
+                    $("#ChallanWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+        $(document).on('keyup', '.ChallanID', function (e) {
+            if (e.which == 120) {
+                LoadChallanGrid();
+                SelectedItemOfListOfValue('ChallanWindowGrid');
+                MakeAdjustmentGridEditable();
+                ChallanWindow.open(); //Open Popup
+            }
+        });
+
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+
+
+
+        //------------------------------------------Handling Delete Events--------------------------------------------------------------------------
+        var DeleteFrom = 0;
+        function DeleteAdjustItem(event) {
+            
+            if (changeStatus == 0) {
+                DeleteFrom = 1; // From Grid Delete
+                dataitem = AdjustmentGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 3; // From Grid Delete
+                dataitem = AdjustmentGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                DeleteFrom = 2; // Request Delete
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 4;
+                OpenSaveChangesDialog();
+            }
+        });
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // From Grid Delete
+            {
+                
+                if (dataitem.AdjustID == 0) {
+                    $("#AdjustmentGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteAdjustItem", "StockAdjust")',
+                        type: 'GET',
+                        data: { "AdjustID": dataitem.AdjustID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#AdjustmentGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+            else if (DeleteFrom == 2) //Purchase Delete
+            {
+                var AdjustmentGridDataSource = $("#AdjustmentGrid").data("kendoGrid").dataSource;
+                var AdjustmentGridData = AdjustmentGridDataSource.data();
+                if (AdjustmentGridData.length > 0) {
+                    $('#MessageText').html("Adjustment Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteAdjustmentRequest", "StockAdjust")',
+                        type: 'GET',
+                        data: { "RequestID": $("#RequestID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //-----------------------------------------End of Handling Delete Events----------------------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        // Handling button click for Supplier window grid
+        function SupplierWindowEvent() {
+            var WindowGrid = $("#SupplierWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#AdjustmentGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("SupplierName", WindowGridItem.SupplierName);
+            PageGridItem.set("SupplierID", WindowGridItem.SupplierID);
+
+            PageGrid.editCell($("#AdjustmentGrid tr:eq(" + (rowIndex + 1) + ") td:eq(1)"));
+            changeStatus = 1;
+            $("#AdjustmentGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            if (rowIndex > 0)
+                $("#AdjustmentGrid tr:eq(1)").removeClass('k-state-selected');
+        };
+        $('#btnSupplierWindowOK').click(function () {
+            SupplierWindowEvent();
+            SupplierWindow.close();
+        });
+        $('#btnSupplierWindowCancel').click(function () {
+            SupplierWindow.close();
+        });
+        $("#SupplierWindow").dblclick(function () {
+            SupplierWindowEvent();
+            SupplierWindow.close();
+        });
+        $("#SupplierWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SupplierWindowEvent();
+                SupplierWindow.close();
+            }
+            else if (keycode == '27') {
+                SupplierWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        function ChallanWindowEvent() {
+            var WindowGrid = $("#ChallanWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#AdjustmentGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            var dataRows = PageGrid.items();
+            var rowIndex = dataRows.index(PageGrid.select());
+
+            PageGridItem.set("PurchaseID", WindowGridItem.PurchaseID);
+            PageGridItem.set("PurchaseNo", WindowGridItem.PurchaseNo);
+            PageGridItem.set("ItemTypeName", WindowGridItem.ItemTypeName);
+            PageGridItem.set("ItemTypeID", WindowGridItem.ItemTypeID);
+            PageGridItem.set("StockQty", WindowGridItem.StockQty);
+            PageGridItem.set("UnitName", WindowGridItem.UnitName);
+            PageGridItem.set("Unit", WindowGridItem.Unit);
+
+
+            PageGrid.editCell($("#AdjustmentGrid tr:eq(" + (rowIndex + 1) + ") td:eq(5)"));
+            changeStatus = 1;
+            $("#AdjustmentGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            if (rowIndex > 0)
+                $("#AdjustmentGrid tr:eq(1)").removeClass('k-state-selected');
+
+
+            MakeAdjustmentGridNonEditable();
+
+
+        };
+        $('#btnChallanWindowOK').click(function () {
+            ChallanWindowEvent();
+            ChallanWindow.close();
+        });
+        $('#btnChallanWindowCancel').click(function () {
+            ChallanWindow.close();
+        });
+        $("#ChallanWindow").dblclick(function () {
+            ChallanWindowEvent();
+            ChallanWindow.close();
+        });
+        $("#ChallanWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ChallanWindowEvent();
+                ChallanWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ChallanWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        function SearchWindowEvent() {
+            
+            var WindowGrid = $("#SearchWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $.ajax({
+                url: '@Url.Action("GetRequestDetails", "StockAdjust")',
+                type: 'GET',
+                data: { "RequestID": WindowGridItem.RequestID },
+                success: function (response) {
+                    $("#AdjustmentGrid").data("kendoGrid").dataSource.data(response);
+                },
+                cache: false
+            });
+            $("#RequestID").val(WindowGridItem.RequestID);
+            $("#PurchaseYear").val(WindowGridItem.PurchaseYear);
+            $("#LeatherType").val(WindowGridItem.LeatherType);
+            $("#ReceiveStore").val(WindowGridItem.StoreID);
+            $("#RequestDate").val(WindowGridItem.RequestDate);
+
+
+            PageStatus = WindowGridItem.RecordStatus;
+            CheckRecordStatusForButton(WindowGridItem.RecordStatus);
+
+        };
+
+        $('#btnSearchWindowOK').click(function () {
+            
+            SearchWindowEvent();
+            SearchWindow.close();
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            SearchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvent();
+            SearchWindow.close();
+        });
+        $("#SearchWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvent();
+                SearchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                SearchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Button Event----------------------------------------
+
+
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton('NCF');
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                $("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirmAdjustRequest", "StockAdjust")',
+                type: 'GET',
+                data: { "requestID": $("#RequestID").val(), "confirmComment": $("#ConfirmComment").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+
+                        $('#MessageText').html("Confirmation Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+                    else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+
+        function LoadSearchGrid() {
+            $.ajax({
+                url: '@Url.Action("GetAllNCFRequestList", "StockAdjust")',
+                type: 'GET',
+                //data: { "leatherType": $("#LeatherType").val(), "receiveStore": $("#ReceiveStore").val() },
+                success: function (data) {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+            if (changeStatus == 0) {
+                LoadSearchGrid();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function (event) {
+            if (resetEditStatus == 1) // From Reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ResetOnlyMasterPageData();
+                $("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // From Search
+            {
+                CloseSaveChangesDialog();
+                LoadSearchGrid();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else if (resetEditStatus == 3) // For Grid Item Delete
+            {
+                DeleteFrom = 1; // From Grid Delete
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+            else if (resetEditStatus == 4) // For Request Delete
+            {
+                DeleteFrom = 2; // Request Delete
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        //------------------------------------End of Button Event----------------------------------------
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+        function MakeAdjustmentGridEditable() {
+            var grid = $("#AdjustmentGrid").data("kendoGrid");
+            
+            grid.dataSource.at(0).fields["ItemTypeName"].editable = true;
+            grid.dataSource.at(0).fields["StockQty"].editable = true;
+            grid.dataSource.at(0).fields["UnitName"].editable = true;
+        };
+
+        function MakeAdjustmentGridNonEditable() {
+            var grid = $("#AdjustmentGrid").data("kendoGrid");
+
+            grid.dataSource.at(0).fields["ItemTypeName"].editable = false;
+            grid.dataSource.at(0).fields["StockQty"].editable = false;
+            grid.dataSource.at(0).fields["UnitName"].editable = false;
+        };
+
+        $("#AdjustmentGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#AdjustmentGrid").data("kendoGrid");
+                
+                $("#AdjustmentGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                MakeAdjustmentGridEditable();
+            }
+        });
+
+        
+
+        $(".btnRequestGrid").click(function () {
+            var grid = $("#AdjustmentGrid").data("kendoGrid");
+            
+
+            $("#AdjustmentGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            MakeAdjustmentGridEditable();
+        });
+
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+        //window.onbeforeunload = function (e) {
+
+
+        //    alert("test");
+        //    if (changeStatus == 1) {
+        //        e.preventDefault();
+        //    }
+        //};
+
+    });//End of Document.Ready()
+
+
+    //-----------------------------------To Save Data------------------------------------------------------------------------------------
+
+    var StockAdjustItemList = {
+        "AdjustID": "", "SupplierID": "", "ChallanID": "", "ItemTypeID": "", "StockQty": "", "Unit": "",
+        "ItemQty": "", "AdjustmentCause": "", "Remarks": ""
+    };
+
+    var FinalObject = {
+        "RequestID": "", "PurchaseYear": "", "RequestDate": "", "LeatherType": "", "StoreID": "", "StockAdjustItemList": []
+    };
+
+    var saveStatus = 1;
+    function Save() {
+        saveStatus = 1;
+
+        CheckRequiredTextBoxMaxLength('PurchaseYear', 4);
+        CheckRequiredTextBoxMaxLength('LeatherType', 20);
+        CheckRequiredTextBoxMaxLength('ReceiveStore', 20);
+        CheckRequiredTextBoxMaxLength('RequestDate', 10);
+
+        var AdjustmentGridDataSource = $("#AdjustmentGrid").data("kendoGrid").dataSource;
+        var AdjustmentGridData = AdjustmentGridDataSource.data();
+
+        if (AdjustmentGridData.length < 1)
+            saveStatus = 0;
+
+        if (saveStatus == 1) {
+            FinalObject.RequestID = $("#RequestID").val();
+            FinalObject.PurchaseYear = $("#PurchaseYear").val();
+            FinalObject.RequestDate = $("#RequestDate").val();
+            FinalObject.LeatherType = $("#LeatherType").val();
+            FinalObject.StoreID = $("#ReceiveStore").val();
+
+
+
+            for (var i = 0; i < AdjustmentGridData.length; i++) {
+                if (AdjustmentGridData[i].dirty) {
+                    StockAdjustItemList.AdjustID = AdjustmentGridData[i].AdjustID;
+                    StockAdjustItemList.SupplierID = AdjustmentGridData[i].SupplierID;
+                    StockAdjustItemList.ChallanID = AdjustmentGridData[i].PurchaseID;
+                    StockAdjustItemList.ItemTypeID = AdjustmentGridData[i].ItemTypeID;
+                    StockAdjustItemList.StockQty = AdjustmentGridData[i].StockQty;
+                    StockAdjustItemList.Unit = AdjustmentGridData[i].Unit;
+                    StockAdjustItemList.ItemQty = AdjustmentGridData[i].ItemQty;
+                    StockAdjustItemList.AdjustmentCause = AdjustmentGridData[i].AdjustmentCause;
+                    StockAdjustItemList.Remarks = AdjustmentGridData[i].Remarks;
+
+                    FinalObject.StockAdjustItemList.push(StockAdjustItemList);
+                    StockAdjustItemList = {
+                        "SupplierID": "", "ChallanID": "", "ItemTypeID": "", "StockQty": "", "Unit": "",
+                        "ItemQty": "", "AdjustmentCause": "", "Remarks": ""
+                    };
+                }
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("StockAdjust", "StockAdjust")',
+                    data: JSON.stringify(FinalObject),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+
+                        if (response.Msg.Type == 2) {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#RequestID").val(response.requestID);
+
+                            $("#AdjustmentGrid").data('kendoGrid').dataSource.data(response.requestDetails);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                        }
+                        else if (response.Msg.Type == 3) {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                            $("#AdjustmentGrid").data('kendoGrid').dataSource.data(response.requestDetails);
+                            changeStatus = 0;
+                            PageStatus = "NCF";
+                        }
+                        else {
+                            $('#MessageText').html(response.Msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                    } //End of success call
+                });
+            }//End of ajax call
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#GradeName").focus();
+            }
+        }
+
+        FinalObject = {
+            "PurchaseYear": "", "RequestDate": "", "LeatherType": "", "StoreID": "", "StockAdjustItemList": []
+        };
+    };
+
+    //-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>

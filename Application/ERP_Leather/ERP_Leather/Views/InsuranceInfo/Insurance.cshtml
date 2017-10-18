@@ -1,0 +1,1694 @@
+﻿@{
+    ViewBag.Title = "Insurance Information";
+    ViewBag.SearchTitle = "Insurance Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="headerForm">
+    @Html.Partial("~/Views/Common/_FormHeader.cshtml")
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <input type="hidden" id="InsuranceID" class="" name="InsuranceID" value="" readonly="readonly" />
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Insurance Company<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="txtInsuranceID" class="" name="txtInsuranceID" value="" placeholder="Press F9" readonly="readonly" />
+                <input type="text" id="InsuranceCompany" class="col-lg-11" name="InsuranceCompany" value="" readonly="readonly" placeholder="Press F9" style="padding:2px" />
+            </div>
+            <div class="col-lg-2">
+                <label>CI No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="txtCIID" name="txtCIID" class="textField" />
+                <input type="text" id="txtInvoiceNo" class="textField" placeholder="Press F9" readonly />              
+                <input type="text" readonly="readonly" id="CIDate" name="CIDate" value="" placeholder="dd/MM/yyyy" />
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>L/C No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" readonly="readonly" id="txtLCID" name="txtLCID" value=""  />
+                <input type="text" readonly="readonly" id="LCNumber" name="LCNumber" value="" placeholder="Press F9" />
+                <input type="text" readonly="readonly" id="txtLCDate" name="txtLCDate" value="" placeholder="dd/MM/yyyy" />
+              
+            </div>
+            <div class="col-lg-2">
+                <label>PI/Indent No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" placeholder="Press F9" id="PINo" name="PINo" value="" readonly="readonly" />
+                <input type="text" placeholder="dd/MM/yyyy" id="PIDate" name="PIDate" value="" readonly="readonly" />
+                <input type="hidden" id="txtPIID" name="txtPIID" value="" />
+            </div>
+        </div>
+        @*<div class="row">
+            <div class="col-lg-2">
+                <label>Insurance No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="InsuranceNo" name="InsuranceNo" style="width:68%" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>PI No</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="PINo" name="PINo" value="" placeholder="Press F9" readonly="readonly" />
+            </div>
+        </div>*@
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Cover Note No.<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtCoverNote" class="" name="txtCoverNote" value="" onblur="return IsValidInsuranceNo();" style="width:68%" />
+            </div>
+            <div class="col-lg-2">
+                <label>Insurance Challan No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtInsChallan" name="txtInsChallan" value="" style="width:68%" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Cover Note Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtNoteDate" class="datePicker" placeholder="DD/MM/YYYY" name="txtNoteDate" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Insurance Challan Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtChallanDate" class="datePicker" placeholder="DD/MM/YYYY" name="txtChallanDate" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Money Receipt No.</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtMoneyReceipt" name="txtMoneyReceipt" style="width:68%" />
+            </div>
+            <div class="col-lg-2">
+                <label>Policy No. </label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtPolicyNo" name="txtPolicyNo" value="" style="width:68%" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Money Receipt Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtMoneyReceiptDate" class="datePicker" placeholder="DD/MM/YYYY" name="txtMoneyReceiptDate" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Policy Date. </label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtPolicyDate" class="datePicker" placeholder="DD/MM/YYYY" name="txtPolicyDate" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Clause Endorsement</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtEndorse" name="txtEndorse" style="width:68%" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Premium Calculation</label>
+            </div>
+            <div class="col-lg-4">
+
+            </div>
+            <div class="col-lg-2">
+                <label>Marine Premium<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtMarinePremium" class="text-right" name="txtMarinePremium" value="" placeholder="0.00" onblur="CalculateMarinePremium(); return IsNumber('txtMarinePremium');" /> %
+                <input type="text" id="txtMarinePremium2" class="text-right" name="txtMarinePremium2" readonly="readonly" value="" placeholder="0.00" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Invoice Amount<span style='color:red'>*</span> </label>
+            </div>
+            <div class="col-lg-4">
+                <div id="divInvoiceCurrency">
+                    <input type="text" id="txtInvoiceAmount" class="text-right" name="txtInvoiceAmount" value="" placeholder="0.00" onblur="CalculateIncreasePercent();return IsNumber('txtInvoiceAmount');" />
+                    @Html.DropDownList("Currency")
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <label>Decrease Percent<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtDiscount" class="text-right" name="txtDiscount" value="" placeholder="0.00" onblur="CalculateDisCount();return IsNumber('txtDiscount');" /> %
+                <input type="text" id="txtDiscount2" class="text-right" readonly="readonly" name="txtDiscount2" value="" placeholder="0.00"  />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Increase Percent<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtIncreasePercent" class="text-right" name="txtIncreasePercent" placeholder="0.00" onblur="CalculateIncreasePercent(); return IsNumber('txtIncreasePercent');" /> %
+                <input type="text" id="txtIncreasePercent2" class="text-right" name="txtIncreasePercent2" onblur="CalculateIncreasePercent2(); return IsNumber('txtIncreasePercent2');" placeholder="0.00"  />
+            </div>
+            <div class="col-lg-2">
+                <label>War and SRCC<span style='color:red'>*</span> </label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtSRCC" class="text-right" name="txtSRCC" value="0" placeholder="0.00" onblur="CalculateWarAndSRCC();return IsNumber('txtSRCC');" /> %
+                <input type="text" id="txtSRCC2" class="text-right" name="txtSRCC2" value="0.00" placeholder="0.00" readonly="readonly"  />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Sum Insured<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtSumInsured" class="text-right" readonly="readonly" name="txtSumInsured" placeholder="0.00" />
+            
+            </div>
+            <div class="col-lg-2">
+                <label>Total (Net Premium) </label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" style="width:71%" class="text-right" readonly="readonly" id="txtTotalNetPremium" name="LCNo" value="" placeholder="0.00"  />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Exchange Rate<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <div id="divExchangeRate">
+                    <input type="text" id="txtExchangeRate" class="text-right" name="txtInsuranceNo" value="1.00" placeholder="1.00" onblur="CalculateExchangeRate(); return IsNumber('txtExchangeRate');" />
+                    @Html.DropDownList("Currency")
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <label>VAT<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtVAT" name="txtVAT" class="text-right" placeholder="0.00" value="0" onblur="CalculateVat();return IsNumber('txtVAT');" /> %
+                <input type="text" id="txtVAT2" name="txtVAT2" class="text-right" placeholder="0.00" readonly="readonly" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Exchanged Sum Insured</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtExcngSum" readonly="readonly" class="text-right" name="txtExcngSum" placeholder="0.00" onblur="return IsNumber('txtExcngSum');" />
+            </div>
+
+            <div class="col-lg-2">
+                <label>Stamp Duty<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtStampDuty"  class="text-right" name="txtStampDuty" placeholder="0.00" onblur="StampDuty(); CalculateGrandTotal();" /> %
+                <input type="text" id="txtStampDuty2"  class="text-right"  name="txtStampDuty2" placeholder="0.00" onblur=" CalculateGrandTotal(); return IsNumber('txtExcngSum');"  />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+
+            </div>
+            <div class="col-lg-4">
+
+            </div>
+
+            <div class="col-lg-2">
+                <label>Grand Total</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtGrandTotal" style="width:71%" name="txtGrandTotal" class="text-right" readonly="readonly" placeholder="0.00"  />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Cost Return Calculation</label>
+            </div>
+            <div class="col-lg-4">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Net Premium Amt</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtNetPremium" readonly="readonly" class="text-right" name="txtNetPremium" value="" placeholder="0.00" />
+            </div>
+            <div class="col-lg-2">
+                <label>Total Paid Amount</label>
+            </div>
+            <div class="col-lg-4">          
+                <input type="text" id="TotalPaidAmount" readonly="readonly" class="text-right" name="TotalPaidAmount" value="" placeholder="0.00" />
+             </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Refund Amount<span style='color:red'>*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtRefund" class="text-right" value="0.00" name="txtRefund" placeholder="0.00" onblur="CalculateRefundAmount();return IsNumber('txtRefund');" /> %
+                <input type="text" id="txtRefund2" class="text-right" value="0.00" readonly="readonly" name="txtRefund2" placeholder="0.00"  />
+            </div>
+            <div class="col-lg-2">
+                <label>Check Comments</label>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-8"><input type="text" id="txtCheckComment" name="txtCheckComment" value="" style="width:100%" /> </div>
+                    <div class="col-lg-4"><input type="hidden" id="btnCheck" name="btnCheck" value="Checked" /></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Paid Amount</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="txtPaidAmount" class="text-right" name="txtPaidAmount" placeholder="0.00" readonly="readonly" />                
+            </div>    
+            
+            <div class="col-lg-2">
+                <label>Confirm Comments </label>
+            </div>
+            <div class="col-lg-4">
+                @*<input type="text" id="txtConfComment" name="txtConfComment" style="width:72%" />*@
+                <input type="button" id="btnConfirm" name="btnConfirm" value="Confirmed" />
+            </div>
+                    
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+          <div class="row">
+            <div class="col-lg-2">
+                <label>Revise No.</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtReviseNo" name="txtReviseNo" value="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Revise Date</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtRevisionDate" class="datePicker" placeholder="DD/MM/YYYY" name="txtRevisionDate" tabindex="" />           
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="btnNewRevise" name="btnNewRevise" value="New Revision" style="" />     
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+
+<!--    ### Popup Windows Insurance Start ### -->
+<div id="InsuranceIDWindow" style="display: none;">
+    <p>Insurance:<input type="text" id="txtOpeningInsurance" style="width: 250px;" placeholder="Search Insurance Name.." /><input type="button" id="btnOpeningGridSearch" value="Search" /></p>
+
+    <div id="InsuranceIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInsuranceIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInsuranceIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows Insurance End ### -->
+
+<!--    ### Popup Windows PINO Start ### -->
+<div id="LCPIWindow" style="display: none;">
+    <p>
+        PI:<input type="text" id="txtPI" style="width: 250px;" placeholder="Search PI.." />
+        <input type="button" id="btnPIGridSearch" value="Search" />
+    </p>
+
+    <div id="LCPIGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCPIWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCPIWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows PINO End ### -->
+
+<!--    ### Popup Windows LCNo Start ### -->
+<div id="LCLCNoWindow" style="display: none;">
+    <p>
+        L/C No:<input type="text" id="txtLCNo" style="width: 250px;" placeholder="Search LCNo.." />
+        <input type="button" id="btnLCNoGridSearch" value="Search" />
+    </p>
+
+    <div id="LCLCNoGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLCLCNoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLCLCNoWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows LCNoNO End ### -->
+
+<!--    ### Popup Windows CI Start ### -->
+<div id="CIIDWindow" style="display: none;">
+    <p>CI:<input type="text" id="txtOpeningCI" style="width: 250px;" placeholder="Search CI Name.." /><input type="button" id="btnCIGridSearch" value="Search" /></p>
+
+    <div id="CIIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnCIIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCIIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<!--    ### Popup Windows CI End ### -->
+
+
+<script type="text/javascript">
+
+    NumericAndDecimalValue("txtInvoiceAmount");
+    NumericAndDecimalValue("txtIncreasePercent");
+    NumericAndDecimalValue("txtExchangeRate");
+    NumericAndDecimalValue("txtMarinePremium");
+    NumericAndDecimalValue("txtDiscount");
+    NumericAndDecimalValue("txtSRCC");
+    NumericAndDecimalValue("txtVAT");
+    NumericAndDecimalValue("txtStampDuty2");
+    NumericAndDecimalValue("txtRefund");
+
+
+
+    $("select").addClass("select");
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+    Reset();
+    $("#btnCheck").css("display", "block");
+    $("#btnConfirm").css("display", "block");
+    $("#btnConfirm").removeAttr('disabled');
+    $("#btnCheck").removeAttr('disabled');
+
+    $("#btnDelete").attr("disabled", "disabled");
+    $("#InsuranceID").val("");
+
+
+    function CalculateIncreasePercent() {
+        if ($("#txtInvoiceAmount").val() != "" && $("#txtIncreasePercent").val() != "") {
+            $("#txtIncreasePercent2").val(((($("#txtIncreasePercent").val() - 0) * ($("#txtInvoiceAmount").val() - 0)) / 100).toFixed(2));
+            $("#txtSumInsured").val((($("#txtIncreasePercent2").val() - 0) + ($("#txtInvoiceAmount").val() - 0)).toFixed(2));
+            CalculateExchangeRate();
+            CalculateMarinePremium();
+            CalculateDisCount();
+            CalculateWarAndSRCC();
+            CalculateVat();
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtIncreasePercent").val("");
+            $("#txtIncreasePercent2").val("");
+            $("#txtSumInsured").val("");
+            $("#txtExchangeRate").val("1.00");
+            $("#txtExcngSum").val("");
+            $("#txtMarinePremium2").val("");
+            $("#txtMarinePremium").val("");
+            $("#txtDiscount2").val("");
+            $("#txtDiscount").val("");
+            $("#txtSRCC").val("0.00");
+            $("#txtSRCC2").val("0.00");
+            $("#txtTotalNetPremium").val("");
+            $("#txtNetPremium").val("");
+            $("#txtVAT").val("");
+            $("#txtVAT2").val("");
+            $("#txtStampDuty").val("");
+            $("#txtStampDuty2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+
+        }
+    }
+
+    function CalculateIncreasePercent2() {
+
+        if ($("#txtInvoiceAmount").val() != "" && $("#txtIncreasePercent2").val() != "") {
+            $("#txtIncreasePercent").val((((($("#txtIncreasePercent2").val() - 0) * 100)) / $("#txtInvoiceAmount").val()).toFixed(2));
+            $("#txtSumInsured").val((($("#txtIncreasePercent2").val() - 0) + ($("#txtInvoiceAmount").val() - 0)).toFixed(2));
+            CalculateExchangeRate();
+            CalculateMarinePremium();
+            CalculateDisCount();
+            CalculateWarAndSRCC();
+            CalculateVat();
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtIncreasePercent").val("");
+            $("#txtIncreasePercent2").val("");
+            $("#txtSumInsured").val("");
+            $("#txtExchangeRate").val("1.00");
+            $("#txtExcngSum").val("");
+            $("#txtMarinePremium2").val("");
+            $("#txtMarinePremium").val("");
+            $("#txtDiscount2").val("");
+            $("#txtDiscount").val("");
+            $("#txtSRCC").val("0.00");
+            $("#txtSRCC2").val("0.00");
+            $("#txtTotalNetPremium").val("");
+            $("#txtNetPremium").val("");
+            $("#txtVAT").val("");
+            $("#txtVAT2").val("");
+            $("#txtStampDuty").val("");
+            $("#txtStampDuty2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+
+        }
+    }
+
+    function CalculateExchangeRate() {
+        if ($("#txtExchangeRate").val() != "" && $("#txtSumInsured").val() != "") {
+            $("#txtExcngSum").val((($("#txtSumInsured").val() - 0) * ($("#txtExchangeRate").val() - 0)).toFixed(2));
+            $("#txtStampDuty").val(($("#txtExcngSum").val() + "/" + 1500));
+            $("#txtStampDuty2").val((($("#txtExcngSum").val() - 0) / 1500).toFixed(2));
+            CalculateMarinePremium();
+            CalculateDisCount();
+            CalculateWarAndSRCC();
+            CalculateVat();
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtExcngSum").val("");
+            $("#txtMarinePremium2").val("");
+            $("#txtMarinePremium").val("");
+            $("#txtStampDuty").val("");
+            $("#txtStampDuty2").val("");
+            $("#txtDiscount2").val("");
+            $("#txtDiscount").val("");
+            $("#txtSRCC").val("0.00");
+            $("#txtSRCC2").val("0.00");
+            $("#txtTotalNetPremium").val("");
+            $("#txtNetPremium").val("");
+            $("#txtVAT").val("");
+            $("#txtVAT2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+
+        }
+    }
+
+    function CalculateMarinePremium() {
+        if ($("#txtMarinePremium").val() != "" && $("#txtExcngSum").val() != "") {
+            $("#txtMarinePremium2").val(((($("#txtMarinePremium").val() - 0) * ($("#txtExcngSum").val() - 0)) / 100).toFixed(2));
+            CalculateDisCount();
+            CalculateWarAndSRCC();
+            CalculateVat();
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtMarinePremium2").val("");
+            $("#txtDiscount2").val("");
+            $("#txtDiscount").val("");
+            $("#txtSRCC").val("0.00");
+            $("#txtSRCC2").val("0.00");
+            $("#txtTotalNetPremium").val("");
+            $("#txtNetPremium").val("");
+            $("#txtVAT").val("");
+            $("#txtVAT2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+        }
+    }
+
+    function CalculateDisCount() {
+        if ($("#txtMarinePremium2").val() != "" && $("#txtDiscount").val() != "") {
+            $("#txtDiscount2").val(((($("#txtMarinePremium2").val() - 0) * ($("#txtDiscount").val() - 0)) / 100).toFixed(2));
+            CalculateWarAndSRCC();
+            CalculateVat();
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtDiscount2").val("");
+            $("#txtSRCC").val("0.00");
+            $("#txtSRCC2").val("0.00");
+            $("#txtTotalNetPremium").val("");
+            $("#txtNetPremium").val("");
+            $("#txtVAT").val("");
+            $("#txtVAT2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+        }
+    }
+
+    function CalculateWarAndSRCC() {
+        if ($("#txtMarinePremium2").val() != "" && $("#txtSRCC").val() != "") {
+            $("#txtSRCC2").val(((($("#txtMarinePremium2").val() - 0) * ($("#txtSRCC").val() - 0)) / 100).toFixed(2));
+            $("#txtTotalNetPremium").val((($("#txtMarinePremium2").val() - 0) - (($("#txtDiscount2").val() - 0) + ($("#txtSRCC2").val() - 0))).toFixed(2));
+            $("#txtNetPremium").val((($("#txtMarinePremium2").val() - 0) - (($("#txtDiscount2").val() - 0) + ($("#txtSRCC2").val() - 0))).toFixed(2));
+            CalculateVat();
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtSRCC2").val("0.00");
+            $("#txtTotalNetPremium").val("");
+            $("#txtNetPremium").val("");
+            $("#txtVAT").val("");
+            $("#txtVAT2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+        }
+    }
+
+    function CalculateVat() {
+        if ($("#txtTotalNetPremium").val() != "" && $("#txtVAT").val() != "") {
+            $("#txtVAT2").val(((($("#txtTotalNetPremium").val() - 0) * ($("#txtVAT").val() - 0)) / 100).toFixed(2));
+            CalculateGrandTotal();
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtVAT2").val("");
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+            $("#txtVAT").val("0");
+        }
+    }
+
+    function CalculateGrandTotal() {
+        if ($("#txtTotalNetPremium").val() != "" && $("#txtVAT2").val() != "" && $("#txtStampDuty2").val() != "") {
+            $("#txtGrandTotal").val(((($("#txtTotalNetPremium").val() - 0) + ($("#txtVAT2").val() - 0)) + ($("#txtStampDuty2").val() - 0)).toFixed(2));
+            CalculateRefundAmount();
+        }
+        else {
+            $("#txtGrandTotal").val("");
+            $("#txtRefund2").val("0.00");
+        }
+    }
+
+    function CalculateRefundAmount() {
+        if ($("#txtTotalNetPremium").val() != "" && $("#txtRefund").val() != "") {
+            $("#txtRefund2").val(((($("#txtRefund").val() - 0) * ($("#txtTotalNetPremium").val() - 0)) / 100).toFixed(2));
+            $("#txtPaidAmount").val(((($("#txtTotalNetPremium").val() - 0) - ($("#txtRefund2").val() - 0))).toFixed(2));
+            $("#TotalPaidAmount").val((($("#txtPaidAmount").val() - 0) + ($("#txtStampDuty2").val() - 0)).toFixed(2));
+        }
+        else {
+            $("#txtRefund2").val("0.00");
+        }
+    }
+
+    function StampDuty() {
+        var val = $("#txtStampDuty").val().split('/');
+        if (val.length == 2) {
+            if (isNaN(val[0]) || isNaN(val[1])) {
+                $("#txtStampDuty").val("");
+                $("#txtStampDuty2").val("");
+            }
+            else {
+                var data = (val[0] - 0) / (val[1] - 0);
+                $("#txtStampDuty2").val(data.toFixed(2));
+            }
+        }
+        else {
+            $("#txtStampDuty").val("");
+        }
+    }
+
+    // ############ Insurance List F9 Functionality Start ##########
+    $(document.body).keypress(function (e) {
+        if ($("#InsuranceCompany").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetLCBankList", "LCOpening")',
+                    type: "GET",
+                    data: { bankCategory: "INC", bankType: "LOC" },
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#InsuranceIDGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('InsuranceIDGrid');
+                InsuranceIDWindow.open();
+            }
+        }
+    });
+
+    var InsuranceIDWindow = $('#InsuranceIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Insurance",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var InsuranceIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BranchID",
+                fields: {
+                    BranchID: { editable: false },
+                    BankCode: { editable: false },
+                    BankName: { editable: false },
+                    BranchName: { editable: false },
+                    CurrencyName: { editable: false },
+                    LCLimit: { editable: false },
+                    LCMargin: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var InsuranceIDGrid = $("#InsuranceIDGrid").kendoGrid({
+        dataSource: InsuranceIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              //{ field: "BranchID", title: "Branch ID", width: "60px", filterable: false, sortable: false },
+              { field: "BankCode", title: "SWIFT Code" },
+              { field: "BankName", title: "Ins. Company" },
+              { field: "BranchName", title: "Branch" },
+              { field: "CurrencyName", title: "Currency" }
+        ]
+    });
+
+    $('#btnInsuranceIDWindowOK').click(function () {
+        ListOfValueOpeningInsuranceGridEvent('InsuranceIDGrid');
+        InsuranceIDWindow.close();
+    });
+
+    $('#btnInsuranceIDWindowCancel').click(function () {
+        InsuranceIDWindow.close();
+    });
+
+    $("#InsuranceIDWindow").dblclick(function () {
+        ListOfValueOpeningInsuranceGridEvent('InsuranceIDGrid');
+        InsuranceIDWindow.close();
+    });
+
+    $("#InsuranceIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningInsuranceGridEvent('InsuranceIDGrid');
+            InsuranceIDWindow.close();
+        }
+        else if (keycode == '27') {
+            InsuranceIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnOpeningGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+            type: 'GET',
+            data: { bank: $("#txtOpeningInsurance").val(), bankCategory: "INC", BankType: "LOC" },
+            success: function (data33) {
+                $("#InsuranceIDGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueOpeningInsuranceGridEvent('InsuranceIDGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCBankNameList", "LCOpening")',
+                data: { bankCategory: "INC", BankType: "LOC" },
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtOpeningInsurance").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtOpeningInsurance").keyup(function (event) {
+        if ($("#txtOpeningInsurance").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCBankByBank", "LCOpening")',
+                    type: 'GET',
+                    data: { bank: $("#txtOpeningInsurance").val(), bankCategory: "INC", BankType: "LOC" },
+                    success: function (data33) {
+                        $("#InsuranceIDGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueOpeningInsuranceGridEvent('InsuranceIDGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    function ListOfValueOpeningInsuranceGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+      
+        $("#InsuranceCompany").val(selectedItem.BankName + ' ' + selectedItem.BranchName);
+        $("#txtInsuranceID").val(selectedItem.BranchID);
+    }
+
+    // ############ Insurance List F9 Functionality End ##########
+
+    /// ############ LCNo List F9 Functionality Start ##########
+    $(document.body).keypress(function (e) {
+        if ($("#LCNumber").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetLCNoInfo", "InsuranceInfo")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#LCLCNoGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+                });
+                SelectedItemOfListOfValue('LCLCNoGrid');
+                LCLCNoWindow.open();
+            }
+        }
+    });
+
+    var LCLCNoWindow = $('#LCLCNoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of L/C No",
+        position: { top: 100 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCLCNoDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LCNoID",
+                fields: {
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+                    //CINo: { editable: false },
+                    //CIDate: { editable: false },
+                    LCDate: { editable: false },
+                    //CIID: { editable: false },
+                    //CIDate: { editable: false }
+                    LCAmount: { editable: false },
+                    LCMargin: { editable: false },
+                    SupplierName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LCLCNoGrid = $("#LCLCNoGrid").kendoGrid({
+        dataSource: LCLCNoDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        groupable: true,
+        sortable: true,
+        height: 400,
+        columns: [
+              //{ field: "LCID", title: "LC ID" },
+              { field: "LCNo", title: "L/C No" },
+              { field: "LCDate", title: "L/C Date" },
+              //{ field: "CINo", title: "CINo" },
+              //{ field: "CIDate", title: "CIDate" }
+               { field: "LCAmount", title: "L/C Amount" },
+              { field: "LCMargin", title: "L/C Margin" },
+                { field: "SupplierName", title: "Supplier" }
+        ]
+    });
+
+
+    $('#btnLCLCNoWindowOK').click(function () {
+        ListOfValueLCNoGridEvent('LCLCNoGrid');
+        LCLCNoWindow.close();
+    });
+
+    $('#btnLCLCNoWindowCancel').click(function () {
+        LCLCNoWindow.close();
+    });
+
+    $("#LCLCNoWindow").dblclick(function () {
+        ListOfValueLCNoGridEvent('LCLCNoGrid');
+        LCLCNoWindow.close();
+    });
+
+    $("#LCLCNoWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueLCNoGridEvent('LCLCNoGrid');
+            LCLCNoWindow.close();
+        }
+        else if (keycode == '27') {
+            LCLCNoWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnLCNoGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchLCNoByLCNo", "InsuranceInfo")',
+            type: 'GET',
+            data: { search: $("#txtLCNo").val() },
+            success: function (data33) {
+                $("#LCLCNoGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValueLCNoGridEvent('LCLCNoGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetLCNoSearch", "InsuranceInfo")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtLCNo").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtLCNo").keyup(function (event) {
+        if ($("#txtLCNo").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchLCNoByLCNo", "InsuranceInfo")',
+                    type: 'GET',
+                    data: { search: $("#txtLCNo").val() },
+                    success: function (data33) {
+                        $("#LCLCNoGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValueLCNoGridEvent('LCLCNoGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    function ListOfValueLCNoGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#txtLCID").val(selectedItem.LCID);
+        $("#LCNumber").val(selectedItem.LCNo);
+        //$("#CINo").val(selectedItem.CINo);
+        //$("#CIID").val(selectedItem.CIID);
+        $("#txtLCDate").val(selectedItem.LCDate);
+    }
+
+    // ############ LCNoNO List F9 Functionality END ##########
+
+    // ############## Btn Search Operation Start #####################
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetLcmInsuranceInfo", "InsuranceInfo", "InsuranceID,RecordStatus");
+    });
+
+    $("#btnSearchGridSearch").click(function () {
+        GetSearchResult("SearchLcmInsuranceByInsuranceNo", "InsuranceInfo");
+    });
+
+    AutoComplete("GetAutoCompleteData", "InsuranceInfo");
+
+    $("#txtSearch").keyup(function (event) {
+        if ($("#txtSearch").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                GetSearchResult("SearchLcmInsuranceByInsuranceNo", "InsuranceInfo");
+            }
+        }
+    });
+
+    // ############## Btn Search Operation END #####################
+
+    function ListOfValueSearchGridEvent(gridName) {
+        Reset();
+        $('#btnDelete').attr('disabled', true);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+
+        if (selectedItem.RecordStatus == "CNF") {
+            $('.FormBody').find('input, textarea, button, select').attr('disabled', 'disabled');
+            $('#btnSubmit').attr('disabled', 'disabled');
+
+        }
+        else {
+            $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+            $('#btnSubmit').attr('disabled', false);
+        }
+
+        //  CheckRecordStatusForButton(selectedItem.RecordStatus);
+        $("#divLoading").show();
+        $("#btnCheck").css("display", "block");
+        $("#btnConfirm").css("display", "block");
+        $("#btnConfirm").removeAttr('disabled');
+        $("#btnCheck").removeAttr('disabled');
+        $("#MessageText").html('');
+        $.ajax({
+            url: '@Url.Action("GetLcDetailsInfoByInsuranceID", "InsuranceInfo")',
+            type: 'GET',
+            data: { InsuranceID: selectedItem.InsuranceID },
+
+            success: function (data33) {
+                $("#InsuranceID").val(data33.InsuranceID);
+                $("#txtInsuranceID").val(data33.InsuranceCompany);
+                $("#InsuranceCompany").val(data33.InsuranceCompanyName);
+
+               
+                $("#txtCoverNote").val(data33.InsuranceNo);
+                $("#txtNoteDate").val(data33.CoverNoteDate);
+                $("#txtMoneyReceipt").val(data33.MoneyReceiptNo);
+                $("#txtMoneyReceiptDate").val(data33.MoneyReceiptDate);
+
+                $("#txtEndorse").val(data33.ClauseEndorsement);
+                $("#txtInsChallan").val(data33.InsuranceChallanNo);
+                $("#txtChallanDate").val(data33.InsurancChallanDate); //LCMarginCurrency
+                $("#txtPolicyNo").val(data33.PolicyNo);
+                $("#txtPolicyDate").val(data33.PolicyDate);
+                $("#txtInvoiceAmount").val(data33.InvoiceAmount);
+                $("#divInvoiceCurrency").find('.select').val(data33.InvouceCurrency);
+                $("#txtIncreasePercent").val(data33.IncreasePercent);
+                $("#txtIncreasePercent2").val(data33.IncreaseAmount);
+                $("#txtSumInsured").val(data33.SumInsured);
+                $("#txtExchangeRate").val(data33.ExchangeRate);
+                $("#divExchangeRate").find('.select').val(data33.ExchangeRateCurrency);
+                $("#txtExcngSum").val(data33.ExchangedSumInsured);
+
+                $("#LCAmountCurrency").find('.select').val(data33.LCAmountCurrency);
+                $("#txtMarinePremium").val(data33.MarinePremiumPercent);
+                $("#txtMarinePremium2").val(data33.MarinePremiumAmount);
+                $("#txtDiscount").val(data33.DiscountPercent);
+                $("#txtDiscount2").val(data33.DiscountAmount);
+                $("#txtSRCC").val(data33.WarSRCCPercent);
+                $("#txtSRCC2").val(data33.WarSRCCPercentAmount);
+                $("#txtTotalNetPremium").val(data33.NetPremium);
+                $("#txtNetPremium").val(data33.NetPremium);
+                $("#txtVAT").val(data33.VatPercent);
+                $("#txtVAT2").val(data33.VatAmount);
+                $("#txtNetPremium").val();
+
+                $("#txtStampDuty").val(data33.StampDutyRetio);
+                $("#txtStampDuty2").val(data33.StampDutyAmount);
+                $("#txtGrandTotal").val(data33.GrandPremium);
+
+                $("#txtRefund").val(data33.RefundPercent);
+                $("#txtRefund2").val(data33.RefundAmount);
+
+                $("#txtPaidAmount").val(data33.PaidAmount);
+                $("#txtReviseNo").val(data33.RevisionNo);
+                $("#txtRevisionDate").val(data33.RevisionDate);
+                $("#txtCheckComment").val(data33.ApprovalAdvice);
+
+                $("#txtLCID").val(data33.LCNo); 
+                $("#LCNumber").val(data33.LCNumber);
+                $("#txtLCDate").val(selectedItem.LCDate);
+
+                $("#txtCIID").val(data33.CIID);
+                $("#txtInvoiceNo").val(data33.CINo);
+                $("#CIDate").val(selectedItem.CIDate);
+                $("#txtPIID").val(data33.PIID);
+                if (data33.RecordStatus == "CNF") {
+                    $("#btnCheck").css("display", "none");
+                    $("#btnConfirm").css("display", "none");
+                    $('#btnSubmit').attr('disabled', true);
+                }
+                else if (data33.RecordStatus == "CHK") {
+                    $("#btnCheck").css("display", "none");
+                    $("#btnConfirm").css("display", "block");
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                else {
+                    $("#btnCheck").css("display", "block");
+                    $("#btnConfirm").css("display", "block");
+                    $('#btnSubmit').attr('disabled', false);
+                }
+
+
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    // ############## Global Variable Declaration Start ############
+    var saveStatus = 1;
+    var obDataSet = {
+        "InsuranceID": "", "InsuranceNo": "", "InsuranceCompany": "", "LCID": "", "LCNo": "", "CoverNoteDate": "", "MoneyReceiptNo": "",
+        "MoneyReceiptDate": "", "ClauseEndorsement": "", "InsuranceChallanNo": "", "InsurancChallanDate": "",
+        "PolicyNo": "", "PolicyDate": "", "InvoiceAmount": "", "InvouceCurrency": "", "IncreasePercent": "", "IncreaseAmount": "",
+        "SumInsured": "", "ExchangeRate": "", "ExchangeRateCurrency": "", "ExchangedSumInsured": "", "MarinePremiumPercent": "",
+        "MarinePremiumAmount": "", "DiscountPercent": "", "DiscountAmount": "", "WarSRCCPercent": "", "WarSRCCPercentAmount": "",
+        "NetPremium": "", "VatPercent": "", "VatAmount": "", "StampDutyAmount": "", "GrandPremium": "", "RefundPercent": "",
+        "RefundAmount": "", "PaidAmount": "", "RevisionNo": "", "RevisionDate": "", "RunningStatus": "", "RecordStatus": "", "CheckedBy": "",
+        "CheckDate": "", "ApprovedBy": "", "ApproveDate": "", "ApprovalAdvice": "", "CIID": "", "CINo": ""
+    };
+    // ############## Global Variable Declaration END ##############
+
+    // ############## Btn Save Operation Start #####################
+    function Save() {
+        saveStatus = 1;
+        // CheckRequiredTextBoxMaxLength('txtStampDuty', 30);
+
+        CheckRequiredTextBoxMaxLength('txtInvoiceAmount', 30);
+       // CheckRequiredTextBoxMaxLength('LCNumber', 600);
+        CheckRequiredTextBoxMaxLength('InsuranceCompany', 600);
+        CheckRequiredTextBoxMaxLength('txtStampDuty2', 30);
+        CheckRequiredTextBoxMaxLength('txtInsuranceID', 30);
+        //CheckRequiredTextBoxMaxLength('LCNo', 30);
+        CheckRequiredTextBoxMaxLength('txtCoverNote', 300);
+        // CheckRequiredTextBoxMaxLength('txtNoteDate', 30);
+        // CheckRequiredTextBoxMaxLength('txtMoneyReceipt', 300);
+        // CheckRequiredTextBoxMaxLength('txtEndorse', 300);
+        // CheckRequiredTextBoxMaxLength('txtInsChallan', 30);
+        //CheckRequiredTextBoxMaxLength('txtChallanDate', 30);
+        // CheckRequiredTextBoxMaxLength('txtPolicyNo', 30);
+        //   CheckRequiredTextBoxMaxLength('txtPolicyDate', 18);
+        CheckRequiredTextBoxMaxLength('txtIncreasePercent', 6);
+        CheckRequiredTextBoxMaxLength('txtExchangeRate', 18);
+        CheckRequiredTextBoxMaxLength('txtExcngSum', 30);
+        CheckRequiredTextBoxMaxLength('txtMarinePremium', 30);
+        CheckRequiredTextBoxMaxLength('txtDiscount', 30);
+        CheckRequiredTextBoxMaxLength('txtSRCC', 30);
+        CheckRequiredTextBoxMaxLength('txtTotalNetPremium', 30);
+        CheckRequiredTextBoxMaxLength('txtVAT', 30);
+        CheckRequiredTextBoxMaxLength('txtRefund', 30);
+        if (saveStatus == 1) {
+            obDataSet.InsuranceID = $("#InsuranceID").val();
+            obDataSet.InsuranceCompany = $("#txtInsuranceID").val();
+            obDataSet.LCID = $("#txtLCID").val();
+            obDataSet.InsuranceNo = $("#txtCoverNote").val();
+            obDataSet.CoverNoteDate = $("#txtNoteDate").val();
+            obDataSet.MoneyReceiptNo = $("#txtMoneyReceipt").val();
+            obDataSet.MoneyReceiptDate = $("#txtMoneyReceiptDate").val();
+            obDataSet.ClauseEndorsement = $("#txtEndorse").val();
+            obDataSet.InsuranceChallanNo = $("#txtInsChallan").val();
+            obDataSet.InsurancChallanDate = $("#txtChallanDate").val(); //LCMarginCurrency
+            obDataSet.PolicyNo = $("#txtPolicyNo").val();
+            obDataSet.PolicyDate = $("#txtPolicyDate").val();
+            obDataSet.InvoiceAmount = $("#txtInvoiceAmount").val();
+
+            obDataSet.InvouceCurrency = $("#divInvoiceCurrency").find('.select').val();
+            obDataSet.IncreasePercent = $("#txtIncreasePercent").val();
+            obDataSet.IncreaseAmount = $("#txtIncreasePercent2").val();
+            obDataSet.SumInsured = $("#txtSumInsured").val();
+            obDataSet.ExchangeRate = $("#txtExchangeRate").val();
+            obDataSet.ExchangeRateCurrency = $("#divExchangeRate").find('.select').val();
+            obDataSet.ExchangedSumInsured = $("#txtExcngSum").val();
+
+            obDataSet.LCAmountCurrency = $("#LCAmountCurrency").find('.select').val();
+            obDataSet.MarinePremiumPercent = $("#txtMarinePremium").val();
+            obDataSet.MarinePremiumAmount = $("#txtMarinePremium2").val();
+            obDataSet.DiscountPercent = $("#txtDiscount").val();
+            obDataSet.DiscountAmount = $("#txtDiscount2").val();
+            obDataSet.WarSRCCPercent = $("#txtSRCC").val();
+            obDataSet.WarSRCCPercentAmount = $("#txtSRCC2").val();
+            obDataSet.NetPremium = $("#txtTotalNetPremium").val();
+            obDataSet.VatPercent = $("#txtVAT").val();
+            obDataSet.VatAmount = $("#txtVAT2").val();
+
+            obDataSet.StampDutyRetio = $("#txtStampDuty").val();
+            obDataSet.StampDutyAmount = $("#txtStampDuty2").val();
+            obDataSet.GrandPremium = $("#txtGrandTotal").val();
+
+            obDataSet.RefundPercent = $("#txtRefund").val();
+            obDataSet.RefundAmount = $("#txtRefund2").val();
+
+            obDataSet.PaidAmount = $("#txtPaidAmount").val();
+            obDataSet.RevisionNo = $("#txtReviseNo").val();
+            obDataSet.RevisionDate = $("#txtRevisionDate").val();
+            obDataSet.ApprovalAdvice = $("#txtCheckComment").val();
+            obDataSet.CINo = $("#txtInvoiceNo").val();
+            obDataSet.CIID = $("#txtCIID").val();
+            obDataSet.PIID = $("#txtPIID").val();
+            obDataSet.LCNo = $("#LCNumber").val();
+            $("#divLoading").show();
+            if (obDataSet.InsuranceID == "") {
+                // INSERT DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "InsuranceInfo")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            //  Reset();
+                            $("#InsuranceID").val(data.msg.ReturnId);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+            else {
+                // UPDATE DATA
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update", "InsuranceInfo")',
+                    data: JSON.stringify(obDataSet),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.msg.Type == 2) {
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "red");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+            }
+        }
+        return true;
+    }
+    // ############## Btn Save Operation END #####################
+    $("#btnCheck").click(function () {
+        // CheckRequiredTextBoxMaxLength('txtCheckComment', 300);
+
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '@Url.Action("UpdateRecordStatus", "InsuranceInfo")',
+            type: 'POST',
+            data: { note: $("#txtCheckComment").val(), insuranceID: $("#InsuranceID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnCheck").attr('disabled', 'disabled');
+
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+    $("#btnConfirm").click(function () {
+
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '@Url.Action("ConfirmRecordStatus", "InsuranceInfo")',
+            type: 'POST',
+            data: { insuranceID: $("#InsuranceID").val() },
+            success: function (data) {
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $('#btnSubmit').attr('disabled', true);
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                    $('#btnSubmit').attr('disabled', false);
+                }
+                return true;
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        return false;
+    });
+
+
+    function IsValidInsuranceNo() {
+        if ($("#txtCoverNote").val() != "") {
+            $.ajax({
+                url: '@Url.Action("IsAlreadyExist", "Utility")',
+                type: 'POST',
+                data: { table: "LCM_Insurence", fld: "InsuranceNo", val: $("#txtCoverNote").val(), datatype: "str" },
+                success: function (data) {
+                    if (data == "True") {
+                        $('#MessageText').html("This Cover Note No. Already Exist");
+                        $("#MessageText").css({ 'text-align': "center", 'color': "red", 'font-weight': "bold", 'font-size': "17px" });
+                        $("#txtCoverNote").val("");
+                        return false;
+                    }
+                    else {
+                        $('#MessageText').html("");
+
+                    }
+                }
+            });
+        }
+        return true;
+    }
+
+    function Reset() {
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled');
+        $("#btnChecked").css("display", "block");
+        $("#btnConfirm").css("display", "block");
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        $('.FormBody input[type=text]').css("border-color", "");
+    }
+
+    // #################### PI #######################
+    $(document.body).keypress(function (e) {
+        if ($("#PINo").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetPIInfo", "LCOpening")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data33) {
+                        $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('LCPIGrid');
+                LCPIWindow.open();
+            }
+        }
+    });
+    var LCPIWindow = $('#LCPIWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        groupable: true,
+        title: "List Of PI",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LCPIDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PIID",
+                fields: {
+                    PIID: { editable: false },
+                    PINo: { editable: false },
+                    PIDate: { editable: false },
+                    AdvisingBank: { editable: false },
+                    AdvisingBankName: { editable: false },
+                    BankSwiftCode: { editable: false },
+                    Beneficiary: { editable: false },
+                    BeneficiaryName: { editable: false },
+                    BenificiaryAddress: { editable: false },
+                    BuyerAddressID: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var LCPIGrid = $("#LCPIGrid").kendoGrid({
+        dataSource: LCPIDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              { field: "PINo", title: "PI No" },
+              { field: "PIDate", title: "PI Date" },
+              { field: "AdvisingBankName", title: "AdvisingBank" },
+              { field: "BeneficiaryName", title: "Beneficiary Bank" }
+        ]
+    });
+
+
+    $('#btnLCPIWindowOK').click(function () {
+        ListOfValuePIGridEvent('LCPIGrid');
+        LCPIWindow.close();
+    });
+
+    $('#btnLCPIWindowCancel').click(function () {
+        LCPIWindow.close();
+    });
+
+    $("#LCPIWindow").dblclick(function () {
+        ListOfValuePIGridEvent('LCPIGrid');
+        LCPIWindow.close();
+    });
+
+    $("#LCPIWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuePIGridEvent('LCPIGrid');
+            LCPIWindow.close();
+        }
+        else if (keycode == '27') {
+            LCPIWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnPIGridSearch").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("SearchPIByPI", "LCOpening")',
+            type: 'GET',
+            data: { beni: $("#txtPI").val() },
+            success: function (data33) {
+                $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    ListOfValuePIGridEvent('LCPIGrid');
+                    SearchWindow.close();
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+
+    var dataSource4 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetPISearch", "LCOpening")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtPI").kendoAutoComplete({
+        dataSource: dataSource4,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtPI").keyup(function (event) {
+        if ($("#txtPI").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchPIByPI", "LCOpening")',
+                    type: 'GET',
+                    data: { beni: $("#txtPI").val() },
+                    success: function (data33) {
+                        $("#LCPIGrid").data("kendoGrid").dataSource.data(data33);
+                        if (data33.Count == 1) {
+                            ListOfValuePIGridEvent('LCPIGrid');
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValuePIGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#PINo").val(selectedItem.PINo);
+        $("#PIDate").val(selectedItem.PIDate);
+        $("#txtPIID").val(selectedItem.PIID);
+        $("#AdvisingBank").val(selectedItem.BranchID);
+        $("#BankSwiftCode").val(selectedItem.BankSwiftCode);
+        $("#AdvisingBankName").val(selectedItem.AdvisingBankName);
+
+        $("#BeneficiaryName").val(selectedItem.BeneficiaryName);
+        $("#BenificiaryAddress").val(selectedItem.BenificiaryAddress);
+        $("#Beneficiary").val(selectedItem.Beneficiary);
+        $("#BuyerAddressID").val(selectedItem.BuyerAddressID);
+
+        console.log(selectedItem);
+
+    }
+
+    //################################### CI #####################
+    $(document.body).keypress(function (e) {
+        if ($("#txtInvoiceNo").is(":focus")) {
+            if (e.keyCode == 120) {
+                $.ajax({
+                    url: '@Url.Action("GetAllInvoiceMin", "CommercialInvoice")',
+                    type: 'GET',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $("#CIIDGrid").data("kendoGrid").dataSource.data(data);
+                    }
+                });
+
+                SelectedItemOfListOfValue('CIIDGrid');
+                CIIDWindow.open();
+            }
+        }
+    });
+
+    var CIIDWindow = $('#CIIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of CI",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var CIIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CIID",
+                fields: {
+                    CIID: { editable: false },
+                    CINo: { editable: false },
+                    CIDate: { editable: false },
+                    LCID: { editable: false },
+                    LCNo: { editable: false },
+                    LCDate: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    var CIIDGrid = $("#CIIDGrid").kendoGrid({
+        dataSource: CIIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        groupable: true,
+        height: 300,
+        columns: [
+              //{ field: "BranchID", title: "Branch ID", width: "60px", filterable: false, sortable: false },
+              { field: "CINo", title: "CINo" },
+              { field: "CIDate", title: "CIDate" },
+              { field: "LCNo", title: "L/C No" },
+              { field: "LCDate", title: "L/C Date" }
+        ]
+    });
+
+    $('#btnCIIDWindowOK').click(function () {
+        ListOfValueOpeningCIGridEvent('CIIDGrid');
+        CIIDWindow.close();
+    });
+
+    $('#btnCIIDWindowCancel').click(function () {
+        CIIDWindow.close();
+    });
+
+    $("#CIIDWindow").dblclick(function () {
+        ListOfValueOpeningCIGridEvent('CIIDGrid');
+        CIIDWindow.close();
+    });
+
+    $("#CIIDWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningCIGridEvent('CIIDGrid');
+            CIIDWindow.close();
+        }
+        else if (keycode == '27') {
+            CIIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $("#btnCIGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("SearchCIByNo", "CommercialInvoice")',
+            type: "GET",
+            data: { ciNo: $("#txtOpeningCI").val() },
+            dataType: "JSON",
+            success: function (data33) {
+                console.log(data33);
+                $("#CIIDGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+
+    });
+
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetCINo", "CommercialInvoice")',
+                //data: { bankCategory: "INC", BankType: "LOC" },
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtOpeningCI").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        placeholder: "Search ...",
+    });
+
+    $("#txtOpeningCI").keyup(function (event) {
+        if ($("#txtOpeningCI").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("SearchCIByNo", "CommercialInvoice")',
+                    type: "GET",
+                    data: { ciNo: $("#txtOpeningCI").val() },
+                    dataType: "JSON",
+                    success: function (data33) {
+                        console.log(data33);
+                        $("#CIIDGrid").data("kendoGrid").dataSource.data(data33);
+                    }
+         });
+            }
+        }
+    });
+
+    function ListOfValueOpeningCIGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#txtInvoiceNo").val(selectedItem.CINo);
+        $("#txtCIID").val(selectedItem.CIID);
+        $("#CIDate").val(selectedItem.CIDate);
+    }
+</script>

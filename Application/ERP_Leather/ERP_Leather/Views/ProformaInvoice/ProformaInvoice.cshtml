@@ -1,0 +1,1920 @@
+﻿@{
+    ViewBag.Title = "PI/Indent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script src="~/Scripts/kendo/2013.2.716/kendo.maskedtextbox.min.js"></script>
+<script src="~/Scripts/kendo/2013.2.716/kendo.culture.de-DE.min.js"></script>*@
+<script src="~/Scripts/kendo/2013.2.716/kendo.numerictextbox.min.js"></script>
+<div class="row">
+
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSave" class="Button" value="Save" onclick="Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Document Category<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <select class="txtBox RequiredTextBox Dropdown" id="PICategory" style="width:150px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="PI">Proforma Invoice</option>
+                    <option value="IO">Indent Order</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label>PI / Indent No.<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="PINo" class="txtBox" name="" tabindex="" style="width:150px;" />
+                <input type="hidden" id="PIID" class="txtBox" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Purchase Order No.<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="OrderID" class="txtBox"  />
+                <input type="text" id="OrderNo" class="txtBox" name="" tabindex="" style="width:150px; margin-left:2px;" placeholder="Press F9" readonly="readonly" />
+            </div>
+            <div class="col-lg-2">
+                <label>PI / Indent Date</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="PIDate" class="datePicker" name="" tabindex="" style="width:150px; margin-left:2px;" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Beneficiary<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-10">
+                <input type="hidden" id="BuyerID" class="txtBox" />
+                <input type="text" id="BuyerCode" class="txtBox  " readonly="readonly" style="width: 80px;" placeholder="Press F9" />
+                <input type="text" id="BuyerName" class="txtBox " readonly="readonly" style="width: 266px;" />
+                <input type="text" id="Address" class="txtBox " readonly="readonly" style="width: 266px;" />
+                <input type="text" id="BuyerContactNumber" class="txtBox " readonly="readonly" style="width: 266px;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Supplier</label>
+            </div>
+            <div class="col-lg-10">
+                <input type="hidden" id="SupplierID" class="txtBox">
+                <input type="text" id="SupplierCode" class="txtBox " readonly="readonly"  style="width: 80px;" />
+                <input type="text" id="SupplierName" class="txtBox" readonly="readonly" style="width: 266px;" />
+                <input type="text" id="SupplierAddress" class="txtBox" readonly="readonly" style="width: 266px;" />
+                <input type="text" id="SupplierContactNumber" class="txtBox" readonly="readonly" style="width: 266px;" />
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Local Agent</label>
+            </div>
+            <div class="col-lg-10">
+                <input type="hidden" id="LocalAgent" class="txtBox" />
+                <input type="text" id="LocalAgentCode" class="txtBox " readonly="readonly" style="width: 80px;" />
+                <input type="text" id="LocalAgentName" class="txtBox" readonly="readonly" style="width: 266px;" />
+                <input type="text" id="LocalAgentAddress" class="txtBox" readonly="readonly" style="width: 266px;" />
+                <input type="text" id="LocalAgentContactNumber" class="txtBox" readonly="readonly" style="width: 266px;" />
+            </div>
+
+           
+
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Foreign Agent</label>
+            </div>
+            <div class="col-lg-10">
+                <input type="hidden" id="ForeignAgent" class="txtBox" />
+                <input type="text" id="ForeignAgentCode" class="txtBox  " readonly="readonly" style="width: 80px;" />
+                <input type="text" id="ForeignAgentName" class="txtBox " readonly="readonly" style="width: 266px;" />
+                <input type="text" id="ForeignAgentAddress" class="txtBox " readonly="readonly" style="width: 266px;" />
+                <input type="text" id="ForeignAgentContactNumber" class="txtBox " readonly="readonly" style="width: 266px;" />
+            </div>
+        </div>
+
+       
+    </div>
+
+    <div class="FormBody">
+        <div id="PIGrid"></div>
+        <label id="" style="margin-left:645px;">Total PI Quantity</label>
+        <input type="text" readonly="readonly" class="txtBox" id="TotalPIQuantity" style="width:100px;" />
+        <label id="" style="margin-left:110px;">Total Price</label>
+        <input type="text" readonly="readonly" class="txtBox" id="TotalPrice" style="width:100px;" />
+    </div>
+
+    <div class="FormBody">
+       
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Currency</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("PICurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+            </div>
+
+            <div class="col-lg-2">
+                <label>Delivery Term</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="DeliveryTerm" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="CF">C&F</option>
+                    <option value="EW">Ex Work</option>
+                    <option value="FB">FOB</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Goods Delivery</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="GoodDelivery" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="FCL">FCL</option>
+                    <option value="LCL">LCL</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Payment Term</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="PaymentTerm" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="CD">CAD</option>
+                    <option value="FT">FTT</option>
+                    <option value="LC">LC</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Delivery Mode</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="DeliveryMode" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="BA">By Air</option>
+                    <option value="CR">By Courier</option>
+                    <option value="BR">By Road</option>
+                    <option value="BS">By Sea</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Shipping Mark</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ShippingMark" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 166px;" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Payment Mode</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="PaymentMode" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="ST"> At Sight</option>
+                    <option value="DF">Deffered</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Port of Loading</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="PortofLoading" class="txtBox" />
+                <input type="text" id="PortofLoadingName" class="txtBox" readonly="readonly" style="width: 166px;" placeholder="Press F9" />
+                @*@Html.DropDownList("PortofLoading", new SelectList(ViewBag.PortList, "PortID", "PortName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })*@
+            </div>
+
+            <div class="col-lg-2">
+                <label>Expected Time of Shipment</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ExpectedShipmentTime" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 100px;" />
+                <label>Days</label>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Deferred Days</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="DeferredDays" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="90">90</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="180">180</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Port of Discharge</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="PortofDischarge" class="txtBox" />
+                <input type="text" id="PortofDischargeName" class="txtBox" readonly="readonly" style="width: 166px;" placeholder="Press F9" />
+                @*@Html.DropDownList("PortofDischarge", new SelectList(ViewBag.PortList, "PortID", "PortName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })*@
+            </div>
+
+            <div class="col-lg-2">
+                <label>Packing</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="Packing" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="EQ">Export Standard</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Country of Origin</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="CountryOforigin" class="txtBox" />
+                <input type="text" id="CountryOforiginName" class="txtBox" readonly="readonly" style="width: 166px;" placeholder="Press F9" />
+                @*@Html.DropDownList("CountryOforigin", new SelectList(ViewBag.CountryList, "CountryID", "CountryName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })*@
+            </div>
+
+            <div class="col-lg-2">
+                <label>Transhipment</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="Transshipment" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="TA">Allowed</option>
+                    <option value="TN">Not Allowed</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Pre Shipment Ins.</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="PreShipmentIns" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="IR">Required</option>
+                    <option value="NR">Not Required</option>
+                </select>
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Freight Charge</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="FreightCharge" class="txtBox" name="" tabindex="" style="width: 166px;" />
+            </div>
+           
+            <div class="col-lg-2">
+                <label>Partial Shipment</label>
+            </div>
+            <div class="col-lg-2">
+                <select class="txtBox RequiredTextBox Dropdown" id="PartialShipment" style="width: 166px;">
+                    <option value="" selected="selected">--Select--</option>
+                    <option value="PA">Allowed</option>
+                    <option value="PN">Not Allowed</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Offer Validity</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="OfferValidityDays" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 40px;" />
+                <input type="text" id="OfferValidityNote" class="txtBox RequiredTextBox " name="" tabindex="" style="width: 116px;" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Freight Charge Extra</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="FreightChargeExtra" class="txtBox" name="" tabindex="" style="width: 166px;" />
+            </div>
+            <div class="col-lg-2">
+                <label>Beneficiary Bank<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="BeneficiaryBank" class="txtBox" />
+                <input type="text" id="BeneficiaryBankName" class="txtBox" readonly="readonly" style="" placeholder="Press F9" />
+                @*@Html.DropDownList("BeneficiaryBank", new SelectList(ViewBag.BeneficiaryBankList, "BranchID", "BranchName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })*@
+            </div>
+            
+        </div>
+    </div>
+
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Exchange Currency</label>
+            </div>
+            <div class="col-lg-2">
+                @Html.DropDownList("ExchangeCurrency", new SelectList(ViewBag.CurrencyList, "CurrencyID", "CurrencyName"), "--Select--", new { @class = "txtBox Dropdown RequiredTextBox", @style = "width: 166px; margin-left: 0px;" })
+            </div>
+
+            <div class="col-lg-2">
+                <label>Exchange Rate</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ExchangeRate" class="txtBox RequiredTextBox" name="" tabindex="" style="width: 166px;" />
+
+            </div>
+
+            <div class="col-lg-2">
+                <label>Exchange Amount</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ExchangeValue" readonly="readonly" class="txtBox RequiredTextBox" name="" tabindex="" style="width: 166px;" />
+            </div>
+
+        </div>
+    </div>
+   
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Check Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="ApprovalAdvice" class="txtBox" name="" tabindex=""></textarea>
+                @*<input type="button" id="btnCheck" value="Checked" />*@
+                <input type="button" id="btnConfirm" value="Confirm" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="BeneficiaryWindow" style="display: none;">
+    <div id="BeneficiaryWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBeneficiaryWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBeneficiaryWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="BeneficiaryBankWindow" style="display: none;">
+    <div id="BeneficiaryBankWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBeneficiaryBankWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBeneficiaryBankWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="PortWindow" style="display: none;">
+    <div id="PortWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPortWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPortWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="CountryWindow" style="display: none;">
+    <div id="CountryWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnCountryWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnCountryWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RequisitionWindow" style="display: none;">
+    <div id="RequisitionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRequisitionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRequisitionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Please wait... <img src="../../images/ajax-loading.gif">
+    </p>
+</div>
+
+
+<script type="text/javascript">
+    var ItemGridchangeStatus = 0;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+    $(document).ready(function () {
+
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+        
+        $("#TotalPrice").kendoNumericTextBox({
+            format: "n",
+            decimals: 3
+        });
+        $("#TotalPIQuantity").kendoNumericTextBox({
+            format: "n",
+            decimals: 3
+        });
+
+        $("#ExchangeValue").kendoNumericTextBox({
+            format: "n",
+            decimals: 3
+        });
+       
+        var ddlSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SizeID",
+                    fields: {
+                        SizeID: { editable: false },
+                        SizeName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllPackSizeForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlSize(container, options) {
+            $('<input name="SizeID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "SizeName",
+                        dataValueField: "SizeName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlSizeDataSource
+                    });
+        };
+
+        var ddlUnitForChemicalPackSizeDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemicalPackSize", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemicalPackSize(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalPackSizeDataSource
+                    });
+        };
+
+        var ddlUnitForChemicalDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UnitID",
+                    fields: {
+                        UnitID: { editable: false },
+                        UnitName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllUnitForChemical", "ChemicalForeignPurchaseOrder")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        function ddlUnitForChemical(container, options) {
+            $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        dataTextField: "UnitName",
+                        dataValueField: "UnitName",
+                        optionLabel: "Select",
+                        autoBind: false,
+                        scrolling: false,
+                        change: function (e) {
+                            ItemGridchangeStatus = 1;
+                            changeStatus = 1;
+                            checkUnsavedData = 1;
+                        },
+                        dataSource: ddlUnitForChemicalDataSource
+                    });
+        };
+        //--------------------------------------Start of Defining Datasource & Dropdown-----------------------------------------------------------------
+
+        //--------------------------------------Start of defining Datagrid----------------------------------------------------------------
+
+        var PIGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PIItemID",
+                    fields: {
+                        PIItemID: { editable: true },
+                        PIID: { editable: true },
+                        ItemID: { editable: false },
+                        ItemName: { editable: false },
+                        HSCode: { editable: false },
+                        OrderQty: { editable: false, type: "number", validation: { required: false, min: 0, max: 999999999999 } },
+                        OrderUnitID: { editable: false },
+                        OrderUnitName: { editable: false },
+                        PackSizeID: { editable: true },
+                        PackSizeName: { editable: true },
+                        SizeUnitID: { editable: true },
+                        SizeUnitName: { editable: true },
+                        PackQty: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 } },
+                        PIQty: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 } },
+                        PIUnitID: { editable: true },
+                        PIUnitName: { editable: true },
+                        PIUnitPrice: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 } },
+                        PITotalPrice: { editable: true, type: "number", validation: { required: false, min: 0, max: 999999999999 } },
+                        SupplierID: { editable: true },
+                        ManufacturerID: { editable: true },
+                        ItemSource: { editable: true }
+                    }
+                }
+            },
+            pageSize: 50
+        });
+
+        var PIGrid = $("#PIGrid").kendoGrid({
+            dataSource: PIGridDataSource,
+            pageable: true,
+            editable: true,
+            edit: function (e) {
+                $(".CalculationNeeded").unbind().change(function () {
+                    var grid = $("#PIGrid").data("kendoGrid");
+                    var row = $(this).closest("tr");
+                    e.model.set("PIQty", (grid.dataItem(row).PackSizeName * grid.dataItem(row).PackQty).toFixed(4));
+                    e.model.set("PITotalPrice", (grid.dataItem(row).PIQty * grid.dataItem(row).PIUnitPrice).toFixed(4));
+                    
+                    var TotalPrice = 0.00;
+                    var TotalPIQuantity = 0.00;
+                    var PIGridDataSource = $("#PIGrid").data("kendoGrid").dataSource;
+                    var PIGridData = PIGridDataSource.data();
+                    for (i = PIGridData.length - 1; i >= 0; i--) {
+                        TotalPrice = TotalPrice + parseFloat(PIGridData[i].PITotalPrice);
+                        TotalPIQuantity = TotalPIQuantity + parseFloat(PIGridData[i].PIQty);
+                    }
+
+                    var TotalPriceValue = $("#TotalPrice").data("kendoNumericTextBox");
+                    TotalPriceValue.value(TotalPrice);
+
+                    var TotalPIQuantityValue = $("#TotalPIQuantity").data("kendoNumericTextBox");
+                    TotalPIQuantityValue.value(TotalPIQuantity);
+                   
+
+                    //To calculate Exchanged Total
+                    var ExchangeAmount = parseFloat(($("#ExchangeRate").val()) * $("#TotalPrice").val());
+
+                    var ExchangeValue = $("#ExchangeValue").data("kendoNumericTextBox");
+                    ExchangeValue.value(ExchangeAmount);
+
+                    //$("#ExchangeValue").val(ExchangeAmount.toFixed(2));
+                });
+                
+
+                var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                if (ddl) {
+                    ddl.open();
+                }
+            },
+            dataBound: function (e) {
+                var TotalPrice = 0.00;
+                var TotalPIQuantity = 0.00;
+
+                var PIGridDataSource = $("#PIGrid").data("kendoGrid").dataSource;
+                var PIGridData = PIGridDataSource.data();
+                for (i = PIGridData.length - 1; i >= 0; i--) {
+                    TotalPrice = TotalPrice + parseFloat(PIGridData[i].PITotalPrice);
+                    TotalPIQuantity = TotalPIQuantity + parseFloat(PIGridData[i].PIQty);
+                }
+
+                var TotalPriceValue = $("#TotalPrice").data("kendoNumericTextBox");
+                TotalPriceValue.value(TotalPrice);
+
+                var TotalPIQuantityValue = $("#TotalPIQuantity").data("kendoNumericTextBox");
+                TotalPIQuantityValue.value(TotalPIQuantity);
+                
+
+                var ExchangeAmount = parseFloat(($("#ExchangeRate").val()) * $("#TotalPrice").val());
+
+                var ExchangeValue = $("#ExchangeValue").data("kendoNumericTextBox");
+                ExchangeValue.value(ExchangeAmount);
+
+               
+            },
+            selectable: "row",
+            groupable: true,
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 450,
+            columns: [
+                    { field: "ItemName", title: "Chemical", width: "140px" },
+                    { field: "HSCode", title: "H.S. Code", width: "100px", attributes: { style: "background-color: silver" } },
+                    { field: "OrderQty", title: "Order Qty", width: "75px", attributes: { style: "background-color: silver" }, format: "{0:n2}" },
+                    { field: "OrderUnitName", title: "Unit", width: "60px", editor: ddlUnitForChemical, attributes: { style: "background-color: silver" } },
+                    { field: "PackSizeName", title: "Pack Size<span style='color:red'>*</span>", width: "60px", editor: ddlSize, attributes: { "class": "CalculationNeeded" } },
+                    { field: "SizeUnitName", title: "Unit<span style='color:red'>*</span>", width: "60px", editor: ddlUnitForChemicalPackSize },
+                    { field: "PackQty", format: "{0:n2}", title: "Pack Qty<span style='color:red'>*</span>", width: "70px", attributes: { "class": "CalculationNeeded" } },
+                    { field: "PIQty", format: "{0:n2}", title: "PI Qty<span style='color:red'>*</span>", width: "80px", attributes: {"class": "CalculationNeeded" , style: "background-color: silver" } },
+                    { field: "PIUnitName",  title: "Unit<span style='color:red'>*</span>", width: "60px", editor: ddlUnitForChemical },
+                    { field: "PIUnitPrice", editor: numberEditor, format: "{0:n4}", title: "Unit Price<span style='color:red'>*</span>", width: "80px", attributes: { "class": "CalculationNeeded" } },
+                    { field: "PITotalPrice", editor: numberEditor, format: "{0:n4}", title: "Total Price<span style='color:red'>*</span>", width: "80px", attributes: { style: "background-color: silver" } },
+
+                    //{ field: "SupplierID", title: "SupplierID", width: "80px" },
+                    { command: [{ name: "DeltedRow", text: "Delete", click: DeleteItem }], title: "Action", width: 70 }
+            ]
+
+        }).data('kendoGrid');
+
+        function numberEditor(container, options) {
+            $('<input name="' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoNumericTextBox({
+                        format: "{0:n4}",
+                        decimals: 4
+                        //step: 0.001
+                    });
+        }
+
+
+
+        var RequisitionLOVGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "OrderID",
+                    fields: {
+                        OrderID: { editable: false },
+                        OrderNo: { editable: false },
+                        OrderTo: { editable: false },
+                        OrderDate: { editable: false },
+                        OrderType: { editable: false },
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false },
+                        LocalAgent: { editable: false },
+                        LocalAgentName: { editable: false },
+                        ForeignAgent: { editable: false },
+                        ForeignAgentName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetOrderInformationForLOV", "ProformaInvoice")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        var RequisitionLOVGrid = $("#RequisitionWindowGrid").kendoGrid({
+            dataSource: RequisitionLOVGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            autoBind: false,
+            columns: [
+                  //{ field: "OrderID", title: "Order ID", width: "60px" },
+                  { field: "OrderNo", title: "Order No.", width: "60px" },
+                  { field: "OrderTo", title: "Order To", width: "60px" },
+                  { field: "OrderDate", title: "Order Date", width: "80px" },
+                  { field: "OrderType", title: "Order Type", width: "60px" },
+                  { field: "SupplierName", title: "SupplierName", width: "60px" },
+                  { field: "LocalAgentName", title: "Local Agent", width: "60px" },
+                  { field: "ForeignAgentName", title: "Foreign Agent", width: "70px" }
+            ]
+        });
+
+
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PIID",
+                    fields: {
+                        PIID: { editable: false },
+                        PINo: { editable: false },
+                        PIDate: { editable: false },
+                        PICategory: { editable: false },
+                        SupplierName: { editable: false },
+                        LocalAgentName: { editable: false },
+                        ForeignAgentName: { editable: false },
+                        RecordStatus: { editable: false }
+
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetPIInformationForSearch", "ProformaInvoice")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            }
+        });
+
+        var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 320,
+            columns: [
+                  { field: "PINo", title: "PI Number", width: "60px" },
+                  { field: "PIDate", title: "PI Date", width: "60px" },
+                  { field: "PICategory", title: "PI Category", width: "80px" },
+                  { field: "SupplierName", title: "Supplier", width: "60px" },
+                  { field: "LocalAgentName", title: "Local Agent", width: "60px" },
+                  { field: "ForeignAgentName", title: "Foreign Agent", width: "80px" },
+                  { field: "RecordStatus", title: "Record Status", width: "80px" }
+            ]
+        });
+
+        var BeneficiaryWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BuyerID",
+                    fields: {
+                        BuyerID: { editable: false },
+                        BuyerCode: { editable: false },
+                        BuyerName: { editable: false },
+                        Address: { editable: false },
+                        BuyerAddressID: { editable: false },
+                        BuyerContactNumber: { editable: false }
+
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetBuyerListForPI", "ProformaInvoice")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var BeneficiaryGrid = $("#BeneficiaryWindowGrid").kendoGrid({
+            dataSource: BeneficiaryWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "BuyerCode", title: "Beneficiary Code", width: "60px" },
+                  { field: "BuyerName", title: "Beneficiary Name", width: "60px" },
+                  { field: "Address", title: "Address", width: "60px" },
+                  { field: "BuyerContactNumber", title: "Contact Number", width: "60px" }
+            ]
+        });
+
+
+        var BeneficiaryBankWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BranchID",
+                    fields: {
+                        BranchID: { editable: false },
+                        BranchName: { editable: false },
+                        BankName: { editable: false },
+                        BankType: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetBeneficiaryAdvisingBankList", "ProformaInvoice")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var BeneficiaryBankWindowGrid = $("#BeneficiaryBankWindowGrid").kendoGrid({
+            dataSource: BeneficiaryBankWindowGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 500,
+            columns: [
+                  { field: "BranchName", title: "Branch", width: "60px" },
+                  { field: "BankName", title: "Bank", width: "60px" },
+                  { field: "BankType", title: "Bank Type", width: "60px" }
+            ]
+        });
+
+        var PortWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PortID",
+                    fields: {
+                        PortID: { editable: false },
+                        PortCode: { editable: false },
+                        PortName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllPortList", "ProformaInvoice")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var PortWindowGrid = $("#PortWindowGrid").kendoGrid({
+            dataSource: PortWindowGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "PortCode", title: "Port Code", width: "60px" },
+                  { field: "PortName", title: "Port Name", width: "60px" }
+            ]
+        });
+
+        var CountryWindowGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "CountryID",
+                    fields: {
+                        CountryID: { editable: false },
+                        CountryCode: { editable: false },
+                        CountryName: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetAllCountryList", "ProformaInvoice")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var CountryWindowGrid = $("#CountryWindowGrid").kendoGrid({
+            dataSource: CountryWindowGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            groupable: true,
+            height: 300,
+            columns: [
+                  { field: "CountryCode", title: "Country Code", width: "60px" },
+                  { field: "CountryName", title: "Country Name", width: "60px" }
+            ]
+        });
+
+
+        //--------------------------------------End of defining Datagrid----------------------------------------------------------------
+
+
+        //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+        var Port = "";
+        $(document.body).keyup(function (e) {
+
+            if ($("#BuyerCode").is(":focus")) {
+                if (e.keyCode == 120) {
+
+                    SelectedItemOfListOfValue('BeneficiaryWindowGrid');
+                    BeneficiaryWindow.open();
+                    BeneficiaryWindow.center();
+                }
+            }
+
+            else if ($("#OrderNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('RequisitionWindowGrid');
+                    RequisitionWindow.open();
+                    RequisitionWindow.center();
+                }
+            }
+            else if ($("#BeneficiaryBankName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('BeneficiaryBankWindowGrid');
+                    BeneficiaryBankWindow.open();
+                    BeneficiaryBankWindow.center();
+                }
+            }
+            else if ($("#CountryOforiginName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('CountryWindowGrid');
+                    CountryWindow.open();
+                    CountryWindow.center();
+                }
+            }
+            else if ($("#PortofLoadingName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('PortWindowGrid');
+                    PortWindow.open();
+                    PortWindow.center();
+                    Port = "Loading";
+                }
+            }
+
+            else if ($("#PortofDischargeName").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('PortWindowGrid');
+                    PortWindow.open();
+                    PortWindow.center();
+                    Port = "Discharge";
+                }
+            }
+        });
+
+        //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+        //---------------------------------------------Start of defining popup Window-----------------------------------------------
+
+        var SearchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Proforma Invoice/Indent",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        var BeneficiaryWindow = $('#BeneficiaryWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Supplier",
+            position: { top: 10, left: 10 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BeneficiaryBankWindow = $('#BeneficiaryBankWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Bank",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var CountryWindow = $('#CountryWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Country",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var PortWindow = $('#PortWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "List Of Port",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var RequisitionWindow = $('#RequisitionWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "auto",
+            height: "auto",
+            title: "Purchase List",
+            position: { top: 50, left: 5 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //---------------------------------------------End of defining popup Window-----------------------------------------------
+
+
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(GridName) {
+            var grid = $('#' + GridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+
+
+
+        ClearOperationalMessage();
+        ClearRequiredTextBoxRedColor();
+        CheckUnSavedOnlyMasterData();
+
+
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            max: new Date()
+        });
+
+        // Display Date into kendo Grid Row
+        function dateTimeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                    .appendTo(container)
+                    .kendoDatePicker({
+                        value: new Date(),
+                        max: new Date()
+                        //change: function () {
+                        //    alert("CalculationNeeded");
+                        //}
+                    });
+        }
+        //-------------------------------------------------Common Function--------------------------------------------------------
+
+
+
+        //-----------------------------------------------Handling all the pop up window events------------------------------------------
+
+        //To bring data from search window to main page
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            $.ajax({
+                url: '@Url.Action("GetPIDetailsAfterSearch", "ProformaInvoice")',
+                data: ({ "PIID": selectedItem.PIID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    //ResetData();
+                    if (response != null) {
+                        $.each(response, function (key, value) {
+                            if (value != null && value != 0)
+                                $('#' + key).val(value);
+                        });
+                    };
+
+                    //SelectedItemOfListOfValue('ChallanGrid');
+                    $("#PIGrid").data("kendoGrid").dataSource.data(response.PIItemList);
+                    PageStatus = response.RecordStatus;
+                    CheckRecordStatusForButton(PageStatus);
+                }
+            });
+        };
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+            //var ExchangeAmount = parseFloat(($("#ExchangeRate").val()) * $("#TotalPrice").val()).toFixed(2);
+            //alert(ExchangeAmount);
+            //$("#ExchangeValue").val(ExchangeAmount);
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            SearchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                SearchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                SearchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        // Handling button click for Supplier window grid
+        $('#btnBeneficiaryWindowOK').click(function () {
+            ListOfValueGridEvent('BeneficiaryWindowGrid');
+            BeneficiaryWindow.close();
+        });
+        $('#btnBeneficiaryWindowCancel').click(function () {
+            BeneficiaryWindow.close();
+        });
+        $("#BeneficiaryWindowGrid").dblclick(function () {
+            ListOfValueGridEvent('BeneficiaryWindowGrid');
+            BeneficiaryWindow.close();
+        });
+        $("#BeneficiaryWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEvent('BeneficiaryWindowGrid');
+                BeneficiaryWindow.close();
+
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BeneficiaryWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //Handling button click for Location window grid
+        function RequisitionWindowEvent() {
+            var WindowGrid = $("#RequisitionWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            var PageGrid = $("#PIGrid").data("kendoGrid");
+            var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+            //var dataRows = PageGrid.items();
+            //var rowIndex = dataRows.index(PageGrid.select());
+
+            //PageGridItem.set("RequisitionID", WindowGridItem.RequisitionID);
+            //PageGridItem.set("RequisitionNo", WindowGridItem.RequisitionNo);
+
+            $("#OrderID").val(WindowGridItem.OrderID);
+            $("#OrderNo").val(WindowGridItem.OrderNo);
+
+            $("#SupplierID").val(WindowGridItem.SupplierID);
+            $("#SupplierCode").val(WindowGridItem.SupplierCode);
+            $("#SupplierName").val(WindowGridItem.SupplierName);
+            $("#SupplierAddress").val(WindowGridItem.SupplierAddress);
+            $("#SupplierContactNumber").val(WindowGridItem.SupplierContactNumber);
+
+            $("#LocalAgent").val(WindowGridItem.LocalAgent);
+            $("#LocalAgentCode").val(WindowGridItem.LocalAgentCode);
+            $("#LocalAgentName").val(WindowGridItem.LocalAgentName);
+            $("#LocalAgentAddress").val(WindowGridItem.LocalAgentAddress);
+            $("#LocalAgentContactNumber").val(WindowGridItem.LocalAgentContactNumber);
+
+            $("#ForeignAgent").val(WindowGridItem.ForeignAgent);
+            $("#ForeignAgentCode").val(WindowGridItem.ForeignAgentCode);
+            $("#ForeignAgentName").val(WindowGridItem.ForeignAgentName);
+            $("#ForeignAgentAddress").val(WindowGridItem.ForeignAgentAddress);
+            $("#ForeignAgentContactNumber").val(WindowGridItem.ForeignAgentContactNumber);
+
+            $.ajax({
+                url: '@Url.Action("GetOrderItemListForLOV", "ProformaInvoice")',
+                data: ({ "OrderID": WindowGridItem.OrderID }),
+                type: 'GET',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    $("#PIGrid").data("kendoGrid").dataSource.data(response);
+                }
+            });
+
+            changeStatus = 1;
+
+
+            //PageGrid.editCell($("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ") td:eq(1)"));
+
+            //$("#RequisitionGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+            //if (rowIndex > 0)
+            //    $("#RequisitionGrid tr:eq(1)").removeClass('k-state-selected');
+
+
+        };
+
+        $('#btnRequisitionWindowOK').click(function () {
+            RequisitionWindowEvent();
+            RequisitionWindow.close();
+        });
+        $('#btnRequisitionWindowCancel').click(function () {
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").dblclick(function () {
+            RequisitionWindowEvent();
+            RequisitionWindow.close();
+        });
+        $("#RequisitionWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                RequisitionWindowEvent();
+                RequisitionWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                RequisitionWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Beneficiary Bank window grid
+        function BeneficiaryBankWindowEvent() {
+            var WindowGrid = $("#BeneficiaryBankWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $("#BeneficiaryBank").val(WindowGridItem.BranchID);
+            $("#BeneficiaryBankName").val(WindowGridItem.BranchName);
+            changeStatus = 1;
+        };
+
+        $('#btnBeneficiaryBankWindowOK').click(function () {
+            BeneficiaryBankWindowEvent();
+            BeneficiaryBankWindow.close();
+        });
+        $('#btnBeneficiaryBankWindowCancel').click(function () {
+            BeneficiaryBankWindow.close();
+        });
+        $("#BeneficiaryBankWindow").dblclick(function () {
+            BeneficiaryBankWindowEvent();
+            BeneficiaryBankWindow.close();
+        });
+        $("#BeneficiaryBankWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                BeneficiaryBankWindowEvent();
+                BeneficiaryBankWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BeneficiaryBankWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //Handling button click for Country window grid
+        function CountryWindowEvent() {
+            var WindowGrid = $("#CountryWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $("#CountryOforigin").val(WindowGridItem.CountryID);
+            $("#CountryOforiginName").val(WindowGridItem.CountryName);
+            changeStatus = 1;
+        };
+
+        $('#btnCountryWindowOK').click(function () {
+            CountryWindowEvent();
+            CountryWindow.close();
+        });
+        $('#btnCountryWindowCancel').click(function () {
+            CountryWindow.close();
+        });
+        $("#CountryWindow").dblclick(function () {
+            CountryWindowEvent();
+            CountryWindow.close();
+        });
+        $("#CountryWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                CountryWindowEvent();
+                CountryWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                CountryWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //Handling button click for Port window grid
+        function PortWindowEvent() {
+            var WindowGrid = $("#PortWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            if (Port == "Loading")
+            {
+                $("#PortofLoading").val(WindowGridItem.PortID);
+                $("#PortofLoadingName").val(WindowGridItem.PortName);
+            }
+            else
+            {
+                $("#PortofDischarge").val(WindowGridItem.PortID);
+                $("#PortofDischargeName").val(WindowGridItem.PortName);
+            }
+            
+            changeStatus = 1;
+        };
+
+        $('#btnPortWindowOK').click(function () {
+            PortWindowEvent();
+            PortWindow.close();
+        });
+        $('#btnPortWindowCancel').click(function () {
+            PortWindow.close();
+        });
+        $("#PortWindow").dblclick(function () {
+            PortWindowEvent();
+            PortWindow.close();
+        });
+        $("#PortWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                PortWindowEvent();
+                PortWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                PortWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //-----------------------------------------------End of Handling all the pop up window events------------------------------------------
+
+        //------------------------------------Start of Handling of all the button event----------------------------------------
+        $("#btnReset").click(function () {
+            resetEditStatus = 1; // 1 for reset
+
+            if (changeStatus == 0) {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "white");
+                //ItemGridchangeStatus = 0;
+                $("#PIGrid").data('kendoGrid').dataSource.data([]);
+            }
+            else {
+                OpenSaveChangesDialog(); // Probelm opening window!
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            resetEditStatus = 2; // 2 for Search
+
+            if (changeStatus == 0) {
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else {
+                OpenSaveChangesDialog(); // Probelm opening window!
+            }
+        });
+
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditStatus == 1) //For reset
+            {
+                PageStatus = "NCF";
+                CheckRecordStatusForButton(PageStatus);
+                ResetOnlyMasterPageData();
+                //ItemGridchangeStatus = 0;
+                $("#PIGrid").data('kendoGrid').dataSource.data([]);
+                //$("#ItemGrid").data('kendoGrid').dataSource.data([]);
+                CloseSaveChangesDialog();
+                changeStatus = 0;
+            }
+            else if (resetEditStatus == 2) // For Search
+            {
+                CloseSaveChangesDialog();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            }
+            else if (resetEditStatus == 3) // For PI Item Delete from Grid
+            {
+                DeleteFrom = 1;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+
+            else if (resetEditStatus == 5) // For Purchase Delete
+            {
+                DeleteFrom = 3;
+                CloseSaveChangesDialog();
+                OpenConfirmationDialog();
+            }
+        });
+
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        $("#btnConfirm").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("ConfirPI", "ProformaInvoice")',
+                type: 'GET',
+                data: { "PIID": $("#PIID").val(), "confirmComment": $("#ApprovalAdvice").val() },
+                success: function (response) {
+
+                    if (response.Msg == "Success") {
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html("Confirmation Successful");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#PIGrid").data('kendoGrid').dataSource.data([]);
+                        PageStatus = "CNF";
+                        CheckRecordStatusForButton(PageStatus);
+                        changeStatus = 0;
+
+
+                    } else if (response.Msg == "Fail") {
+                        $('#MessageText').html("Confirmation Failed");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        //$("#AdjustmentGrid").data('kendoGrid').dataSource.data([]);
+                    }
+
+                } //End of success call
+            });
+        });
+        //------------------------------------End of Handling of all the button event----------------------------------------
+
+
+
+        //------------------------------To Add new row to any grid----------------------------------------------------
+
+        $("#PIGrid").on('input', function () {
+            changeStatus = 1;
+        });
+        //------------------------------End of Adding new row to any grid----------------------------------------------------
+
+        //--------------------------------Handling Delete Event-------------------------------------------------------------
+        var DeleteFrom = 0;
+
+        function DeleteItem(event) {
+            if (changeStatus == 0) {
+                DeleteFrom = 1;
+                dataitem = PIGrid.dataItem($(event.currentTarget).closest("tr"));
+                OpenConfirmationDialog();
+            }
+            else {
+                dataitem = PIGrid.dataItem($(event.currentTarget).closest("tr"));
+                resetEditStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+        $("#btnDelete").click(function () {
+            if (changeStatus == 0) {
+                DeleteFrom = 3;
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditStatus = 5;
+                OpenSaveChangesDialog();
+            }
+        });
+
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (DeleteFrom == 1) // PIItem Delete
+            {
+                if (dataitem.PIItemID == 0) {
+                    $("#PIGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeletePIItem", "ProformaInvoice")',
+                        type: 'GET',
+                        data: { "_PIItemID": dataitem.PIItemID, "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#PIGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+
+            else if (DeleteFrom == 3) //PI Delete
+            {
+                var PIGridDataSource = $("#PIGrid").data("kendoGrid").dataSource;
+                var PIGridData = PIGridDataSource.data();
+                if (PIGridData.length > 0) {
+                    $('#MessageText').html("PI Item Found.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeletePI", "ProformaInvoice")',
+                        type: 'GET',
+                        data: { "_PIID": $("#PIID").val(), "_PageStatus": PageStatus },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                ResetOnlyMasterPageData();
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+            CloseConfirmationDialog();
+        });
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+        //---------------------------------End of handling Delete Event-----------------------------------------------------
+
+        $("#ExchangeRate").blur(function () {
+            
+            var ExchangeAmount = parseFloat(($("#ExchangeRate").val()) * $("#TotalPrice").val()).toFixed(2);
+            //$("#ExchangeValue").val(ExchangeAmount);
+
+            var ExchangeValue = $("#ExchangeValue").data("kendoNumericTextBox");
+            ExchangeValue.value(ExchangeAmount);
+        });
+
+    });//End of Document.Ready()
+
+
+//-----------------------------------To Save Data------------------------------------------------------------------------------------
+
+var PIItemList = {
+    "PIItemID": "", "PIID": "", "ItemID": "", "OrderQty": "", "OrderUnitName": "", "PackSizeName": "", "SizeUnitName": "",
+    "PackQty": "", "PIQty": "", "PIUnitName": "", "PIUnitPrice": "", "PITotalPrice": "", "SupplierID": ""
+};
+
+var FinalObject = {
+    "PIID": "", "PINo": "", "OrderID": "", "OrderNo": "", "PIDate": "", "PICategory": "", "SupplierID": "", "LocalAgent": "", "ForeignAgent": "",
+    "BuyerID": "", "BuyerAddressID": "", "PICurrency": "", "ExchangeCurrency": "", "ExchangeRate": "",
+    "ExchangeValue": "", "PaymentTerm": "", "PaymentMode": "", "DeferredDays": "", "CountryOforigin": "", "BeneficiaryBank": "", "AdvisingBank": "",
+    "DeliveryTerm": "", "DeliveryMode": "", "PortofLoading": "", "PortofDischarge": "", "Transshipment": "", "PartialShipment": "",
+    "GoodDelivery": "", "ShippingMark": "", "ExpectedShipmentTime": "", "Packing": "", "PreShipmentIns": "",
+    "OfferValidityDays": "", "OfferValidityNote": "", "ApprovalAdvice": "", "FreightCharge": "", "FreightChargeExtra": "", "PIItemList": []
+};
+var saveStatus = 1;
+function Save() {
+    saveStatus = 1;
+    CheckRequiredTextBoxMaxLength('OrderNo', 50);
+    CheckRequiredTextBoxMaxLength('PICategory', 10);
+    CheckRequiredTextBoxMaxLength('PINo', 30);
+    CheckRequiredTextBoxMaxLength('BeneficiaryBank', 200);
+    CheckRequiredTextBoxMaxLength('BuyerCode', 200);
+
+    var PIGridDataSource = $("#PIGrid").data("kendoGrid").dataSource;
+    var PIGridData = PIGridDataSource.data();
+    for (var i = PIGridData.length - 1; i >= 0; i--) {
+        if (PIGridData[i].PackSizeID == "" || PIGridData[i].SizeUnitID == "" || PIGridData[i].PackQty == "" ||
+            PIGridData[i].PIQty == "" || PIGridData[i].PIUnitID == "" || PIGridData[i].PIUnitPrice == "" ||
+            PIGridData[i].PITotalPrice == "") {
+            saveStatus = 0;
+            break;
+        }
+    }
+    if (saveStatus == 1) {
+        FinalObject.OrderID = $("#OrderID").val();
+        FinalObject.OrderNo = $("#OrderNo").val();
+        FinalObject.PIID = $("#PIID").val();
+        FinalObject.PINo = $("#PINo").val();
+        FinalObject.PIDate = $("#PIDate").val();
+        FinalObject.PICategory = $("#PICategory").val();
+        FinalObject.SupplierID = $("#SupplierID").val();
+        FinalObject.LocalAgent = $("#LocalAgent").val();
+        FinalObject.ForeignAgent = $("#ForeignAgent").val();
+        FinalObject.BuyerID = $("#BuyerID").val();
+        FinalObject.BuyerAddressID = $("#BuyerAddressID").val();
+        FinalObject.PICurrency = $("#PICurrency").val();
+        FinalObject.ExchangeCurrency = $("#ExchangeCurrency").val();
+        FinalObject.ExchangeRate = $("#ExchangeRate").val();
+        FinalObject.ExchangeValue = $("#ExchangeValue").val();
+        FinalObject.PaymentTerm = $("#PaymentTerm").val();
+        FinalObject.PaymentMode = $("#PaymentMode").val();
+        FinalObject.DeferredDays = $("#DeferredDays").val();
+        FinalObject.CountryOforigin = $("#CountryOforigin").val();
+        FinalObject.BeneficiaryBank = $("#BeneficiaryBank").val();
+        FinalObject.AdvisingBank = $("#AdvisingBank").val();
+        FinalObject.DeliveryTerm = $("#DeliveryTerm").val();
+        FinalObject.DeliveryMode = $("#DeliveryMode").val();
+        FinalObject.PortofLoading = $("#PortofLoading").val();
+        FinalObject.PortofDischarge = $("#PortofDischarge").val();
+        FinalObject.Transshipment = $("#Transshipment").val();
+        FinalObject.PartialShipment = $("#PartialShipment").val();
+
+        FinalObject.GoodDelivery = $("#GoodDelivery").val();
+        FinalObject.ShippingMark = $("#ShippingMark").val();
+        FinalObject.ExpectedShipmentTime = $("#ExpectedShipmentTime").val();
+        FinalObject.Packing = $("#Packing").val();
+        FinalObject.PreShipmentIns = $("#PreShipmentIns").val();
+
+        FinalObject.OfferValidityDays = $("#OfferValidityDays").val();
+        FinalObject.OfferValidityNote = $("#OfferValidityNote").val();
+        FinalObject.ApprovalAdvice = $("#ApprovalAdvice").val();
+        FinalObject.FreightCharge = $("#FreightCharge").val();
+        FinalObject.FreightChargeExtra = $("#FreightChargeExtra").val();
+
+        for (var i = PIGridData.length - 1; i >= 0; i--) {
+            //if (PIGridData[i].dirty) {
+            PIItemList.PIItemID = PIGridData[i].PIItemID;
+            PIItemList.PIID = PIGridData[i].PIID;
+            PIItemList.ItemID = PIGridData[i].ItemID;
+            PIItemList.OrderQty = PIGridData[i].OrderQty;
+            PIItemList.OrderUnitName = PIGridData[i].OrderUnitName;
+            PIItemList.PackSizeName = PIGridData[i].PackSizeName;
+            PIItemList.SizeUnitName = PIGridData[i].SizeUnitName;
+            PIItemList.PackQty = PIGridData[i].PackQty;
+            PIItemList.PIQty = PIGridData[i].PIQty;
+            PIItemList.PIUnitName = PIGridData[i].PIUnitName;
+            PIItemList.PIUnitPrice = PIGridData[i].PIUnitPrice;
+            PIItemList.PITotalPrice = PIGridData[i].PITotalPrice;
+            PIItemList.SupplierID = PIGridData[i].SupplierID;
+
+            FinalObject.PIItemList.push(PIItemList);
+            PIItemList = {
+                "PIItemID": "", "PIID": "", "ItemID": "", "OrderQty": "", "OrderUnitName": "", "PackSizeName": "", "SizeUnitName": "",
+                "PackQty": "", "PIQty": "", "PIUnitName": "", "PIUnitPrice": "", "PITotalPrice": "", "SupplierID": ""
+            };
+            //}
+        }
+
+        if (changeStatus == 1) {
+            $.ajax({
+                url: '@Url.Action("ProformaInvoice", "ProformaInvoice")',
+                data: JSON.stringify(FinalObject),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#divLoading").show();
+                },
+                complete: function () {
+                    $("#divLoading").hide();
+                },
+                success: function (response) {
+                    ItemGridchangeStatus = 0;
+                    if (response.Msg.Type == 2) {
+
+                        $('#MessageText').html(response.Msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        $("#PIID").val(response.PIID);
+                        //$("#PINo").val(response.PINo);
+
+                        $("#PIGrid").data('kendoGrid').dataSource.data(response.PIItemList);
+                        changeStatus = 0;
+                        PageStatus = "NCF";
+
+                    }
+                    else if (response.Msg.Type == 3) {
+                        ItemGridchangeStatus = 0;
+                        $('#MessageText').html(response.Msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+
+                        $("#PIGrid").data('kendoGrid').dataSource.data(response.PIItemList);
+                        changeStatus = 0;
+                        PageStatus = "NCF";
+
+                    }
+                    else {
+                        $('#MessageText').html(response.Msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                    }
+                } //End of success call
+            }); //End of ajax call
+        }
+        else {
+            $("#MessageText").html("No Changes to Save.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+    }
+    else {
+        $("#MessageText").html("Please Enter the Required Data Properly.");
+        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+    }
+
+    FinalObject = {
+        "PIID": "", "PINo": "", "OrderID": "", "OrderNo": "", "PIDate": "", "PICategory": "", "SupplierID": "", "LocalAgent": "", "ForeignAgent": "",
+        "BuyerID": "", "BuyerAddressID": "", "PICurrency": "", "ExchangeCurrency": "", "ExchangeRate": "",
+        "ExchangeValue": "", "PaymentTerm": "", "PaymentMode": "", "DeferredDays": "", "CountryOforigin": "", "BeneficiaryBank": "", "AdvisingBank": "",
+        "DeliveryTerm": "", "DeliveryMode": "", "PortofLoading": "", "PortofDischarge": "", "Transshipment": "", "PartialShipment": "",
+        "GoodDelivery": "", "ShippingMark": "", "ExpectedShipmentTime": "", "Packing": "", "PreShipmentIns": "", "FreightCharge": "", "FreightChargeExtra": "",
+        "OfferValidityDays": "", "OfferValidityNote": "", "ApprovalAdvice": "", "PIItemList": []
+    };
+};
+
+//-----------------------------------End of Saving Data------------------------------------------------------------------------------------
+</script>

@@ -1,0 +1,590 @@
+﻿@{
+    ViewBag.Title = "Finish Leather Issue ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("FinishedLeatherIssueRpt", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="FormHeader">
+        <div class="row">
+            <div id="FormTitlePannel" class="col-lg-3">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Finish Leather Issue & Stock Report </div>
+            </div>
+            <div id="MessageText" class="col-lg-5">
+
+            </div>
+            <div class="col-lg-2" style="">
+                <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+                <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" id="btnShowReport" value="Show Report" style="position: absolute; right:110px;" />
+                <input type="button" id="btnReset" value="Reset" style="position: absolute; right: 50px;" />
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-5" style="padding-left: 0; padding-right: 0;">
+
+                @*<div id="buyerInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Buyer</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="BuyerCode" class="txtBox" name="BuyerCode" placeholder="Press F9" readonly="readonly" />
+                        <input type="text" id="BuyerName" name="BuyerName" class="txtBox" readonly="readonly" />
+                        <input type="hidden" id="BuyerID" class="txtBox" name="BuyerID" />
+                    </div>
+                </div>*@
+
+                <div id="buyerInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Challan No</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="ArticleChallanNo" class="txtBox" name="ArticleChallanNo" placeholder="Press F9" readonly="readonly" />
+
+                        <input type="text" id="ArticleChallanID" class="txtBox" name="ArticleChallanID" />
+                    </div>
+                </div>
+
+                <div id="buyerInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Article No</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="ArticleNo" class="txtBox" name="ArticleNo" placeholder="Press F9" readonly="readonly" value="" />
+
+                        <input type="hidden" id="ArticleID" class="txtBox" name="ArticleID" value="" />
+                    </div>
+                </div>
+
+                <div class="row col-lg-12" style="margin-bottom: 15px;">
+                    <div class="col-lg-3">
+                        <label style="">From Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateFrom" name="DateFrom" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <label style="padding-right: 0; padding-left: 0; margin-left: 50px;">To Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateTo" name="DateTo" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-5" style="padding-left: 0; padding-right: 0;">
+              
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Issue Details</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" checked="checked" id="AllIssues" name="ReportName" value="AllIssues" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Challan Wise Finish Leather Issues</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ChallanWiseIssue" name="ReportName" value="ChallanWiseIssue" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Articale Wise Finish Leather Issues</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ArticleWiseIssue" name="ReportName" value="ArticleWiseIssue" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Buyer Wise Finish Leather Issues</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="BuyerWiseIssue" name="ReportName" value="BuyerWiseIssue" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Daily Finish Leather Issues</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="DailyIssue" name="ReportName" value="DailyIssue" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Challan Wise Finish Leather Stock</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ChallanWiseStock" name="ReportName" value="ChallanWiseStock" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Articale Wise Finish Leather Stock</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ArticalWiseStock" name="ReportName" value="ArticalWiseStock" />
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Buyer Wise Finish Leather Stock #####</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="BuyerWiseStock" name="ReportName" value="BuyerWiseStock" />
+                    </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Daily Finish Leather Stock</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="DailyStock" name="ReportName" value="DailyStock" />
+                    </div>
+                </div>
+               
+
+                
+
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+
+}
+
+<div id="BuyerWindow" style="display: none;">
+    @*<p>Buyer:<input type="text" id="txtBuyer" style="width: 250px;" /><input type="button" id="btnBuyerGridSearch" value="Search" /></p>*@
+
+    <div id="BuyerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<div id="ChallanWindow" style="display: none;">
+    <div id="ChallanWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChallanWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChallanWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+        });
+        $(document.body).keypress(function (e) {
+            if ($("#BuyerCode").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('BuyerWindowGrid');
+                    BuyerWindow.open();
+                }
+            }
+        });
+
+        var BuyerWindow = $('#BuyerWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "80%",
+            height: "auto",
+            title: "List Of Buyer",
+            position: { top: 100 },
+            modal: true,
+            groupable: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var BuyerGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "BuyerID",
+                    fields: {
+                        BuyerID: { editable: false },
+                        BuyerName: { editable: false },
+                        BuyerCode: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("CrustBuyerList", "Utility")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 10
+
+        });
+
+        var BuyerGrid = $("#BuyerWindowGrid").kendoGrid({
+            dataSource: BuyerGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 300,
+            columns: [
+                  //{ field: "BuyerID", title: "Buyer ID", width: "60px", filterable: false, sortable: false },
+                  //{ field: "BuyerID", title: "BuyerID", width: "60px" },
+                  { field: "BuyerName", title: "Buyer Name", width: "60px" },
+                  { field: "BuyerCode", title: "Buyer Code", width: "60px" }
+            ]
+        });
+
+        //Handling button click for Buyer window grid
+        $('#btnBuyerWindowOK').click(function () {
+            ListOfValuBuyereGridEvent('BuyerWindowGrid');
+            BuyerWindow.close();
+        });
+
+        $('#btnBuyerWindowCancel').click(function () {
+            BuyerWindow.close();
+        });
+
+        $("#BuyerWindow").dblclick(function () {
+            ListOfValuBuyereGridEvent('BuyerWindowGrid');
+            BuyerWindow.close();
+        });
+
+        $("#BuyerWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValuBuyereGridEvent('BuyerWindowGrid');
+                BuyerWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                BuyerWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $("#btnBuyerGridSearch").click(function () {
+            $.ajax({
+                url: '@Url.Action("SearchBuyerByFirstName", "FinalGradeSelection")',
+                type: 'GET',
+                data: { supplier: $("#txtBuyer").val() },
+                success: function (data33) {
+                    $("#BuyerWindowGrid").data("kendoGrid").dataSource.data(data33);
+                    if (data33.Count == 1) {
+                        ListOfValueGridEvent('BuyerWindowGrid');
+                        SearchWindow.close();
+                    }
+                }
+            });
+        });
+
+        $("#txtBuyer").keyup(function (event) {
+            if ($("#txtBuyer").is(':focus')) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $.ajax({
+                        url: '@Url.Action("SearchBuyerByFirstName", "FinalGradeSelection")',
+                        type: 'GET',
+                        data: { search: $("#txtBuyer").val() },
+                        success: function (data33) {
+                            $("#BuyerWindowGrid").data("kendoGrid").dataSource.data(data33);
+                            console.log(data33.BuyerList);
+                            if (data33.Count == 1) {
+                                SearchWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        var dataSourceBuyer = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetBuyerAutocompleteData", "FinalGradeSelection")',
+                    type: "GET"
+                }
+            }
+        });
+
+        $("#txtBuyer").kendoAutoComplete({
+            dataSource: dataSourceBuyer,
+            filter: "startswith",
+            placeholder: "Search Buyer...",
+        });
+
+        function ListOfValuBuyereGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+            $('#SelectedBy').val(selectedItem.SelectedBy);
+            $('#RequestTo').val(selectedItem.BuyerID);
+        }
+
+        $("#btnReset").click(function () {
+            $("#ArticleID").val("");
+            $("#ArticleChallanID").val("");
+            $('#H1Form input[type=text]').val('');
+        });
+
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+
+        // ##################################### Chalan N0
+        $(document.body).keypress(function (e) {
+            if ($("#ArticleChallanNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('ChallanWindowGrid');
+                    ChallanWindow.open();
+                }
+            }
+        });
+
+        var ChallanWindow = $('#ChallanWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "80%",
+            height: "auto",
+            title: "List Of Challan",
+            position: { top: 100 },
+            modal: true,
+            groupable: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ChallanGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleChallanID",
+                    fields: {
+
+                        ArticleChallanID: { editable: false },
+                        ArticleChallanNo: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("FinishedLeatherChallanList", "Utility")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ChallanGrid = $("#ChallanWindowGrid").kendoGrid({
+            dataSource: ChallanGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 300,
+            columns: [
+                  //{ field: "ArticleChallanID", title: "Challan ID", width: "60px" },
+                  { field: "ArticleChallanNo", title: "Challan Code", width: "60px" }
+            ]
+        });
+
+        //Handling button click for Challan window grid
+        $('#btnChallanWindowOK').click(function () {
+            ListOfValuChallaneGridEvent('ChallanWindowGrid');
+            ChallanWindow.close();
+        });
+
+        $('#btnChallanWindowCancel').click(function () {
+            ChallanWindow.close();
+        });
+
+        $("#ChallanWindow").dblclick(function () {
+            ListOfValuChallaneGridEvent('ChallanWindowGrid');
+            ChallanWindow.close();
+        });
+
+        $("#ChallanWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValuChallaneGridEvent('ChallanWindowGrid');
+                ChallanWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ChallanWindow.close();
+            }
+            event.stopPropagation();
+        });
+        function ListOfValuChallaneGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            alert(selectedItem.ArticleChallanNo);
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        
+        }
+
+        // ####################### Artical ###############################
+        $(document.body).keypress(function (e) {
+            if ($("#ArticleNo").is(":focus")) {
+                if (e.keyCode == 120) {
+                    SelectedItemOfListOfValue('ArticleWindowGrid');
+                    ArticleWindow.open();
+                }
+            }
+        });
+
+        var ArticleWindow = $('#ArticleWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "80%",
+            height: "auto",
+            title: "List Of Article",
+            position: { top: 100 },
+            modal: true,
+            groupable: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ArticleGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ArticleID",
+                    fields: {
+                        ArticleID: { editable: false },
+                        ArticleNo: { editable: false },
+                        ArticleName: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("FinishedLeatherIssueArticle", "Utility")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 50
+
+        });
+
+        var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+            dataSource: ArticleGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "ArticleName", title: "Article Name", width: "60px" },
+                  { field: "ArticleNo", title: "Article No", width: "60px" }
+            ]
+        });
+
+        //Handling button click for Article window grid
+        $('#btnArticleWindowOK').click(function () {
+            ListOfValuArticleeGridEvent('ArticleWindowGrid');
+            ArticleWindow.close();
+        });
+
+        $('#btnArticleWindowCancel').click(function () {
+            ArticleWindow.close();
+        });
+
+        $("#ArticleWindow").dblclick(function () {
+            ListOfValuArticleeGridEvent('ArticleWindowGrid');
+            ArticleWindow.close();
+        });
+
+        $("#ArticleWindow").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValuArticleeGridEvent('ArticleWindowGrid');
+                ArticleWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ArticleWindow.close();
+            }
+            event.stopPropagation();
+        });
+        function ListOfValuArticleeGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+
+            $("#ArticleID").val(selectedItem.ArticleID);
+            console.log(selectedItem);
+        }
+    });
+</script>

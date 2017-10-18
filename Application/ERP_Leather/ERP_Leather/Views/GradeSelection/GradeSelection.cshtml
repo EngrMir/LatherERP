@@ -1,0 +1,939 @@
+﻿@using System.Web.Mvc.Html
+@{
+    ViewBag.Title = "Grade Selection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .datePicker {
+        width: 150px;
+    }
+    .table th {
+        text-align: center;
+    }
+</style>
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-3">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+
+            </div>
+            <div id="ButtonPanel" class="col-lg-3 right">             
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" disabled="disabled" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSearch" disabled="disabled" class="Button" value="Search" style="position:absolute; right:135px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="return Save()" style="position:absolute; right:200px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Supplier</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="hidden" id="SupplierID" class="col-lg-8" name="" tabindex="" readonly="readonly" placeholder="Press F9 Key" />
+                <input type="text" id="SupplierName" class="col-lg-8" name="" tabindex="" readonly="readonly" placeholder="Press F9 Key" />
+                <input type="hidden" id="SupplierAddressID" class=" " name="" tabindex="" value="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Contact Number</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ContactNumber" class="txtBox" name="" tabindex="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Contact Person</label>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="ContactPerson" class="txtBox" name="" tabindex="" />
+            </div>
+            <div class="col-lg-2">
+                <label>Supplier Address</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="Address" class="txtBox" name="" style="height: 35px;" tabindex=""></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Store Name</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("ddlStoreName", new List<SelectListItem> { new SelectListItem { Text = "--Select---" }, })
+            </div>
+        </div>
+    </div>
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.ListBox("leftListBox", new SelectList("", "Value", "Text"), new { @class = "col-lg-12" })
+            </div>
+            <div class="col-lg-1">
+                <div class="row">
+                    <button class="" id="leftToRight">
+                        <span class=" glyphicon glyphicon-arrow-right"></span>
+                    </button>
+                </div>
+                <div class="row">
+                    <button class="" id="rightToLeft">
+                        <span class=" glyphicon glyphicon-arrow-left"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                @Html.ListBox("rightListBox", new SelectList("", "Value", "Text"), new { @class = "col-lg-12" })
+            </div>
+            <div class="col-lg-12">
+                <input type="button" onclick="return setSNR();" class="pull-right" title="SNR" value="Set as Selection Not Required" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="lstChalan">
+
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-lg-12">
+                <form id="contactForm" name="contactForm" method="post">
+                    <input type="hidden" id="errorField" value="" />
+                    <table class="table table-bordered" style="width: 1200px !important;" id="tblGradeSelection">
+                        <thead>
+                            <tr class="active">
+                                <th>Purchase No</th>
+                                <th>Purchase Item</th>
+                                <th>Qty</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" id="gradeSelectionDiv" style="">
+        <input id="hItemTypeID" type="hidden" name="hItemTypeID" value="" />
+        <input id="hItemTypeName" type="hidden" name="hItemTypeName" value="" />
+        <input id="hReceiveQuantity" type="hidden" name="hReceiveQuantity" value="" />
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-4"><label>Selection ID</label></div>
+                            <div class="col-lg-8"><input type="text" id="SelectionID" name="" tabindex="" readonly="readonly" /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-5"><label>Selection Date</label></div>
+                            <div class="col-lg-7"><input type="text" class="datePicker changeValidation" required id="SelectionDate" name="" tabindex="" /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-4"><label>Selected By</label></div>
+                            <div class="col-lg-8"><input class="changeValidation" required type="text" id="SelectedBy" name="SelectedBy" tabindex="" /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-4"><label>Area Unit</label></div>
+                            <div class="col-lg-8">@Html.DropDownList("ddlAreaUnit", @ViewBag.UnitList as IEnumerable<SelectListItem>, new { style = "width: 170px;", @class = "changeValidation required" })</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-8"></div>
+                        </div>    
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-5"><label>Total Quantity</label></div>
+                            <div class="col-lg-7"><input type="text" class="" id="tQty" value="" readonly="readonly" /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-4"><label>Total Side</label></div>
+                            <div class="col-lg-8"><input type="text" id="tSide" value="" readonly="readonly" /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-4"><label>Total Area</label></div>
+                            <div class="col-lg-8"><input class="" type="text" id="tArea" readonly="readonly" value="" /></div>
+                        </div>       
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+               <table id="gradeSelectionTable" class="table table-bordered" style="width: 1200px !important;">
+               <thead>
+                    <tr class="active">
+                        <th>Grade</th>
+                        <th>Qty</th>
+                        <th>Grade Side</th>
+                        <th>Area</th>
+                    </tr>
+                </thead>
+               <tbody>
+                    @{
+                        var count = 0;
+                        var asa = string.Empty;
+                        foreach (var gradeItem in ViewBag.GradeList)
+                        {
+                            count++;
+                            asa += @gradeItem.GradeID + "/";
+                            <tr>
+                                <td style="width: 100px;">
+                                    <input type="hidden" value="@gradeItem.GradeID" />
+                                    <label class="center-block text-center"> @gradeItem.GradeName</label>
+                                </td>
+                                <td style="width: 100px;" class="gradeItemTableTd">
+                                    <input type="text" class="gradeItemID changeValidation center-block text-center" id="@gradeItem.GradeID" value="" onblur="sumQty();return CheckNumber($(this).val(), @gradeItem.GradeID);" />
+                                </td>
+
+                                <td style="width: 100px;" class="gradeItemTableTdArea">
+                                    <input type="text" class="gradeItemID changeValidation center-block text-center" id="side_@gradeItem.GradeID" value="" onblur="sumSide();return CheckNumber($(this).val(), 'side_@gradeItem.GradeID');" />
+                                </td>
+
+                                <td style="width: 100px;" class="gradeItemTableTdArea">
+                                    <input class="changeValidation center-block text-center" type="text" id="@gradeItem.GradeName" value="" onblur="sumArea();return CheckNumber($(this).val(), '@gradeItem.GradeName');" />
+                                </td>
+                            </tr>
+                        }
+                        @Html.Hidden("tblGradeColumn", @count)
+                        @Html.Hidden("gradeNameList", @asa)
+                    }                      
+                    <tr>
+                        <td colspan="1">
+                            <label class="center-block text-center">Selector Comments:</label>
+                        </td>
+                        <td colspan="2">
+                            <textarea id="SelectorComments" class="txtBox pull-left" name="" tabindex=""></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="center-block text-center">Checked By:</label>
+                        </td>
+                        <td>
+                            @*<input type="text" class="CheckedBy changeValidation center-block text-center" id="CheckedBy" value="" />*@
+                            @Html.DropDownList("CheckedBy", " -- Select One -- ")
+
+                        </td>
+                        <td>
+                            <label class="center-block text-center">Checker Comments:</label>
+                        </td>
+                        <td>
+                            <textarea id="CheckComments" class="txtBox pull-left" name="" tabindex=""></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="center-block text-center">Approved By:</label>
+                        </td>
+                        <td>
+                            @*<input type="text" class="ApprovedBy changeValidation center-block text-center" id="ApprovedBy" value="" />*@
+                            @Html.DropDownList("ApprovedBy", " -- Select One -- ")
+                        </td>
+                        <td>
+                            <label class="center-block text-center">Approver Comments:</label>
+
+                        </td>
+                        <td>
+                            <textarea id="ApprovedComments" class="txtBox pull-left" name="" tabindex=""></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+               </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <p>Supplier:<input type="text" id="txtSupplier" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>
+
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    var saveCheck = 0;
+    var purchaseId = 0;
+    clearAll();
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierListForSearch", "Supplier")',
+                type: "GET"
+            }
+        }
+    });
+
+    $("#txtSupplier").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search Supplier...",
+    });
+
+    $("#btnGridSearch").click(function () {
+        $.ajax({
+            url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+            type: 'GET',
+            data: { supplier: $("#txtSupplier").val() },
+            success: function (data33) {
+                console.log(data33.SupplierList);
+                $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                if (data33.Count == 1) {
+                    //SearchWindowEvents();
+                    ListOfValueGridEvent('SupplierWindowGrid');
+                    SearchWindow.close();
+                }
+            }
+        });
+    });
+
+    $("#txtSupplier").keyup(function (event) {
+        if ($("#txtSupplier").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                $.ajax({
+                    url: '@Url.Action("GetSupplierListSearchById", "Supplier")',
+                    type: 'GET',
+                    data: { supplier: $("#txtSupplier").val() },
+                    success: function (data33) {
+                        $("#SupplierWindowGrid").data("kendoGrid").dataSource.data(data33);
+                        console.log(data33.SupplierList);
+                        if (data33.Count == 1) {
+                            //SearchWindowEvents();
+                            SearchWindow.close();
+                        }
+                    }
+                });
+            }
+        }
+    });
+    function CheckNumber(item, id) {
+        if ($.isNumeric(item)) {
+            return true;
+        }
+        else {
+            $("#" + id + "").val("");
+            return false;
+        }
+    }
+
+    $(document).ready(function () {
+        $('#gradeSelectionDiv').hide();
+
+        $(".changeValidation").on("input", function () {
+            saveCheck = 1;
+        });
+    });
+
+    function showGradeSelectionTable() {
+        $("#tblGradeSelection tr").delegate(".btnSet", "click", function () {
+            $('#hItemTypeID').val($(this).parent().parent().find('td').eq(0).text());
+            $('#hItemTypeName').val($(this).parent().parent().find('td').eq(2).text());
+            $('#hReceiveQuantity').val($(this).parent().parent().find('td').eq(3).text());
+            $('#gradeSelectionDiv').show();
+            $(this).parent().parent().parent().find('tr').removeAttr('style');
+            $(this).parent().parent().css("background", "#82BA82");
+
+            clearGradeSelectionData();
+            purchaseId = $(this).parent().parent().find('td').eq(1).text();
+            var itemTypeID = $(this).parent().parent().find('td').eq(0).text();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSelectionQtyData", "GradeSelection")',
+                data: { purchaseId: purchaseId, itemTypeID: itemTypeID },
+                success: function (data) {
+                    $.each(data, function (key, val) {
+                        $('#' + val.GradeID).val(val.GradeQty);
+                        $('#side_' + val.GradeID).val(val.GradeSide);
+                        $('#' + val.GradeName).val(val.GradeArea);
+                        $('#SelectionID').val(val.SelectionID);
+                        $('#ddlAreaUnit').val(val.UnitID);
+                        $('#SelectionDate').val(val.SelectionDate);
+                        $('#SelectedBy').val(val.SelectedBy);
+
+                        $("#SelectorComments").val(val.SelectionComments);
+                        $("#CheckComments").val(val.CheckComments);
+                        $("#ApprovedComments").val(val.ApproveComments);
+                        $("#CheckedBy").val(val.CheckedBy);
+                        $("#ApprovedBy").val(val.ApprovedBy);
+                    });
+
+                    sumQty();
+                    sumArea();
+                    sumSide();              
+                },
+                error: function () {
+                }
+            });
+
+        });
+    }
+
+    function clearGradeSelectionData() {
+        $("#gradeSelectionTable tbody tr").find('.gradeItemTableTd input').val("");
+        $("#gradeSelectionTable tbody tr").find('.gradeItemTableTdArea input').val("");
+        $('#SelectionID').val("");
+        $('#SelectionDate').val("");
+        $('#SelectedBy').val("");
+
+        $("#SelectorComments").val("");
+        $("#CheckedBy").val("");
+        $("#CheckComments").val("");
+        $("#ApprovedBy").val("");
+        $("#ApprovedComments").val("");
+
+        $('#tQty').val("");
+        $('#tSide').val("");
+        $('#tArea').val("");
+        GradeSelectedList = { "SelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "GradeArea": "", "UnitID": "" };
+    }
+
+    function Save() {
+
+        if (fromValidation()) {
+            itemWiseGradeData.SupplierID = $('#SupplierID').val();
+            itemWiseGradeData.SupplierAddressID = $('#SupplierAddressID').val();
+            itemWiseGradeData.SelectionStore = $('#ddlStoreName').val();
+            itemWiseGradeData.SelectionID = $('#SelectionID').val();
+            itemWiseGradeData.SelectionDate = $('#SelectionDate').val();
+            itemWiseGradeData.SelectedBy = $('#SelectedBy').val();
+            itemWiseGradeData.PurchaseID = purchaseId;
+            itemWiseGradeData.ItemTypeID = $('#hItemTypeID').val();
+            itemWiseGradeData.SelectionComments = $("#SelectorComments").val();
+            itemWiseGradeData.CheckedBy = $("#CheckedBy").val();
+            itemWiseGradeData.CheckComments = $("#CheckComments").val();
+            itemWiseGradeData.ApprovedBy = $("#ApprovedBy").val();
+            itemWiseGradeData.ApproveComments = $("#ApprovedComments").val();
+
+            GradeSelectedList = { "SelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "GradeArea": "", "UnitID": "" };
+            $('#gradeSelectionTable tbody tr').each(function () {
+                if ($(this).find('td').eq(1).find('input[type="text"]').val()) {
+                    GradeSelectedList.GradeID = $(this).find('td').eq(1).find('input[type="text"]').attr('id');
+                    GradeSelectedList.GradeQty = $(this).find('td').eq(1).find('input[type="text"]').val();
+                    GradeSelectedList.GradeSide = $(this).find('td').eq(2).find('input[type="text"]').val();
+                    GradeSelectedList.GradeArea = $(this).find('td').eq(3).find('input[type="text"]').val();
+                    GradeSelectedList.UnitID = $('#ddlAreaUnit').val();
+                    itemWiseGradeData.GradeSelectedList.push(GradeSelectedList);
+                    GradeSelectedList = { "SelectionID": "", "GradeID": "", "GradeQty": "", "GradeSide": "", "GradeArea": "", "UnitID": "" };
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveGradeSelectionData", "GradeSelection")',
+                data: JSON.stringify(itemWiseGradeData),
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    saveCheck = 0;
+                    clearGradeSelection();
+                    itemWiseGradeData = { "SupplierID": "", "SupplierAddressID": "", "SelectionStore": "", "SelectionID": "", "SelectionDate": "", "SelectedBy": "", "SelectionComments": "", "CheckedBy": "", "CheckComments": "", "ApprovedBy": "", "ApproveComments": "", "ItemTypeID": "", "PurchaseID": "", "GradeSelectedList": [] };
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+
+    function gradeSelectionConfirm() {
+
+        $("#tblGradeSelection tr").delegate(".btnConfirm", "click", function () {
+
+            var selectionID = parseInt($('#SelectionID').val()) || 0;
+            if (selectionID == 0) {
+                alert("Please save first. Then confirm it.");
+                return false;
+            }
+
+            if (saveCheck == 1) {
+                alert("Please save first. Then confirm it.");
+                return false;
+            }
+
+            var purchaseId = $(this).parent().parent().find('td').eq(1).text();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GradeSelectionConfirm", "GradeSelection")',
+                data: { selectionID: selectionID },
+                success: function (data) {
+                    $("#tblGradeSelection td").parent().remove();
+                    generateChallanTable(purchaseId);
+                    clearGradeSelection();
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                },
+                error: function () {
+                }
+            });
+            return true;
+        });
+    }
+
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "{0:dd MMM yyyy}"
+    });
+
+    var GradeSelectedList = { "SelectionID": "", "GradeID": "", "GradeQty": "", "GradeArea": "", "UnitID": "" };
+    var itemWiseGradeData = { "SupplierID": "", "SupplierAddressID": "", "SelectionStore": "", "SelectionID": "", "SelectionDate": "", "SelectedBy": "", "SelectionComments": "", "CheckedBy": "", "CheckComments": "", "ApprovedBy": "", "ApproveComments": "", "ItemTypeID": "", "PurchaseID": "", "GradeSelectedList": [] };
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierName").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                SupplierWindow.open();
+            }
+        }
+    });
+
+    function getLeftPurchaseBoxList(supplierId, store) {
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({ supplierId: supplierId, storeId: store }),
+            url: '@Url.Action("GetPurchaseList", "GradeSelection")',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $('#leftListBox').empty();
+                $.each(data, function (key, value) {
+                    $('#leftListBox').append('<option value=' + value.PurchaseID + '>' + 'Purchase No:' + ' [' + value.PurchaseNo + ']' + ' ' + ' [' + value.PurchaseDate + ']' + '</option>');
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // load store location dropdwon
+    function getStoreLocationList(supplierId) {
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({ supplierId: supplierId }),
+            url: '@Url.Action("GetStoreLoactionList", "GradeSelection")',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $('#ddlStoreName').get(0).options.length = 0;
+                $('#ddlStoreName').get(0).options[0] = new Option("--Select--", "0");
+                $.map(data, function (item) {
+                    $('#ddlStoreName').get(0).options[$('#ddlStoreName').get(0).options.length] = new Option(item.Text, item.Value);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $('#ddlStoreName').change(function () {
+            if ($(this).val() != 0) {
+                var store = $(this).val();
+                getLeftPurchaseBoxList(supplierId, store);
+            } else {
+                $('#leftListBox').empty();
+            }
+        });
+    }
+
+    function getChallanItemSumBySourceID(supplierId) {
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ItemTypeID",
+                    fields: {
+                        ItemTypeName: { editable: false },
+                        ChallanQty: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetChallanItemSumBySourceID", "GradeSelection")',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: { id: supplierId }
+                }
+            }
+        });
+
+        var SearchGrid = $("#lstChalan").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 320,
+            columns: [
+                  { field: "ItemTypeName", title: "Item Type", width: "60px" },
+                  { field: "ChallanQty", title: "ChallanQty", width: "60px" },
+                  { command: [{ name: "SelectRow", text: "Select", click: _setGrade }], title: "Grade", width: 50 }
+            ]
+        });
+    }
+
+    function _setGrade(event) {
+        alert("Grade will be provided in next release");
+    };
+
+    function removeRowFromChallanTable(purchaseID) {
+
+    }
+
+    function generateChallanTable(purchaseID) {
+        var trNew = "";
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({ purchaseID: purchaseID }),
+            url: '@Url.Action("GetChallanInfoForChallanTable", "GradeSelection")',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+
+                $.each(data, function (key, value) {
+                    var isEven = function (someNumber) {
+                        return (someNumber % 2 == 0) ? true : false;
+                    };
+
+                    if (isEven(key)) {
+                        trNew = "<tr class='evenClass'>";
+                    } else {
+                        trNew = "<tr class='oddClass'>";
+                    }
+                    trNew = trNew + "<td style='display:none;'>" + value.ItemTypeID + "</td>";
+                    trNew = trNew + "<td style='display:none;' >" + purchaseID + "</td>";
+                    trNew = trNew + "<td style='text-align:center;' >" + value.PurchaseNo + "</td>";
+                    trNew = trNew + "<td style='text-align:center;' >" + value.ItemTypeName + "</td>";
+                    trNew = trNew + "<td style='text-align:center;'>" + value.ReceiveQty + "</td>";
+                    trNew = trNew + "<td style='width:200px;'>" + "<input type='button' class='btnSet' name='btnSet' value='Set Grade'/> | <input type='button' class='btnConfirm' name='btnConfirm' value='Confirm'/>" + "</td>";
+                    trNew = trNew + "</tr>";
+                    $("#tblGradeSelection tbody").prepend(trNew);
+                    checkGradeSum();
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        showGradeSelectionTable();
+        gradeSelectionConfirm();
+    }
+    
+    function getTotalQuantity() {
+        var val = 0;
+        var sum = 0;
+        var dataRows = $("#gradeSelectionTable tbody tr").find('.gradeItemTableTd input');
+        dataRows.each(function () {
+            val = $(this).val();
+            if (val != "") {
+                sum += parseInt(val);
+            }
+        });
+        return sum;
+    }
+
+    function checkGradeSum() {
+        $(".gradeItemID").focusout(function () {
+            var total = getTotalQuantity();
+            if (total > parseInt($('#hReceiveQuantity').val())) {
+                $("#errorField").val(1);
+            }
+            if ($("#errorField").val() == "1") {
+                alert("Total Quantity cannot be smaller than input grade selection quantity.");
+                $("#errorField").val("");
+                $(this).val("");
+            }
+        });
+    }
+
+    function removeChallanRow(purchaseID) {
+        $('#tblGradeSelection tbody tr').each(function () {
+            if ($(this).find('td').eq(1).text() == purchaseID) {
+                $(this).find('td').eq(1).parent().remove();
+            }
+        });
+    }
+
+    $("#leftToRight").click(function () {
+        $("#leftListBox > option:selected").each(function () {
+            $(this).remove().appendTo("#rightListBox");
+            generateChallanTable($(this).val());
+        });
+    });
+
+    $("#rightToLeft").click(function () {
+        $("#rightListBox > option:selected").each(function () {
+            $(this).remove().appendTo("#leftListBox");
+            removeChallanRow($(this).val());
+            $('#gradeSelectionDiv').hide();
+            removeRowFromChallanTable($(this).val());
+        });
+    });
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    var SupplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 100 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var SupplierGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SupplierID",
+                fields: {
+                    SupplierID: { editable: false },
+                    SupplierName: { editable: false },
+                    Address: { editable: false },
+                    ContactPerson: { editable: false },
+                    ContactNumber: { editable: false },
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSupplierList", "Common")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var SupplierGrid = $("#SupplierWindowGrid").kendoGrid({
+        dataSource: SupplierGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              //{ field: "SupplierID", title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+              { field: "SupplierName", title: "Supplier Name", width: "60px" },
+              { field: "Address", title: "Address", width: "60px" },
+              { field: "ContactPerson", title: "Contact Person", width: "60px" },
+              { field: "ContactNumber", title: "Contact Number", width: "60px" }
+        ]
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        clearAll();
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row     
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        var supplierId = $('#SupplierID').val();
+        getStoreLocationList(supplierId);
+    }
+
+    //Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $('#btnSupplierWindowCancel').click(function () {
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        SupplierWindow.close();
+    });
+
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            SupplierWindow.close();
+        }
+        // Close Window with escape key
+        else if (keycode == '27') {
+            SupplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $('#btnReset').click(function () {
+        clearAll();
+    });
+
+    function fromValidation() {
+        var datePickerValue = $('#SelectionDate').val();
+        if ($("#SelectedBy").val() == "") {
+            $('#SelectedBy').css("border-color", "red");
+            return false;
+        }
+        if (datePickerValue == "") {
+            $('#SelectionDate').css("border-color", "red");
+            return false;
+        }
+        return true;
+    }
+
+    function clearAll() {
+        $("input[type='text']").val("");
+        $('#leftListBox').empty();
+        $('#rightListBox').empty();
+        $('#Address').val("");
+        $('#ddlStoreName').val(0);
+        $('#tblGradeSelection tbody').find('tr').remove();
+        $("#MessageText").empty();
+        $("#SelectorComments").val("");
+        $("#CheckedBy").val("");
+        $("#CheckComments").val("");
+        $("#ApprovedBy").val("");
+        $("#ApprovedComments").val("");
+        clearGradeSelection();
+    }
+
+    function clearGradeSelection() {
+        $('#gradeSelectionDiv').hide();
+        $("#gradeSelectionTable tbody tr").find('.gradeItemTableTd input').val("");
+        $("#gradeSelectionTable tbody tr").find('.gradeItemTableTdArea input').val("");
+    }
+
+    function setSNR() {
+        var purchaseId = "";
+        $("#rightListBox > option:selected").each(function () {
+            purchaseId += $(this).val() + ",";
+        });
+
+        if (purchaseId != "") {
+            purchaseId = purchaseId.slice(0, -1);
+            if (confirm(" Are you sure to set purchase ID: ( " + purchaseId + " ) as SNR? ")) {
+
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ purchaseId: purchaseId }),
+                    url: '@Url.Action("setSNR", "GradeSelection")',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        var supplierId = $("#SupplierID").val();
+                        var store = $("#ddlStoreName option:selected").val();
+                        getLeftPurchaseBoxList(supplierId, store);
+                        clearGradeSelection();
+                        $("#tblGradeSelection").remove();
+                        $("#rightListBox > option:selected").remove();
+                        return true;
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+        return false;
+    }
+    var GradeQty=0;
+    function sumQty(){
+        GradeQty=0;
+        $('#gradeSelectionTable tbody tr').each(function () {
+            
+            if ($(this).find('td').eq(1).find('input[type="text"]').val()) {
+                //GradeSelectedList.ChallanItemID = $('#hChallanItemID').val();
+                GradeSelectedList.GradeID = $(this).find('td').eq(1).find('input[type="text"]').attr('id');
+                if(!isNaN($(this).find('td').eq(1).find('input[type="text"]').val()))
+                {
+                    GradeQty += ($(this).find('td').eq(1).find('input[type="text"]').val() -0);
+                  
+                }
+            }                 
+        });
+        $("#tQty").val(GradeQty);
+    }
+
+    function sumSide(){
+        GradeQty=0;
+        $('#gradeSelectionTable tbody tr').each(function () {            
+            if ($(this).find('td').eq(2).find('input[type="text"]').val()) {
+                GradeSelectedList.GradeID = $(this).find('td').eq(2).find('input[type="text"]').attr('id');
+                if(!isNaN($(this).find('td').eq(2).find('input[type="text"]').val()))
+                {
+                    GradeQty += ($(this).find('td').eq(2).find('input[type="text"]').val() -0);                   
+                }
+            }                 
+        });
+        $("#tSide").val(GradeQty);
+    }
+
+    function sumArea(){
+        GradeQty=0;
+        $('#gradeSelectionTable tbody tr').each(function () {            
+            if ($(this).find('td').eq(3).find('input[type="text"]').val()) {
+                GradeSelectedList.GradeID = $(this).find('td').eq(3).find('input[type="text"]').attr('id');
+                if(!isNaN($(this).find('td').eq(3).find('input[type="text"]').val()))
+                {
+                    GradeQty += ($(this).find('td').eq(3).find('input[type="text"]').val() -0);                  
+                }
+            }                 
+        });
+        $("#tArea").val(GradeQty);
+    }
+</script>

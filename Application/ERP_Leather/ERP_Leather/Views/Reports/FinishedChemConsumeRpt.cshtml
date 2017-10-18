@@ -1,0 +1,383 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Finished Chemical Consumption for Production";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("FinishedChemConsumeRpt", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="FormHeader">
+        <div class="row">
+            <div id="FormTitlePannel" class="col-lg-5">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">Finished Chemical Consumption for Production Report</div>
+            </div>
+            <div id="MessageText" class="col-lg-3">
+
+            </div>
+            <div class="col-lg-2" style="">
+                <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+                <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" id="btnShowReport" value="Show Report" style="position: absolute; right:110px;" />
+                <input type="button" id="btnReset" value="Reset" style="position: absolute; right: 50px;" />
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-5" style="padding-left: 0; padding-right: 0;">
+                @*<div id="supplierInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3" style="">
+                        <label style="">Supplier</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="SupplierCode" class="txtBox" name="SupplierCode" placeholder="Press F9" readonly="readonly" />
+                        <input type="text" id="SupplierName" name="SupplierName" class="txtBox" readonly="readonly" />
+                        <input type="hidden" id="SupplierID" class="txtBox" name="SupplierID" />
+                    </div>
+                </div>*@
+                <div id="StoreInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Store</label>
+                    </div>
+                    <div class="col-lg-8" style="padding-left: 0; padding-right: 0;">
+                        @Html.DropDownList("StoreID", new SelectList(ViewBag.Store, "StoreID", "StoreName"), "--Select All--", new { @class = "txtBox Dropdown", @style = "width: 175px;" })
+                    </div>
+                </div>
+                <div id="ItemInfo" class="row col-lg-12" style="margin-bottom: 5px; ">
+                    <div class="col-lg-3">
+                        <label style="">Chemical Name</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="ItemName" class="txtBox" name="ItemName" placeholder="Press F9" readonly="readonly" />
+                        <input type="hidden" id="ItemID" class="txtBox" name="ItemID" />
+                    </div>
+                </div>
+                <div class="row col-lg-12" style="margin-bottom: 15px;">
+                    <div class="col-lg-3">
+                        <label style="">From Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateFrom" name="DateFrom" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <label style="padding-right: 0; padding-left: 0; margin-left: 50px;">To Date:</label>
+                    </div>
+                    <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                        <input type="text" id="dateTo" name="DateTo" class="datePicker" style="min-width: 100px; width: 100%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Chemical Wise Finished Consumption Summary Without Schedule</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ChemicalWiseFndConsumptionSummaryWithoutSch" name="ReportName" value="ChemicalWiseFndConsumptionSummaryWithoutSch" checked="checked" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 text-right">
+                        <label style="">Schedule Wise Finished Chemical Consumption Summary</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SchWiseFndChemConsumptionSummary" name="ReportName" value="SchWiseFndChemConsumptionSummary" />
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-lg-10 text-right">
+                            <label style="">Chemical Wise Finished Consumption Summary Against Schedule</label>
+                        </div>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="ChemicalWiseFndConsumptionSummary" name="ReportName" value="ChemicalWiseFndConsumptionSummary" />
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+}
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ChemicalWindow" style="display: none;">
+    <div id="ChemicalWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnChemicalWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnChemicalWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+        });
+
+        var supplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierCode: { editable: false },
+                        SupplierName: { editable: false },
+                        Address: { editable: false },
+                        SupplierAddressID: { editable: false },
+                        ContactPerson: { editable: false },
+                        ContactNumber: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSupplierList", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 10
+
+        });
+
+        var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: supplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "SupplierID", hidden:true, title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+                  { field: "SupplierCode", title: "Supplier Code", width: "60px" },
+                  { field: "SupplierName", title: "Supplier Name", width: "120px" },
+                  { field: "Address", title: "Address", width: "60px" },
+                  { field: "ContactPerson", title: "Contact Person", width: "60px" },
+                  { field: "ContactNumber", title: "Contact Number", width: "60px" }
+            ]
+        });
+
+    });
+    var supplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierCode").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                supplierWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            supplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    // For Chemical window
+
+    $(document.body).keypress(function (e) {
+        if ($("#ItemName").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ChemicalWindowGrid');
+                chemicalWindow.open();
+            }
+        }
+    });
+    var chemicalWindow = $('#ChemicalWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Chemical",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var chemicalGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemID",
+                fields: {
+                    ItemID: { editable: false },
+                    ItemName: { editable: false },
+                    HSCode: { editable: false },
+                    SafetyStock: { editable: false },
+                    UnitID: { editable: false },
+                    UnitName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllActiveChemicalItem", "CommonChemical")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var chemicalGrid = $("#ChemicalWindowGrid").kendoGrid({
+        dataSource: chemicalGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        //filterable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ItemID", hidden: true, title: "Chemical ID", width: "60px", filterable: false, sortable: false },
+              { field: "ItemName", title: "Chemical Name", width: "80px", filterable: { ui: chemicalFilter } },
+              { field: "HSCode", title: "HSCode", width: "80px" },
+              { field: "SafetyStock", hidden: true, title: "Chemical Stock", width: "60px" },
+              { field: "UnitID", hidden: true, width: "60px", filterable: false, sortable: false },
+              { field: "UnitName", hidden: true, title: "Unit", width: "60px", filterable: false, sortable: false }
+        ]
+
+    });
+
+    function chemicalFilter(element) {
+        element.kendoAutoComplete({
+            dataSource: chemicalSearchDataSource,
+            placeholder: "Search Chemical...",
+        });
+    }
+    var chemicalSearchDataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetChemicalListForSearch", "ChemicalItem")',
+                type: "GET"
+            }
+        }
+    });
+
+
+    //Handling button click for Supplier window grid
+    $('#btnChemicalWindowOK').click(function () {
+        ListOfValueGridEvent('ChemicalWindowGrid');
+        chemicalWindow.close();
+    });
+
+    $('#btnChemicalWindowCancel').click(function () {
+        chemicalWindow.close();
+    });
+
+    $("#ChemicalWindowGrid").dblclick(function () {
+        ListOfValueGridEvent('ChemicalWindowGrid');
+        chemicalWindow.close();
+    });
+
+    $("#ChemicalWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('ChemicalWindowGrid');
+            chemicalWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            chemicalWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //End Chemical
+    /*----------------------------------------------- Reset --------------------------------------------*/
+
+    $("#btnReset").click(function () {
+        $("#SupplierID").val("");
+        $("#SupplierName").val("");
+        $("#StoreID").val("");
+        $("#ItemID").val("");
+        $("#ItemName").val("");
+        $("#dateFrom").val("");
+        $("#dateTo").val("");
+        $("#SupplierCode").val("");
+    });
+
+
+
+    /*--------------------------------------------- Reset End ------------------------------------------*/
+
+</script>
+

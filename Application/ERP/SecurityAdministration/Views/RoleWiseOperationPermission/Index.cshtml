@@ -1,0 +1,287 @@
+﻿@using SecurityAdministration.BLL.ViewModels
+@using Telerik.Web.Mvc.UI
+@model RoleWiseOperationPermissionVm
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<style type="text/css">
+    .t-filter-options {
+        width: 155px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-alerts="alerts" id="message" data-titles="{}" data-ids="myid" data-fade="3000"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Role Wise Operation Permission Setup
+                    @Html.Hidden("hdnIsInsert", true)
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label"> Role ID</label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.RoleWiseOperationPermission.RoleID, Model.RoleList, "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Operation ID </label>
+                                <div class="col-xs-8">
+                                    @Html.DropDownListFor(model => model.RoleWiseOperationPermission.OperationID, Model.OperationList, "--Select--", new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label"> Have Access</label>
+                                <div class="col-xs-8">
+                                    @Html.CheckBoxFor(model => model.RoleWiseOperationPermission.HaveAccess)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <input id="btnSave" type="button" value="Save" class="btn btn-default btn-sm" />
+                                <input id="btnReset" type="button" value="Reset" class="btn btn-default btn-sm" onclick="return clearData()" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Role Wise Operation Permission
+            </div>
+
+            <div class="panel-body">
+                @(Html.Telerik().Grid<RolePermissionView>()
+                .BindTo(ViewBag.RoleWiseOperationPermissionList as List<RolePermissionView>)
+                .Name("gvRoleOperationPermissionList")
+                .DataKeys(keys => keys.Add(k => k.RoleID))
+                .Filterable()
+                .Columns(column =>
+                  {
+                      column.Bound(s => s.RoleID).Hidden().Template(@<input type="hidden" id="@item.RoleID@item.OperationID" value="@item.RoleID@item.OperationID" />);
+                      column.Bound(s => s.RoleID);
+                      column.Bound(s => s.OperationID);
+                      column.Bound(s => s.RoleName);
+                      column.Bound(s => s.OperationTitle);
+                      column.Bound(s => s.HaveAccess).Template(@<text> @(item.HaveAccess ? Html.Label("Yes") : Html.Label("No"))</text>);
+                      column.Bound(s => s.SetBy);
+                      column.Bound(s => s.SetOn);
+                      column.Bound(s => s.RoleID).Title("Action").Template(@<text><a class="btn-link">Edit</a> | <a class="btn-link-delete">Delete</a></text>);
+                  })
+                                        .Selectable()
+                                        .Pageable(pages => pages.PageSize(10))
+                                        .Scrollable(scroll => scroll.Height(200))
+                                        .Sortable()
+                                        .Footer(true)
+                )
+                <div style="clear: both; margin-bottom: 15px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#hdnIsInsert").val(true);
+        $('#RoleWiseOperationPermission_RoleID').attr("disabled", false);
+        $('#RoleWiseOperationPermission_OperationID').attr("disabled", false);
+    });
+
+    function validatedRoleWiseOperation() {
+        if ($('#RoleWiseOperationPermission_RoleID').val() == "") {
+            showMessage('Role ID is required.', 'warning', 'Warning!');
+            return false;
+        }
+        else if ($('#RoleWiseOperationPermission_OperationID').val() == "") {
+            showMessage('Operation ID is required.', 'warning', 'Warning!');
+            return false;
+        }
+        return true;
+    }
+
+    function checkDataBaseSameEntryValidation() {
+        var checkVal = 0;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckEntry", "RoleWiseOperationPermission")',
+            data: { roleID: $('#RoleWiseOperationPermission_RoleID').val(), operationID: $('#RoleWiseOperationPermission_OperationID').val() },
+            async: false,
+            cache: false,
+            success: function (data) {
+                if (data == false) {
+                    checkVal = 1;
+                } else {
+                    checkVal = 0;
+                }
+            },
+            error: function () {
+            }
+        });
+
+        return checkVal;
+    }
+
+
+    $("#btnSave").click(function () {
+        if (validatedRoleWiseOperation()) {
+            var jsonObject = {
+                "RoleID": $('#RoleWiseOperationPermission_RoleID').val(),
+                "OperationID": $('#RoleWiseOperationPermission_OperationID').val(),
+                "HaveAccess": $('#RoleWiseOperationPermission_HaveAccess').is(":checked")
+            };
+
+            if (checkDataBaseSameEntryValidation() == 1) {
+                showMessage('This entry already exists.', 'warning', 'Warning!');
+                return false;
+            }
+
+            var trNew = "";
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "RoleWiseOperationPermission")',
+                data: JSON.stringify({ rolewiseoperationpermission: jsonObject, isInsert: $("#hdnIsInsert").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    trNew = "<tr>";
+                    trNew = trNew + "<td style='display:none'>" + data.RoleID + "" + data.OperationID + "</td>";
+                    trNew = trNew + "<td>" + data.RoleID + "</td>";
+                    trNew = trNew + "<td>" + data.OperationID + "</td>";
+                    trNew = trNew + "<td>" + data.RoleName + "</td>";
+                    trNew = trNew + "<td>" + data.OperationTitle + "</td>";
+                    trNew = trNew + "<td>" + "<label for=\"\">";
+
+                    if ($('#RoleWiseOperationPermission_HaveAccess').is(":checked") == true) {
+                        trNew = trNew + "Yes";
+                    } else {
+                        trNew = trNew + "No";
+                    }
+
+                    trNew = trNew + "</label> </td>";
+                    trNew = trNew + "<td>" + data.SetBy + "</td>";
+                    trNew = trNew + "<td>" + data.SetOn.toString() + "</td>";
+                    trNew = trNew + "<td>" + "<a class=\"btn-link\"> Edit </a> | <a class=\"btn-link-delete\"> Delete </a></td>";
+                    trNew = trNew + " </tr>";
+                    var tr;
+                    if ($("#hdnIsInsert").val() == "true") {
+                        $('#gvRoleOperationPermissionList .t-grid-content tbody').prepend(trNew);
+                    } else {
+                        tr = $('#' + data.RoleID + "" + data.OperationID).parent().parent();
+                        tr.replaceWith(trNew);
+                    }
+                    showMessage('Saved successfully.', 'success', 'Success!');
+                    clearData();
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+        return true;
+    });
+
+
+    $('#gvRoleOperationPermissionList').delegate('a.btn-link', 'click', function () {
+        var roleId = $(this).parent().parent().find("td:eq(1)").text();
+        var operationId = $(this).parent().parent().find("td:eq(2)").text();
+        editRoleOperationData(roleId.trim(), operationId.trim());
+    });
+
+    $('#gvRoleOperationPermissionList').delegate('a.btn-link-delete', 'click', function () {
+        var roleId = $(this).parent().parent().find("td:eq(1)").text();
+        var operationId = $(this).parent().parent().find("td:eq(2)").text();
+        deleteData(roleId, operationId);
+    });
+
+    function editRoleOperationData(roleId, operationId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRoleWiseScreenOperationData", "RoleWiseOperationPermission")',
+            data: { roleID: roleId, operationID: operationId },
+            cache: false,
+            success: function (data) {
+                $('#RoleWiseOperationPermission_RoleID').val(data.RoleID);
+                $('#RoleWiseOperationPermission_OperationID').val(data.OperationID);
+                $('#RoleWiseOperationPermission_HaveAccess').prop('checked', data.HaveAccess);
+                $('#RoleWiseOperationPermission_RoleID').attr("disabled", true);
+                $('#RoleWiseOperationPermission_OperationID').attr("disabled", true);
+                $("#hdnIsInsert").val(false);
+            },
+            error: function (xhr) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message);
+            }
+        });
+    }
+
+    function deleteData(roleId, operationId) {
+        if (confirm("Are you sure you want to delete this Role?")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "RoleWiseOperationPermission")',
+                data: { roleID: roleId, operationID: operationId },
+                cache: false,
+                success: function () {
+                    $('#' + roleId.trim() + '' + operationId.trim()).parent().parent().remove();
+                    showMessage('Deleted successfully.', 'success', 'Success!');
+                },
+                error: function () {
+                    showMessage('Connection error.', 'error', 'Error!');
+                }
+            });
+        }
+    }
+
+    function clearData() {
+        $('#RoleWiseOperationPermission_RoleID').val("");
+        $('#RoleWiseOperationPermission_OperationID').val("");
+        $('#RoleWiseOperationPermission_HaveAccess').prop("checked", false);
+        $('#RoleWiseOperationPermission_RoleID').attr("disabled", false);
+        $('#RoleWiseOperationPermission_OperationID').attr("disabled", false);
+    }
+
+    function showMessage(message, priority, title) {
+        $('#message').html("");
+        $(document).trigger("add-alerts", [
+          {
+              'message': message,
+              'priority': priority,
+              'title': title
+          }
+        ]);
+    }
+</script>
+<script src="~/Scripts/jquery.bsAlerts.js"></script>

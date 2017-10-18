@@ -1,0 +1,796 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTiltle</title>
+
+@*<div class="row">
+        <div class="FormHeader">
+            <fieldset id="FormHeaderFieldSet">
+                <div id="FormTitlePannel" class="col-lg-4">
+                    <div id="FormTitle" style="font-size:larger; font-weight:bold;"></div>
+                </div>
+                <div id="MessageText" class="col-lg-6">
+                </div>
+                <div id="ButtonPanel" class="col-lg-2">
+                    <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                    <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position: absolute; right: 75px;" />
+                </div>
+            </fieldset>
+        </div>
+    </div>*@
+
+<div class="row FormHeader" style="padding: 5px 0 5px 0;">
+
+    <div id="FormTitlePannel" class="col-lg-4">
+        <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTiltle</div>
+    </div>
+    <div id="MessageText" class="col-lg-5">
+    </div>
+    <div id="" class="col-lg-3" style="padding: 0 0 0 0;">
+        @*<button type="button" id="btnSave" title="Save" onclick="" class="btnFrm" style="margin-left: 10px; width: 58px; font-size: 12px;">Save</button>
+
+            <button type="button" id="btnSearch" onclick="" value="Search" class="" style="width: 58px; font-size: 12px;">Search</button>
+
+            <button type="button" id="btnReset" onclick="" value="Reset" class="" style="margin-left: 10px; width: 58px; font-size: 12px; ">Reset</button>
+
+            <button type="button" id="btnDelete" onclick="" value="Delete" class="btnFrm" style="width: 58px; font-size: 12px;">Delete</button>*@
+
+        <input type="button" id="btnReset" onclick="" value="Reset" class="" style="position: absolute; right: 30px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnDelete" onclick="" value="Delete" class="" style="position: absolute; right:93px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSearch" onclick="" value="Search" class="" style="position: absolute; right: 156px; width: 62px; font-size: 12px;" />
+        <input type="button" id="btnSave" onclick="" value="Save" class="" style="position: absolute; right: 219px; width: 62px; font-size: 12px;" />
+    </div>
+</div>
+
+<input id="BankID" type="hidden" class="txtBox" />
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bank Code<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BankCode" class="txtBox SetFocus" name="BankCode" tabindex="1" placeholder="Auto" readonly />
+            </div>
+            <div class="col-lg-2">
+                <label>Bank Swift Code</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BankSwiftCode" class="txtBox SetFocus" name="BankCode" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>Bank Type</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="BankType" class="txtBox" tabindex="4">
+                    <option value="" style="display: none;">--Select--</option>
+                    <option value="LOC">Local</option>
+                    <option value="BNF">Beneficiary </option>
+                    <option value="ADV">Advising  </option>
+                    <option value="SLR">Sellers  </option>
+                    <option value="BYR">Buyers  </option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Bank Name<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BankName" class="txtBox" name="BankName" tabindex="2" />
+            </div>
+            <div class="col-lg-2">
+                <label>Bank Bin No.</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="BankBINNo" class="txtBox SetFocus" name="BankCode" tabindex="1" />
+            </div>
+            <div class="col-lg-2">
+                <label>Status</label>
+            </div>
+            <div class="col-lg-2">
+                <select id="IsActive" class="txtBox" tabindex="5">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="MainGrid"></div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+@* **********  Bank Window ********** *@
+<div id="BankWindow" style="display: none;">
+    <div class="row" style="width: 99%;">
+        <label style="margin-left: 20px;">Bank Code</label>
+        <input type="text" id="txtBank" style="width: 250px;" /><input type="button" id="btnBankGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div class="row" style="width: 100%; height: 320px;">
+        <div id="BankWindowGrid" class="PopUpGrid" style="margin-left: 20px;">
+        </div>
+    </div>
+    <div class="row" style="width: 99%;">
+        <input type="button" id="btnBankWindowCancel" class="PopUpButton" value="Cancel" style="margin-right: 10px;" />
+        <input type="button" id="btnBankWindowOK" class="PopUpButton" value="OK" />
+    </div>
+</div>
+@* ********** Bank Window End ********** *@
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var deleteStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+
+
+    $(document).ready(function () {
+
+        function AddBranch() {
+            var grid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+
+            var cell = $('#PageDetailGrid').find('tr.k-state-selected td:eq(0)');
+            $('#PageDetailGrid').data('kendoGrid').editCell(cell);
+        }
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            deleteStatus = 1; //For Year
+            resetEditDeleteStatus = 3; //Delete Button
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        $(".btnAddBranch").click(function (e) {
+            AddBranch();
+        });
+
+        $('#PageDetailGrid').keyup(function (e) {
+            if (e.keyCode == 13) {
+                AddBranch();
+            }
+        });
+    });
+
+
+
+    //Handling Yes button click for grid row deletion
+    $('#btnConfirmationOK').click(function () {
+        if (deleteStatus == 1) {
+            if ($("#BankID").val() != "") {
+                $.ajax({
+                    url: '@Url.Action("Delete", "Bank")',
+                    type: 'POST',
+                    data: JSON.stringify({ "BankID": $("#BankID").val() }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            CheckRecordStatusForButton("NCF");
+                            $("#MessageText").html("");
+                            ResetOnlyMasterPageData();
+                            $(".txtBox").css("border-color", "");
+                            //$("#BranchID").val("Auto Generated");
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        } else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+            $(".txtBox").css("border-color", "");
+            CloseConfirmationDialog();
+        }
+        else if (deleteStatus == 2) {
+            if (dataitem.BranchID != "") {
+                $.ajax({
+                    url: '@Url.Action("Delete", "Branch")',
+                    type: 'POST',
+                    //data: JSON.stringify({ "BranchID": dataitem.BranchID, "RecordStatus": dataitem.RecordStatus }),
+                    data: JSON.stringify({ "BranchID": dataitem.BranchID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        } else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            } else {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+            }
+            $(".txtBox").css("border-color", "");
+            CloseConfirmationDialog();
+        }
+    });
+
+    //Handling No button click for grid row deletion
+    $('#btnConfirmationCancel').click(function () {
+        dataitem = {};
+        CloseConfirmationDialog();
+    });
+
+
+    //To Define Data Bank for Kendo Grid
+
+    var branchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BranchID",
+                fields: {
+                    BranchID: { editable: true },
+                    BanchCode: { editable: true },
+                    BranchName: { editable: true },
+                    LCLimit: { editable: true, type: "number", defaultValue: '' },
+                    Address1: { editable: true },
+                    Address2: { editable: true },
+                    Address3: { editable: true },
+                    LCOpened: { editable: true, type: "number", defaultValue: '' },
+                    LCBalance: { editable: true, type: "number", defaultValue: '' },
+                    LCMargin: { editable: true, type: "number", defaultValue: '' },
+                    LCMarginUsed: { editable: true, type: "number", defaultValue: '' },
+                    LCMarginBalance: { editable: true, type: "number", defaultValue: '' },
+                    BranchSwiftCode: { editable: true },
+                    LIMLimit: { editable: true, type: "number", defaultValue: '' },
+                    LIMTaken: { editable: true, type: "number", defaultValue: '' },
+                    LIMBalance: { editable: true, type: "number", defaultValue: '' },
+                    IsActive: { editable: true }
+                }
+            }
+        },
+        pageSize: 50
+    });
+    var grid = $("#PageDetailGrid").kendoGrid({
+        dataSource: branchGridDataSource,
+        pageable: true,
+        edit: function (e) {
+
+        },
+        editable: true,
+        selectable: "row",
+        scrollable: true,
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 200,
+        toolbar: [
+            {
+                text: "Add Branch", className: "btnAddBranch", imageClass: "k-icon k-add"
+            }
+            //{
+            //    template: "<input type='button' class='k-button' value='Add Branch' onclick='AddBranch()' />",
+            //    imageclass: "k-icon k-add"
+            //}
+        ],
+        columns: [
+
+            { field: "BanchCode", title: "Branch Code", width: 110 },
+            { field: "BranchName", title: "Branch Name", width: 150 },
+            { field: "BranchSwiftCode", title: "Swift Code", width: 100 },
+            { field: "LCLimit", title: "LC Limit", width: 100 },
+            { field: "LCOpened", title: "LC Opened", width: 100 },
+            { field: "LCBalance", title: "LC Balance", width: 120 },
+            { field: "LCMargin", title: "LC Margin", width: 100 },
+            { field: "LCMarginUsed", title: "Margin Used", width: 110 },
+            { field: "LCMarginBalance", title: "Margin Balance", width: 130 },
+            { field: "LIMLimit", title: "LIM Limit", width: 100 },
+            { field: "LIMTaken", title: "LIM Taken", width: 100 },
+            { field: "LIMBalance", title: "LIM Balance", width: 110 },
+            { field: "Address1", title: "Address1", width: 100 },
+            { field: "Address2", title: "Address2", width: 100 },
+            { field: "Address3", title: "Address3", width: 100 },
+            { field: "IsActive", title: "Status", width: 100, editor: ddlActive },
+            { command: [{ name: "DeltedRow", text: "Delete", click: handleDelete }], title: "Delete", width: "80px" }
+        ]
+    });
+
+
+    var activeAgentDataSource = [{ text: "Active", value: "Active" }, { text: "Inactive", value: "Inactive" }];
+
+    function ddlActive(container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                optionLabel: "Select",
+                autoBind: false,
+                change: function () {
+                    changeStatus = 1;
+                },
+                dataSource: activeAgentDataSource
+            });
+    };
+    //Handling Delete event for PageDeailsGrid row
+    function handleDelete(event) {
+        deleteStatus = 2;
+        var gridBank = $("#PageDetailGrid").data("kendoGrid");
+        dataitem = (gridBank.dataItem(gridBank.select()));
+        //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+        if (changeStatus == 0) {
+            OpenConfirmationDialog();
+        }
+        else {
+            resetEditDeleteStatus = 3; //Delete Button
+            OpenSaveChangesDialog();
+        }
+    };
+
+    @*//Handling Yes button click for grid row deletion
+    $('#btnConfirmationOK').click(function () {
+        if (dataitem.BranchID == "") {
+            $.ajax({
+                url: '@Url.Action("DelBranch", "Bank")',
+                type: 'POST',
+                data: JSON.stringify({ "branchId": dataitem.BranchID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".txtBox").css("border-color", "");
+                        $("#IsActive").val("Active");
+                        $(".SetFocus").focus();
+                    } else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css("color", "red");
+                    }
+                }
+            });
+        } else {
+            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+        }
+
+        $(".txtBox").css("border-color", "");
+        CloseConfirmationDialog();
+    });
+
+    //Handling No button click for grid row deletion
+    $('#btnConfirmationCancel').click(function () {
+        dataitem = {};
+        CloseConfirmationDialog();
+    });*@
+
+    //To clear operational/error message
+    ClearOperationalMessage();
+
+    //For removing operational & required message after triggering other event
+    ClearRequiredTextBoxRedColor();
+
+    // To check unsaved data in master or details
+    CheckUnSavedMasterData();
+
+    // Focus BankName textbox
+    $(".SetFocus").focus();
+
+    // Edit Button in Grid
+    function handleEdit(event) {
+        // For Grid Edit Button
+        resetEditDeleteStatus = 2;
+        // When Changes Data
+        if (changeStatus == 1) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            OpenSaveChangesDialog();
+        }
+            // When No Changes Data
+        else {
+            $(".txtBox").css("border-color", "");
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            SetMasterData(dataitem);
+        }
+    };
+
+    // Click Save Chages Popup No Button
+    $("#btnSaveChangeWindowOk").click(function () {
+        if (resetEditDeleteStatus == 1) { // Reset
+            ResetOnlyMasterPageData();
+            //ClearDetailGridFilterAndPaging('PageDetailGrid');
+            $(".txtBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#IsActive").val("Active");
+            changeStatus = 0;
+            CloseSaveChangesDialog();
+        }
+        else if (resetEditDeleteStatus == 2) { // Edit
+            $(".txtBox").css("border-color", "");
+            SetMasterData(dataitem);
+            changeStatus = 0;
+            CloseSaveChangesDialog();
+        }
+        else if (resetEditDeleteStatus == 3) { // Delete
+            if (deleteStatus == 1) {
+                if ($("#BankID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Bank")',
+                        type: 'POST',
+                        data: JSON.stringify({ "BankID": $("#BankID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                CheckRecordStatusForButton("NCF");
+                                $("#MessageText").html("");
+                                ResetOnlyMasterPageData();
+                                $(".txtBox").css("border-color", "");
+                                //$("#BranchID").val("Auto Generated");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+            else if (deleteStatus == 2) {
+                if (dataitem.BranchID != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Branch")',
+                        type: 'POST',
+                        //data: JSON.stringify({ "BranchID": dataitem.BranchID, "RecordStatus": dataitem.RecordStatus }),
+                        data: JSON.stringify({ "BranchID": dataitem.BranchID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".txtBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        } else
+            CloseSaveChangesDialog();
+    });
+
+    // Click Save Chages Popup Cancel Button
+    $("#btnSaveChangeWindowCancel").click(function () {
+        CloseSaveChangesDialog();
+    });
+
+    // **       Page Unloaded **//
+    window.onbeforeunload = function (e) {
+        if (changeStatus == 1) {
+            e.preventDefault();
+        }
+    };
+    //  **       Page Unloaded **//
+
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var modelSysSource = {
+        "BankID": "", "BankCode": "", "BankName": "", "BankCategory": "", "BankBINNo": "", "BankSwiftCode": "", "IsActive": "",
+        "Branches": []
+    };
+    function ClearSource() {
+        modelSysSource = {
+            "BankID": "", "BankCode": "", "BankName": "", "BankCategory": "", "BankBINNo": "", "BankSwiftCode": "", "IsActive": "",
+            "Branches": []
+        };
+    }
+    var branch = {
+        "BranchID": "", "BankID": "", "BanchCode": "", "BranchName": "", "Address1": "", "Address2": "", "Address3": "",
+        "LCLimit": "", "LCOpened": "", "LCBalance": "", "LCMargin": "", "LCMarginUsed": "", "LCMarginBalance": "",
+        "BranchSwiftCode": "", "LIMLimit": "", "LIMTaken": "", "LIMBalance": "", "IsActive": ""
+    };
+    function ClearBranch() {
+        branch = {
+            "BranchID": "", "BankID": "", "BanchCode": "", "BranchName": "", "Address1": "", "Address2": "", "Address3": "",
+            "LCLimit": "", "LCOpened": "", "LCBalance": "", "LCMargin": "", "LCMarginUsed": "", "LCMarginBalance": "",
+            "BranchSwiftCode": "", "LIMLimit": "", "LIMTaken": "", "LIMBalance": "", "IsActive": ""
+        };
+    }
+    var saveStatus = 1;
+
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        // Check Empty or Maximum Length in BankCode
+        //CheckRequiredTextBoxMaxLength('BankCode', 30);
+        // Check Empty or Maximum Length in BankName
+        CheckRequiredTextBoxMaxLength('BankName', 100);
+        // Check Maximum Length in BankType
+        CheckNormalTextBoxMaxLength('BankType', 20);
+        // Check Maximum Length in BankType
+        //CheckNormalTextBoxMaxLength('BankCategory', 10);
+        if ($('#BankType').val() == "") {
+            $('#MessageText').html("Please input bank type.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            $('#BankType').css({ 'box-shadow': '1px 1px 1px red' });
+            setTimeout(function () {
+                $('#BankType').focus();
+            }, 1);
+            return false;
+        }
+        $('#BankType').css({ 'box-shadow': 'none' });
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            modelSysSource.BankID = $("#BankID").val();
+            modelSysSource.BankCode = $("#BankCode").val();
+            modelSysSource.BankName = $("#BankName").val();
+            modelSysSource.BankCategory = "BNK";
+            modelSysSource.BankType = $("#BankType").val();
+            modelSysSource.BankBINNo = $("#BankBINNo").val();
+            modelSysSource.BankSwiftCode = $("#BankSwiftCode").val();
+            modelSysSource.IsActive = $("#IsActive option:selected").val();
+            var grid = branchGridDataSource.data();
+            if (grid.length > 0) {
+                for (var i = 0; i < grid.length; i++) {
+                    branch.BranchID = grid[i].BranchID;
+                    branch.BankID = $("#BankID").val();
+                    branch.BanchCode = grid[i].BanchCode;
+                    branch.BranchName = grid[i].BranchName;
+                    branch.Address1 = grid[i].Address1;
+                    branch.Address2 = grid[i].Address2;
+                    branch.Address3 = grid[i].Address3;
+                    branch.LCLimit = grid[i].LCLimit;
+                    branch.LCOpened = grid[i].LCOpened;
+                    branch.LCBalance = grid[i].LCBalance;
+                    branch.LCMargin = grid[i].LCMargin;
+                    branch.LCMarginUsed = grid[i].LCMarginUsed;
+                    branch.LCMarginBalance = grid[i].LCMarginBalance;
+                    branch.BranchSwiftCode = grid[i].BranchSwiftCode;
+                    branch.LIMLimit = grid[i].LIMLimit;
+                    branch.LIMTaken = grid[i].LIMTaken;
+                    branch.LIMBalance = grid[i].LIMBalance;
+                    branch.IsActive = grid[i].IsActive;
+                    modelSysSource.Branches.push(branch);
+                    ClearBranch();
+                }
+            }
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("Save", "Bank")',
+                    data: JSON.stringify(modelSysSource),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#BankID').val(response.BankID);
+                            SetBank(response.BankID);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            SetBank(response.msg.ReturnId);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $("#MessageText").html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#BankName").focus();
+            }
+        }
+        ClearSource();
+        return true;
+    };
+
+    $("#btnSave").click(function () {
+        ChangesInGrid(branchGridDataSource);
+        Save();
+    });
+
+    // ------------------------ Search ---------------------- //
+
+    // ************ Bank Grid & Window Declaration ************ //
+
+    //Bank Window
+    var BankWindow = $('#BankWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "80%",
+        height: "420px",
+        title: "Bank List",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Packing List Grid Data Source
+    var BankGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BankID",
+                fields: {
+                    BankID: { editable: false },
+                    BankCode: { editable: false },
+                    BankName: { editable: false },
+                    BankCategory: { editable: false },
+                    BankType: { editable: false },
+                    IsActive: { editable: false }
+                }
+            }
+        },
+        pageSize: 50
+    });
+
+    //Packing List Grid
+    $("#BankWindowGrid").kendoGrid({
+        dataSource: BankGridDataSource,
+        pageable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 268,
+        columns: [
+            { field: "BankName", title: "Name" },
+            { field: "BankCode", title: "Code" },
+            { field: "BankSwiftCode", title: "SwiftCode" },
+            { field: "BankBINNo", title: "BINNo" },
+            { field: "BankType", title: "Type" }
+        ]
+    });
+
+    //Activate Packing List Window
+    $('#btnSearch').click(function (e) {
+        GetBanks();
+        BankWindow.open();
+        BankWindow.center();
+    });
+
+    // ************ Bank Grid & Window Declaration End ************ //
+
+    // ************ Bank Window Pop-up Event ************ //
+
+    function GetBanks() {
+        $.ajax({
+            url: '@Url.Action("GetAllBanks", "CommonChemical")',
+            type: 'GET',
+            //data: ({  }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    BankGridDataSource.data(data);
+                }
+            }
+        });
+    }
+
+    function SetBank(bankId) {
+        $.ajax({
+            url: '@Url.Action("GetBankById", "Bank")',
+            type: 'GET',
+            data: ({ bankId: bankId }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $('#BankID').val(data.BankID);
+                $('#BankCode').val(data.BankCode);
+                $('#BankName').val(data.BankName);
+                $('#BankCategory').val(data.BankCategory);
+                $('#BankType').val(data.BankType);
+                $('#BankBINNo').val(data.BankBINNo);
+                $('#BankSwiftCode').val(data.BankSwiftCode);
+                $('#IsActive').val(data.IsActive);
+                if (data.Branches.length > 0) {
+                    branchGridDataSource.data(data.Branches);
+                }
+            }
+        });
+
+    }
+
+    function GetBankId() {
+        var gridBank = $("#BankWindowGrid").data("kendoGrid");
+        var selectedBank = (gridBank.dataItem(gridBank.select()));
+        SetBank(selectedBank.BankID);
+    }
+
+    $("#btnBankWindowOK").click(function () {
+        GetBankId();
+        BankWindow.close();
+    });
+
+    $('#BankWindowGrid').dblclick(function () {
+        GetBankId();
+        BankWindow.close();
+    });
+
+    // ************ Bank Window Pop-up Event End ************ //
+
+    // ------------------------ Search End ---------------------- //
+
+    function ChangesInGrid(ds) {
+        //var ds = commercialInvoiceItemGridDataSource;
+        var dirty = false;
+
+        $.each(ds._data, function () {
+            if (this.dirty == true) {
+                dirty = true;
+                changeStatus = 1;
+            }
+        });
+        if (ds._destroyed.length > 0) { dirty = true; changeStatus = 1; }
+        return dirty;
+    }
+
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            $('#BankType').css({ 'box-shadow': 'none' });
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".txtBox").css("border-color", "");
+            $("#PageDetailGrid").data('kendoGrid').dataSource.data([]);
+            $("#IsActive").val("Active");
+        }
+    });
+</script>

@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "GradeReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="FormHeader">
+    <div class="row">
+        <div id="FormTitlePannel" class="col-lg-4">
+            <div id="FormTitle" style="font-size:larger; font-weight:bold;">Reports Parameter</div>
+        </div>
+    </div>
+</div>
+<div class="FormBody" style="font-size: 12px;">
+    @using (Html.BeginForm("StockReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; float: right;" tabindex="3" checked="checked" />
+                <label style="font-size: small; float: right; font-weight: bold; color: #00688B;">PDF</label>
+
+                <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%; float: right;" tabindex="4" />
+                <label style="font-size: small; float: right; font-weight: bold; color: #00688B;">Excel</label>
+            </div>
+        </div>
+
+
+
+        <div id="supplierInfo" class="row" style="margin-bottom: 5px; ">
+            <div class="col-lg-2">
+                <label style="float: right;">Supplier</label>
+            </div>
+            <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                <input type="text" id="SupplierID" name="SupplierID" placeholder="Press F9" readonly="readonly" />
+                <input type="text" id="SupplierName" readonly="readonly" />
+            </div>
+        </div>
+
+        <div id="StoreInfo" class="row" style="margin-bottom: 5px; ">
+            <div class="col-lg-2">
+                <label style="float: right;">Store</label>
+            </div>
+            <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                @Html.DropDownList("StoreID", new SelectList(ViewBag.Store, "StoreID", "StoreName"), "--Select--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })
+            </div>
+        </div>
+
+        <div id="ItemTypeInfo" class="row" style="margin-bottom: 5px; ">
+            <div class="col-lg-2">
+                <label style="float: right;">Item Type</label>
+            </div>
+            <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                @Html.DropDownList("ItemTypeID", new SelectList(ViewBag.ItemType, "ItemTypeID", "ItemTypeName"), "--Select--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })
+            </div>
+        </div>
+
+        <div id="LeatherTypeInfo" class="row" style="margin-bottom: 5px; ">
+            <div class="col-lg-2">
+                <label style="float: right;">Leather Type</label>
+            </div>
+            <div class="col-lg-3" style="padding-left: 0; padding-right: 0;">
+                @Html.DropDownList("LeatherTypeID", new SelectList(ViewBag.LeatherType, "LeatherTypeID", "LeatherTypeName"), "--Select--", new { @class = "txtBox Dropdown RequiredDropdown", @style = "width: 175px;" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 15px;">
+            <div class="col-lg-2">
+                <label style="float: right;">Date from:</label>
+            </div>
+            <div class="col-lg-1" style="padding-left: 0; padding-right: 0;">
+                <input type="text" id="dateFrom" name="DateFrom" class="datePicker" style="min-width: 100px; width: 100%;" />
+            </div>
+            <div class="col-lg-2">
+                <label style="float: right;">Date To:</label>
+            </div>
+            <div class="col-lg-1" style="padding-left: 0; padding-right: 0;">
+                <input type="text" id="dateTo" name="DateTo" class="datePicker" style="min-width: 100px; width: 100%;" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px; ">
+            <div class="col-lg-2">
+                <label style="float: right;">Daily Stock</label>
+            </div>
+            <div class="col-lg-1" style="">
+                <input type="radio" id="DailyStock" name="ReportName" value="DailyStock" checked="checked" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label style="float: right;">Item Stock</label>
+            </div>
+            <div class="col-lg-1" style="">
+                <input type="radio" id="ItemStock" name="ReportName" value="ItemStock" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label style="float: right;">Supplier Stock</label>
+            </div>
+            <div class="col-lg-1" style="">
+                <input type="radio" id="SupplierStock" name="ReportName" value="SupplierStock" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 15px;">
+            <div class="col-lg-2">
+                <input type="submit" id="btnShowReport" value="Show Report" style="float:right;" />
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+        });
+
+        var supplierGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SupplierID",
+                    fields: {
+                        SupplierID: { editable: false },
+                        SupplierName: { editable: false },
+                        Address: { editable: false },
+                        SupplierAddressID: { editable: false },
+                        ContactPerson: { editable: false },
+                        ContactNumber: { editable: false },
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSupplierList", "Common")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 10
+
+        });
+
+        var supplierGrid = $("#SupplierWindowGrid").kendoGrid({
+            dataSource: supplierGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                  { field: "SupplierID", title: "Supplier ID", width: "60px", filterable: false, sortable: false },
+                  { field: "SupplierName", title: "Supplier Name", width: "60px" },
+                  { field: "Address", title: "Address", width: "60px" },
+                  { field: "ContactPerson", title: "Contact Person", width: "60px" },
+                  { field: "ContactNumber", title: "Contact Number", width: "60px" }
+            ]
+        });
+
+    });
+
+    var supplierWindow = $('#SupplierWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List Of Supplier",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + GridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + GridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(GridName) {
+        var grid = $('#' + GridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+
+    $(document.body).keypress(function (e) {
+        if ($("#SupplierID").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SupplierWindowGrid');
+                supplierWindow.open();
+            }
+        }
+    });
+
+
+    // Handling button click for Supplier window grid
+    $('#btnSupplierWindowOK').click(function () {
+        alert("test");
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $('#btnSupplierWindowCancel').click(function () {
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").dblclick(function () {
+        ListOfValueGridEvent('SupplierWindowGrid');
+        supplierWindow.close();
+    });
+    $("#SupplierWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEvent('SupplierWindowGrid');
+            supplierWindow.close();
+
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            supplierWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+
+
+</script>
+

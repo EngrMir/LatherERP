@@ -1,0 +1,2627 @@
+﻿@{
+    ViewBag.Title = "Crust Leather Transfer Treatment";
+    ViewBag.SearchTitle = "CLTransferNo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @Html.Partial("~/Views/Common/_FormHeader.cshtml")
+</div>
+
+<div class="row">
+
+    <input type="hidden" class="txtBox" id="CLTransferID" name="CLTransferID" readonly="readonly" />
+    <input type="hidden" class="txtBox" id="CLTransferFromID" name="CLTransferFromID" readonly="readonly" />
+    <input type="hidden" class="txtBox" id="CLTransferToID" name="CLTransferToID" readonly="readonly" />
+    <input class="txtBox" id="BuyerID" name="BuyerID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="ArticleID" name="ArticleID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="ColorID" name="ColorID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="BuyerOrderID" name="BuyerOrderID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="ItemTypeID" name="ItemTypeID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="LeatherStatusID" name="LeatherStatusID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="GradeRange" name="GradeRange" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="ArticleChallanID" name="ArticleChallanID" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="ArticleColorNo" name="ArticleColorNo" readonly="readonly" style="display: none" />
+    <input class="txtBox" id="AreaUnit" name="AreaUnit" readonly="readonly" style="display: none" />
+
+
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Transfer No</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="CLTransferNo" class="txtBox" readonly="readonly" placeholder="Auto Generated" name="CLTransferNo" tabindex="1" />
+            </div>
+            <div class="col-lg-1">
+                <label>TransferCategory</label>
+            </div>
+            <div class="col-lg-3">
+                <div id="ddTransferCategory">
+                    <select id="CLTransferCategory" name="CLTransferCategory" tabindex="2" class="txtBox" style="width:274px">
+                        <option value="" style="display: none">.....Select.....</option>
+                        <option value="AQP">After QC To Production</option>
+                        <option value="AQS">After QC To Store</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <label>Issue From</label>@*map with IssueFrom*@
+            </div>
+            <div class="col-lg-3">
+                @Html.DropDownList("TransactionStore", new SelectList(ViewBag.IssueFromStoreList, "StoreID", "StoreName"), ".....Select.....", new { @class = " txtBox", @style = "width: 274px; margin-left: 0px;" })
+                @if (ViewBag.IssueFromStoreList != null)
+                {
+                    var d = ViewBag.IssueFromStoreList;
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-1">
+                <label>TransferDate</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="CLTransferDate" class=" txtBox datePicker" name="CLTransferDate" tabindex="4" />
+            </div>
+            <div class="col-lg-1">
+                <label>TransferType</label>
+            </div>
+            <div class="col-lg-3">
+                <select id="TranrsferType" tabindex="5" class="txtBox" style="width:274px">
+                    <option value="" style="display: none">.....Select.....</option>
+                    <option value="TAO">Transfer Against Order</option>
+                    <option value="TWO">Transfer Without Order</option>
+                </select>
+
+
+
+            </div>
+            <div class="col-lg-1">
+                <label>Issued Store</label>
+            </div>
+            <div class="col-lg-3">
+                <select id="IssueStore" class="txtBox" style="width:274px"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        @*<div class="row">
+                <div class="col-lg-1">
+                    <label>Party Name</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="BuyerName" readonly="readonly" class="txtBox" name="BuyerName" tabindex="7" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-1">
+                    <label>Order</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="BuyerOrderNo" class="txtBox" readonly="readonly" name="BuyerOrderNo" tabindex="8" />
+                </div>
+                <div class="col-lg-1">
+                    <label>Article</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="ArticleNo" readonly="readonly" class="txtBox" name="ArticleNo" tabindex="9" />
+                </div>
+            </div>*@
+
+        <div class="row" style="padding-top:2%">
+            <div class="col-lg-12" style="width:100%" tabindex="10">
+                <div id="ItemGrid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-6" style="width:100%" tabindex="11">
+                <div id="IssueItemGrid">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Check Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="CheckNote" class="col-lg-12" name="CheckNote" rows="1" tabindex="12"></textarea><br />
+                <button id="btnCheck" class="" name="btnCheck">Checked</button>
+
+            </div>
+            <div class="col-lg-2" style="">
+                <label>Confirm Note</label>
+            </div>
+            <div class="col-lg-4">
+                <textarea id="IssueNote" class="col-lg-12" name="IssueNote" rows="1" tabindex="13"></textarea><br />
+                <button type="button" id="btnConfirm" name="ConfirmComments">Confirmed</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+@*############################ Crust Detail Grid Popup #######################*@
+<div id="PartyWindow" style="display: none;">
+
+    <div id="PartyWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPartyWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPartyWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="BuyerNameWindow" style="display: none;">
+    <div id="BuyerNameWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerNameWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerNameWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="BuyerOrderWindow" style="display: none;">
+    <div id="BuyerOrderWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnBuyerOrderWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnBuyerOrderWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ArticleWindow" style="display: none;">
+    <div id="ArticleWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnArticleWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnArticleWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ItemTypeWindow" style="display: none;">
+    <div id="ItemTypeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnItemTypeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnItemTypeWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="LeatherStatusWindow" style="display: none;">
+    <div id="LeatherStatusWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnLeatherStatusWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnLeatherStatusWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ColorWindow" style="display: none;">
+    <div id="ColorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnColorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnColorWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="GradeWindow" style="display: none;">
+    <div id="GradeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGradeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGradeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+@*############################ END of Crust Detail Grid Popup #######################*@
+
+@*################################## DELETE Confirm Window ######################### *@
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+@*################################## END of DELETE Confirm Window ######################### *@
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    //############### Variable Decleration ##############################
+    //$("#IssueStore").html("");
+    var saveStatus = 1;
+    var changeStatus = 0; // any change textbox/Dropdown/Grid
+    var ChildItemGridchangeStatus = 0;
+    var MasterItemGridchangeStatus = 0; // any change textbox/Dropdown/Grid
+    var ItemGridchangeStatus = 0;
+    var resetEditStatus = 0;
+    var dataitem = {};
+    var PageStatus = "";
+
+
+
+
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+    //############### End Variable ##########################
+
+
+
+    //######################################### ALL DROP DOWN ######################################//
+
+
+    //**************************** Cascading DropDown for Transfer Category & Issue To ****************************//
+    function CheckValue() {
+        if (($("#IssueStore").val() != "-- Select One --")) {
+            return true;
+        }
+        else {
+            $("#MessageText").html("Issue store can not be blank.");
+            $("#MessageText").css("color", "red");
+            return false;
+        }
+    }
+
+    $('#CLTransferCategory').change(function () {
+        var flag = 0;
+        var id = $(this).val();
+
+        if ($("#CLTransferCategory").val() == "AQP") {
+            flag = 1;
+            if (id != "") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RetriveDropdownDataAgainstTransferCategory", "CrustedLeatherTransferTreatment")',
+                    data: JSON.stringify({ "tempFlag": flag }),
+                    contentType: "application/json",
+                    dataType: "html",
+                    success: function (data) {
+                        $("#IssueStore").html(data);
+                        return true;
+                    },
+                    error: function (msg) {
+                        alert("Failed: " + msg.status + ": " + msg.statusText);
+                    },
+                    failure: function (response) {
+                        //alert(response.d);
+                    }
+                });
+            }
+
+        }
+        else if ($("#CLTransferCategory").val() == "AQS") {
+            flag = 2;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RetriveDropdownDataAgainstTransferCategory", "CrustedLeatherTransferTreatment")',
+                data: JSON.stringify({ "tempFlag": flag }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                    $("#IssueStore").html(data);
+                    return true;
+                },
+                error: function (msg) {
+                    alert("Failed: " + msg.status + ": " + msg.statusText);
+                },
+                failure: function (response) {
+                    //alert(response.d);
+                }
+            });
+        }
+
+    });
+
+    //************************ END of Cascading DropDown for Transfer Category & Issue To *****************************//
+
+
+
+    //************************** DropDown in Grids *********************************//
+
+
+    var ddlCrustQCLabelDataSource = [{ text: "PASS", value: "PASS" }, { text: "FAIL", value: "FAIL" }];
+
+    function ddlCrustQCLabel(container, options) {
+        $('<input id="CrustQCLabel" data-bind="value:' + options.field + '"/ >')
+        .appendTo(container)
+        .kendoDropDownList({
+
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: "Select",
+            change: function (e) {
+                changeStatus = 1;
+                ChildItemGridchangeStatus = 1;
+            },
+            dataSource: ddlCrustQCLabelDataSource
+        });
+    };
+
+
+    var ddlChallanDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleChallanID",
+                fields: {
+                    ArticleChallanID: { editable: true },
+                    ArticleChallanNo: { editable: true },
+                    ArticleColorNo: { editable: true }
+                }
+            }
+        },
+        pageSize: 50,
+        transport: {
+            read: {
+                url: '@Url.Action("GetArticleChallanNoDD", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlChallan(container, options) {
+        $('<input name="ArticleChallanNo" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "ArticleChallanNo",
+                    dataValueField: "ArticleChallanID",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function (e) {
+                        ChildItemGridchangeStatus = 1;
+                        changeStatus = 1;
+                        var dataItem = e.sender.dataItem();
+                        options.model.set("ArticleChallanID", dataItem.ArticleChallanID);
+                        options.model.set("ArticleChallanNo", dataItem.ArticleChallanNo);
+                        options.model.set("ArticleColorNo", dataItem.ArticleColorNo);
+                    },
+                    dataSource: ddlChallanDataSource
+                });
+    };
+
+    var ddlUnitDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UnitID",
+                fields: {
+                    AreaUnit: { editable: true },
+                    UnitID: { editable: true },
+                    UnitName: { editable: true }
+                }
+            }
+        },
+        pageSize: 50,
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllUnit", "Common")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        }
+    });
+
+    function ddlUnit(container, options) {
+        $('<input name="UnitID" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "UnitName",
+                dataValueField: "UnitID",
+                optionLabel: "Select",
+                autoBind: false,
+                dataSource: ddlUnitDataSource,
+                change: function (e) {
+                    changeStatus = 1;
+                    var dataItem = e.sender.dataItem();
+                    options.model.set("UnitName", dataItem.UnitName);
+                    options.model.set("AreaUnit", dataItem.UnitID);
+                },
+            });
+    }
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    //******************************* End of DropDown in Grids *************************************//
+
+    //######################################### END OF ALL DROP DOWN ######################################//
+
+
+
+
+
+
+
+
+
+
+
+    // ######################### Crust Leather Transfer Treatment Master Grid Start ###########################
+
+    var ItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CLTransferID",
+                fields: {
+                    CLTransferID: { editable: true },
+                    CLTransferNo: { editable: true },
+                    CLTransferFromID: { editable: true },
+                    CLTransferToID: { editable: true },
+
+                    BuyerID: { editable: true },
+                    BuyerOrderID: { editable: true },
+                    ItemTypeID: { editable: true },
+                    LeatherTypeID: { editable: true },
+                    LeatherStatusID: { editable: true },
+                    StoreID: { editable: true },
+                    ArticleID: { editable: true },
+                    ColorID: { editable: true },
+                    GradeRange: { editable: true },
+                    UnitID: { editable: true },
+
+                    CrustQCLabel: { editable: true },
+
+                    BuyerName: { editable: true, defaultValue: 'Press F9' },
+                    BuyerOrderNo: { editable: true },
+                    ArticleName: { editable: true },
+                    ArticleNo: { editable: true },
+                    ArticleChallanNo: { editable: true },
+                    ArticleChallanID: { editable: true },
+                    ArticleColorNo: { editable: true },
+                    ItemTypeName: { editable: true },
+                    LeatherStatusName: { editable: true },
+                    StoreName: { editable: true },
+                    GradeName: { editable: true },
+                    ColorName: { editable: true },
+                    UnitName: { editable: true },
+
+
+                    QCStockPcs: { editable: true },
+                    QCStockSide: { editable: true },
+                    QCStockArea: { editable: true },
+                    AreaUnit: { editable: true }
+                }
+            }
+        },
+
+
+
+
+        pageSize: 10
+    });
+
+    var ItemGrid = $("#ItemGrid").kendoGrid({
+        dataSource: ItemGridDataSource,
+        pageable: false,
+        scrolable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 180,
+        toolbar: [{
+            text: "Add New Item",
+            className: "btnIssueItemMasterGrid",
+            imageClass: "k-icon k-add"
+
+        }],
+        edit: function (e) {
+            $('input[name = "BuyerName"]').attr("readonly", true);
+            $('input[name = "BuyerOrderNo"]').attr("readonly", true);
+            $('input[name = "ArticleName"]').attr("readonly", true);
+            $('input[name = "ArticleChallanNo"]').attr("readonly", true);
+            $('input[name = "ItemTypeName"]').attr("readonly", true);
+            $('input[name = "LeatherStatusName"]').attr("readonly", true);
+            $('input[name = "ColorName"]').attr("readonly", true);
+            $('input[name = "GradeRange"]').attr("readonly", true);
+            $('input[name = "CrustQCLabel"]').attr("readonly", true);
+            $('input[name = "QCStockPcs"]').attr("readonly", true);
+            $('input[name = "QCStockSide"]').attr("readonly", true);
+            $('input[name = "QCStockArea"]').attr("readonly", true);
+            $('input[name = "UnitName"]').attr("readonly", true);
+
+        },
+        columns: [
+              { field: "TransectionID", hidden: true },
+              { field: "CLTransferID", hidden: true },
+              { field: "CLTransferNo", hidden: true },
+              { field: "CLTransferFromID", hidden: true, title: "CLTransferFromID", width: "60px" },
+              { field: "CLTransferToID", hidden: true },
+              { field: "StoreID", hidden: true },
+              { field: "BuyerID", hidden: true },
+              { field: "BuyerOrderID", hidden: true },
+              { field: "ArticleID", hidden: true },
+              { field: "ArticleNo", hidden: true },
+              { field: "ItemTypeID", hidden: true },
+              { field: "LeatherTypeID", hidden: true },
+              { field: "LeatherStatusID", hidden: true },
+              { field: "ColorID", hidden: true },
+              { field: "GradeRange", hidden: true },
+              { field: "AreaUnit", hidden: true },
+              { field: "ArticleChallanID", hidden: true },
+              { field: "ArticleColorNo", hidden: true },
+
+
+              { field: "BuyerName", title: "Party", width: "50px", editable: true, filterable: false, attributes: { "class": "Buyer", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "BuyerOrderNo", title: "Order", width: "60px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ArticleName", title: "Article", width: "60px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ArticleChallanNo", title: "Challan", filterable: false, width: "60px",   headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ItemTypeName", title: "Item", width: "60px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "LeatherStatusName", title: "Leather Status", width: "80px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ColorName", title: "Color", width: "55px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "GradeRange", title: "Grade", width: "50px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "CrustQCLabel", title: "QC Label", width: "70px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "QCStockPcs", title: "Stock Pcs", width: "68px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "QCStockSide", title: "Stock Side", width: "68px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "QCStockArea", title: "Stock Area", width: "68px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "UnitName", title: "Unit", width: "50px", filterable: false,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { command: [{ name: "DeltedRow", text: "Delete", click: DeleteMasterGridItem }], title: "Action", width: 55, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    }).data('kendoGrid');
+
+
+
+    $(".btnIssueItemMasterGrid").click(function (e) {
+
+        var grid = $("#ItemGrid").data("kendoGrid");
+        $("#ItemGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+        grid.addRow();
+        e.preventDefault();
+    });
+
+
+
+    @*//Get Child Grid Data According To Master Grid Data
+
+    $("#ItemGrid").on("click", "tr", function () {
+        var parentGrid = $("#ItemGrid").data("kendoGrid");
+        var parentGridRow = parentGrid.select();
+        var itemParentGrid = parentGrid.dataitem(parentGridRow);
+        $("#ArticleChallanNo").val(itemParentGrid.ArticleChallanNo);
+        if (itemParentGrid.CLTransferFromID != "") {
+            $.ajax({
+                url: '@Url.Action("GetCrustDataGradeGrid", "CrustedLeatherTransferTreatment")',
+                type: 'GET',
+                data: { "CLTransferFromID": itemParentGrid.CLTransferFromID, "TransactionStore": $("#TransactionStore").val(), "BuyerID": $("#BuyerID").val(), "BuyerOrderID": $("#BuyerOrderID").val(), "ArticleID": $("#ArticleID").val(), "ItemTypeID": $("#ItemTypeID").val(), "LeatherStatusID": $("#LeatherStatusID").val(), "ColorID": $("#ColorID").val() },
+                success: function (response) {
+                    $("#IssueItemGrid").data("kendoGrid").dataSource.data(response);
+
+                }
+            });
+        }
+        else {
+            $("#IssueItemGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });*@
+
+
+
+    // ######################### Item Master Grid END ###########################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ######################### Item Child Grid Start ###########################
+
+    var ItemGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "CLTransferToID",
+                fields: {
+                    CLTransferID: { editable: true },
+                    CLTransferFromID: { editable: true },
+                    CLTransferToID: { editable: true },
+                    CLTransferNo: { editable: true },
+
+                    BuyerID: { editable: true },
+                    BuyerOrderID: { editable: true },
+                    ArticleID: { editable: true },
+                    ArticleNo: { editable: true },
+                    ArticleName: { editable: true, defaultValue: 'Press F9' },
+                    ArticleChallanNo: { editable: true },
+                    ArticleChallanID: { editable: true },
+                    StoreID: { editable: true },
+                    ItemTypeID: { editable: true },
+                    LeatherStatusID: { editable: true },
+                    ColorID: { editable: true },
+                    GradeRange: { editable: true },
+                    CrustQCLabel: { editable: true },
+
+
+
+                    ArticleColorNo: { editable: false },
+                    ItemTypeName: { editable: true, defaultValue: 'Press F9' },
+                    LeatherStatusName: { editable: true, defaultValue: 'Press F9' },
+                    GradeName: { editable: true, defaultValue: 'Press F9' },
+                    ColorName: { editable: true, defaultValue: 'PressF9' },
+                    UnitName: { editable: true },
+                    BuyerOrderNo: { editable: true, defaultValue: 'Press F9' },
+                    BuyerName: { editable: true, defaultValue: 'Press F9' },
+
+                    ToStockPcs: { editable: true },
+                    ToStockSide: { editable: true },
+                    ToStockArea: { editable: true },
+                    AreaUnit: { editable: true },
+                    TransferAreaUnit: { editable: false },
+                    UnitName: { editable: true }
+                }
+            }
+        },
+
+
+
+
+        pageSize: 10
+    });
+
+    var IssueItemGrid = $("#IssueItemGrid").kendoGrid({
+        dataSource: ItemGridDataSource,
+        pageable: false,
+        scrolable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 180,
+        toolbar: [{
+            text: "Add New Item",
+            className: "btnIssueItemGrid",
+            imageClass: "k-icon k-add"
+
+        }],
+        columns: [
+              { field: "CLTransferID", hidden: true },
+              { field: "CLTransferFromID", hidden: true },
+              { field: "CLTransferToID", hidden: true, title: "CLTransferToID", width: "50px" },
+              { field: "CLTransferNo", hidden: true },
+              { field: "ArticleID", hidden: true },
+              { field: "ColorID", hidden: true },
+              { field: "GradeRange", hidden: true },
+              { field: "ItemTypeID", hidden: true },
+              { field: "LeatherStatusID", hidden: true },
+              { field: "BuyerOrderID", hidden: true },
+              { field: "BuyerID", hidden: true },
+              { field: "AreaUnitID", hidden: true },
+              { field: "AreaUnit", hidden: true },
+              { field: "ArticleChallanID", hidden: true },
+              { field: "UnitID", hidden: true },
+              { field: "BuyerName", title: "Party", editable: true, filterable: false, width: "53px", attributes: { "class": "BuyerName", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "BuyerOrderNo", title: "Order", filterable: false, width: "52px", attributes: { "class": "BuyerOrder", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ArticleName", title: "Article ", filterable: false, width: "50px", attributes: { "class": "Article", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ArticleChallanNo", title: "Challan", filterable: false, editor: ddlChallan, width: "55px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ItemTypeName", title: "Item Type ", width: "60px", filterable: false, attributes: { "class": "ItemType", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "LeatherStatusName", title: "Leather Status ", filterable: false, width: "80px", attributes: { "class": "LeatherStatus", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ColorName", title: "Color ", width: "45px", filterable: false, attributes: { "class": "Color", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "GradeRange", title: "Grade ", filterable: false, width: "50px", attributes: { "class": "Grade", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "CrustQCLabel", title: "QC Label ", width: "70px", filterable: false, editor: ddlCrustQCLabel, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ToStockPcs", title: "Transfer Pcs", width: "75px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ToStockSide", title: "Transfer Side", width: "75px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "ToStockArea", title: "Transfer Area", width: "75px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "UnitName", title: "Unit", width: "50px", filterable: false, editor: ddlUnit, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { command: [{ name: "DeltedRow", text: "Delete", click: DeleteChildGridItem }], title: "Action", width: 55, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    }).data('kendoGrid');
+
+
+    $(".btnIssueItemGrid").click(function (e) {
+
+        var grid = $("#IssueItemGrid").data("kendoGrid");
+        $("#IssueItemGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+        grid.addRow();
+        e.preventDefault();
+    });
+
+
+    // ######################### Item Child Grid END ###########################
+
+    //************************** ADD NEW ROW IN CHILD GRID VIEW ****************
+
+
+    var DeleteFrom = 0;
+    function DeleteChildGridItem(event) {
+        if (changeStatus == 1) {
+            DeleteFrom = 1;
+            dataitem = IssueItemGrid.dataItem($(event.currentTarget).closest("tr"));
+            OpenConfirmationDialog();
+        }
+        else {
+            resetEditStatus = 4;
+            dataitem = IssueItemGrid.dataItem($(event.currentTarget).closest("tr"));
+            OpenSaveChangesDialog();
+        }
+
+    };
+
+    function DeleteMasterGridItem(event) {
+        if (changeStatus == 1) {
+            DeleteFrom = 2;
+            dataitem = ItemGrid.dataItem($(event.currentTarget).closest("tr"));
+            OpenConfirmationDialog();
+        }
+        else {
+            dataitem = ItemGrid.dataItem($(event.currentTarget).closest("tr"));
+            resetEditStatus = 3;
+            OpenSaveChangesDialog();
+        }
+
+    };
+
+    //Handling Yes button click for grid row deletion
+    $('#btnConfirmationOK').click(function () {
+        if (DeleteFrom == 1) // IssueItemGrid Delete
+        {
+            if (dataitem.CLTransferToID == 0) {
+                $("#IssueItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                $('#MessageText').html("Delete Successful");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("DeleteChildItemGridInfo", "CrustedLeatherTransferTreatment")',
+                    type: 'GET',
+                    data: { "CLTransferToID": dataitem.CLTransferToID },
+                    success: function (response) {
+                        if (response.Msg == "Success") {
+                            $('#MessageText').html("Delete Successful");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            $("#IssueItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        }
+                        else if (response.Msg == "Fail") {
+                            $('#MessageText').html("Delete Failed");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                        else if (response.Msg == "CNF") {
+                            $('#MessageText').html("Confirmed record can not be deleted.");
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+
+                    } //End of success call
+                });
+            }
+        }
+
+
+        else if (DeleteFrom == 2) // Challan Delete
+
+        {
+            if (dataitem.CLTransferFromID == 0) {
+                $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                $('#MessageText').html("Delete Successful");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("DeleteChildItemGridInfo", "CrustedLeatherTransferTreatment")',
+                    type: 'GET',
+                    data: { "CLTransferFromID": dataitem.CLTransferFromID },
+                    success: function (response) {
+                        if (response.Msg == "Success") {
+                            $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            $('#MessageText').html("Delete Successful");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            
+                        }
+                        else if (response.Msg == "Fail") {
+                            $('#MessageText').html("Delete Failed");
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+                        else if (response.Msg == "CNF") {
+                            $('#MessageText').html("Confirmed record can not be deleted.");
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                        }
+
+                    } //End of success call
+                });
+            }
+        }
+
+
+        @*{
+            var IssueItemGridDataSource = $("#IssueItemGrid").data("kendoGrid").dataSource;
+            var IssueItemGridData = IssueItemGridDataSource.data();
+            if (IssueItemGridData.length > 0) {
+                $('#MessageText').html("Color Item Found.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+            else {
+                if (dataitem.CLTransferFromID == 0) {
+                    $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    $('#MessageText').html("Delete Successful");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                }
+
+                else {
+                    $.ajax({
+                        url: '@Url.Action("DeleteMasterItemGridInfo", "CrustedLeatherTransferTreatment")',
+                        type: 'GET',
+                        data: { "CLTransferFromID": dataitem.CLTransferFromID },
+                        success: function (response) {
+
+                            if (response.Msg == "Success") {
+                                $('#MessageText').html("Delete Successful");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                                $("#ItemGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            }
+                            else if (response.Msg == "Fail") {
+                                $('#MessageText').html("Delete Failed");
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+                            else if (response.Msg == "CNF") {
+                                $('#MessageText').html("Confirmed record can not be deleted.");
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+                            }
+
+                        } //End of success call
+                    });
+                }
+            }
+        }*@
+        CloseConfirmationDialog();
+    });
+
+
+    //Handling No button click for grid row deletion
+    $('#btnConfirmationCancel').click(function () {
+        dataitem = {};
+        CloseConfirmationDialog();
+    });
+
+
+
+
+    //************************** END of ADD NEW ROW IN CHILD GRID VIEW *********
+
+
+
+
+
+
+    //******************************************* PartyName Popup Value ***************************************************//
+
+
+
+    $(document).on('keyup', '.Buyer', function (e) {
+        if (e.which == 120) {
+            if (($("#TransactionStore").val() != "") && ($("#IssueStore").val() != "")) {
+                SelectedItemOfListOfValue('PartyWindowGrid');
+                CrustItemInfo();
+                PartyWindow.open();
+                PartyWindow.center();
+            }
+            else {
+                $('#MessageText').html("Select Transfer & Issue Store");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'center' });
+            }
+        }
+
+    });
+
+    function CrustItemInfo() {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetCrustTransferItemGrid", "CrustedLeatherTransferTreatment")',
+            type: 'GET',
+            data: { "TransactionStore": $("#TransactionStore").val() },
+            success: function (response) {
+                $("#PartyWindowGrid").data('kendoGrid').dataSource.data(response);
+
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    var PartyWindow = $('#PartyWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1000px",
+        height: "auto",
+        title: "List Of Buyer",
+        position: { top: 100, left: 300 },
+        modal: true,
+        groupable: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BuyerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    TransectionID: { editable: false },
+                    CLTransferID: { editable: false },
+                    CLTransferFromID: { editable: false },
+                    BuyerID: { editable: false },
+                    BuyerOrderID: { editable: false },
+                    ItemTypeID: { editable: false },
+                    LeatherTypeID: { editable: false },
+                    LeatherStatusID: { editable: false },
+                    StoreID: { editable: false },
+                    ArticleID: { editable: false },
+                    ColorID: { editable: false },
+                    GradeRange: { editable: false },
+                    ArticleChallanID: { editable: false },
+                    ArticleColorNo: { editable: false },
+                    UnitID: { editable: false },
+
+                    CrustQCLabel: { editable: false },
+
+                    BuyerName: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleChallanNo: { editable: false },
+                    ItemTypeName: { editable: false },
+                    LeatherStatusName: { editable: false },
+                    StoreName: { editable: false },
+                    GradeName: { editable: false },
+                    ColorName: { editable: false },
+                    UnitName: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+
+        pageSize: 10
+
+    });
+
+    var WBSelectionNoGrid = $("#PartyWindowGrid").kendoGrid({
+        dataSource: BuyerGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 300,
+        columns:
+            [
+                { field: "CLTransferID", hidden: true },
+                { field: "CLTransferFromID", hidden: true },
+                { field: "BuyerID", hidden: true },
+                { field: "BuyerOrderID", hidden: true },
+                { field: "ArticleID", hidden: true },
+                { field: "ItemTypeID", hidden: true },
+                { field: "LeatherTypeID", hidden: true },
+                { field: "LeatherStatusID", hidden: true },
+                { field: "ColorID", hidden: true },
+                { field: "GradeRange", hidden: true },
+                { field: "ArticleColorNo", hidden: true },
+                { field: "ArticleChallanID", hidden: true },
+                { field: "UnitID", hidden: true },
+
+                { field: "BuyerName", title: "Party Name", filterable: false, width: "60px" },
+                { field: "BuyerOrderNo", title: "Order No", filterable: false, width: "60px" },
+                { field: "ArticleChallanNo", title: "Challan", filterable: false, width: "60px" },
+                { field: "ItemTypeName", title: "ItemType", filterable: true, width: "60px" },
+                { field: "LeatherStatusName", title: "LeatherStatus", filterable: true, width: "60px" },
+                { field: "ColorName", title: "Color", filterable: true, width: "60px", hidden: true },
+                { field: "GradeRange", title: "Grade", hidden: true, filterable: true, width: "60px" },
+                { field: "CrustQCLabel", title: "QC Lebel", filterable: true, width: "60px" },
+
+                { field: "UnitName", title: "Unit", filterable: false, width: "60px", hidden: true },
+                { field: "ClosingStockPcs", title: "Stock Pcs", filterable: false, width: "60px", hidden: true },
+                { field: "ClosingStockSide", title: "Stock Side", filterable: false, width: "60px", hidden: true },
+                { field: "ClosingStockArea", title: "Stock Area", filterable: false, width: "60px", hidden: true },
+                { field: "ClosingStockAreaUnit", title: "Unit", filterable: false, width: "60px", hidden: true }
+            ]
+    });
+
+
+
+
+    //Handling button click for BuyerWindow Grid
+    function ListOfValuCrustGridEvent() {
+        var WindowGrid = $("#PartyWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#ItemGrid").data("kendoGrid");//ItemGrid
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+        //PageGridItem.set("BuyerID", WindowGridItem.BuyerID);
+        //PageGridItem.set("BuyerName", WindowGridItem.BuyerName);
+        //PageGridItem.set("BuyerOrderID", WindowGridItem.BuyerOrderID);
+        //PageGridItem.set("BuyerOrderNo", WindowGridItem.BuyerOrderNo);
+        //PageGridItem.set("ArticleID", WindowGridItem.ArticleID);
+        //PageGridItem.set("ArticleName", WindowGridItem.ArticleName);
+        //PageGridItem.set("ArticleChallanID", WindowGridItem.ArticleChallanID);
+        //PageGridItem.set("ArticleChallanNo", WindowGridItem.ArticleChallanNo);
+        //PageGridItem.set("ItemTypeID", WindowGridItem.ItemTypeID);
+        //PageGridItem.set("ItemTypeName", WindowGridItem.ItemTypeName);
+        //PageGridItem.set("LeatherStatusID", WindowGridItem.LeatherStatusID);
+        //PageGridItem.set("LeatherStatusName", WindowGridItem.LeatherStatusName);
+        //PageGridItem.set("ColorID", WindowGridItem.ColorID);
+        //PageGridItem.set("ColorName", WindowGridItem.ColorName);
+        //PageGridItem.set("GradeRange", WindowGridItem.GradeRange);
+        //PageGridItem.set("CrustQCLabel", WindowGridItem.CrustQCLabel);
+        //PageGridItem.set("QCStockPcs", WindowGridItem.ClosingStockPcs);
+        //PageGridItem.set("QCStockSide", WindowGridItem.ClosingStockSide);
+        //PageGridItem.set("QCStockArea", WindowGridItem.ClosingStockArea);
+        //PageGridItem.set("AreaUnit", WindowGridItem.ClosingStockAreaUnit);
+        //PageGridItem.set("UnitName", WindowGridItem.UnitName);
+
+
+        $.ajax({
+            url: '@Url.Action("GetCrustDataItemAndGradeGrid", "CrustedLeatherTransferTreatment")',
+            type: 'GET',
+            data: { "TransactionStore": $('#TransactionStore').val(), "BuyerID": WindowGridItem.BuyerID, "BuyerOrderID": WindowGridItem.BuyerOrderID, "ColorID": WindowGridItem.ColorID, "ArticleID": WindowGridItem.ArticleID, "ItemTypeID": WindowGridItem.ItemTypeID, "LeatherStatusID": WindowGridItem.LeatherStatusID, "ArticleChallanID": WindowGridItem.ArticleChallanID },
+            success: function (data) {
+                console.log(data);
+                $("#ItemGrid").data("kendoGrid").dataSource.data(data.TransferFromList);
+                $("#IssueItemGrid").data("kendoGrid").dataSource.data(data.TransferToList);
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+
+        changeStatus = 0;
+    };
+
+    //Handling button click for WBSelectionNo window grid
+    $('#btnPartyWindowOK').click(function () {
+        ListOfValuCrustGridEvent('PartyWindowGrid');
+        PartyWindow.close();
+    });
+
+    $('#btnPartyWindowCancel').click(function () {
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").dblclick(function () {
+        ListOfValuCrustGridEvent('PartyWindowGrid');
+        PartyWindow.close();
+    });
+
+    $("#PartyWindow").keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValuCrustGridEvent('PartyWindowGrid');
+            PartyWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            PartyWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+    //$('#btnBuyerNameWindowOK').click(function () {
+    //    BuyerWindowEvent(PartyWindowGrid);
+    //    BuyerNameWindow.close();
+    //});
+    //$('#btnBuyerNameWindowCancel').click(function () {
+    //    BuyerNameWindow.close();
+    //});
+    //$("#BuyerNameWindow").dblclick(function () {
+    //    BuyerWindowEvent(PartyWindowGrid);
+    //    BuyerNameWindow.close();
+    //});
+    //$("#BuyerNameWindow").keyup(function (event) {
+    //    var keycode = (event.keyCode ? event.keyCode : event.which);
+    //    if (keycode == '13') {
+    //        BuyerWindowEvent(PartyWindowGrid);
+    //        BuyerNameWindow.close();
+    //    }
+    //        // Close Window with escape key
+    //    else if (keycode == '27') {
+    //        BuyerNameWindow.close();
+    //    }
+    //    event.stopPropagation();
+    //});
+
+
+
+
+    @*function ListOfValuCrustGridEvent() {
+        var WindowGrid = $("#PartyWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#BuyerID").val(WindowGridItem.BuyerID);
+        $("#BuyerName").val(WindowGridItem.BuyerName);
+        $("#BuyerOrderID").val(WindowGridItem.BuyerOrderID);
+        $("#BuyerOrderNo").val(WindowGridItem.BuyerOrderNo);
+        $("#ArticleID").val(WindowGridItem.ArticleID);
+        $("#ArticleNo").val(WindowGridItem.ArticleNo);
+        $("#ArticleChallanID").val(WindowGridItem.ArticleChallanID);
+        $("#ArticleColorNo").val(WindowGridItem.ArticleColorNo);
+
+        //$("#divLoading").show();
+
+
+        var PageGrid = $("#ItemGrid").data("kendoGrid");
+        //var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        //var dataRows = PageGrid.items();
+        //var rowIndex = dataRows.index(PageGrid.select());
+
+
+        PageGrid.set("ItemTypeID", WindowGridItem.ItemTypeID);
+        PageGrid.set("ItemTypeName", WindowGridItem.ItemTypeName);
+
+
+
+
+
+
+        @*$.ajax({
+            url: '@Url.Action("GetCrustDataItemAndGradeGrid", "CrustedLeatherTransferTreatment")',
+            type: 'GET',
+            data: { "TransactionStore": $('#TransactionStore').val(), "BuyerID": WindowGridItem.BuyerID, "BuyerOrderID": WindowGridItem.BuyerOrderID, "ColorID": WindowGridItem.ColorID, "ArticleID": WindowGridItem.ArticleID, "ItemTypeID": WindowGridItem.ItemTypeID, "LeatherStatusID": WindowGridItem.LeatherStatusID },
+            success: function (data) {
+                $("#ItemGrid").data("kendoGrid").dataSource.data(data.TransferFromList);
+                //$("#IssueItemGrid").data("kendoGrid").dataSource.data(data.TransferToList);
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+        changeStatus = 0;*@
+    //};
+
+
+
+    ////Handling button click for WBSelectionNo window grid
+    //$('#btnPartyWindowOK').click(function () {
+    //    ListOfValuCrustGridEvent('PartyWindowGrid');
+    //    PartyWindow.close();
+    //});
+
+    //$('#btnPartyWindowCancel').click(function () {
+    //    PartyWindow.close();
+    //});
+
+    //$("#PartyWindow").dblclick(function () {
+    //    ListOfValuCrustGridEvent('PartyWindowGrid');
+    //    PartyWindow.close();
+    //});
+
+    //$("#PartyWindow").keypress(function (event) {
+    //    var keycode = (event.keyCode ? event.keyCode : event.which);
+    //    if (keycode == '13') {
+    //        ListOfValuCrustGridEvent('PartyWindowGrid');
+    //        PartyWindow.close();
+    //    }
+    //        // Close Window with escape key
+    //    else if (keycode == '27') {
+    //        PartyWindow.close();
+    //    }
+    //    event.stopPropagation();
+    //});
+
+
+
+
+    //******************************************* END of PartyName Popup Value ***************************************************//
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //########################################################## START CHILD GRID POP UP ##################################################################//
+
+
+
+    // ######################### Buyer Name PopUp Grid Start #########################
+    var BuyerNameGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerID",
+                fields: {
+                    BuyerID: { editable: false },
+                    BuyerName: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+
+
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllBuyer", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var BuyerNameGrid = $("#BuyerNameWindowGrid").kendoGrid({
+        dataSource: BuyerNameGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "BuyerID", title: "Buyer ID", hidden: true, width: "60px", filterable: true, sortable: false },
+              { field: "BuyerName", title: "Buyer Name", width: "60px", filterable: true, },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });
+    // ######################### Buyer Name PopUp Grid END ###########################
+
+    // ######################### Buyer Order No PopUp Grid Start #########################
+    var BuyerOrderDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "BuyerOrderID",
+                fields: {
+                    BuyerOrderID: { editable: false },
+                    BuyerOrderNo: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllBuyerOrder", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var BuyerOrderGrid = $("#BuyerOrderWindowGrid").kendoGrid({
+        dataSource: BuyerOrderDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "BuyerOrderID", hidden: true, title: "BuyerOrder ID", width: "60px", filterable: false, sortable: false },
+              { field: "BuyerOrderNo", title: "BuyerOrder No", width: "60px" },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });
+    // ######################### Buyer Order No PopUp Grid END #######################
+
+    // ######################### Article No PopUp Grid Start #########################aasdgasfga
+    var ArticleGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ArticleID",
+                fields: {
+                    ArticleID: { editable: false },
+                    ArticleNo: { editable: false },
+                    ArticleName: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllArticle", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var ArticleGrid = $("#ArticleWindowGrid").kendoGrid({
+        dataSource: ArticleGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ArticleID", hidden: true, title: "Article ID", width: "60px", filterable: false, sortable: false },
+              { field: "ArticleNo", title: "Article No", width: "60px" },
+              { field: "ArticleName", title: "Article Name", width: "60px" },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });
+    // ######################### Article No PopUp Grid END ###########################
+
+    // ######################### ItemType Name PopUp Grid Start #########################
+    var ItemTypeGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ItemTypeID",
+                fields: {
+                    ItemTypeID: { editable: false },
+                    ItemTypeName: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllItemType", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var ItemTypeGrid = $("#ItemTypeWindowGrid").kendoGrid({
+        dataSource: ItemTypeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ItemTypeID", title: "ItemTyp ID", hidden: true, width: "60px", filterable: false, sortable: false },
+              { field: "ItemTypeName", title: "ItemType Name", width: "60px" },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });
+    // ######################### ItemType Name PopUp Grid END ###########################
+
+    // ######################### LeatherStatus Name PopUp Grid Start #########################
+    var LeatherStatusGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "LeatherStatusID",
+                fields: {
+                    LeatherStatusID: { editable: false },
+                    LeatherStatusName: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllLeatherStatus", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var LeatherStatusGrid = $("#LeatherStatusWindowGrid").kendoGrid({
+        dataSource: LeatherStatusGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "LeatherStatusID", hidden: true, title: "LeatherStatus ID", width: "60px", filterable: false, sortable: false },
+              { field: "LeatherStatusName", title: "LeatherStatus Name", width: "60px" },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });
+    // ######################### LeatherStatus Name PopUp Grid END ##############
+
+    // ######################### Color Grid PopUp Start #########################
+    var ColorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ColorID",
+                fields: {
+                    ColorID: { editable: false },
+                    ColorName: { editable: false },
+                    ArticleColorNo: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllColor", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var ColorGrid = $("#ColorWindowGrid").kendoGrid({
+        dataSource: ColorGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "ColorID", title: "Color ID", hidden: true, width: "60px", filterable: false, sortable: false },
+              { field: "ColorName", title: "Color Name", width: "60px" },
+              { field: "ArticleColorNo", title: "Article Color No", width: "60px" },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });
+    // ######################### Color Grid PopUp END ###########################
+
+
+    ///// // ######################### Grade Grid PopUp Start #########################
+    @*var GradeGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GradeID",
+                fields: {
+                    GradeID: { editable: false },
+                    GradeName: { editable: false },
+                    ClosingStockPcs: { editable: false },
+                    ClosingStockSide: { editable: false },
+                    ClosingStockArea: { editable: false },
+                    ClosingStockAreaUnit: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllGrade", "CrustedLeatherTransferTreatment")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var GradeGrid = $("#GradeWindowGrid").kendoGrid({
+        dataSource: GradeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "GradeID", title: "Grade ID", hidden: true, width: "60px", filterable: false, sortable: false },
+              { field: "GradeName", title: "Grade Name", width: "60px" },
+              { field: "ClosingStockPcs", title: "Stock Pcs", width: "60px", filterable: false, },
+              { field: "ClosingStockSide", title: "Stock Side", width: "60px", filterable: false, },
+              { field: "ClosingStockArea", title: "Stock Area", width: "60px", filterable: false, },
+              { field: "ClosingStockAreaUnit", hidden: true, title: "Stock Area Unit", width: "60px", filterable: false, }
+        ]
+
+    });*@
+    /////////// ######################### GradeGrid PopUp END ##############
+
+
+    //########################## All PopUp Window #################
+    var BuyerNameWindow = $('#BuyerNameWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of BuyerName",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var BuyerOrderWindow = $('#BuyerOrderWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of BuyerOrder",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ArticleWindow = $('#ArticleWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Article",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ItemTypeWindow = $('#ItemTypeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of ItemType",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var LeatherStatusWindow = $('#LeatherStatusWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of LeatherStatus",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ColorWindow = $('#ColorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Color",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var GradeWindow = $('#GradeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Grade",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //########################## End of All PopUp Window ##########
+
+
+
+    //######################### Open All Pop Up Windows ###########
+
+    $(document).on('keyup', '.BuyerName', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('BuyerNameWindowGrid');
+            BuyerNameWindow.open(); //Open Popup
+            BuyerNameWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.BuyerOrder', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('BuyerOrderWindowGrid');
+            BuyerOrderWindow.open(); //Open Popup
+            BuyerOrderWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.Article', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('ArticleWindowGrid');
+            ArticleWindow.open(); //Open Popup
+            ArticleWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.ItemType', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('ItemTypeWindowGrid');
+            ItemTypeWindow.open(); //Open Popup
+            ItemTypeWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.LeatherStatus', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('LeatherStatusWindowGrid');
+            LeatherStatusWindow.open(); //Open Popup
+            LeatherStatusWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.Color', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('ColorWindowGrid');
+            ColorWindow.open(); //Open Popup
+            ColorWindow.center();
+        }
+
+    });
+
+    $(document).on('keyup', '.Grade', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('GradeWindowGrid');
+            GradeWindow.open(); //Open Popup
+            GradeWindow.center();
+        }
+
+    });
+
+
+    //######################### End of All Pop Up Windows #########
+
+    //############## Start All PopUP Window Events ################
+
+    //Handling button click for BuyerWindow Grid
+    function BuyerWindowEvent() {
+        var WindowGrid = $("#BuyerNameWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+        PageGridItem.set("BuyerID", WindowGridItem.BuyerID);
+        PageGridItem.set("BuyerName", WindowGridItem.BuyerName);
+        PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+        PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+        PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+        PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+        PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+    $('#btnBuyerNameWindowOK').click(function () {
+        BuyerWindowEvent();
+        BuyerNameWindow.close();
+    });
+    $('#btnBuyerNameWindowCancel').click(function () {
+        BuyerNameWindow.close();
+    });
+    $("#BuyerNameWindow").dblclick(function () {
+        BuyerWindowEvent();
+        BuyerNameWindow.close();
+    });
+    $("#BuyerNameWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            BuyerWindowEvent();
+            BuyerNameWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            BuyerNameWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //Handling button click for BuyerOrderWindow Grid
+    function BuyerOrderWindowEvent() {
+        var WindowGrid = $("#BuyerOrderWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+
+        PageGridItem.set("BuyerOrderNo", WindowGridItem.BuyerOrderNo);
+        PageGridItem.set("BuyerOrderID", WindowGridItem.BuyerOrderID);
+        PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+        PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+        PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+        PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+        PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+    $('#btnBuyerOrderWindowOK').click(function () {
+        BuyerOrderWindowEvent();
+        BuyerOrderWindow.close();
+    });
+    $('#btnBuyerOrderWindowCancel').click(function () {
+        BuyerOrderWindow.close();
+    });
+    $("#BuyerOrderWindow").dblclick(function () {
+        BuyerOrderWindowEvent();
+        BuyerOrderWindow.close();
+    });
+    $("#BuyerOrderWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            BuyerOrderWindowEvent();
+            BuyerOrderWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            BuyerOrderWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //Handling button click for Article Grid
+    function ArticleWindowEvent() {
+        var WindowGrid = $("#ArticleWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+        PageGridItem.set("ArticleID", WindowGridItem.ArticleID);
+        PageGridItem.set("ArticleName", WindowGridItem.ArticleName);
+        PageGridItem.set("ArticleNo", WindowGridItem.ArticleNo);
+        PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+        PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+        PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+        PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+        PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+    $('#btnArticleWindowOK').click(function () {
+        ArticleWindowEvent();
+        ArticleWindow.close();
+    });
+    $('#btnArticleWindowCancel').click(function () {
+        ArticleWindow.close();
+    });
+    $("#ArticleWindow").dblclick(function () {
+        ArticleWindowEvent();
+        ArticleWindow.close();
+    });
+    $("#ArticleWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ArticleWindowEvent();
+            ArticleWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ArticleWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+    //Handling button click for Color Grid
+    function ColorWindowEvent() {
+        var WindowGrid = $("#ColorWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+
+        PageGridItem.set("ColorName", WindowGridItem.ColorName);
+        PageGridItem.set("ColorID", WindowGridItem.ColorID);
+        PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+        PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+        PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+        PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+        PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+    $('#btnColorWindowOK').click(function () {
+        ColorWindowEvent();
+        ColorWindow.close();
+    });
+    $('#btnColorWindowCancel').click(function () {
+        ColorWindow.close();
+    });
+    $("#ColorWindow").dblclick(function () {
+        ColorWindowEvent();
+        ColorWindow.close();
+    });
+    $("#ColorWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ColorWindowEvent();
+            ColorWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ColorWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    ////Handling button click for Grade Grid
+    //function GradeWindowEvent() {
+    //    var WindowGrid = $("#GradeWindowGrid").data("kendoGrid");
+    //    var WindowGridRow = WindowGrid.select();
+    //    var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+    //    var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+    //    var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+    //    var dataRows = PageGrid.items();
+    //    var rowIndex = dataRows.index(PageGrid.select());
+
+
+    //    PageGridItem.set("GradeName", WindowGridItem.GradeName);
+    //    PageGridItem.set("GradeID", WindowGridItem.GradeID);
+    //    PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+    //    PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+    //    PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+    //    PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+    //    PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+    //    changeStatus = 1;
+
+    //    $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+    //    //alert(rowIndex);
+    //    if (rowIndex > 0)
+    //        $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    //};
+    //$('#btnGradeWindowOK').click(function () {
+    //    GradeWindowEvent();
+    //    GradeWindow.close();
+    //});
+    //$('#btnGradeWindowCancel').click(function () {
+    //    GradeWindow.close();
+    //});
+    //$("#GradeWindow").dblclick(function () {
+    //    GradeWindowEvent();
+    //    GradeWindow.close();
+    //});
+    //$("#GradeWindow").keyup(function (event) {
+    //    var keycode = (event.keyCode ? event.keyCode : event.which);
+    //    if (keycode == '13') {
+    //        GradeWindowEvent();
+    //        GradeWindow.close();
+    //    }
+    //        // Close Window with escape key
+    //    else if (keycode == '27') {
+    //        GradeWindow.close();
+    //    }
+    //    event.stopPropagation();
+    //});
+
+
+    //Handling button click for ItemType Grid
+    function ItemTypeWindowEvent() {
+        var WindowGrid = $("#ItemTypeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+
+        PageGridItem.set("ItemTypeName", WindowGridItem.ItemTypeName);
+        PageGridItem.set("ItemTypeID", WindowGridItem.ItemTypeID);
+        PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+        PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+        PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+        PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+        PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+    $('#btnItemTypeWindowOK').click(function () {
+        ItemTypeWindowEvent();
+        ItemTypeWindow.close();
+    });
+    $('#btnItemTypeWindowCancel').click(function () {
+        ItemTypeWindow.close();
+    });
+    $("#ItemTypeWindow").dblclick(function () {
+        ItemTypeWindowEvent();
+        ItemTypeWindow.close();
+    });
+    $("#ItemTypeWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ItemTypeWindowEvent();
+            ItemTypeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ItemTypeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //Handling button click for LeatherStatus Grid
+    function LeatherStatusWindowEvent() {
+        var WindowGrid = $("#LeatherStatusWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        var PageGrid = $("#IssueItemGrid").data("kendoGrid");
+        var PageGridItem = PageGrid.dataItem(PageGrid.select());
+
+
+        var dataRows = PageGrid.items();
+        var rowIndex = dataRows.index(PageGrid.select());
+
+        PageGridItem.set("LeatherStatusID", WindowGridItem.LeatherStatusID);
+        PageGridItem.set("LeatherStatusName", WindowGridItem.LeatherStatusName);
+        PageGridItem.set("ClosingStockPcs", WindowGridItem.ClosingStockPcs);
+        PageGridItem.set("ClosingStockSide", WindowGridItem.ClosingStockSide);
+        PageGridItem.set("ClosingStockArea", WindowGridItem.ClosingStockArea);
+        PageGridItem.set("ClosingStockAreaUnit", WindowGridItem.ClosingStockAreaUnit);
+
+
+
+        PageGrid.editCell($("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ") td:eq(3)"));
+        changeStatus = 1;
+
+        $("#IssueItemGrid tr:eq(" + (rowIndex + 1) + ")").addClass('k-state-selected');
+        //alert(rowIndex);
+        if (rowIndex > 0)
+            $("#IssueItemGrid tr:eq(1)").removeClass('k-state-selected');
+    };
+    $('#btnLeatherStatusWindowOK').click(function () {
+        LeatherStatusWindowEvent();
+        LeatherStatusWindow.close();
+    });
+    $('#btnLeatherStatusWindowCancel').click(function () {
+        ArticleWindow.close();
+    });
+    $("#LeatherStatusWindow").dblclick(function () {
+        LeatherStatusWindowEvent();
+        LeatherStatusWindow.close();
+    });
+    $("#LeatherStatusWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            LeatherStatusWindowEvent();
+            LeatherStatusWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            LeatherStatusWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+
+    //####################################################### END OF GRID POP UP  #############################################################//
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //####################################################### SAVE CRUST LEATHER TRANSFER TREATMENT ###########################################//
+
+    //######################### function Clear Data from screen ##################
+
+
+    clTransfer = {
+        "CLTransferID": "", "CLTransferNo": "", "CLTransferDate": "", "CLTransferCategory": "", "TranrsferType": "", "TransactionStore": "", "IssueStore": "",
+        "ReferenceJobOrdNo": "", "RecordStatus": "", "CheckNote": "", "TransferFromList": [], "TransferToList": []
+    };
+
+
+
+    clTransferFrom = {
+        "CLTransferFromID": "", "CLTransferID": "", "CLTransferNo": "", "StoreID": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "",
+        "ArticleNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "GradeRange": "", "QCStockPcs": "", "QCStockSide": ""
+          , "QCStockArea": "", "AreaUnit": "", "ArticleChallanNo": "", "ArticleChallanID": "", "ArticleColorNo": "", "CrustQCLabel": ""
+    };
+
+
+
+    clTransferTo = {
+        "CLTransferToID": "", "CLTransferFromID": "", "CLTransferID": "", "CLTransferNo": "", "StoreID": "", "CrustQCLabel": "", "BuyerID": ""
+        , "BuyerOrderID": "", "ArticleID": "", "ArticleNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": ""
+        , "GradeRange": "", "ToStockPcs": "", "ToStockSide": "", "ToStockArea": "", "AreaUnit": "", "ArticleChallanNo": "", "ArticleChallanID": "", "ArticleColorNo": ""
+    };
+
+
+
+    //######################### End of Function Clear Data ############
+
+
+    function Save() {
+        saveStatus = 1;
+
+
+        if (saveStatus == 1) {
+            clTransfer.CLTransferID = $("#CLTransferID").val();
+            clTransfer.CLTransferNo = $("#CLTransferNo").val();
+            clTransfer.CLTransferDate = $("#CLTransferDate").val();
+            clTransfer.CLTransferCategory = $("#CLTransferCategory").val();
+            clTransfer.TranrsferType = $("#TranrsferType").val();
+            clTransfer.TransactionStore = $("#TransactionStore").val();
+            clTransfer.IssueStore = $("#IssueStore").val();
+            clTransfer.RecordStatus = $("#RecordStatus").val();
+            clTransfer.IssueNote = $("#IssueNote").val();
+            clTransfer.CheckNote = $("#CheckNote").val();
+
+            var parentGrid = $("#ItemGrid").data("kendoGrid").dataSource;
+            var parentGridItem = parentGrid.data(); // Get Detail Grid Data
+            clTransfer.TransferFromList = [];
+            for (var i = 0; i <= parentGridItem.length - 1; i++) {
+
+                clTransferFrom.CLTransferID = '';
+                clTransferFrom.CLTransferNo = '';
+                clTransferFrom.CLTransferFromID = parentGridItem[i].CLTransferFromID;
+                clTransferFrom.StoreID = clTransfer.TransactionStore;
+                clTransferFrom.BuyerID = parentGridItem[i].BuyerID;
+                clTransferFrom.BuyerOrderID = parentGridItem[i].BuyerOrderID;
+                clTransferFrom.ArticleID = parentGridItem[i].ArticleID;
+                clTransferFrom.ArticleNo = parentGridItem[i].ArticleNo;
+                clTransferFrom.ColorID = parentGridItem[i].ColorID;
+                clTransferFrom.ItemTypeID = parentGridItem[i].ItemTypeID;
+                clTransferFrom.LeatherTypeID = parentGridItem[i].LeatherTypeID;
+                clTransferFrom.LeatherStatusID = parentGridItem[i].LeatherStatusID;
+                clTransferFrom.GradeRange = parentGridItem[i].GradeRange;
+                clTransferFrom.QCStockPcs = parentGridItem[i].QCStockPcs;
+                clTransferFrom.QCStockSide = parentGridItem[i].QCStockSide;
+                clTransferFrom.QCStockArea = parentGridItem[i].QCStockArea;
+                clTransferFrom.AreaUnit = parentGridItem[i].AreaUnit;
+                clTransferFrom.ArticleChallanNo = parentGridItem[i].ArticleChallanNo;
+                clTransferFrom.ArticleChallanID = parentGridItem[i].ArticleChallanID;
+                clTransferFrom.ArticleColorNo = parentGridItem[i].ArticleColorNo;
+                clTransferFrom.CrustQCLabel = parentGridItem[i].CrustQCLabel
+
+
+
+                clTransfer.TransferFromList.push(clTransferFrom);
+
+                clTransferFrom = {
+                    "CLTransferFromID": "", "CLTransferID": "", "CLTransferNo": "", "StoreID": "", "BuyerID": "", "BuyerOrderID": "", "ArticleID": "",
+                    "ArticleNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "GradeRange": "", "QCStockPcs": "", "QCStockSide": ""
+                    , "QCStockArea": "", "AreaUnit": "", "ArticleChallanNo": "", "ArticleChallanID": "", "ArticleColorNo": "", "CrustQCLabel": ""
+                };
+            }
+
+            var dataSourcePeriodItem = $("#IssueItemGrid").data("kendoGrid").dataSource;
+            var dataPeriodItem = dataSourcePeriodItem.data(); // Get Detail Grid Data
+            clTransfer.TransferToList = [];
+            for (var j = 0; j <= dataPeriodItem.length - 1; j++) {
+
+                clTransferTo.CLTransferID = '';
+                clTransferTo.CLTransferNo = '';
+                clTransferTo.CLTransferFromID = '';
+                clTransferTo.CLTransferToID = dataPeriodItem[j].CLTransferToID;
+                clTransferTo.StoreID = clTransfer.IssueStore;
+                clTransferTo.BuyerID = dataPeriodItem[j].BuyerID;
+                clTransferTo.BuyerOrderID = dataPeriodItem[j].BuyerOrderID;
+                clTransferTo.ArticleID = dataPeriodItem[j].ArticleID;
+                clTransferTo.ArticleNo = dataPeriodItem[j].ArticleNo;
+                clTransferTo.ColorID = dataPeriodItem[j].ColorID;
+                clTransferTo.ItemTypeID = dataPeriodItem[j].ItemTypeID;
+                clTransferTo.LeatherTypeID = dataPeriodItem[j].LeatherTypeID;
+                clTransferTo.LeatherStatusID = dataPeriodItem[j].LeatherStatusID;
+                clTransferTo.GradeRange = dataPeriodItem[j].GradeRange;
+                clTransferTo.ToStockPcs = dataPeriodItem[j].ToStockPcs;
+                clTransferTo.ToStockSide = dataPeriodItem[j].ToStockSide;
+                clTransferTo.ToStockArea = dataPeriodItem[j].ToStockArea;
+                clTransferTo.AreaUnit = dataPeriodItem[j].AreaUnit;
+                clTransferTo.ArticleChallanNo = $('#ArticleChallanNo').val();//dataPeriodItem[j].ArticleChallanNo;
+                clTransferTo.ArticleChallanID = dataPeriodItem[j].ArticleChallanID;
+                clTransferTo.ArticleColorNo = dataPeriodItem[j].ArticleColorNo;
+                clTransferTo.CrustQCLabel = dataPeriodItem[j].CrustQCLabel;
+
+                clTransfer.TransferToList.push(clTransferTo);
+
+                clTransferTo = {
+                    "CLTransferToID": "", "CLTransferFromID": "", "CLTransferID": "", "CLTransferNo": "", "StoreID": "", "BuyerID": "", "BuyerOrderID": "",
+                    "ArticleID": "", "ArticleNo": "", "ColorID": "", "ItemTypeID": "", "LeatherTypeID": "", "LeatherStatusID": "", "GradeRange": "", "ToStockPcs": "", "ToStockSide": ""
+                    , "ToStockArea": "", "AreaUnit": "", "ArticleChallanNo": "", "ArticleColorNo": "", "ArticleChallanID": "", "CrustQCLabel": ""
+                };
+
+            }
+
+
+            if ($("#CLTransferID" == "")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CrustedLeatherTransferTreatment", "CrustedLeatherTransferTreatment")',
+                    data: JSON.stringify(clTransfer),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        if (data.msg.Type == 2) {
+                            $("#CLTransferID").val(data.CLTransferID);
+                            $("#CLTransferFromID").val(data.CLTransferFromID);
+                            $("#CLTransferNo").val(data.CLTransferNo);
+                            Reset();
+                            $("#ItemGrid").data("kendoGrid").dataSource.data(data.TransferFromList);
+                            $("#IssueItemGrid").data("kendoGrid").dataSource.data([]);
+                            $('#MessageText').html(data.msg.Msg);
+                            $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                            @*$.ajax({
+                                url: '@Url.Action("GetWBSellectionIssueGradeAfterSave", "WBIStoreSelection")',
+                                type: 'GET',
+                                data: { WBSIssueItemID: $("#WBSIssueItemID").val() },
+                                success: function (data33) {
+
+                                    $("#GradingGrid").data("kendoGrid").dataSource.data(data33);
+
+                                }
+                            });*@
+                            }
+                        else {
+                            $("#MessageText").html(data.msg.Msg);
+                            $("#MessageText").css("color", "green");
+                        }
+                    },
+                    error: function (respnse) {
+                        // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                        $("#divLoading").hide();
+                    },
+                    complete: function (data) {
+
+                    }
+                });
+                clTransfer = {
+                    "CLTransferID": "", "CLTransferNo": "", "CLTransferDate": "", "CLTransferCategory": "", "TranrsferType": "", "TransactionStore": "", "IssueStore": "",
+                    "ReferenceJobOrdNo": "", "RecordStatus": "", "CheckNote": "", "TransferFromList": [], "TransferToList": []
+                };
+            }
+        }
+    }
+
+
+
+    //################################################### END of SAVE CRUST LEATHER TRANSFER TREATMENT ###########################################//
+
+
+
+    //***************************************** RESET ************************************************//
+
+    function Reset() {
+        $("#IssueItemGrid").data('kendoGrid').dataSource.data('');
+        $("#ItemGrid").data('kendoGrid').dataSource.data('');
+        $('.FormBody input[type=text]').val('');
+        $('.FormBody input[type=hidden]').val('');
+        $('.FormBody input[type=number]').val('');
+        $('.FormBody input[type=button]').attr('disabled', false);
+        $('#MessageText').html('');
+        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $('.FormBody').find('input, textarea, button, select').attr('disabled', false);
+        $('.FormBody input[type=text]').css("border-color", "");
+        $('select').find('option:first').prop('selected', 'selected');
+    }
+
+    //***************************************** END OF RESET ************************************************//
+
+
+
+
+
+
+    //###################################################################  SESRCH WETBLUE DATA ######################################################
+
+    $("#btnSearch").click(function () {
+        SearchResult("GetCrustLeatherQCInfo", "CrustedLeatherTransferTreatment", "CLTransferID,CLTransferCategory,TranrsferType,TransactionStore,IssueStore");
+    });
+
+
+    //$("#btnSearchGridSearch").click(function () {
+
+    //    GetSearchResult("SearchWetBlueIssueNo", "CrustedLeatherTransferTreatment");
+    //});
+
+
+    //AutoComplete("GetAutoCompleteData", "CrustedLeatherTransferTreatment");
+
+
+    function ListOfValueSearchGridEvent(gridName) {
+        console.log(gridName);
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+
+        $("#CLTransferID").val(selectedItem.CLTransferID);
+        $("#CLTransferNo").val(selectedItem.CLTransferNo);
+        $("#CLTransferDate").val(selectedItem.CLTransferDate);
+
+        $("#CLTransferCategory").val(selectedItem.CLTransferCategory);
+        $("#TranrsferType").val(selectedItem.TranrsferType);
+        $("#CLTransferCategoryName").val(selectedItem.CLTransferCategoryName);
+        $("#TranrsferTypeName").val(selectedItem.TranrsferTypeName);
+        //$('#CLTransferCategory option:selected').text();
+        //$("#TranrsferType option:selected").text();
+        //$("#CLTransferCategory option:contains(" + response.CLTransferCategory + ")").attr('selected', 'selected');
+        //divIssueStore
+
+        $("#TransactionStore").val(selectedItem.TransactionStore);
+        //$("#divIssueStore").val(selectedItem.IssueStore);
+        //console.log("Issue Store:"+selectedItem.IssueStore);
+        $("#IssueStore").val("Issue Store:" + selectedItem.IssueStore);
+        $("#IssueStoreName").val(selectedItem.IssueStoreName);
+
+
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("GetAllGridDetailsList", "CrustedLeatherTransferTreatment")',
+            type: 'GET',
+            data: { "CLTransferID": $('#CLTransferID').val() },//selectedItem.CLTransferID
+            success: function (response) {
+
+                console.log(response);
+                $("#divLoading").hide();
+
+                $("#BuyerID").val(response.TransferFromList[0].BuyerID);
+                $("#BuyerName").val(response.TransferFromList[0].BuyerName);
+                $("#BuyerOrderID").val(response.TransferFromList[0].BuyerOrderID);
+                $("#BuyerOrderNo").val(response.TransferFromList[0].BuyerOrderNo);
+                $("#ArticleID").val(response.TransferFromList[0].ArticleID);
+                $("#ArticleNo").val(response.TransferFromList[0].ArticleNo);
+
+                $("#ItemGrid").data("kendoGrid").dataSource.data(response.TransferFromList);
+                $("#IssueItemGrid").data("kendoGrid").dataSource.data(response.TransferToList);
+                $("#RecordStatus").val(response.RecordStatus);
+                if (selectedItem.RecordStatus == "Not Confirmed") {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                }
+                else if (selectedItem.RecordStatus == "Checked") {
+                    $("#btnCheck").attr('disabled', 'disabled');
+
+                }
+                    //else {
+                    //    $("#btnCheck").removeAttr('disabled');
+                    //}
+
+                else if (selectedItem.RecordStatus == "Confirmed") {
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnCheck").attr('disabled', 'disabled');
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+
+                }
+                else {
+                    $("#btnConfirm").removeAttr('disabled');
+                    $("#btnCheck").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
+                    $('#btnDelete').removeAttr('disabled');
+                }
+
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            complete: function (data) {
+
+                $("#divLoading").hide();
+            }
+        });
+
+        $("#ItemGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        $("#IssueItemGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+
+    //################################################################### END OF SESRCH WETBLUE DATA ######################################################
+
+
+
+    //******************************************************** DELETE All Data Crust Leather Transfer Treatment *******************************************//
+
+    $('#btnDelete').click(function () {
+        if ($("#CLTransferID").val() != "") {
+            $.ajax({
+                url: '@Url.Action("DeleteSelectionData", "CrustedLeatherTransferTreatment")',
+                type: 'GET',
+                data: { id: $("#CLTransferID").val() },
+                success: function (data) {
+                    $("#divLoading").show();
+                    if (data.Type == 2) {
+                        $('#MessageText').html(data.Msg);
+                        $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                        $('.FormBody input[type=text]').val('');
+                        $('.Dropdown').val('');
+                        $('.FormBody input[type=hidden]').val('');
+                        $('.FormBody input[type=number]').val('');
+                        $('.FormBody .datePicker').val(getISODateTime(new Date()));
+                        $('#MessageText').html(data.Msg);
+                        $("#ItemGrid").data("kendoGrid").dataSource.data("");
+                        $("#IssueItemGrid").data("kendoGrid").dataSource.data("");
+                    }
+                    else {
+                        $('#MessageText').html('Error Occured.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error occured !!!");
+                },
+                complete: function (data) {
+                    $("#divLoading").hide();
+                }
+            });
+        }
+    });
+
+    //******************************************************** END DELETE All Data Crust Leather Transfer Treatment *******************************************//
+
+
+    // ################## Check ############################
+    $("#btnCheck").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("CheckedRecordStatus", "WBIStoreSelection")',
+            type: 'POST',
+            data: { status: 'CHK', IssueID: $("#IssueID").val() },
+            success: function (data) {
+                if (data.Type == 2) {
+                    $('#MessageText').html(data.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnCheck").attr('disabled', 'disabled');
+                    CheckRecordStatusForButton("CHK");
+                    //$('.FormBody input[type=text]').val('');
+                    //$('.FormBody input[type=hidden]').val('');
+                    //$('.FormBody input[type=number]').val('');
+                    //$('#MessageText').html('');
+                    //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+                    // $("#GradingGrid").data("kendoGrid").dataSource.data("");
+                    $("#GradingGrid").data("kendoGrid").dataSource.data(data);
+                }
+                else {
+                    $("#MessageText").html(data.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+
+    });
+
+
+    //############################################################### CONFIRMED CRUST LEATHER TRANSFER TREATMENT ###################################################
+    $("#btnConfirm").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+
+            type: "POST",
+            url: '@Url.Action("ConfirmCrustLeatherTransferTreatment", "CrustedLeatherTransferTreatment")',
+            data: JSON.stringify({ "CLTransferID": $("#CLTransferID").val() }),
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                $("#divLoading").hide();
+                if (data.msg.Type == 2) {
+                    $('#MessageText').html(data.msg.Msg);
+                    $("#MessageText").css({ 'text-align': "center", 'color': "green", 'font-weight': "bold", 'font-size': "17px" });
+                    $("#btnConfirm").attr('disabled', 'disabled');
+                    $("#btnChecked").attr('disabled', 'disabled');
+                    $('#btnDelete').attr('disabled', true);
+                    $("#btnSubmit").attr('disabled', 'disabled');
+                }
+                else {
+                    $("#MessageText").html(data.msg.Msg);
+                    $("#MessageText").css("color", "red");
+                }
+            },
+            error: function (respnse) {
+                // alert("Failed: " + respnse.status + ": " + respnse.statusText);
+                $("#divLoading").hide();
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+    //############################################################### END OF CONFIRMED CRUST LEATHER TRANSFER TREATMENT ###################################################
+
+
+
+    //To clear operational/error message
+    ClearOperationalMessage();
+    //For removing operational & required message after triggering other event
+    ClearRequiredTextBoxRedColor();
+    // To check unsaved data in master or details
+    CheckUnSavedMasterDetailData();
+
+
+
+
+
+</script>
